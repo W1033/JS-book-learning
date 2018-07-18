@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>访问器属性 + 0bject.defineProperty</title>
+</head>
+<body>
+<div>
+    <h1>我在这里</h1>
+</div>
+<script type="text/javascript">
+    /** 第六章: 《javascript 高级程序设计》
+     2.访问器属性: 访问器属性不包含数据值；它们包含一对儿 getter 和 setter 函数(不过，这两个函数都不是必需的)。
+     在读取访问器属性时，会调用getter函数，这个函数负责返回有效地值；在写入访问器属性时，会调用setter函数并传入新值，
+     这个函数负责决定如何处理数据。访问器属性有如下4个特性。
+     (1.) [[ Configurable ]] : 表示能否通过 delete 删除属性从而重新定义属性，能否修改属性的特性，或者能否把属性
+     修改为数据属性。对于直接在对象上定义的属性，这个特性的默认值为true。
+     (2.) [[ Enumerable ]] :  表示能否通过 for-in 循环返回属性。对于直接在对象上定义的属性，这个特性的默认值为true。
+     (3.) [[ Get ]] :         在读取属性时调用的函数。 默认值为 undefined。
+     (4.) [[ Set ]] :         在写入属性时调用的函数。 默认值为 undefined。
+     访问器属性不能直接定义，必须使用 Object.defineProperty()来定义。请看下面的例子:
+     **/
+    var book = {
+        _year: 2004,
+        edition: 1
+    };
+
+    // 在 book 对象上定义访问器属性 year
+    Object.defineProperty(book, "year", {
+        get: function () {
+            return this._year;
+        },
+        set: function (newValue) {
+            if (newValue > 2004) {
+                this._year = newValue;
+                this.edition += newValue - 2004;
+            }
+        }
+    });
+
+    book.year = 2005;
+    console.log(book.edition);
+    /** 以上代码创建了一个book对象，并给它定义两个默认的属性: _year 和 edition。 _year前面的下划线是一种
+     常用的记号，用于表示只能通过对象方法访问的属性。而访问器属性 year 则包含一个 getter 函数和一个 setter
+     函数。 getter函数返回 _year 的值，setter 函数通过计算来确定正确的版本。因此，把 year 属性修改为
+     2005会导致 _year 变为 2005, 而edition变为2。 这是使用访问器属性的常见方式，即设置一个属性的值会
+     导致其他属性发生变化率。**/
+    /*--------------------------------------------------------*/
+
+    /**  6.1.2 定义多个属性
+     由于为对象定义多个属性的可能性很大，ECMAScript 5 又定义了一个 Object.defineProperties()方法。利用这个
+     方法可以通过描述符一次定义多个属性。这个方法接受两个对象参数:
+     (1.)第一个个对象时要添加和修改其属性的对象，
+     (2.)第二个对象的属性与第一个对象中药添加或修改的属性一一对应。 例如:
+     **/
+    var book2 = {};
+    Object.defineProperties(book2, {
+        _year: {
+            value: 2004,
+            writable: true
+        },
+        edition: {
+            value: 1,
+            writable: true
+        },
+        year: {
+            get: function () {
+                return this._year;
+
+            },
+            set: function (newValue) {
+                if (newValue > 2004) {
+                    this._year = newValue;
+                    this.edition += newValue - 2004;
+                }
+            }
+        }
+    });
+    book2.year = 2017;
+    console.log(book2.edition);
+</script>
+</body>
+</html>

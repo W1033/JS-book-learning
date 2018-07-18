@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>5.5.5-apply和call方法</title>
+</head>
+<body>
+<script type="text/javascript">
+    //apply()和call(): 这两个方法的用途是在[特定的作用域中调用函数]，实际上等于设置函数体内this对象的值。
+    /*function sum(num1, num2){
+        return num1 + num2;
+    }
+    function callSum1(num1, num2){
+        //apply()方法接收两个参数：一个是在其中运行函数的作用域，另一个是参数数组。
+        // 其中，第二个参数可以是Array的实例，也可以是arguments对象。
+        return sum.apply(this, arguments); //此处的this值的就是cassSum1函数
+    }
+    function callSum2(num1, num2){
+        //call()方法也是接收两个参数: 第一个参数是this值没有变化，变化的是其余参数都是直接传递给函数。
+        return sum.apply(this, [num1, num2]); //传入数组
+    }
+    alert(callSum1(10, 10));
+    alert(callSum2(20, 20));*/
+
+    // 14.js高级 5.5.5函数属性和方法 apply()和call(): 这两个方法的用途是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。
+    //(1.) apply()方法接收两个参数：一个是在其中运行函数的作用域，另一个是参数数组。其中，第二个参数可以是Array的实例，也可以是arguments对象。
+
+    function sum(num1, num2) {
+        return num1 + num2;
+    }
+
+    function callSum1(num1, num2) {
+        return sum.apply(sum, arguments); //传入arguments对象
+    }
+
+    function callSum2(num1, num2) {
+        return sum.apply(sum, [num1, num2]); //传入数组
+    }
+
+    alert(callSum1(10, 10)); //20
+    alert(callSum2(10, 10)); //20
+
+    /*
+     #### (2) call()方法也是接收两个参数: 第一个参数是this值没有变化，变化的是其余参数都是直接传递给函数。换句话说就是在使用call()方法时，传递给函数的参数必须逐个列举出来。
+
+     #### (3).call()方法: 来自于 "Mozilla MDN"(Mozilla Developer Network)的词条讲解: Function.prototype.call(): <br/>
+     -  <1.> call()方法是使用一个指定的this值和若干个指定的参数值得前提下调用某个函数或方法。<br/>
+     -  <2.> 返回值:返回结果包括指定的this值和参数。<br/>
+     -  <3.> 描述:可以让call()中的对象调用当前对象所拥有的function.可以使用call()来实现继承:写一个方法然后让另外一个新的对象来继承他(而不是在新对象中在写一次这个方法) <br/>
+     **示例:使用call方法调用父构造函数***/
+
+    function Product(name, price) {
+        this.name = name;
+        this.price = price;
+        if (price < 0) {
+            throw RangeError("Cannot create product" + this.name + "with a negative price")
+        }
+    }
+
+    function Food(name, price) {
+        Product.call(this, name, price);
+        this.category = "food";
+    }
+
+    /*---上面Food()构造函数调用Product()构造函数 "等同于"(=) 下面这个写法---*/
+
+    function Food1(name, price) {
+        this.name = name;
+        this.price = price;
+        if (price < 0) {
+            throw RangeError("Cannot create product" + this.name + "with a negative price")
+        }
+        this.category = "food";
+    }
+
+
+    /**使用call()方法调用匿名函数 : 在for循环内部，我们创建了一个匿名函数，通过调用该函数的call方法,将每个数组元素作为
+     指定的this值执行了那个匿名函数。这个匿名函数的主要目的是给每个数组元素对象添加一个print方法，这个print
+     方法可以打印出各元素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数(普通参数就可以),
+     目的是为了演示call的用法 **/
+    const animals = [
+        {species: "Lion", name: "XinBa"},
+        {species: "Whale", name: "Blue"}
+    ];
+    for (let i = 0; i < animals.length; i++) {
+        (function (i) {
+            this.print = function () {
+                console.log("#" + i + "" + this.species + ":" + this.name);
+            }
+        }).call(animals[i], i)
+    }
+
+
+    /**使用call()方法调用函数并且指定上下文的this :下面的例子中，当调用greet方法的时候，该方法的 this 值会绑定到 i 对象。**/
+    function greet() {
+        const reply = [this.person, "Is An Awesome", this.role].join(" ");
+        console.log(reply);
+    }
+
+    const called = {
+        person: "Nicholas C.Zakas",
+        role: "Javascript Developer"
+    };
+    greet.call(called); //Nicholas C.Zakas Is An Awesome Javascript Developer
+
+
+</script>
+</body>
+</html>

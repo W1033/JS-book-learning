@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Array.prototype.forEach()遍历方法</title>
+</head>
+<body>
+<!-- 文档完整讲解链接: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach -->
+<!--
+    (1.) forEach() 方法对数组的每个元素执行一次提供的函数。
+    (2.) 语法:
+        array.forEach(callback(currentValue, index, array){
+            //do something
+        }, this)
+
+    (3.)
+        currentValue(当前值)
+            数组中正在处理的当前元素。
+        index(索引)
+            数组中正在处理的当前元素的索引。
+        array
+            forEach()方法正在操作的数组。
+
+        array.forEach(callback[, thisArg])
+ -->
+
+<script type="text/javascript">
+    function logArrayElements(element, index, array) {
+        console.log("a[" + index + "] = " + element);
+        // console.log(array);     // 输出 4 次 [2,5,7,9]
+    }
+
+    [2, 5, 7, 9].forEach(logArrayElements);
+
+    // a[0] = 2
+    // a[1] = 5
+    // a[2] = 7
+    // a[3] = 9
+</script>
+
+</body>
+</html>

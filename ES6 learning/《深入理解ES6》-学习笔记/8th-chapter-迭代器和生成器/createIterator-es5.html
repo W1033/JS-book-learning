@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>es5 创建迭代器</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    function createIterator(items) {
+        let i = 0;
+        return {
+            next: function () {
+                let done = (i >= items.length);
+                let value = !done ? items[i++] : undefined;
+
+                return {
+                    done: done,
+                    value: value
+                }
+            }
+        }
+    }
+
+    let iterator = createIterator([1, 2, 3]);
+
+    console.log(iterator.next());   // {done: false, value: 1}
+    console.log(iterator.next());   // {done: false, value: 2}
+    console.log(iterator.next());   // {done: false, value: 3}
+    console.log(iterator.next());   // {done: true, value: undefined}
+</script>
+</body>
+</html>

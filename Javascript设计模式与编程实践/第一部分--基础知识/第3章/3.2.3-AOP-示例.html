@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AOP 示例</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 76%;
+            margin: 20px auto;
+            min-height: 30rem;
+            background: lightsteelblue;
+        }
+    </style>
+</head>
+<body>
+<div class="container"></div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        Function.prototype.before = function (beforefn) {
+            console.log(beforefn);    // function () { console.log(1) }
+            const _self = this;
+            console.log(this);    // ƒ () { console.log(2); }
+            return function () {
+                console.log(arguments);   // Arguments [callee: ƒ, Symbol(Symbol.iterator): ƒ]
+                beforefn.apply(this, arguments);
+                return _self.apply(this, arguments);
+            }
+        };
+
+        Function.prototype.after = function (afterfn) {
+            const _self = this;
+            return function () {
+                let ret = _self.apply(this, arguments);
+                afterfn.apply(this, arguments);
+                return ret;
+            }
+        };
+
+        let func = function () {
+            console.log(2);
+        };
+        // func = func.before(function () { console.log(1); }).after(function () { console.log(3); });
+
+        func = func.before(function () {
+            console.log(1);
+        });
+
+        /*
+        * 此时输出 func 是上面 func.before() 执行返回的 匿名函数 :
+        *   function () {
+        *       beforefn.apply(this, arguments);
+        *       return _self.apply(this, arguments);
+        *   }
+        * */
+        console.log(func);
+
+        func = func.after(function () {
+            console.log(3);
+        });
+
+        /*
+        * 此时输出 func 是上面 func.after() 执行返回的 匿名函数 :
+        *   function () {
+        *        let ret = _self.apply( this, arguments );
+        *        afterfn.apply( this, arguments );
+        *        return ret;
+        *   }
+        * */
+        console.log(func);
+
+        func();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>P49-cost</title>
+</head>
+<body>
+<div id="container"></div>
+
+
+<script type="text/javascript">
+
+    // Created on 20180514
+
+    let args = [];
+
+    // 函数表达式
+    let cost = function () {
+        console.log(arguments);
+        if (arguments.length === 0) {
+            let money = 0;
+            for (let i = 0, l = args.length; i < l; i++) {
+                money += args[i];
+            }
+            return money;
+        } else {
+            // 利用 apply() 方法 給 args 數組推入一项 (arguments)
+            [].push.apply(args, arguments)
+        }
+    };
+
+    // 调用函数的指针
+    console.log(cost);
+
+
+    // cost( 100 );
+    // cost( 200 );
+    // cost( 300 );
+    //
+    // console.log( cost() );
+</script>
+</body>
+</html>

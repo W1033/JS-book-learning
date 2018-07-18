@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Sheets Example</title>
+    <link rel="stylesheet" title="blah" type="text/css" href="stylesheet1.css">
+    <link rel="alternate stylesheet" type="text/css" href="stylesheet2.css">
+    <style type="text/css">
+        #myDiv {
+            background-color: blue;
+            width: 100px;
+            height: 200px;
+        }
+    </style>
+    <script type="text/javascript">
+        function outputStyleSheets() {
+            var sheet = null;
+            for (var i = 0, len = document.styleSheets.length; i < len; i++) {
+                sheet = document.styleSheets[i];
+                alert(sheet.href); //输出link1,link2的URL，link3即嵌入式样式表，没有URL为null
+            }
+        }
+
+        function toggleStyleSheet() {
+            //disabled表示样式表是否被禁止的，取反表示不禁止styleSheets[0]表示第一个样式表
+            document.styleSheets[0].disabled = !document.styleSheets[0].disabled;
+        }
+    </script>
+</head>
+<body>
+<div id="myDiv"></div>
+<input type="button" value="Output Style Sheets" onclick="outputStyleSheets()">
+<input type="button" value="Enable/Disable Style Sheet" onclick="toggleStyleSheet()">
+
+
+</body>
+</html>
