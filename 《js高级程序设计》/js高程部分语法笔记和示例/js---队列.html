@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3-17-js队列</title>
+    <script type="text/javascript" src="publiScript%20&&%20publicCss/publicScript.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    function queue(ele, fn) {
+        if (!ele.cache) {
+            ele.cache = [];
+        }
+        ele.cache.push(fn);
+    }
+
+    function dequeue(ele) {
+        var next = function () {
+            dequeue(ele);
+        };
+        var fn = ele.cache.shift();
+        fn.call(ele, next);
+    }
+</script>
+</body>
+</html>

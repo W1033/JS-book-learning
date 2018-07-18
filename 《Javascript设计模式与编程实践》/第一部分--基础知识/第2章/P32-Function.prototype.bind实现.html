@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Function.prototype.bind</title>
+</head>
+<body>
+<script type="text/javascript">
+    Function.prototype.bind = function () {
+
+        // 保存原函数
+        const self = this;
+
+        // shift() 方法，它能够移除数组中的第一项并返回该项，同时将数组长度减 1。
+        // 需要绑定的 this 上下文
+        let context = [].shift.call(arguments);
+        console.log("context", context);
+
+        // 取得 arguments 类数组转换为数组去掉第一项后的剩余项
+        let args = [].slice.call(arguments);
+        console.log("掉第一项后的剩余项参数", args);
+
+        // 返回一个新的函数
+        return function () {
+            // 执行新的函数的时候，会把之前传入的 context 当作新函数体内的 this
+            // 并结合两次分别传入的参数，作为新函数的参数
+            return self.apply(context, [].concat.call(args, [].slice.call(arguments)));
+        };
+    };
+
+    const obj = {name: "Seven"};
+
+    let func = function (a, b, c, d) {
+        console.log(this.name);
+        console.log([a, b, c, d])
+    }.bind(obj, 1, 2);
+
+    func(3, 4);
+</script>
+</body>
+</html>

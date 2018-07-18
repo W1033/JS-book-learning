@@ -1,0 +1,656 @@
+@charset "UTF-8";
+
+body {
+    background: #f0f2f6;
+    color: #232323;
+    min-width: 1200px;
+    overflow: auto;
+    font: 14px/1.5 "Open Sans", "Gotham", "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, sans-serif;
+}
+
+/* a标签 */
+a {
+    text-decoration: none;
+    color: #232323;
+    font-family: "Open Sans", "Gotham", "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, sans-serif;
+}
+
+/*input*/
+input[type=text]:focus {
+    border: 1px solid #20a2e6;
+}
+
+input[type=number]:focus {
+    border: 1px solid #20a2e6;
+}
+
+input[type=password]:focus {
+    border: 1px solid #20a2e6;
+}
+
+input:focus {
+    border: 0;
+}
+
+textarea:hover {
+    border: 1px solid #20a2e6;
+}
+
+/*opacity*/
+.opacity-0 {
+    opacity: 0;
+}
+
+.opacity-02 {
+    opacity: .2;
+}
+
+.opacity-04 {
+    opacity: .4;
+}
+
+.opacity-06 {
+    opacity: .6;
+}
+
+.opacity-08 {
+    opacity: .8;
+}
+
+.opacity-1 {
+    opacity: 1;
+}
+
+/* left - bottom */
+.left-0 {
+    right: 0;
+}
+
+.bottom-0 {
+    bottom: 0;
+}
+
+/* margin-auto */
+.margin-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*margin-top*/
+.mar-top-5 {
+    margin-top: 5px;
+}
+
+.mar-top-10 {
+    margin-top: 10px;
+}
+
+.mar-top-15 {
+    margin-top: 15px;
+}
+
+.mar-top-20 {
+    margin-top: 20px;
+}
+
+.mar-top-25 {
+    margin-top: 25px;
+}
+
+/*margin-bottom*/
+.mar-bot-5 {
+    margin-bottom: 5px;
+}
+
+.mar-bot-10 {
+    margin-bottom: 10px;
+}
+
+.mar-bot-15 {
+    margin-bottom: 15px;
+}
+
+.mar-bot-20 {
+    margin-bottom: 20px;
+}
+
+.mar-bot-25 {
+    margin-bottom: 25px;
+}
+
+/*margin-left*/
+.mar-left-5 {
+    margin-left: 5px;
+}
+
+.mar-left-10 {
+    margin-left: 10px;
+}
+
+.mar-left-15 {
+    margin-left: 15px;
+}
+
+.mar-left-20 {
+    margin-left: 20px;
+}
+
+.mar-left-25 {
+    margin-left: 25px;
+}
+
+/*margin-right*/
+.mar-rig-5 {
+    margin-right: 5px;
+}
+
+.mar-rig-10 {
+    margin-right: 10px;
+}
+
+.mar-rig-15 {
+    margin-right: 15px;
+}
+
+.mar-rig-20 {
+    margin-right: 20px;
+}
+
+.mar-rig-25 {
+    margin-right: 25px;
+}
+
+/*padding-top*/
+.pad-top-5 {
+    padding-top: 5px;
+}
+
+.pad-top-10 {
+    padding-top: 10px;
+}
+
+.pad-top-15 {
+    padding-top: 15px;
+}
+
+.pad-top-20 {
+    padding-top: 20px;
+}
+
+.pad-top-25 {
+    padding-top: 25px;
+}
+
+/*padding-bottom*/
+.pad-bot-5 {
+    padding-bottom: 5px;
+}
+
+.pad-bot-10 {
+    padding-bottom: 10px;
+}
+
+.pad-bot-15 {
+    padding-bottom: 15px;
+}
+
+.pad-bot-20 {
+    padding-bottom: 20px;
+}
+
+.pad-bot-25 {
+    padding-bottom: 25px;
+}
+
+/*padding-left*/
+.pad-left-5 {
+    padding-left: 5px;
+}
+
+.pad-left-10 {
+    padding-left: 10px;
+}
+
+.pad-left-15 {
+    padding-left: 15px;
+}
+
+.pad-left-20 {
+    padding-left: 20px;
+}
+
+.pad-left-25 {
+    padding-left: 25px;
+}
+
+/*padding-right*/
+.pad-rig-5 {
+    padding-right: 5px;
+}
+
+.pad-rig-10 {
+    padding-right: 10px;
+}
+
+.pad-rig-15 {
+    padding-right: 15px;
+}
+
+.pad-rig-20 {
+    padding-right: 20px;
+}
+
+.pad-rig-25 {
+    padding-right: 25px;
+}
+
+/*width*/
+.wid-10-per {
+    width: 10%;
+}
+
+.wid-16-per {
+    width: 16%;
+}
+
+.wid-18-per {
+    width: 18%;
+}
+
+.wid-20-per {
+    width: 20%;
+}
+
+.wid-26-per {
+    width: 26%;
+}
+
+.wid-30-per {
+    width: 30%;
+}
+
+.wid-40-per {
+    width: 40%;
+}
+
+.wid-50-per {
+    width: 50%;
+}
+
+.wid-60-per {
+    width: 60%;
+}
+
+.wid-80-per {
+    width: 80%;
+}
+
+.wid-92-per {
+    width: 92%;
+}
+
+.wid-98-per {
+    width: 98%;
+}
+
+.wid-100-per {
+    width: 100%;
+}
+
+/*height*/
+.hei-72 {
+    height: 72px;
+}
+
+.hei-10-per {
+    height: 10%;
+}
+
+.hei-16-per {
+    height: 16%;
+}
+
+.hei-18-per {
+    height: 18%;
+}
+
+.hei-20-per {
+    height: 20%;
+}
+
+.hei-26-per {
+    height: 26%;
+}
+
+.hei-30-per {
+    height: 30%;
+}
+
+.hei-40-per {
+    height: 40%;
+}
+
+.hei-50-per {
+    height: 50%;
+}
+
+.hei-60-per {
+    height: 60%;
+}
+
+.hei-80-per {
+    height: 80%;
+}
+
+.hei-92-per {
+    height: 92%;
+}
+
+.hei-98-per {
+    height: 98%;
+}
+
+.hei-100-per {
+    height: 100%;
+}
+
+.hei-auto {
+    height: auto;
+}
+
+.min-hei-100 {
+    min-height: 100%;
+}
+
+/*line-height*/
+.line-hei-14 {
+    line-height: 14px;
+}
+
+.line-hei-16 {
+    line-height: 16px;
+}
+
+.line-hei-18 {
+    line-height: 18px;
+}
+
+.line-hei-24 {
+    line-height: 24px;
+}
+
+.line-hei-72 {
+    line-height: 72px;
+}
+
+/*cursor*/
+.cur-point {
+    cursor: pointer;
+}
+
+.cur-default {
+    cursor: default;
+}
+
+/*overflow*/
+.over-hid {
+    overflow: hidden;
+}
+
+.over-auto {
+    overflow: auto;
+}
+
+.over-x-hid {
+    overflow-x: hidden;
+}
+
+.over-y-auto {
+    overflow-y: auto;
+}
+
+/*float*/
+.clear {
+    clear: both;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+/*position*/
+.pos-absolute {
+    position: absolute;
+}
+
+.pos-relative {
+    position: relative;
+}
+
+.pos-fixed {
+    position: fixed;
+}
+
+/*display*/
+.dis-none {
+    display: none;
+}
+
+.dis-inl-block {
+    display: inline-block;
+}
+
+.dis-block {
+    display: block;
+}
+
+.dis-flex {
+    display: flex;
+}
+
+/*vertical-align*/
+.vertical-top {
+    vertical-align: top;
+}
+
+.vertical-mid {
+    vertical-align: middle;
+}
+
+/*text-align*/
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/*font-size*/
+.font-14 {
+    font-size: 14px;
+}
+
+.font-16 {
+    font-size: 16px;
+}
+
+.font-18 {
+    font-size: 18px;
+}
+
+.font-24 {
+    font-size: 24px;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+/*font-color*/
+.white-font {
+    color: #fff;
+}
+
+.blue-font {
+    color: #26abf4;
+}
+
+.grey-font {
+    color: #757575;
+}
+
+/*letter-spacing*/
+.let-spa-1px {
+    letter-spacing: 1px;
+}
+
+.let-spa-2px {
+    letter-spacing: 2px;
+}
+
+/*text-indent*/
+.text-ind-2 {
+    text-indent: 2px;
+}
+
+.text-ind-10 {
+    text-indent: 10px;
+}
+
+/*border-radius*/
+.bor-rad-4px {
+    border-radius: 4px;
+}
+
+.bor-bot-left-rad-4px {
+    border-bottom-left-radius: 4px;
+}
+
+.bor-bot-right-rad-4px {
+    border-bottom-right-radius: 4px;
+}
+
+.bor-rad-6px {
+    border-radius: 6px;
+}
+
+/*border*/
+.bor-1px-white {
+    border: 1px solid #fff;
+}
+
+.bor-1px-grey {
+    border: 1px solid lightgrey;
+}
+
+.bor-1px-blue {
+    border: 1px solid #1198e3;
+}
+
+.bor-top-white {
+    border-top: 1px solid #fff;
+}
+
+.bor-bot-white {
+    border-bottom: 1px solid #fff;
+}
+
+.bor-bot-ccc {
+    border-bottom: 1px solid #ccc;
+}
+
+/*P强制换行*/
+p {
+    word-wrap: break-word;
+}
+
+/*P强制换行*/
+
+/* box-shadow */
+.box-sha {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* z-index */
+.z-ind--100 {
+    z-index: -100
+}
+
+.z-ind-10 {
+    z-index: -10
+}
+
+.z-ind--1 {
+    z-index: -1
+}
+
+.z-ind-1 {
+    z-index: 1
+}
+
+.z-ind-100 {
+    z-index: 100
+}
+
+.z-ind-999 {
+    z-index: 999
+}
+
+/* background-color */
+.white-bg {
+    background-color: #fff;
+}
+
+.green-bg {
+    background: darkseagreen;
+}
+
+.grey-bg {
+    background: lightgrey;
+}
+
+.coral-bg {
+    background: coral;
+}
+
+.blue-bg {
+    background: #1198e3
+}
+
+.light-green-bg {
+    background: #c0e8d0;
+}
+
+.light-coral-bg {
+    background-color: lightcoral
+}
+
+.light-grey-bg {
+    background: #f0f0f0;
+}
+
+.light-blue-bg {
+    background: lightskyblue;
+}
+
+/*三角形 Triangle Bottom Right */
+.triangle-right {
+    width: 0;
+    height: 0;
+    /* 注释代码为讲解代码
+     border-bottom: 30px solid transparent;
+     border-left: 28px solid red;
+     border-right: 28px solid red;
+     border-top: 30px solid #92c89f;*/
+    border-bottom: 60px solid #d8e4f9;
+    border-left: 25px solid transparent;
+}

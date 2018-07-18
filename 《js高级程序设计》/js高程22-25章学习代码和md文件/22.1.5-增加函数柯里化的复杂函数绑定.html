@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>22.1.4函数绑定</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .theBut {
+            width: 120px;
+            height: 30px;
+            border-radius: 4px;
+            background: lightsalmon;
+            margin: 100px;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script type="text/javascript">
+        var EventUtil = {
+            addHandler: function (element, type, handler) {
+                if (element.addEventListener) {
+                    element.addEventListener(type, handler, false);
+                } else if (element.attachEvent) {
+                    element.attachEvent("on" + type, handler);
+                } else {
+                    element["on" + type] = handler;
+                }
+            }, //添加跨浏览器的事件
+
+            removeHandler: function (element, type, handler) {
+                if (element.removeEventListener) {
+                    element.removeEventListener(element, type, handler);
+                } else if (element.detachEvent) {
+                    element.detachEvent("on" + type, handler);
+                } else {
+                    element["on" + type] = null;
+                }
+            },//移除跨浏览器的事件
+
+            getEvent: function (event) {
+                return event ? event : window.event;
+            },//取得跨浏览器的事件event
+
+            getTarget: function (event) {
+                return event.target || event.srcElement;
+            },//取得事件的目标
+
+            preventDefault: function (event) {
+                if (event.preventDefault) {
+                    event.preventDefault();
+                } else {
+                    event.returnValue = null;
+                }
+            },//取消事件的默认行为
+
+            stopPropagation: function (event) {
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                } else {
+                    event.cancelBubble = true;
+                }
+            },//取消事件的进一步传播和冒泡
+
+            getRelatedTarget: function (event) {
+                if (event.relatedTarget) {
+                    return event.relatedTarget;
+                } else if (event.toElement) {
+                    return event.toElement;
+                } else if (event.fromElement) {
+                    return event.fromElement;
+                } else {
+                    return null;
+                }
+            }, //取得相关元素的方法
+
+            getButton: function (event) {
+                if (document.implementation.hasFeature("MouseEvents", "2.0")) {
+                    return event.button;
+                } else {
+                    switch (event.button) {
+                        case 0:
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 7:
+                            return 0;
+                        case 2:
+                        case 6:
+                            return 2;
+                        case 4:
+                            return 1;
+                    }
+                }
+            },// 取得跨浏览器的鼠标按钮事件
+
+            getWheelDelta: function (event) {
+                if (event.wheelDelta) {
+                    return event.wheelDelta;
+                } else {
+                    return -event.detail * 40;
+                }
+            }, //鼠标滚轮事件
+
+            getCharCode: function (event) {
+                if (typeof event.charCode == "number") {
+                    return event.charCode;
+                } else {
+                    return event.keyCode;
+                }
+            } //取得字符编码
+        };
+
+        /**通过标签名tagName($$)获取元素**/
+        var getTagName = function (tagName, oParent) {
+            //如果有父级parent就在父级元素之下查找，如果没有父级元素就直接在document下查找
+            return (oParent || document).getElementsByTagName(tagName);
+        };
+
+        /**通过class($$$)获取元素**/
+        var getClassName = function (oClass, oParent) {
+            var saveClassArray = [],
+                regClass = new RegExp("(\\s|^)" + oClass + "($|\\s)"),//\s匹配一个空白字符
+                allCurrentEle = getTagName("*", oParent); //用getTagName方法取得所有当前标签名的元素
+            for (var i = 0; i < allCurrentEle.length; i++) {
+                //regClass.test(allCurrentEle[i].className) && saveClassArray.push(allCurrentEle[i]);
+                if (regClass.test(allCurrentEle[i].className)) {
+                    saveClassArray.push(allCurrentEle[i]);
+                }
+            }
+            return saveClassArray;
+        };
+    </script>
+</head>
+<body>
+<div class="myBox">
+    <input type="button" class="theBut" value="函数绑定">
+</div>
+<script type="text/javascript">
+    /*函数柯里化(function currying): 函数柯里化的基本方法和函数绑定是一样的：使用一个闭包
+    * 返回一个函数。两者的区别在于，当函数调用时，返回的函数还需要设置一些传入的参数。*/
+    function bind(fn, context) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        return function () {
+            var innerArgs = Array.prototype.slice.call(arguments);
+            var finalArgs = args.concat(innerArgs);
+            return fn.apply(context, finalArgs);
+        }
+    }
+
+    var handler = {
+        message: "增加了函数柯里化的复杂函数绑定",
+        handleClick: function (event) {
+            alert(this.message + ":" + event.type);
+        }
+    };
+    var btn = getClassName("theBut")[0];
+    EventUtil.addHandler(btn, "click", bind(handler.handleClick, handler));
+</script>
+</body>
+</html>

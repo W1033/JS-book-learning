@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>继承-call-apply</title>
+</head>
+<body>
+<div id="box"></div>
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        // combination
+        /**《js高程》 6.3.3 组合继承(combination inheritance): 也叫 "伪经典继承"，指的是将
+         *  原型链和借用构造函数技术组合到一起，从而发挥二者之长的一种继承模式。背后的思路是:
+         *  (1.) 使用原型链实现对原型属性和方法的继承
+         *  (2.) 通过借用构造函数来实现对实例属性的继承。
+         *  这样，即通过在原型上定义方法来实现了函数复用，又能够保证每个实例都有他自己的属性。*/
+
+        function SuperType(name) {
+            this.name = name;
+            this.colors = ["red", "blue", "green"];
+        }
+
+        SuperType.prototype.sayName = function () {
+            console.log(this.name);
+        };
+
+        function SubType(name, age) {
+            SuperType.call(this, name);
+            this.age = age;
+        }
+
+        SubType.prototype = new SuperType();
+        // SubType.prototype.constructor = SubType;
+        SubType.prototype.sayAge = function () {
+            console.log(this.age);
+        };
+        var subInstance = new SubType("Nicholas", 30);
+        subInstance.colors.push("orange");
+        subInstance.sayName();              // Nicholas
+        subInstance.sayAge();               // 30
+        console.log(subInstance.colors);    // ["red", "blue", "green", "orange"]
+
+    }
+</script>
+</body>
+</html>
