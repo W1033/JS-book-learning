@@ -42,6 +42,19 @@
     })*/
     // ------ 仿写最基本的回调函数 ------
 
+    let oObj = {
+        run() {
+            console.log(this);
+        }
+    };
+    oObj.run();
+
+    function run() {
+        console.log(this);
+    }
+
+    run();
+    run.apply(oObj);
 
 </script>
 </body>

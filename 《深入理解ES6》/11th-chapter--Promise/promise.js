@@ -81,7 +81,8 @@ function fnReadFile(filename) {
                 reject(err);
                 return;
             }
-            // 读取成功
+            // 读取成功: 调用 resolve() 后触发一个异步调用，传入 then() 和 catch() 方法的
+            // 函数会被添加到任务队列中并异步执行。
             resolve(contents);
         })
     })
@@ -92,7 +93,8 @@ let promise = fnReadFile("nodejs-example/bb.txt");
 promise.then(
     // 完成
     function (contents) {
-        console.log(contents)
+        console.log(contents);
+        console.log("contents内容输出完毕");
     },
 
     // 拒绝
@@ -101,7 +103,7 @@ promise.then(
     }
 );
 
-
+/** 2. Promise 的基础知识 --> 创建已处理的 Promise  */
 
 
 
