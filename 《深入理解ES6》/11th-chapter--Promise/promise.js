@@ -104,8 +104,59 @@ promise.then(
 );
 
 /** 2. Promise 的基础知识 --> 创建已处理的 Promise  */
+/* P245: - (1) 使用 Promise.resolve(): Promise.resolve() 方法只接受一个参数并返回
+ * 一个完成的 Promise, 也就是说不会有任务编排的过程，而且需要向 Promise 添加一至多个完
+ * 成处理程序来获取值。例如: */
+let oPro = Promise.resolve(42);
+// 由于该 Promise 永远不会存在拒绝状态，因而该 Promise 的拒绝处理程序永远不会被调用。
+oPro.then((value) => {
+    console.log(value);
+});
+
+/* - (2) 使用 Promise.reject()  */
+
+/* 非 Promise 的 Thenable 对象 */
+
+/** 2. Promise 的基础知识 --> 执行器错误 */
+/* P247: 如果执行器内部抛出一个错误，则 Promise 的拒绝处理程序就会被调用。 */
 
 
+/** 3. 全局的 Promise 拒绝处理 */
+
+/** 3. 全局的 Promise 拒绝处理 --> Node.js 环境的拒绝处理 */
+// process /'prəʊses/ n.程序、进程、 vt.处理、加工
+/* P248: 在 Node.js 中，处理 Promise 拒绝时会触发 process 对象上的2个事件:
+ *  - (1) unhandledRejection (未处理的拒绝) 在一个事件循环中, 当 Promise 被拒绝，
+ *  并且没有提供拒绝处理程序时，触发该事件。
+ *  - (2) rejectionHandled (拒绝处理) 在一个事件循环中，当 Promise 被拒绝时，若
+ *  拒绝处理程序被调用，触发该事件。
+ * */
+
+// P250: 下面是一个简单的未处理拒绝跟踪器:
+let possiblyUnhandledRejections = new Map();
+// 如果一个拒绝没被处理，则将它添加到 Map 集合中
+process.on("unhandleRejection", function (reason, promise) {
+    // set() 方法向 Map 集合中添加项: 每当 unhandledRejection 被触发，Promise
+    // 及其拒绝原因就会被添加到此 Map 中。
+    possiblyUnhandledRejections.set(promise, reason);
+});
+// 每当 rejectionHandled 被触发，已被处理的 Promise 就会从这个 Map 中被移除。
+process.on("rejectionHandled", function (promise) {
+    possiblyUnhandledRejections.delete(promise);
+});
+
+setInterval(function () {
+    possiblyUnhandledRejections.forEach(function (reason, promise) {
+        console.log(reason.message ? reason.message : reason);
+        // 做些什么来处理这拒绝
+        handleRejection(promise, reason);
+    });
+    possiblyUnhandledRejections.clear();
+
+}, 60000);
+
+
+/** 3. 全局的 Promise 拒绝处理 --> 浏览器环境的拒绝处理 */
 
 
 
