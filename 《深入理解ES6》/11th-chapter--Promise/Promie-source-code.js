@@ -4,13 +4,13 @@ function _Promise(fn) {
     if (typeof this !== "object") throw new TypeError("Promises must be constructed via new");
     if (typeof fn !== "function") throw new TypeError("not a function");
     let state = null; // 状态，null：pending，true：fulfilled，false：rejected
-    let value = null; // 当前promise的状态事件处理函数（onFullfilled或onRejected）的入参
+    let value = null; // 当前promise的状态事件处理函数（onFulfilled或onRejected）的入参
     let deferreds = []; // 当前promise的状态事件处理函数和promise链表中下一个promise的状态转换发起函数
     let self = this;
     // 唯一的公开方法
-    this.then = function (onFullfilled, onRejected) {
+    this.then = function (onFulfilled, onRejected) {
         return new self.constructor(function (resolve, reject) {
-            handle(new Handler(onFullfilled, onRejected, resolve, reject));
+            handle(new Handler(onFulfilled, onRejected, resolve, reject));
         });
     };
 
@@ -20,7 +20,7 @@ function _Promise(fn) {
             deferreds.push(deferred);
             return;
         }
-        let cb = state ? deferred.onFullfilled : deferred.onRejected;
+        let cb = state ? deferred.onFulfilled : deferred.onRejected;
         if (cb === null) {
             (state ? deferred.resolve : deferred.reject)(value);
             return;
@@ -75,14 +75,14 @@ function _Promise(fn) {
     doResolve(fn, resolve, reject);
 
     // 对状态转换事件处理函数进行封装后，再传给执行函数
-    function doResolve(fn, onFullfilled, onRejected) {
+    function doResolve(fn, onFulfilled, onRejected) {
         // done作为开关以防止fn内同时调用resolve和reject方法
         let done = false;
         try {
             fn(function (value) {
                 if (done) return;
                 done = true;
-                onFullfilled(value);
+                onFulfilled(value);
             }, function (reason) {
                 if (done) return;
                 done = true;
@@ -96,8 +96,8 @@ function _Promise(fn) {
     }
 
     // 构造promise的链表逻辑结构
-    function Handler(onFullfilled, onRejected, resolve, reject) {
-        this.onFullfilled = typeof onFullfilled === "function" ? onFullfilled : null; // 当前promise的状态转换事件处理函数
+    function Handler(onFulfilled, onRejected, resolve, reject) {
+        this.onFulfilled = typeof onFulfilled === "function" ? onFulfilled : null; // 当前promise的状态转换事件处理函数
         this.onRejected = typeof onRejected === "function" ? onRejected : null; // 当前promise的状态转换事件处理函数
         this.resolve = resolve; // 设置链表中下一个promise的状态为fulfilled
         this.reject = reject; // 设置链表中下一个promise的状态为rejected
@@ -115,7 +115,7 @@ function _Promise(fn) {
                         let then = val.then;
                         if (typeof then === "function") {
                             then.call(val, function (val) {
-                                // 对于thenable和promise对象则订阅onFullfilled事件获取处理结果值
+                                // 对于thenable和promise对象则订阅onFulfilled事件获取处理结果值
                                 res(i, val);
                             }, reject);
                             return;
