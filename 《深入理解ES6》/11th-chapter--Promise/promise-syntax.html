@@ -55,7 +55,55 @@
     }
     run();
     run.apply(oObj);*/
-    
+
+
+
+    new Promise(
+        // fn1
+        (resolve, reject) => {
+            try {
+                fetch(url, (data) => { resolve(data) })
+            } catch (e) { reject(e); }}
+        ).then(
+            // fn2
+            (data) => { return JSON.stringify(data);},
+            (e) => { return e }
+        ).then(
+            // f3
+            (data) => { return data; },
+            (e) => { return e; }
+        );
+
+
+    // Promise
+    function Pro(fn) {
+        // null: pending, true: fulfilled,  false: rejected
+        let state = null;
+        // 处理函数的参数
+        let value = null;
+
+        // 当前 promise 的处理函数和下一个 promise 状态转换函数
+        let self = this;
+        // promise 公开调用方法，串联所有异步操作
+        this.then = (onFulfilled, onRejected) => {};
+
+        // 执行成功处理函数 pending -> fulfilled
+        function resolve(value) {}
+
+        // 执行失败处理函数 pending -> rejected
+        function reject(value) {}
+
+        // 保存和执行 Promise 对象 deferreds 中的函数
+        function handle(deferred) {}
+
+        // deferreds 的下一项对象移动
+        function final() {}
+
+        doResolve(fn, resolve, reject)
+        // 对状态转换时间处理函数进行封装后，再传给执行元素
+    }
+
+
 </script>
 </body>
 </html>
