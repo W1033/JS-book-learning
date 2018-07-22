@@ -70,13 +70,15 @@
     /**~~~~~~~~~~~~~~~~~~~~~~~~~~ 数组去重-Over ~~~~~~~~~~~~~~~~~~~~~~~~~~**/
 
 
+
     /**~~~~~~~~~~~~~~~~~~~~~~~~~~ 斐波那契数列-Start ~~~~~~~~~~~~~~~~~~~~~~~~~~**/
-    //斐波那契数列
+    // 斐波那契数列
     function fibonacci1(n) {
         console.log("n", n);
         if (n === 1 || n === 2) return 1;
         return fibonacci1(n - 1) + fibonacci1(n - 2)
     }
+    console.log(fibonacci1(10));  // 輸出？
 
     function fibonacci2(n) {
         let n1 = 1;
@@ -90,7 +92,7 @@
         return sum
     }
 
-    //尾递归调用
+    // 尾递归调用
     function fibonacci3(n) {
         return function (fn) {
             return fn(n, 0, 1, fn)
@@ -100,7 +102,7 @@
         })
     }
 
-    console.log(fibonacci1(10));
+
     console.log(fibonacci2(10));
     console.log(fibonacci3(10));
     /**~~~~~~~~~~~~~~~~~~~~~~~~~~ 斐波那契数列-Over ~~~~~~~~~~~~~~~~~~~~~~~~~~**/

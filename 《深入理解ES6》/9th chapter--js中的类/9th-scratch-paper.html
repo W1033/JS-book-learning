@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
     /** 作為一等公民的類 */
-    function createObject(classDef) {
+    /*function createObject(classDef) {
         console.log(classDef);  // class { sayHi() {console.log("Hi!"); } }
         return new classDef();
     }
@@ -18,7 +18,27 @@
             console.log("Hi!");
         }
     })
-    obj.sayHi();
+    obj.sayHi();*/
+
+
+
+    function testThis() {
+        console.log(this);  // window
+    }
+    testThis();
+
+    function MyArray(col) {
+        this.color = col;
+        console.log(this);  // MyArray {color: "red"}
+    }
+    MyArray.prototype.getColor = function() {
+      console.log(this.color);
+    };
+
+    let colors = new MyArray("red");
+    colors.getColor();
+
+
 </script>
 </body>
 </html>
