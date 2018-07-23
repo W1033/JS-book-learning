@@ -63,30 +63,36 @@ function callback1(data) {
 /*  2. 正常情况下我们希望可以接受任意数量的回调，且不管是否超时，仍然可以继续注册回调。为了实现
  *  这些，我们将创建一个包含2个功能的 promise 对象。
  *
- *  我们暂时设计了一个 defer 对象，他的返回值一个包含2个部分的对象 (这个对象就是 promise),一个
- *  用来注册观察者 (就是 "then" 方法添加回调)，一个用来通知所有的观察者执行代码 (就是 resolve
- *  去执行之前添加的所有回调)。
+ *  我们暂时设计了一个 defer 对象，他的返回值一个包含2个部分的对象 (这个对象就是 promise):
+ *  一个用来注册观察者 (就是 "then" 方法添加回调);
+ *  一个用来通知所有的观察者执行代码 (就是 resolve 去执行之前添加的所有回调)。
  *
  *  当 promise 没有被 resolve 之前，所有回调函数都会存储在一个 "pending" 的数组中。
  *  当 promise 被 resolve 之后，立即执行之前存储的所有回调函数，当回调函数全部执行完毕之后，我们
  *  将根据 "pending" 来区分状态。
  */
-
 let defer = function() {
     let pending = [], value;
     return {
         resolve: function(_value) {
             value = _value;
             for (let i = 0; i < pending.length; i++) {
-                pending[i](value);
+                // pending数组: [ 0: callback2(data) ]
+                /*  (pending[i])(value)
+                 * 相当于下面的匿名函数自执行(Immediately-invoked function expression):
+                 *  (function callback2(data) {
+                 *    console.log(data);
+                 *  })(value);
+                 */
+                (pending[i])(value);
             }
             pending = undefined;
         },
-
         then: function(_callback) {
             if (pending) {
-                // 如果 pending 数组存在，就把传入的回到函数推入
+                // 如果 pending 数组存在，就把传入的回调函数推入其中
                 pending.push(_callback);
+                console.log("输出 pending 数组为:", pending);
             } else {
                 _callback();
             }
@@ -94,12 +100,15 @@ let defer = function() {
     }
 };
 let oneOneSecondLater = () => {
+    // 首先调用 defer() 函数，此函数返回一个对象
     let result = defer();
     setTimeout(() => {
+        // 1s 后调用返回对象下的 resolve() 方法，并传入一个参数 1
         result.resolve(1);
     }, 1000);
     return result;
 };
+// 首先调用 defer()函数返回对象下的 then() 方法，并传入一个名为 callback2 的回调函数
 oneOneSecondLater().then(callback2);
 function callback2(data) {
     console.log(data);
