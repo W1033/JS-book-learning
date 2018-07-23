@@ -71,19 +71,20 @@ function callback1(data) {
  *  当 promise 被 resolve 之后，立即执行之前存储的所有回调函数，当回调函数全部执行完毕之后，我们
  *  将根据 "pending" 来区分状态。
  */
-let defer = function() {
+/*let defer = function() {
     let pending = [], value;
     return {
         resolve: function(_value) {
             value = _value;
             for (let i = 0; i < pending.length; i++) {
                 // pending数组: [ 0: callback2(data) ]
-                /*  (pending[i])(value)
+                /!*  (pending[i])(value)
                  * 相当于下面的匿名函数自执行(Immediately-invoked function expression):
                  *  (function callback2(data) {
                  *    console.log(data);
                  *  })(value);
-                 */
+                 *!/
+                // 所以下面的 callback2 回调函数是在这里调用的
                 (pending[i])(value);
             }
             pending = undefined;
@@ -109,6 +110,67 @@ let oneOneSecondLater = () => {
     return result;
 };
 // 首先调用 defer()函数返回对象下的 then() 方法，并传入一个名为 callback2 的回调函数
+oneOneSecondLater().then(callback2);
+function callback2(data) {
+    console.log(data);
+}*/
+
+
+
+/* 3. 到此时，我们已经可以做到:
+ *  (1.) 可以任意时间添加任意多的回调。
+ *  (2.) 可以认为决定什么时候 resolve。
+ *  (3.) 当 promise 被 resolve 之后，还可以添加回调，只不过此时立即就执行了。
+ *  但是还有一些问题，比如:
+ *   (1.) defer 可以被 resolve 执行多次，我们并没有给出一个错误的提示。而且事实上为了避免恶意或者
+ *   无意的不断去 resolve, 我们仅允许第一次调用可以通知回调并执行。
+ *   (2.) 添加回调只能通过 defer.then 添加，不能链式调用 defer.then(callback).then(callback)。
+ *   接下来我们先修正第一个问题:
+ */
+
+/** 三、 promise 职责分离:
+ *  在实现链式回调之前，为了后期结构，我们希望对我们的 promise 进行职责区分，一个注册观察者，一个执行
+ *  观察者。 根据最少授权原则，我们希望如果授权给某人一个 promise, 这里只允许他增加观察者； 如果授权
+ *  给某人 resolver, 他应该仅仅能决定什么时候给出解决方案。因为大量实验表明任何不可避免的越权行为会
+ *  导致后续的改动变得很难维护。(其实就是希望把添加回调的 then 功能移植到 promise 中， 从 defer.then
+ *  转变为 defer.promise.then, 保证功能的纯粹性)
+ * */
+
+let defer = function() {
+    let pending = [], value;
+    return {
+        resolve: function(_value) {
+            // 3. 解决 resolve 执行多次
+            if (pending) {
+                value = _value;
+                for (let i = 0; i < pending.length; i++) {
+                    (pending[i])(value)
+                }
+                pending = undefined;
+            } else {
+                throw new Error("A promise can only be resolved once.")
+            }
+        },
+        // 三、 promise 职责分离
+        promise: {
+            then: function(_callback) {
+                if (pending) {
+                    // 如果 pending 数组存在，就把传入的回调函数推入其中
+                    pending.push(_callback);
+                } else {
+                    _callback();
+                }
+            }
+        }
+    }
+};
+let oneOneSecondLater = () => {
+    let result = defer();
+    setTimeout(() => {
+        result.resolve(1);
+    }, 1000);
+    return result;
+};
 oneOneSecondLater().then(callback2);
 function callback2(data) {
     console.log(data);
