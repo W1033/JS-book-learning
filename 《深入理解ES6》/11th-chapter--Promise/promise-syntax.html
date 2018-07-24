@@ -74,54 +74,60 @@
             (e) => { return e; }
         );
 
+    
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // Promise
-    function Pro(fn) {
-        // null: pending, true: fulfilled,  false: rejected
-        let state = null;
-        // 处理函数的参数
-        let value = null;
 
-        // 当前 promise 的处理函数和下一个 promise 状态转换函数
-        let self = this;
-        // promise 公开调用方法，串联所有异步操作
-        this.then = (onFulfilled, onRejected) => {};
+        // 例子: 写一个相加的函数，接受2个回调函数返回的数字相加。
+        let twoNumPlus = function(callback) {
+            let a, b;
+            let consider = function() {
+                if (a === undefined || b === undefined) { return; }
+                callback(a + b);
+            };
 
-        // 执行成功处理函数 pending -> fulfilled
-        function resolve(value) {}
+            oneNum(function(_a) {
+                a = _a;
+                consider();
+            });
+            oneOtherNum(function(_b) {
+               b = _b;
+               consider();
+            });
+        };
 
-        // 执行失败处理函数 pending -> rejected
-        function reject(value) {}
+        function oneNum(oneCallback) {
+            oneCallback(1);
+        }
 
-        // 保存和执行 Promise 对象 deferreds 中的函数
-        function handle(deferred) {}
+        function oneOtherNum(oneOtherCallback) {
+            oneOtherCallback(2)
+        }
 
-        // deferreds 的下一项对象移动
-        function final() {}
-
-        doResolve(fn, resolve, reject)
-        // 对状态转换时间处理函数进行封装后，再传给执行元素
-    }
+        twoNumPlus(function(c) {
+            console.log(c);
+        });
+   
     
     
     
     /*let fun = function (par) {
-    console.log(par);
-}("传入的参数");
+        console.log(par);
+    }("传入的参数");
 
-// 错误写法，没有此语法
-function run(par) {
-    console.log(par);
-}("参数");
+    // 错误写法，没有此语法
+    function run(par) {
+        console.log(par);
+    }("参数");
 
-// IIFE (Immediately-invoked function expression)
-(function run(par) {
-    console.log(par);
-})("参数");
+    // IIFE (Immediately-invoked function expression)
+    (function run(par) {
+        console.log(par);
+    })("参数");
 
-(function run(par){
-    console.log(par);
-}("参数"));*/
+    (function run(par){
+        console.log(par);
+    }("参数"));*/
 
 </script>
 </body>
