@@ -79,6 +79,7 @@
 
 
         // 例子: 写一个相加的函数，接受2个回调函数返回的数字相加。
+        // 注釋: 第一步先執行 towNumPlus 函數，走到 consider 內時 a b 都是 undefined 所以會退出
         let twoNumPlus = function(callback) {
             let a, b;
             let consider = function() {
@@ -86,6 +87,11 @@
                 callback(a + b);
             };
 
+
+            /* 調用 oneNum() 函數，并把一個匿名函數当作参数传入，緊接著執行外面的
+             * function oneNum(){} 函数，並且在函數內調用當做參數傳進來的匿名函數，調用的同时傳入
+             * 一個參數 1, 接著就在当前环境中继续执行这个匿名函数中的内容(即其内部的:
+             * a = _a, consider(); )  */
             oneNum(function(_a) {
                 a = _a;
                 consider();
