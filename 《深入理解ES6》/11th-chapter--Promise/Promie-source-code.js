@@ -292,7 +292,7 @@ let ref = function(value) {
         }
     }
 };
-
+/*
 let defer = function() {
     let pending = [], value;
     return {
@@ -334,5 +334,60 @@ run.promise.then(function(value) {
 }).then(function(value) {
     console.log(value);    // 2
 });
-run.resolve(6);
+run.resolve(6);*/
 
+
+/** 五、提供错误的回调 */
+// 为了实现错误消息的传递，我们还需要一个错误的回调函数(errback)。就像 promise 完全执行时调用
+// callback 一样，它会告知执行 errback 以及告诉我们拒绝的原因。 实现一个类似于前面 ref 的函数:
+let reject = function(reason) {
+    return {
+        then: function(callback, errback) {
+            return ref(errback(reason));
+        }
+    }
+};
+// 最简单的实现方法时当监听到返回值时，立即执行代码:
+reject("Meh.").then(
+  function(value) {},
+  function(reason) { throw new Error(reason) }
+);
+
+// 那么接下来我们改进原来 promise 这个 API， 引入 "errback".
+
+// 为了将错误回调添加到代码中，defer 需要添加一种新的容器来添加成功回调和错误回调。因此之前那个
+// 存储在数组 (pending) 中的只有一种待处理回调函数，我们需要重新设计一个同时包含成功回调和错误
+// 回调的数组 ([callback, errback]), 根据 then 传入的参数决定调用哪个。
+
+let defer = function() {
+    let pending = [], value;
+    return {
+        resolve: function(_value) {
+            if (pending) {
+                value = ref(_value);
+                for (let i = 0, ii = pending.length; i < ii; i++) {
+                    // apply the pending arguments to "then"
+                    value.then.apply(value, pending[i]);
+                }
+                pending = undefined;
+            }
+        },
+        promise: {
+            then: function(_callback, _errback) {
+                let result = defer();
+                let callback = function(value) {
+                    result.resolve(_callback(value));
+                };
+                let errback = function(reason) {
+                    result.resolve(_errback(reason));
+                };
+                if (pending) {
+                    pending.push([callback, errback]);
+                } else {
+                    value.then(callback, errback);
+                }
+                return result.promise
+            }
+        }
+    }
+};
