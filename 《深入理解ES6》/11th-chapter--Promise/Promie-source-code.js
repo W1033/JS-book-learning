@@ -2,7 +2,7 @@
 // https://download.csdn.net/download/tydqcjj/10036125
 
 // 最簡單的異步執行
-let basicAsync = (callback) => {
+let basicAsync = function(callback) {
     setTimeout(()=> { callback(1) }, 1000)
 };
 basicAsync(function(data) { console.log(data) });   // 1s 后輸出1
@@ -136,7 +136,7 @@ function callback2(data) {
  *  转变为 defer.promise.then, 保证功能的纯粹性)
  * */
 
-let defer = function() {
+/*let defer = function() {
     let pending = [], value;
     return {
         resolve: function(_value) {
@@ -174,4 +174,165 @@ let oneOneSecondLater = () => {
 oneOneSecondLater().then(callback2);
 function callback2(data) {
     console.log(data);
+}*/
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 例子: 写一个相加的函数，接受2个回调函数返回的数字相加。----start
+let twoNumPlus = function(callback) {
+    let a, b;
+    let consider = function() {
+        if (a === undefined || b === undefined) { return; }
+        callback(a + b);
+    };
+
+    oneNum(function(_a) {
+        a = _a;
+        consider();
+    });
+    oneOtherNum(function(_b) {
+        b = _b;
+        consider();
+    });
+};
+
+function oneNum(oneCallback) {
+    oneCallback(1);
 }
+
+function oneOtherNum(oneOtherCallback) {
+    oneOtherCallback(2)
+}
+
+twoNumPlus(function(c) {
+    console.log(c);
+});
+// 例子: 写一个相加的函数，接受2个回调函数返回的数字相加。----over
+
+// 我们希望用更少的代码去实现上面的需求，比如就像下面这样:
+/*let a = oneNum();
+let b = oneOtherNum();
+let c = a.then(function(a) {
+    return b.then(function(b) {
+        return a + b;
+    })
+});*/
+/* 这个例子其实想表达的就是实现 callback 返回值得传递，如 callback1 的返回值传给
+ * callback2, 将 callback2 的返回值传给 callback3. 为了实现上面例子的效果，我们
+ * 需要实现以下几点:
+ *  - 每个 then 方法胡必须返回一个 promise
+ *  - 每个 promise 被 resolve 后，返回的必然是一个新的 promise 或者是一个执行过的值
+ *  - 返回的 promise 最终可以带着回调的值被 resolve 掉 (这句话有点难翻译，感觉就是
+ *  promise.resolve(_value));
+ */
+
+// 我们实现一个函数可以将获得的值传给下一个回调使用
+/*let ref = function(value) {
+    return {
+        then: function(callback){
+            callback(value);
+        }
+    }
+}*/
+
+// 不过考虑到有时候返回的值不仅仅是一个值，而且还可能是一个 promise 函数，所以要加一个判断
+/*let ref = function(value) {
+    // 这样在使用中就不需要考虑传入的值是一个普通值还是一个 promise 了。
+    // 注: 检查 value 存在 并且 value 下有 then 方法(当 value 是函数时才会有 then 方法);
+    if (value && typeof value.then === "function") {
+        return value;
+    }
+    return {
+        then: function(callback) {
+            callback(value);
+        }
+    }
+}*/
+
+// 接下来，为了能使 then 方法也能返回一个 promise, 我们来改造下 then 方法；我们强制将
+// callback 的返回值传入下一个 promise 并立即返回。 这个例子存储了回调的值，并在下一个回调
+// 中执行了。但是上面第三点没有实现，因为返回值可能是一个 promise, 那么我们继续改进一下方法:
+/*let ref = function(value) {
+    if (value && typeof value.then === "function") {
+        return value;
+    }
+    return {
+        then: function(callback) {
+            // 通过这一步增强之后，基本上就可以做到获得上一个回调值并不断链式调用下去了。
+            return ref(callback(value));
+        }
+    }
+};*/
+
+
+/*
+ *    接下来我们考虑一种比较复杂的情况，就是 defer 中存储的回调会在未来某个时间调用。于是
+ * 我们需要在 defer 里面将回调进行一次封装，我们将回调中执行完后通过 then 方法去驱动下一个
+ * promise 并传递一个返回值。
+ *    此外，resolve 方法应该能处理本身是一个 promise 的情况，resolve 可以将值传递给 promise,
+ * 因为不管是 ref 还是 defer 都是可以返回一个 then 方法。 如果 promise 是 ref 类型的，将会
+ * 通过 then(callback) 立即执行回调。如果 promise 是 defer 类型的，callback 暂时被存储起来，
+ * 依靠下一个 then(callback) 调用才能执行；所以变成了 callback 可以监听一个新的 promise 以便
+ * 能获取完全执行后的 value.
+ *    根据以上要求你，得到了下面最终版的 promise:
+ */
+
+let isPromise = function(value) {
+    return value && typeof value.then === "function";
+};
+
+let ref = function(value) {
+    if (value && typeof value.then === "function") {
+        return value;
+    }
+    return {
+        then: function(callback) {
+            return ref(callback(value));
+        }
+    }
+};
+
+let defer = function() {
+    let pending = [], value;
+    return {
+        resolve: function(_value) {
+            if (pending) {
+                // values wrapped in a promise
+                value = ref(_value);
+                for (let i = 0, ii= pending.length; i < ii; i++) {
+                    let callback = pending[i];
+                    // then called instead
+                    value.then(callback);
+                }
+            }
+        },
+
+        promise: {
+            then: function(_callback) {
+                let result = defer();
+                // callback is wrapped so that its return value is captured
+                // and used to resolve the promise that "then" returns
+                let callback = function(value) {
+                    result.resolve(_callback(value));
+                };
+                if (pending) {
+                    pending.push(callback);
+                } else {
+                    value.then(callback);
+                }
+                return result.promise;
+            }
+        }
+    };
+};
+
+let run = defer();
+run.promise.then(function(value) {
+    console.log(value);    // 6
+    return 2;
+}).then(function(value) {
+    console.log(value);    // 2
+});
+run.resolve(6);
+
