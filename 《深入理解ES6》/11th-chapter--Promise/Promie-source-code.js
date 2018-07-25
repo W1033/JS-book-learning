@@ -278,6 +278,9 @@ let c = a.then(function(a) {
  *    根据以上要求你，得到了下面最终版的 promise:
  */
 
+
+/*
+
 let isPromise = function(value) {
     return value && typeof value.then === "function";
 };
@@ -292,7 +295,7 @@ let ref = function(value) {
         }
     }
 };
-/*
+
 let defer = function() {
     let pending = [], value;
     return {
@@ -340,7 +343,7 @@ run.resolve(6);*/
 /** 五、提供错误的回调 */
 // 为了实现错误消息的传递，我们还需要一个错误的回调函数(errback)。就像 promise 完全执行时调用
 // callback 一样，它会告知执行 errback 以及告诉我们拒绝的原因。 实现一个类似于前面 ref 的函数:
-let reject = function(reason) {
+/*let reject = function(reason) {
     return {
         then: function(callback, errback) {
             return ref(errback(reason));
@@ -351,7 +354,7 @@ let reject = function(reason) {
 reject("Meh.").then(
   function(value) {},
   function(reason) { throw new Error(reason) }
-);
+);*/
 
 // 那么接下来我们改进原来 promise 这个 API， 引入 "errback".
 
@@ -388,6 +391,25 @@ let defer = function() {
                 }
                 return result.promise
             }
+        }
+    }
+};
+
+let ref = function(value) {
+    if (value && typeof value.then === "function") {
+        return value;
+    }
+    return {
+        then: function(callback) {
+            return ref(callback(value));
+        }
+    };
+};
+
+let reject = function(reason) {
+    return {
+        then: function(callback, errback) {
+            return ref(errback(reason));
         }
     }
 };
