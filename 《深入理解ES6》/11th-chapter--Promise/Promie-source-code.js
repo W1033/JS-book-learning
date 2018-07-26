@@ -16,7 +16,7 @@ let maybeAfterOneSecond = function(callback, errorback) {
         if (Math.random() < .5) {
             callback("输出1");
         } else {
-           errorback(new Error("Can't provide one."))
+            errorback(new Error("Can't provide one."))
         }
     }, 1000);
 };
@@ -362,6 +362,14 @@ reject("Meh.").then(
 // 存储在数组 (pending) 中的只有一种待处理回调函数，我们需要重新设计一个同时包含成功回调和错误
 // 回调的数组 ([callback, errback]), 根据 then 传入的参数决定调用哪个。
 
+// 添加一个 enqueue 方法，我的理解就是依靠 setTimeout 的异步将所有回调按照顺序添加到
+// 任务队列中，保证按照顺序执行代码。 enqueue /ɪn'kjuː/ n. 排队
+
+/*
+let enqueue = function(callback) {
+    setTimeout(callback, 1);
+};
+
 let defer = function() {
     let pending = [], value;
     return {
@@ -378,6 +386,16 @@ let defer = function() {
         promise: {
             then: function(_callback, _errback) {
                 let result = defer();
+                // 提供一个默认的成功回调和错误回调
+                _callback = _callback || function(value) {
+                    // 默认执行
+                    return value;
+                };
+                _errback = _errback || function(reason) {
+                    // 默认拒绝
+                    return reject(reason);
+                };
+
                 let callback = function(value) {
                     result.resolve(_callback(value));
                 };
@@ -401,7 +419,12 @@ let ref = function(value) {
     }
     return {
         then: function(callback) {
-            return ref(callback(value));
+            let result = defer();
+            // XXX
+            enqueue(function() {
+                result.resolve(callback(value));
+            });
+            return result.promise;
         }
     };
 };
@@ -409,7 +432,143 @@ let ref = function(value) {
 let reject = function(reason) {
     return {
         then: function(callback, errback) {
-            return ref(errback(reason));
+           let result = defer();
+           // XXX
+            enqueue(function() {
+               result.resolve(errback(reason));
+            });
+            return result.promise;
         }
     }
 };
+*/
+
+
+
+/** q/design/q7.js */
+
+let enqueue = function(callback) {
+    // process.nextTick(callback);  // NodeJS
+    setTimeout(callback, 1)         // Naive browser solution
+};
+
+let isPromise = function(value) {
+    return value && typeof value.then === "function";
+};
+
+let ref = function(value) {
+    if (value && value.then) { return value; }
+    return {
+        then: function(callback) {
+            let result = defer();
+            // XXX
+            enqueue(function() {
+                result.resolve(callback(value));
+            });
+            return result.promise
+        }
+    }
+};
+
+let reject = function(reason) {
+    return {
+        then: function(callback, errback) {
+            let result = defer();
+            // XXX
+            enqueue(function() {
+                result.resolve(errback(reason));
+            });
+            return result.promise;
+        }
+    }
+};
+
+
+let defer = function() {
+    let pending = [], value;
+    return {
+        resolve: function(_value) {
+            if (pending) {
+                value = ref(_value);
+                for (let i = 0, ii = pending.length; i < ii; i++) {
+                    // XXX
+                    enqueue(function() {
+                        value.then.apply(value, pending[i]);
+                    })
+                }
+                pending = undefined;
+            }
+        },
+
+        promise: {
+            then: function(_callback, _errback) {
+                let result = defer();
+                _callback = _callback || function(value) {
+                    return value;
+                };
+                _errback = _errback || function(reason) {
+                    return reject(reason);
+                };
+                let callback = function(value) {
+                    result.resolve(_callback(value));
+                };
+                let errback = function(reason) {
+                    result.resolve(_callback(reason));
+                };
+                if (pending) {
+                    pending.push([callback, errback]);
+                }
+            }
+        }
+
+    }
+};
+
+let when = function(value, _callback, _errback) {
+    let result = defer();
+    let done;
+
+    _callback = _callback || function(value) {
+        return value;
+    };
+    _errback = _errback || function(value) {
+        return reject(reason);
+    };
+
+    // XXX
+    let callback = function(value) {
+        try {
+            return _callback(value)
+        } catch (reason) {
+            return reject(reason)
+        }
+    };
+    let errback = function(reason) {
+        try {
+            return _errback(reason);
+        } catch (reason) {
+            return reject(reason);
+        }
+    };
+
+    enqueue(function() {
+        ref(value).then(
+            function(value) {
+                if (done) { return; }
+                done = true;
+                result.resolve(ref(value).then(callback, errback));
+            },
+            function(reason) {
+                if (done) { return; }
+                done = true;
+                result.resolve(errback(reason))
+            }
+        )
+    });
+
+    return result.promise;
+
+};
+
+
+
