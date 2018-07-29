@@ -85,7 +85,7 @@ var EventUtil = {
     }, //鼠标滚轮事件
 
     getCharCode: function (event) {
-        if (typeof event.charCode == "number") {
+        if (typeof event.charCode === "number") {
             return event.charCode;
         } else {
             return event.keyCode;
