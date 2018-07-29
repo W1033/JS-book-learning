@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>12th-代理与反射接口</title>
+</head>
+<body>
+    <script>
+          /* ES6 让开发者能进一步访问以前仅可用于内置对象 (built-in objects)的 js 引擎功能。
+           * 语言通过代理 (proxy) 暴露了对象的内部工作，代理是一种封装，能够拦截并改变 js 引擎
+           * 的底层操作。本章会首先介绍代理想要处理的问题，并且会讨论如何更有效地创建并使用代理。
+           */
+
+          /**
+           * 1. 数组的问题
+           * 2. 代理与反射是什么？
+           * 3. 创建一个简单的代理
+           * 4. 使用 set 陷阱函数验证属性值
+           * 5. 使用 get 陷阱函数驗證對象結構 (Object Shape)
+           * 6. 使用 has 陷阱函数隐藏已有属性
+           * 7. 使用 deleteProperty 陷阱函数防止刪除屬性
+           * 8. 原型代理陷阱函数
+           *    - 原型代理陷阱的運行機制
+           *    - 為什麼有两组方法？
+           * 9. 对象可扩展性陷阱函数
+           *    - 两个基本范例
+           *    - 重复的可擴展性方法
+           * 10.属性描述符的陷阱函数
+           *    - 給 Object.defineProperty() 添加限制
+           *    - 描述符对象的限制
+           *    - 重复的描述符方法
+           *        + defineProperty() 方法
+           *        + getOwnPropertyDescriptor() 方法
+           * 11.ownKeys 陷阱函数
+           * 12.函數代理中的 apply 和 construct 陷阱
+           *    - 验证函数的参数
+           *    - 不用 new 調用構造函數
+           *    - 覆蓋抽象基类构造函数
+           *    - 可调用的类构造函数
+           * 13.可被撤销的代理
+           * 14.解决数组的问题
+           *    - 检测数组的索引
+           *    - 添加新元素时增加 length 的值
+           *    - 减少 length 的值来删除元素
+           *    - 实现 MyArray 类
+           * 15.将代理用作原型
+           *    - 在原型上使用 get 陷阱函数
+           *    - 在原型上使用 set 陷阱函数
+           *    - 在原型上使用 has 陷阱函数
+           *    - 将代理用作类的原型
+           *  总结
+           * */
+
+
+
+
+          /** 1. 数组的问题
+           *  在 ES6 中数组被认为是奇异对象 (exotic object，与普通对象相对)。 exotic /ɪg'zɒtɪk/
+           * */
+          
+          /** 2. 代理与反射是什么？
+           *  通过调用 new Proxy() 可创建代替其他目标 (target) 对象的代理，它虚拟化了目标，所以二者看起来功能一致。
+           *
+           * */
+
+
+
+
+          /** 静态成员 */
+          // 直接在构造器上添加额外方法来模拟静态成员，这在 ES5 及更早版本中是另一个通用的模式。
+          // 例如下 ES5 写法:
+          function PersonType3(name) {
+              this.name = name;
+          }
+
+          // 静态方法
+          PersonType3.create = function (name) {
+              return new PersonType3(name);
+          };
+          // 实例方法
+          PersonType3.prototype.sayName = function () {
+              console.log(this.name);
+          };
+          let mountain = PersonType3.create("Nicholas");
+          console.dir(PersonType3);
+
+    </script>
+</body>
+</html>
