@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js文字无缝向上滚动</title>
+    <style>
+        #content { list-style: none; margin: 0; padding: 0; }
+        #content li {
+            font-size: 14px;
+            height: 30px;
+            line-height: 30px;
+        }
+        #scrollUpBox {
+            margin-top: 200px;
+            height:30px;
+            padding: 0 15px;
+            border: 2px solid #cccccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="scrollUpBox">
+        <ul id="content">
+            <li>测试内容1！</li>
+            <li>测试内容2！</li>
+            <li>测试内容3！</li>
+            <li>测试内容4！</li>
+            <li>测试内容5！</li>
+            <li>测试内容6！</li>
+            <li>测试内容7！</li>
+            <li>测试内容8！</li>
+            <li >测试内容9！</li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+        var scrollUpBox = document.getElementById('scrollUpBox');
+        var content = document.getElementById('content');
+        console.log("content.clientHeight", content.clientHeight);
+        console.log("content.offsetHeight", content.offsetHeight);
+        function scrollUp() {
+            // console.log("scrollUpBox.scrollTop", scrollUpBox.scrollTop);
+            if (scrollUpBox.scrollTop + 30 >= content.offsetHeight) {
+                setTimeout(function() {
+                    scrollUpBox.scrollTop = 0;
+                }, 200);
+            } else {
+                scrollUpBox.scrollTop++;
+            }
+        }
+        var TIME = 30;
+        var timer = setInterval(scrollUp, TIME);
+        scrollUpBox.onmouseover = function() {
+            clearInterval(timer);
+        }
+        scrollUpBox.onmouseout = function() {
+            timer = setInterval(scrollUp, TIME);
+        }
+    </script>
+</body>
+</html>
