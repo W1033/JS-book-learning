@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <title>js文字无缝向上滚动</title>
     <style>
-        #content { list-style: none; margin: 0; padding: 0; }
-        #content li {
-            font-size: 14px;
-            height: 30px;
-            line-height: 30px;
-        }
+        * { margin:0; padding:0; list-style:none; font-size: 14px; }
         #scrollUpBox {
             margin-top: 200px;
-            height:30px;
+            margin-bottom: 20px;
+            height:60px;
             padding: 0 15px;
             border: 2px solid #cccccc;
             border-radius: 5px;
-            overflow: hidden;
+            overflow: auto;
+            width:60%;
         }
+        #content li {
+            font-size: 14px;
+            height: 60px;
+            line-height: 60px;
+        }
+
     </style>
 </head>
 <body>
@@ -40,16 +43,21 @@
     <script type="text/javascript">
         var scrollUpBox = document.getElementById('scrollUpBox');
         var content = document.getElementById('content');
-        console.log("content.clientHeight", content.clientHeight);
         console.log("content.offsetHeight", content.offsetHeight);
+        console.log("scrollUpBox.scrollTop", scrollUpBox.scrollTop);
         function scrollUp() {
-            // console.log("scrollUpBox.scrollTop", scrollUpBox.scrollTop);
-            if (scrollUpBox.scrollTop + 30 >= content.offsetHeight) {
+            // content 的 offsetHeight = 60 x 9 = 540
+            // 当 scrollUpBox.scrollTop = 480px 时(最后一个 li 刚好显示时) 加上 li 的高度 (60px)，
+            // 做一个 2ms 的停顿，并且从新把 scrollTop 设置为 0
+            if (scrollUpBox.scrollTop + 60 >= content.offsetHeight) {
                 setTimeout(function() {
                     scrollUpBox.scrollTop = 0;
                 }, 200);
+                clearInterval(timer);
             } else {
+                // 包裹元素 scrollUpBox 的 scrollTop 增加 1px， 滚动条就会一直往下走 1px
                 scrollUpBox.scrollTop++;
+                console.log(scrollUpBox.scrollTop);
             }
         }
         var TIME = 30;
