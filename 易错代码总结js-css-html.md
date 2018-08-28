@@ -437,7 +437,7 @@
           ---------------export.js
          
           // 0.导出基本语法见:
-               git-clone\ECMAScript6-Study\《深入理解ES6》-学习笔记\13th chapter--用模块封装代码\1.export导出.js
+               13th chapter--用模块封装代码\1.export导出.js
           
           // 1. 导出默认值 :
           // (1). 导出一个函数: 由于函数被模块所代表，因而它不需要一个名称。
@@ -467,7 +467,7 @@
            
            -----------import.js
           // 0. 导入基本语法见: 
-                git-clone\ECMAScript6-Study\《深入理解ES6》-学习笔记\13th chapter--用模块封装代码\2.import导入.js
+                13th chapter--用模块封装代码\2.import导入.js
            
           // 1.导入默认值:
                import BaseInputText from "./BaseInputText.vue";
@@ -475,7 +475,8 @@
                
   ```
 #### 40. 客户区坐标位置 ( clientX 和 clientY ):
-  + 鼠标事件都是在浏览器视口中特定位置上发生的。这个位置信息保存在事件对象的 clientX 和 clientY 属性中。 所有浏览器都支持这两个属性，他们的值标识事件发生时鼠标指针在视口中的水平和垂直坐标。 event.clientX , event.clientY
+  + 鼠标事件都是在浏览器视口中特定位置上发生的。这个位置信息保存在事件对象的 clientX 和 clientY 属性中。 
+  所有浏览器都支持这两个属性，他们的值标识事件发生时鼠标指针在视口中的水平和垂直坐标。 event.clientX , event.clientY
 
 
 #### 41. 上滑显示错误弹框
