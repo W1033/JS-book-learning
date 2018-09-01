@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>符合规范的Promise</title>
+</head>
+<body>
+    <script type="text/javascript">
+        // 原文: 只会用就out了，手写一个符合规范的Promise
+        // 链接: https://juejin.im/post/5b88df2a51882542e56e62c9
+
+        function Promise(executor) {
+            let _this = this;
+            this.state = "pending";
+            this.value = undefined;
+            this.reason = undefined;
+
+            // 成功存放的数组
+            this.onResolvedCallbacks = [];
+            // 失败存放的数组
+            this.onRejectedCallbacks = [];
+
+            function resolve(value) {
+                if (_this.state === "pending") {
+                    // resolve 调用后, state 转化为成功态
+                    _this.state = "fulfilled";
+                    // 存储成功的值
+                    _this.value = value;
+                    _this.onResolvedCallbacks.forEach(
+                        function (fn) {
+                            fn();
+                        }
+                    );
+                }
+            }
+
+            function reject(reason) {
+                if (_this.state === "pending") {
+                    // reject 调用后， state 转化为失败态
+                    _this.state = "rejected";
+
+                    // 存储失败的原因
+                    _this.reason = reason;
+
+                    _this.onRejectedCallbacks.forEach(
+                        function (fn) {
+                            fn();
+                        }
+                    );
+                }
+            }
+
+            /* executor 对应的匿名函数当作参数传进来之后，调用此函数并传入 2 个参数，但是传进来的2个参数也是函数，
+             * 到底着2个参数函数有没有执行呢？答: 没有，根本没有调用怎么会执行！ */
+            // 如果 executor 执行报错，直接执行 reject
+            try {
+                executor(resolve, reject);
+            } catch(err) {
+                reject(err);
+            }
+        }
+
+        Promise.prototype.then = function(onFulfilled, onRejected) {
+
+            let _this = this;
+
+            // 状态为 fulfilled, 执行 onFulfilled, 传入成功的值
+            if (this.state === "fulfilled") {
+                onFulfilled(this.value);
+            }
+            // 状态为 rejected, 执行 onRejected, 传入失败的原因
+            if (this.state === "rejected") {
+                onRejected(this.reason);
+            }
+
+            if (this.state === "pending") {
+                // onFulfilled 传入到成功数组
+                this.onResolvedCallbacks.push(
+                    function () {
+                        onFulfilled(_this.value);
+                    }
+                );
+
+                // onRejected 传入到失败数组
+                this.onResolvedCallbacks.push(
+                    function() {
+                        onRejected(_this.reason)
+                    }
+                )
+            }
+        };
+
+
+        let p = new Promise (
+            // function 函数传入到 Promise 对象中就是 executor 函数
+            function (resolve, reject) {
+                setTimeout(function () {
+                    resolve(1);
+                }, 500)
+            }
+        );
+        p.then(
+            function (data) {
+                console.log(data);
+                console.log("会不会执行？");
+            }
+            // data => console.log(data);
+        )
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script type="text/javascript">
+        // 原文: 只会用就out了，手写一个符合规范的Promise
+        // 链接: https://juejin.im/post/5b88df2a51882542e56e62c9
+
+        /** # (1) Promise 代码基本结构 : 实例化 Promise 对象时传入一个函数作为执行器, 有2个参数 (resolve 和 reject)
+          * 分别将结果变为成功态和失败态。
+          * executor /ɪg'zekjʊtə/  n.执行者
+         */
+        function Promise(executor) {
+            let _this = this;
+            this.state = "pending";
+            // 成功结果
+            this.value = undefined;
+            // 失败结果
+            this.reason = undefined;
+
+            // 马上执行
+            /* executor 对应的匿名函数当作参数传进来之后，调用此函数并传入 2 个参数，但是传进来的2个参数也是函数，
+             * 到底着2个参数函数有没有执行呢？答: 没有，根本没有调用怎么会执行！ */
+            executor(resolve, reject);
+
+            /** # (6-2) 让 Promise 支持异步 ~~start */
+            // 保存成功回调
+            this.onFulfilledFunc = [];
+            // 保存失败回调
+            this.onRejectedFunc = [];
+            /** # (6-2) 让 Promise 支持异步 ~~end */
+
+
+            /** # (4) 已经时成功太或是失败态不可再更新状态: ~~start */
+            // 规范中规定， 当 Promise 对象已经由 pending 状态改变为成功态 (resolved) 或者是失败态 (rejected)
+            // 就不能再次更改状态了。 因此我们在更新状态时要判断，如果当前状态是 pending (等待态)才可更新:
+            function resolve(value) {
+                // 当前状态为 pending 时再做更新
+                if (_this.state === "pending") {
+                    // 保存成功结果
+                    _this.value = value;
+
+                    /** # (6-4) 让 Promise 支持异步 ~~start */
+                    // 寄存好了回调，接下来就是当状态改变时执行就好了:
+                    // forEach() 对数组中的每一项运行给定函数
+                    /* 平时用 forEach() 方法:
+                     * function removePagActive(allLis) {
+                     *    allLis = allLis || [].slice.call(that.getElementsByTagName("li"));
+                     *    allLis.forEach(function (item) {
+                     *        if (Tools.hasClass(item, "pag-active")) Tools.removeClass(item, "pag-active");
+                     *    });
+                     * }
+                     */
+                    _this.onFulfilledFunc.forEach(
+                        // forEach() 方法运行接受一个 fn (fn 也为函数) 参数的匿名函数，匿名函数内再次执行 fn() 方法并接受外层作用域传入的 value
+                        function (fn) {
+                            fn(value);
+                            console.log(fn(value));
+                        }
+                    );
+                    /** # (6-4) 让 Promise 支持异步 ~~end */
+
+                    _this.state = "resolved";
+                }
+            }
+
+            function reject(reason) {
+                // 当前状态为 pending 时再做更新
+                if (_this.state === "pending") {
+                    _this.reason = reason;
+
+                    /** # (6-4) 让 Promise 支持异步 ~~start */
+                    // 寄存好了回调，接下来就是当状态改变时执行就好了:
+                    _this.onRejectedFunc.forEach(
+                        function (fn) {
+                            fn(reason);
+                            console.log(fn(reason));
+                        }
+                    );
+                    /** # (6-4) 让 Promise 支持异步 ~~end */
+
+                    _this.state = "rejected";
+                }
+            }
+            /** # (4) 已经时成功太或是失败态不可再更新状态: ~~end */
+        }
+
+        /** # (2) then 方法定义在原型上 */
+        Promise.prototype.then = function(onFulfilled, onRejected) {
+            /** # (6-3) 让 Promise 支持异步 ~~start */
+            // 等待态，此时一部代码还没有走完
+            if (this.state === "pending") {
+
+                /** # (5) then 方法的基本实现 ~~start */
+                if (this.state === "resolved") {
+                    // 判断参数类型，是函数执行之
+                    if (typeof onFulfilled === "function") {
+                        /** # (6-3-1) 让 Promise 支持异步 ~~start */
+                        this.onFulfilledFunc.push(onFulfilled);
+                        /** # (6-3-1) 让 Promise 支持异步 ~~start */
+                    }
+                }
+                if (this.state === "rejected") {
+                    if (typeof onRejected === "function") {
+                        /** # (6-3-1) 让 Promise 支持异步 ~~start */
+                        this.onRejectedFunc.push(onRejected);
+                        /** # (6-3-1) 让 Promise 支持异步 ~~start */
+                    }
+                }
+                /** # (5) then 方法的基本实现 ~~end */
+
+            }
+            /** # (6-3) 让 Promise 支持异步 ~~end */
+        };
+
+        /** # (3)  当实例化 Promise 时会立即执行 */
+        /*let p = new Promise (
+            // 此匿名函数传入到 Promise 对象中就是 executor
+            function (resolve, reject) {
+                console.log("执行了");
+            }
+        );*/
+
+        /** # (6-1) 让 Promise 支持异步: 代码写道这里基本功能都实现了，可是还有一个很大的问题，目前此 Promise 还不
+         * 支持异步代码，如果 Promise 中封装的时异步代码，then 方法就无能为力了。 运行下面这些代码没有任何结果，本意
+         * 时等待 500ms 之后执行 then 方法，那里有问题呢？ 原因时 setTimeout 函数使用 resolve 是异步执行的，有延迟，
+         * 当调用 then 方法的时候，此时此刻的状态还是等待态(pending), 因此 then 方法即没有调用 onFulfilled 也没有
+         * 调用 onRejected。
+         *  这个问题要如何解决？ 我们可以参照"发布订阅模式"，在执行 then 方法时如果还在等待态 (pending)， 就把回调函数
+         *  临时寄存到一个数组里，当状态发生改变时一次从数组中取出执行就好了，清楚这个思路我们实现它，首先在类上新增连个
+         *  Array 类型的数组，用于存放回调函数: 见上面  # (6-2)
+         *
+         *  */
+        /* 注意: 原文到这里说 "至此， Promise 已经支持异步操作了，setTimeout 延迟后也可正确执行 then 方法返回结果"，
+         * 然而并不可以，我们来看一下现在的执行顺序: new Promise() 实例执行，传给 Promise 构造函数一个匿名函数，
+         * 匿名函数对应的形参名为 executor，在 Promise 中 executor(resolve, reject) 立刻执行，在执行时还给传入了2个
+         * 参数给匿名函数，而且这 2 个参数也是函数，但是此时 Promise 构造函数中的 resolve 函数和 reject 函数并没有被调用，
+         * 真正的调用出现在哪里？ 答: 出现在 setTimeout 的延时 500ms 之后，的 resolve(1) 调用。然而下面的 p.then() 方法
+         * 会在延时之前就会执行，所以上面  */
+        let p = new Promise (
+            function (resolve, reject) {
+                setTimeout(function () {
+                    resolve(1);
+                }, 500)
+            }
+        );
+        p.then(
+            // then() 方法接受2个参数 onFulfilled 和 onRejected 函数
+            function (data) {
+                // 没有任何结果
+                console.log(data);
+            }
+            // data => console.log(data);
+        )
+
+    </script>
+</body>
+</html>
