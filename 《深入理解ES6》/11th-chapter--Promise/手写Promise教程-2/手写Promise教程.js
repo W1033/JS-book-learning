@@ -88,20 +88,33 @@ class Promise {
         // 当状态 state 为 pending 时
         if (this.state === "pending") {
             // onFulfilled 传入到成功数组
-            this.onResolvedCallbacks.push(
-                function () {
-                    onFulfilled(this.value);
-                }
-            );
+            if (onFulfilled !== undefined) {
+                this.onResolvedCallbacks.push(
+                    () => { onFulfilled(this.value) }
+                );
+            }
 
             // onRejected 传入到失败数组
-            this.onResolvedCallbacks.push(
-                function() {
-                    onRejected(this.reason)
-                }
-            )
+            if (onRejected !== undefined) {
+                this.onResolvedCallbacks.push(
+                    () => { onRejected(this.reason) }
+                )
+            }
+
         }
     }
-
-
 }
+
+
+let p = new Promise (
+    // function 函数传入到 Promise 对象中就是 executor 函数
+    function (resolve, reject) {
+        setTimeout(function () {
+            resolve(1);
+        }, 500)
+    }
+);
+p.then(
+    function (data) { console.log(data)}
+    // data => console.log(data);
+);

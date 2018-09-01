@@ -26,10 +26,11 @@
                     _this.state = "fulfilled";
                     // 存储成功的值
                     _this.value = value;
+
+                    // forEach() 对数组中的每一项运行给定函数
                     _this.onResolvedCallbacks.forEach(
-                        function (fn) {
-                            fn();
-                        }
+                        // forEach() 方法运行接受一个 fn 参数的匿名函数，匿名函数内再次执行 fn() 方法
+                        function (fn) { fn() }
                     );
                 }
             }
@@ -43,9 +44,7 @@
                     _this.reason = reason;
 
                     _this.onRejectedCallbacks.forEach(
-                        function (fn) {
-                            fn();
-                        }
+                        function (fn) { fn() }
                     );
                 }
             }
@@ -73,20 +72,35 @@
                 onRejected(this.reason);
             }
 
+            /* 这里 this.state = "pending" 的判断是解决这种含有超时调用的情况
+             * let p = new Promise (
+             * function (resolve, reject) {
+             *     setTimeout(function () {
+             *          resolve(1);
+             *     }, 500)
+             * }); */
+
             if (this.state === "pending") {
-                // onFulfilled 传入到成功数组
-                this.onResolvedCallbacks.push(
-                    function () {
-                        onFulfilled(_this.value);
-                    }
-                );
+                // onFulfilled 传入到成功数组:
+                // 给 onResolveCallbacks 数组推入一个匿名函数(Notice: 只推没执行)，匿名函数内执行一个
+                // 含有传参的函数调用, 这个调用就是下面的  p.then() 调用执行时传入的 (data) => {console.log(data)}
+                // ; 实际上换句话说就是 (data) => {console.log(data)} 这个匿名函数在接受了一个 _this.value 的参数，
+                if (onFulfilled !== undefined) {
+                    this.onResolvedCallbacks.push(
+                        function () {
+                            onFulfilled(_this.value);
+                        }
+                    );
+                }
 
                 // onRejected 传入到失败数组
-                this.onResolvedCallbacks.push(
-                    function() {
-                        onRejected(_this.reason)
-                    }
-                )
+               if (onRejected !== undefined) {
+                   this.onResolvedCallbacks.push(
+                       function() {
+                           onRejected(_this.reason)
+                       }
+                   )
+               }
             }
         };
 
@@ -100,10 +114,7 @@
             }
         );
         p.then(
-            function (data) {
-                console.log(data);
-                console.log("会不会执行？");
-            }
+            function (data) { console.log(data)}
             // data => console.log(data);
         )
 
