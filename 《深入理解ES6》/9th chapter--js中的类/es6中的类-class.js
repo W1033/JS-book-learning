@@ -21,7 +21,8 @@ console.log(person instanceof Object);      // true
 // js中所有对象的根对象是 Object.prototype [详细讲解见: ../../Javascript设计模式与编程实践/第一部分--基础知识/第1章--面向对象的javascript.md]
 
 
-// ECMAScript 6 类声明 --> 要声明一个类，首先编写 class 关键字，紧跟着的是类的名字，其他部分的语法类似于对象字面量的简写形式，但是不需要在类的各元素之间使用逗号分隔。
+// ECMAScript 6 类声明 --> 要声明一个类，首先编写 class 关键字，紧跟着的是类的名字，
+// 其他部分的语法类似于对象字面量的简写形式，但是不需要在类的各元素之间使用逗号分隔。
 // 每个类都有一个名为 [[Construct]]的内部方法，通过关键字new调用那些不含 [[Construct]] 的方法会导致程序抛出错误。
 // 类声明仅仅是基于已有自定义类型声明的语法糖。
 class PersonClass {

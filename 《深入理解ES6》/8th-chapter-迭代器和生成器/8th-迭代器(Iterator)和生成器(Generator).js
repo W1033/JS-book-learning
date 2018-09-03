@@ -37,7 +37,7 @@ console.log(es5Iterator.next());   // {done: true, value: undefined}
 // 生成器
 function* createIterator(items) {
     for (let i = 0; i < items.length; i++) {
-        // yield g关键字也是 ES6 新增
+        // yield 关键字也是 ES6 新增
         yield items[i];
     }
 
