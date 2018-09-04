@@ -136,6 +136,7 @@
                 // 第一次进入 then, 状态时 fulfilled 或 rejected
                 if (this.state !== "pending") {
                     const callback = this.state === "fulfilled" ? onResolved : onRejected;
+                    console.log("then this.state: ", this.state);
                     // 绑定 this 到 promise   ①
                     this.executeAsyncCallback.call(promise, callback, this.data);
                 }
@@ -203,8 +204,10 @@
         /** # 1. 基础测试  */
         function pms1() {
             return new Promise(function (resolve, reject) {
-                console.log('执行任务1');
-                resolve(0);
+                setTimeout(function() {
+                    console.log('执行任务1');
+                    resolve(0);
+                }, 500)
             })
         }
 
