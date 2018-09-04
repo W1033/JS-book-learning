@@ -18,6 +18,18 @@ const b = new B("Seven");
 console.log(b.getName());   // Seven
 
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* P34 Array.prototype.push 实际上是一个属性复制的过程，把参数按照下标依次添加到被 push 的对象上面，
+ * 顺便修改了这个对象的 length 属性。至于被修改i的对象是谁，到底是数组还是类数组对象，这一点并不重要。
+ * */
+let a = {};
+[].push.call(a, "first");
+console.log("a.length: ", a.length);
+console.log("a[0]: ", a[0]);
+
+
+
+
 /*~~~~~~~~~~~~~~~~~~~~ js高程- 6.3.3 组合继承 ~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function Father(name) {
