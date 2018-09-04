@@ -64,6 +64,12 @@ console.log("------------------");
 
 // 20180203-edit-P14: Object.create
 // 原型模式的实现关键是语言本身是否提供了 clone 方法。 ECMAScript 5 提供了 Object.create 方法，可以用来克隆对象。
+/*
+ *  - ES5 - 提供了 Object.create 方法，可以用来克隆对象。 Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)"):   <br/>
+ *   - 《js高程》P170 --> ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。这个方法接收两个参数：一
+ *   个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。在传入一个参数的情况下，
+ *   Object.create() 与 object() 方法的行为相同。
+ */
 const Plane = function () {
     this.blood = 100;
     this.attackLevel = 1;

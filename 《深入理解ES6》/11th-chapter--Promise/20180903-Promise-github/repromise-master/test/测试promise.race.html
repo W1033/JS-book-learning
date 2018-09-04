@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="../promise.js"></script>
+  <script>
+    // 测试 Promise.race([])
+    var p1 = Promise.resolve(1)
+    var p2 = new Promise((resolve, reject) => {
+      setTimeout(resolve, 2000, 2)
+    })
+    var p3 = 3
+
+    Promise.race([p1, p2, p3]).then(values => {
+      console.log(values); // 1
+    });
+  </script>
+</body>
+
+</html>

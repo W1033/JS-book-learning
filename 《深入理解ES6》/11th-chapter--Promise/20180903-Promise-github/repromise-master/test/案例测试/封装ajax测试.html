@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ajax 库测试</title>
+</head>
+
+<body>
+  <script src="../../promise.js"></script>
+  <script>
+    // 没有成功，日后填坑
+    function fetch(url) {
+      return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', url, true)
+        xhr.responseType = 'json'
+        xhr.setRequestHeader('Accept', 'application/json')
+        xhr.onreadystatechange = function() {
+          if (this.readyState === 4 && this.status === 200) {
+            resolve(this.responseText)
+          } else {
+            reject(new Error(this.statusText))
+          }
+        }
+        xhr.send()
+      })
+    }
+
+    fetch('http://search-merger-ms.juejin.im/v1/search?query=react&page=0&raw_result=false&src=web')
+      .then((fulfilled) => {
+        console.log(fulfilled)
+      })
+      .catch((rejected) => {
+        console.log(rejected)
+      })
+  </script>
+</body>
+
+</html>

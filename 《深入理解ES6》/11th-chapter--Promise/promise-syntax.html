@@ -64,15 +64,15 @@
             try {
                 fetch(url, (data) => { resolve(data) })
             } catch (e) { reject(e); }}
-        ).then(
-            // fn2
-            (data) => { return JSON.stringify(data);},
-            (e) => { return e }
-        ).then(
-            // f3
-            (data) => { return data; },
-            (e) => { return e; }
-        );
+    ).then(
+        // fn2
+        (data) => { return JSON.stringify(data);},
+        (e) => { return e }
+    ).then(
+        // f3
+        (data) => { return data; },
+        (e) => { return e; }
+    );
 
     
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

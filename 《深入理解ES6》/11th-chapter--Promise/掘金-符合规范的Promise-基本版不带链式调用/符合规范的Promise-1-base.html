@@ -6,18 +6,19 @@
 </head>
 <body>
     <script type="text/javascript">
-        // 原文: 只会用就out了，手写一个符合规范的Promise
-        // 链接: https://juejin.im/post/5b88df2a51882542e56e62c9
 
         function Promise(executor) {
             let _this = this;
             this.state = "pending";
+
+            // 调用 Promise 成功后的结果
             this.value = undefined;
+            // 失败后的结果
             this.reason = undefined;
 
-            // 成功存放的数组
+            // 用来存放 p.then(fn, fn) 第一个成功函数的数组
             this.onResolvedCallbacks = [];
-            // 失败存放的数组
+            // 用来存放 p.then(fn, fn) 第二个失败函数的数组
             this.onRejectedCallbacks = [];
 
             function resolve(value) {
@@ -28,6 +29,14 @@
                     _this.value = value;
 
                     // forEach() 对数组中的每一项运行给定函数
+                    /* 平时用 forEach() 方法:
+                     * function removePagActive(allLis) {
+                     *    allLis = allLis || [].slice.call(that.getElementsByTagName("li"));
+                     *    allLis.forEach(function (item) {
+                     *        if (Tools.hasClass(item, "pag-active")) Tools.removeClass(item, "pag-active");
+                     *    });
+                     * }
+                     */
                     _this.onResolvedCallbacks.forEach(
                         // forEach() 方法运行接受一个 fn 参数的匿名函数，匿名函数内再次执行 fn() 方法
                         function (fn) { fn() }
@@ -110,12 +119,13 @@
             function (resolve, reject) {
                 setTimeout(function () {
                     resolve(1);
+                    reject(2);
                 }, 500)
             }
         );
         p.then(
-            function (data) { console.log(data)}
-            // data => console.log(data);
+            function (data) { console.log(data)},
+            // data => console.log(data)
         )
 
     </script>

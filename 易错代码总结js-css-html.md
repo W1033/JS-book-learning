@@ -389,8 +389,11 @@
   - 2.取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
   
 #### 37. Object 
-  - ES5 - Object.create("要克隆的对象", "(可选,一般不写)"):   <br/>
-      + 示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第1章\P14-Object.create.js
+  - ES5 - 提供了 Object.create 方法，可以用来克隆对象。 Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)"):   <br/>
+        - 《js高程》P170 --> ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。这个方法接收两个参数：一
+          个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。在传入一个参数的情况下，
+          Object.create() 与 object() 方法的行为相同。
+      + 示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第1章\1st-面向对象的Javascript.js
   - ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。 
       + 示例: github-clone\js-sundry-goods\js--A语法--MDN文档\js高程---Object.keys().js
   - ES5 - Object.getOwnPropertyNames(): 【取得自身的属性名】。 js高程 - Chapter 6
