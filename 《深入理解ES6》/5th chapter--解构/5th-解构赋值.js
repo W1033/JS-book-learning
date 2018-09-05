@@ -28,16 +28,16 @@ let type2 = "Literal",
 
 // 使用解构语法为多个变量赋值: obj 对象内的属性名要和解构赋值左侧的变量同名。(注意: 外围的小括号是一定要的)
 ({type2, name2} = obj);
-console.log(type2);
-console.log(name2);
+console.log("type2",type2);
+console.log("name2", name2);
 
 /* obj 对象内的属性名也可以和解构赋值左侧的变量名不同名，语法如下:
  * P93: 为非同名局部变量赋值
  * (但是这种写法前面的 type2, 和 name2 还是要和对象内的属性同名，真是鸡肋语法)
  * type2: localType 语法的含义是读取名为 type2 的属性并将气质存储在变量 localType 中。*/
 let {type2: localType, name2: localName} = obj;
-console.log(localType);
-console.log(localName);
+console.log("localType", localType);
+console.log("localName", localName);
 console.log("---------- ----------");
 
 /** P91: 对象解构 ---> 嵌套对象解构 */
