@@ -257,7 +257,7 @@ me.sayName();
 /** 生成器方法 */
 // 此示例用可计算名称创建了一个代理 this.items 数组 values() 迭代器的生成器方法。
 // 迭代器上。
-class Collection {
+/*class Collection {
     constructor() {
         this.items = [];
     }
@@ -273,7 +273,7 @@ collection.items.push(2);
 collection.items.push(3);
 for (let x of collection) {
     console.log(x);
-}
+}*/
 
 
 /** 静态成员 */
@@ -426,6 +426,7 @@ function mixin(...mixins) {
     };
     // 4th: Object.assign() 实现对象组合的新方法
     Object.assign(base.prototype, ...mixins);
+    console.log("base", base);
     return base;
 }
 
