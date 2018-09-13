@@ -58,6 +58,12 @@ console.log(Math.max(...values));       // 100
 let values2 = [-25, -70, -50, -100];
 console.log(Math.max(...values2, 0));   // 0
 
+// 20180913-add:  展开运算符使用示例3
+let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+console.log("x", x);
+console.log("y", x);
+console.log("...z", ...z);
+
 
 /** 20180428-P52: name 属性 */
 // ES6 中为所有的函数新增了 name 属性。 函数声明/函数表达式。 For example:

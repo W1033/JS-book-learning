@@ -27,6 +27,18 @@ people[lastName] = 'Zakas';
 console.log(people["first name"]);
 console.log(people[lastName]);
 
+// 20180913-add: 来自: https://vuex.vuejs.org/zh/guide/mutations.html
+import { SOME_MUTATION } from "./mutation-types"
+const store = new Vuex.Store({
+    state: { ... },
+    mutations: {
+        // 使用"计算属性命名"功能来使用一个常量作为函数名
+        [SOME_MUTATION]: function(state){
+            // mutate state
+        }
+    }
+});
+
 
 // 20180501-P76 - 新增方法: Object.is(): 弥补全等运算符的不准确运算。 比如之前 +0等于-0, NaN不等于NaN, 使用后:
 console.log(+0 === -0);            // true
