@@ -28,6 +28,10 @@ console.log(people["first name"]);
 console.log(people[lastName]);
 
 // 20180913-add: 来自: https://vuex.vuejs.org/zh/guide/mutations.html
+// mutation-types.js
+export const SOME_MUTATION = "SOME_MUTATION";
+
+// store.js
 import { SOME_MUTATION } from "./mutation-types"
 const store = new Vuex.Store({
     state: { ... },
