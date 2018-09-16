@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数抖动 + 函数节流</title>
+    <style>
+        * { margin: 0; padding: 0; font-size: 13px; }
+        .container {
+            width: 60%;
+            height: 4500px;
+            background: lightsalmon;
+            border-radius: 4px;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">Container</h1>
+    </div>
+
+    <script>
+        let func = function(a, b, ...args) {
+            console.log(args);
+        };
+        func(1, 2, 3, 4, 5, 6); // [3, 4, 5, 6]
+    </script>
+</body>
+</html>
