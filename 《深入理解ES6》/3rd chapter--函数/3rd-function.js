@@ -45,6 +45,14 @@ function pick2(obj, ...keys) {
 let bookData2 = pick2(book, "author", "year");
 console.log("bookData2.author: " + bookData2.author);      // bookData2.author: Nicholas C. Zakas
 
+// 不定参数的使用示例
+let func = function(a, b, ...args) {
+    console.log(args);
+};
+func(1, 2, 3, 4, 5, 6); // [3, 4, 5, 6]
+
+
+
 
 /**  20180428-P50: 展开运算符 */
 // ES5 中返回最大值
