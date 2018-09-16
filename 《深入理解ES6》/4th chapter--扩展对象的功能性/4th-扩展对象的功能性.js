@@ -83,6 +83,7 @@ mixin(myObj, EventTarget.prototype);
 myObj.emit("somethingChanged");     // somethingChanged
 
 // 上面的 mixin() 调用可以直接替换为 Object.assign()
+// 201809015-add: 即使这样 Object.assign() 仍然是潜拷贝，深拷贝见: JS集锦.js
 Object.assign(myObj, EventTarget.prototype);
 myObj.emit("somethingChange again");
 
