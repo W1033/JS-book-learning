@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM 事件</title>
+</head>
+<body>
+    <div class="container">
+        <input type="text">
+    </div>
+
+    <script type="text/javascript">
+
+        document.body.addEventListener("click", () => { console.log(2); }, false);
+        document.body.addEventListener("click", () => { console.log(3); }, false);
+        document.body.addEventListener("click", () => { console.log(4); }, false);
+
+        document.body.click();  // 2, 3, 4
+    </script>
+
+</body>
+</html>
