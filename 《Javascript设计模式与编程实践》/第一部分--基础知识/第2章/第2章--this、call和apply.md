@@ -150,3 +150,18 @@
         + (1) 改变 this 指向
         + (2) 实现内置的 Function.prototype.bind
         + (3) 借用其他对象的方法
+            - 借用方法第一种场景是 "借用构造函数"，通过这种技术，可以实现一些类似继承的效果:
+            ```
+                var A = function(name) {
+                    this.name = name;
+                };
+                var B = function() {
+                    A.apply(this, arguments);
+                };
+
+                B.prototype.getName = function() {
+                    return this.name;
+                }
+                var b = new B("sven");
+                console.log(b.getName());   // output: sven
+            ```
