@@ -29,7 +29,10 @@
             const _self = this;
             console.log(this);    // ƒ () { console.log(2); }
             return function () {
-                console.log(arguments);   // Arguments [callee: ƒ, Symbol(Symbol.iterator): ƒ]
+                // // Arguments [callee: ƒ, Symbol(Symbol.iterator): ƒ]
+                console.log(arguments);
+
+                // 这里的 this 就是指向 window
                 beforefn.apply(this, arguments);
                 return _self.apply(this, arguments);
             }
