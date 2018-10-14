@@ -520,3 +520,6 @@
 	}
 	scrollBarRoll();
  ```
+
+### 42. js 经典原型图
+ [js经典原型图](images/JS-原型图.png)
