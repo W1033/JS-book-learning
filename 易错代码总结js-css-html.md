@@ -70,7 +70,7 @@
    ```
   + (1).改变 this 指向: 最常见的用途是改变函数内部的 this 指向
    - 更多见示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第2章\P33-借用其他对象的方法.js
-  ```base
+  ```javascript
 	var obj1 = { name: "sven" };
 	var obj2 = { name: "anne" };
 	window.name = "Window";
@@ -90,7 +90,7 @@
    - 示例见: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第2章\P32-Function.prototype.bind实现.js
 
   + (3.) 借用其他对象的方法
-  ```base
+  ```javascript
   	(function () {
   		Array.prototyp.push.call( arguments, 3 );
   		console.log( arguments );	// [ 1, 2, 3 ]
@@ -98,57 +98,57 @@
   ```
 
   **示例:使用call方法调用父构造函数**
-  ```base
-		   function Product(name, price){
-			   this.name = name;
-			   this.price = price;
-			   if(price < 0){
-				   throw RangeError("Cannot create product" + this.name + "with a negative price")
-			   }
-		   }
-		   function Food(name, price){
-			   Product.call(this, name, price);
-			   this.category = "food";
-		   }
-		   /*---上面Food()构造函数调用Product()构造函数 "等同于"(=) 下面这个写法---*/
+  ```javascript
+       function Product(name, price){
+           this.name = name;
+           this.price = price;
+           if(price < 0){
+               throw RangeError("Cannot create product" + this.name + "with a negative price")
+           }
+       }
+       function Food(name, price){
+           Product.call(this, name, price);
+           this.category = "food";
+       }
+       /*---上面Food()构造函数调用Product()构造函数 "等同于"(=) 下面这个写法---*/
 
-		   function Food(name, price){
-			   this.name = name;
-			   this.price = price;
-			   if(price < 0){
-				   throw RangeError("Cannot create product" + this.name + "with a negative price")
-			   }
-			   this.category = "food";
-		   }
+       function Food(name, price){
+           this.name = name;
+           this.price = price;
+           if(price < 0){
+               throw RangeError("Cannot create product" + this.name + "with a negative price")
+           }
+           this.category = "food";
+       }
 
-		   -----------------------------------------------------
-		   /**使用call()方法调用匿名函数 : 在for循环内部，我们创建了一个匿名函数，通过调用该函数的call方法,将每个数组元素作为
-			  指定的this值执行了那个匿名函数。这个匿名函数的主要目的是给每个数组元素对象添加一个print方法，这个print
-			  方法可以打印出各元素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数(普通参数就可以),
-			  目的是为了演示call的用法 **/
-		   var animals = [
-			   {species:"Lion", name: "XinBa"},
-			   {species:"Whale", name: "Blue"}
-		   ];
-		   for(var i=0; i<animals.length; i++){
-			   (function(i){
-				   this.print = function(){
-					   console.log("#" + i + "" + this.species + ":" + this.name);
-				   }
-			   }).call(animals[i], i)
-		   }
+       -----------------------------------------------------
+       /**使用call()方法调用匿名函数 : 在for循环内部，我们创建了一个匿名函数，通过调用该函数的call方法,将每个数组元素作为
+          指定的this值执行了那个匿名函数。这个匿名函数的主要目的是给每个数组元素对象添加一个print方法，这个print
+          方法可以打印出各元素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数(普通参数就可以),
+          目的是为了演示call的用法 **/
+       var animals = [
+           {species:"Lion", name: "XinBa"},
+           {species:"Whale", name: "Blue"}
+       ];
+       for(var i=0; i<animals.length; i++){
+           (function(i){
+               this.print = function(){
+                   console.log("#" + i + "" + this.species + ":" + this.name);
+               }
+           }).call(animals[i], i)
+       }
 
-		   -----------------------------------------------------
-		   /**使用call()方法调用函数并且指定上下文的this :下面的例子中，当调用greet方法的时候，该方法的 this 值会绑定到 i 对象。**/
-		   function greet(){
-			   var reply = [this.person, "Is An Awesome", this.role].join(" ");
-			   console.log(reply);
-		   }
-		   var called= {
-			   person: "Nicholas C.Zakas",
-			   role: "Javascript Developer"
-		   };
-		   greet.call(called); //Nicholas C.Zakas Is An Awesome Javascript Developer
+       -----------------------------------------------------
+       /**使用call()方法调用函数并且指定上下文的this :下面的例子中，当调用greet方法的时候，该方法的 this 值会绑定到 i 对象。**/
+       function greet(){
+           var reply = [this.person, "Is An Awesome", this.role].join(" ");
+           console.log(reply);
+       }
+       var called= {
+           person: "Nicholas C.Zakas",
+           role: "Javascript Developer"
+       };
+       greet.call(called); //Nicholas C.Zakas Is An Awesome Javascript Developer
   ```
 
 
@@ -172,11 +172,13 @@
 
 #### 13.自己常用到的正则判断
   - 1. 判断手机号的: /^0?1[3|4|7|5|8][0-9]\d{8}$/
-        `if(/^0?1[3|4|5|8][0-9]\d{8}$/.test(target.value) && target.value != ""){
-      ​      return null;
+    ```javascript
+        if(/^0?1[3|4|5|8][0-9]\d{8}$/.test(target.value) && target.value != ""){
+        ​      return null;
         }else{
-      ​      $(".errorPromptDiv").html("请输入正确的手机号！");
-        }`
+        ​      $(".errorPromptDiv").html("请输入正确的手机号！");
+        }
+    ```
   - 2.判断验证码: /^[0-9]{6}$/    <br/>
   - 3.判断身份证: /(^\d{15}$)|(^\d{17}([0-9]|X)$)/     <br/>
   - 4.判断银行卡: /([0-9]{17}([0-9]|X|x))|([0-9]{15})/   <br/>
@@ -191,8 +193,9 @@
 ​
 
 ####  15.outerHTML 属性
-    `在读模式下， outerHTML 返回调用它的元素及所有子节点的 HTML 标签。在写模式下， outerHTML会根据指定的 HTML 字符串创建新的 DOM子树，
-     然后用这个DOM子树完全替换调用元素。下面是一个例子。
+    ```javascript
+        // 在读模式下， outerHTML 返回调用它的元素及所有子节点的 HTML 标签。在写模式下，
+        // outerHTML会根据指定的 HTML 字符串创建新的 DOM子树，然后用这个DOM子树完全替换调用元素。下面是一个例子。
         <div id="content">
             <p>This is a <strong>paragraph</strong> with a list following it.</p>
             <ul>
@@ -201,27 +204,29 @@
                 <li>Item 3</li>
             </ul>
         </div>
-        var allContent =  content.outerHTML; allContent就输出上面所有的代码
-    `
+        var allContent = content.outerHTML;  // allContent 就输出上面所有的代码
+    ```
 ####  16.cloneNode() 方法
-    `cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。`
+ ```
+    cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。
+    这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。
+ ```
 
 ####  17.函数声明 函数表达式 和 匿名函数
- ```base
-  下面的代码却会导致错误。
-           function(){
-                //这里是块级作用域
-           }(); //出错！
-            这段代码会导致语法错误，是因为 JavaScript 将 function 关键字当作一个函数声明的开始，
-            而函数声明后面不能跟圆括号。然而，函数表达式的后面可以跟圆括号。要将函数声明转换成函数表达式，
-            只要像下面这样给它加上一对圆括号即可。
-           (function(){
-                //这里是块级作用域
-           })();
+ ```javascript
+   // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明后面不能跟圆括号。
+   function(){
+      //这里是块级作用域
+   }();
 
-           // 立即执行的匿名函数生命方式还有
-           (function(){
-           }());
+   // 然而，函数表达式的后面可以跟圆括号。要将函数声明转换成函数表达式，只要像下面这样给它加上一对圆括号即可。
+   (function(){
+        //这里是块级作用域
+   })();
+
+   // 立即执行的匿名函数生命方式还有
+   (function(){
+   }());
  ```
 
 ####  18.响应式网页的头部
@@ -366,7 +371,7 @@
 
 #### 32 . js 表单提交: onlyForm.submit();
 #### 33 . 日期格式化
- ```basic
+ ```javascript
     function getTime(time) {
         if (time !== "" || time !== undefined) {
             var data, year, month, day, hour, minute, second;
@@ -388,7 +393,7 @@
   - input:-ms-input-placeholder { letter-spacing:1px; }
 
 #### 35 .银行卡添加空格
- ```basic
+ ```javascript
       function addBlock(num) {
           if (num !== "" || num !== undefined) {
               if (/\S{5}/.test(num)) {   // \S: 匹配一个非空白字符
@@ -421,7 +426,7 @@
       + 示例:《深入理解ES6》-学习笔记\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
 
 #### 38 .localStorage 对象
-```base
+```javascript
      // 使用方法存储数据
      localStorage.setItem("name", "Nicholas");
      // 使用属性存储数据
@@ -500,7 +505,7 @@
 
 
 #### 41. 上滑显示错误弹框
- ```base
+ ```javascript
 	var errBoxPosTop = getPosition(errBoxEleConfig.errorBoxWall).top;
 	var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 	function scrollBarRoll() {
