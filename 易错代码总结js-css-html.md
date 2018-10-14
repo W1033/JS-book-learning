@@ -521,7 +521,7 @@
 	scrollBarRoll();
  ```
 
-### 42. js 经典原型图
+#### 42. js 经典原型图
  <div style="overflow: hidden; width: 600px; height: 700px;">
     <img style="width: 100%; height: 100%; " src="./images/JS-原型图.png">
  </div>
