@@ -6,22 +6,33 @@
 
 #### 2.总要: 关于在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度"的jq和js方法总结:
   - (1).jq方法:
-   + jq获取当前可视窗口的高度和宽度: $(window).height() 和 $(window).width();
-   + jq获取文档高度和宽度: $(document).height() 和 $(document).height();
+  ```javascript
+    // jq获取当前可视窗口的高度和宽度:
+    $(window).height();  $(window).width();
+    // jq获取文档高度和宽度
+    $(document).height();  $(document).height();
+  ```
   - (2).js方法:
-   + js获取当前页面可视窗口的高度和宽度(前提在html的第一行`<!DOCTYPE html>`是这种写法，以前古老的写法除外):  IE,FF,Chrome 统一是: document.body.clientHeight
-   + IE9+, FF, Chrome 确定浏览器窗口大小(可视窗口大小)有两个新属性: window.innerHeight, window.innerWidth;
-   + 获取文档的高度和宽度兼容IE8的写法是: Math.max(document.documentElement.clientHeight,document.body.scrollHeight, document.documentElement.scrollHeight)，获取宽度也是如此。
+   ```javascript
+     // js获取当前页面可视窗口的高度和宽度(前提 `<!DOCTYPE html>` 是这种写法，以前古老的写法除外) IE,FF,Chrome 统一是:
+     document.body.clientHeight
+     // IE9+, FF, Chrome 确定浏览器窗口大小(可视窗口大小)有两个新属性:
+     window.innerHeight;  window.innerWidth;
+     // 获取文档的高度和宽度兼容IE8的写法是:
+     Math.max(document.documentElement.clientHeight,document.body.scrollHeight, document.documentElement.scrollHeight);
+   ```
 
 
 #### 3.jq中获取当前元素的索引的方法: 代码如下
-    $(".selFun .closeFun").click(function(){ <br/>
+   ```javascript
+     $(".selFun .closeFun").click(function(){ <br/>
         $(this).css("backgroundColor", "#ccc");
 
         var nIndex = $(".selFun .closeFun").index(this);  //获取当前元素索引的方法
 
         $(".selFun li").eq(nIndex).css({"display":"none"}); <br/>
-    });
+     });
+   ```
 
 #### 4.关于清除浮动的问题:
   - (1).如果一个div或者ul没有设置高度，子元素又设置了float:left; 那么在子元素的最后加一个同级元素`<div class="clear"></div>`css中增加.clear{ clear:both; } <br/>
