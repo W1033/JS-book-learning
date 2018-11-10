@@ -56,6 +56,13 @@ export default {
     }
 }
 
+// 导出一个匿名类(就是到处一个构造函数，构造函数的名字在导入文件中自定义)
+export default class {
+    constructor(x,y ) {
+        this.x = x;
+        this.y = y;
+    }
+}
 
 
 
