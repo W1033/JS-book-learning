@@ -331,6 +331,7 @@ Rectangle.prototype.getArea = function () {
 };
 
 function Square(length) {
+    console.log(this);
     Rectangle.call(this, length, length);
 }
 
