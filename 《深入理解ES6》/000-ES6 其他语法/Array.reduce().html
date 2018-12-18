@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>reduce() 方法</title>
+</head>
+<body>
+    <script>
+        // accumulator /ə'kjuːmjʊleɪtə/ n.累加器
+        // reduce /rɪ'djuːs/ v.减少，降低，缩小
+        // reducer /rɪ'djuːsə/ n.减速器，还原剂
+
+        // [MDN 文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
+        // [js 中 reduce() 方法不完全指南] (https://aotu.io/notes/2016/04/14/js-reduce/index.html)
+
+        const arrNums = [1, 2, 3, 4];
+        /**
+         * reducer 函数接受 4 个参数:
+         *  1. Accumulator (acc) (累加器: 上次回掉函数返回值/初始值)
+         *  2. Current Value (cur) (数组当前值)
+         *  3. Current Index (idx) (当前索引: 当前数组下标)
+         *  4. Source Array (src)(源数组: 调用reduce 方法的数组)
+         *  reduce 函数的返回值分配给累计器，该返回值在数组的每一个迭代中被记住，并最后成为最
+         *  终的单个结值。
+         */
+        const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+        /**
+         * reduce 参数
+         *  1. callback (此例为上面的 reducer)
+         *  2. initialValue (可选的初始值。作为第一次调用回调函数时传给 Accumulator 的值)
+         */
+        // 1 + 2 + 3 +4
+        console.log(arrNums.reduce(reducer));
+        // 5 + 1 + 2 + 3 +4
+        // 5 为 initialValue: 可选的初始值
+        console.log(arrNums.reduce(reducer,5));
+
+
+
+        /**
+         * reduce() 和 forEach(), map() 的区别
+         */
+        const arr = [11, 22, 33, 44];
+        let sum = 0;
+        arr.forEach(function(item) {
+            sum += item;
+        });
+        console.log("sum: ", sum);
+
+
+        const arr2 = [11, 22, 33, 44];
+        let sum2 = 0;
+        arr2.map(function(item) {
+            sum2 += item;
+        });
+        console.log("sum2: ", sum2);
+
+        // reduce 专门为累加这种操作而设计，为累加这类操作而设计的参数，十分方便。
+        const arr3 = [11, 22, 33, 44];
+        let total = arr3.reduce(function(acc, cur) {
+            return acc + cur;
+        });
+        console.log("total: ", total);
+
+        // 测试传入 initialValue 值的执行步骤
+        const arr4 = [11, 22, 33, 44];
+        let total2 = arr3.reduce(function(acc, cur) {
+                //debugger;
+                // 第一次输出 acc 为 55
+                console.log(acc);
+                return acc + cur;
+            }
+        , 55);
+        console.log("total2: ", total2);
+
+
+        // 更多实例: 求乘积
+        const arr5 = [11, 22, 33, 44];
+        // product /'prɒdʌkt/ n.产品，乘积
+        let pro = arr5.reduce((acc, cur) => acc * cur);
+        console.log("pro: ", pro);
+
+        // 更多实例: 求最大值
+        const arr6 = [11, 22, 33, 44];
+        let max = arr6.reduce((acc, cur) => {
+            return acc > cur ? acc : cur;
+        });
+        console.log("max: ", max);
+
+
+        // ~~~~~~~~~~~~~
+        /** reduce方法在数组对象中的运用： */
+        const arrObj =  [ {name: 'brick11'}, {name: 'brick12'}, {name: 'brick13'} ];
+        // brick /brɪk/ n.砖，砖头
+        function carryBricks(arr){
+            return arr.reduce(function(prev, current, index, array){
+                if (index === 0){
+                    return current.name;
+                }
+                else if (index === array.length - 1){
+                    return prev + ' & ' + current.name;
+                }
+                else {
+                    return prev + ', ' + current.name;
+                }
+            }, '');
+        }
+        // brick11, brick12 & brick13
+        console.log(carryBricks(arrObj));
+
+
+        const arrObj2 =  [ {name: 'brick11'}, {name: 'brick12'}, {name: 'brick13'} ];
+        const bricks = 'brick1, brick2, brick3';  //已经堆好的砖
+        function carryBricksAgain(arr){
+            return arr.reduce(function(prev, current, index, array){
+                if (index === 0){
+                    return prev + ", " + current.name;
+                }
+                else if (index === array.length - 1){
+                    return prev + ' & ' + current.name;
+                }
+                return prev + ', ' + current.name;
+            }, bricks);
+        }
+        // brick1, brick2, brick3, brick11, brick12 & brick13
+        console.log(carryBricksAgain(arrObj2));
+
+
+
+
+       /* let numbers = [65, 44, 12, 4];
+        function getSum(total, num) {
+            return total + num;
+        }
+        function myFunction(item) {
+            console.log(item.reduce(getSum));
+        }
+        myFunction(numbers);*/
+
+    </script>
+</body>
+</html>
