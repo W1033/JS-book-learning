@@ -6,14 +6,14 @@
 
 #### 2.总要: 关于在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度"的jq和js方法总结:
   - (1).jq方法:
-  ```javascript
+  ```javascript 
     // jq获取当前可视窗口的高度和宽度:
     $(window).height();  $(window).width();
     // jq获取文档高度和宽度
     $(document).height();  $(document).height();
   ```
   - (2).js方法:
-   ```javascript
+   ```javascript 
      // js获取当前页面可视窗口的高度和宽度(前提 `<!DOCTYPE html>` 是这种写法，以前古老的写法除外) IE,FF,Chrome 统一是:
      document.body.clientHeight
      // IE9+, FF, Chrome 确定浏览器窗口大小(可视窗口大小)有两个新属性:
@@ -24,7 +24,7 @@
 
 
 #### 3.jq中获取当前元素的索引的方法: 代码如下
-   ```javascript
+   ```javascript 
      $(".selFun .closeFun").click(function(){ <br/>
         $(this).css("backgroundColor", "#ccc");
 
@@ -67,7 +67,7 @@
 
  - apply() 接受2个参数，第一个参数制定了函数体内 this 对象的指向。第二个参数为一个带下标的集合，这个集合可以是数组，也可以为类数组， **apply 方法把这个集合中的元素作为参数传递给被调用的函数。**
 
-  ```javascript
+  ```javascript 
    var func = function(a, b, c) {
        console.log([a, b, c]);
    };
@@ -81,7 +81,7 @@
    ```
   + (1).改变 this 指向: 最常见的用途是改变函数内部的 this 指向
    - 更多见示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第2章\P33-借用其他对象的方法.js
-  ```javascript
+  ```javascript 
 	var obj1 = { name: "sven" };
 	var obj2 = { name: "anne" };
 	window.name = "Window";
@@ -101,7 +101,7 @@
    - 示例见: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第2章\P32-Function.prototype.bind实现.js
 
   + (3.) 借用其他对象的方法
-  ```javascript
+  ```javascript 
   	(function () {
   		Array.prototyp.push.call( arguments, 3 );
   		console.log( arguments );	// [ 1, 2, 3 ]
@@ -109,7 +109,7 @@
   ```
 
   **示例:使用call方法调用父构造函数**
-  ```javascript
+  ```javascript 
        function Product(name, price){
            this.name = name;
            this.price = price;
@@ -224,7 +224,7 @@
  ```
 
 ####  17.函数声明 函数表达式 和 匿名函数
- ```javascript
+ ```javascript 
    // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明后面不能跟圆括号。
    function(){
       //这里是块级作用域
@@ -382,7 +382,7 @@
 
 #### 32 . js 表单提交: onlyForm.submit();
 #### 33 . 日期格式化
- ```javascript
+ ```javascript 
     function getTime(time) {
         if (time !== "" || time !== undefined) {
             var data, year, month, day, hour, minute, second;
@@ -404,7 +404,7 @@
   - input:-ms-input-placeholder { letter-spacing:1px; }
 
 #### 35 .银行卡添加空格
- ```javascript
+ ```javascript 
       function addBlock(num) {
           if (num !== "" || num !== undefined) {
               if (/\S{5}/.test(num)) {   // \S: 匹配一个非空白字符
@@ -437,7 +437,7 @@
       + 示例:《深入理解ES6》-学习笔记\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
 
 #### 38 .localStorage 对象
-```javascript
+```javascript 
      // 使用方法存储数据
      localStorage.setItem("name", "Nicholas");
      // 使用属性存储数据
@@ -516,7 +516,7 @@
 
 
 #### 41. 上滑显示错误弹框
- ```javascript
+ ```javascript 
 	var errBoxPosTop = getPosition(errBoxEleConfig.errorBoxWall).top;
 	var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 	function scrollBarRoll() {
@@ -539,7 +539,8 @@
 
 
 #### 43 构造函数的方法内可以动态给构造函数添加属性
-```javascript
+```javascript 
+    // Vue-study\Vue--文档+语法\Vue-双向数据绑定\Vue双向绑定-基础示例讲解\Vue双向数据绑定原理-2.html
     // 订阅者 Watcher
     function Watcher (vm, node, name, nodeType) {
         Dependence.target = this;

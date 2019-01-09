@@ -7,7 +7,7 @@
 <body>
 <img src="smile.gif" id="myImage"/>
 <script type="text/javascript">
-    var image = document.getElementById("myImage"); //取得<img>元素
+    var image = document.getElementById("myImage"); //取得<imgs>元素
     EventUtil.addHandler(image, "load", function (event) {
         event = EventUtil.getEvent(event);
         alert(EventUtil.getTarget(event).src);
