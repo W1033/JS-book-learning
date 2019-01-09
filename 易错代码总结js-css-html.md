@@ -132,7 +132,7 @@
            this.category = "food";
        }
 
-       -----------------------------------------------------
+
        /**使用call()方法调用匿名函数 : 在for循环内部，我们创建了一个匿名函数，通过调用该函数的call方法,将每个数组元素作为
           指定的this值执行了那个匿名函数。这个匿名函数的主要目的是给每个数组元素对象添加一个print方法，这个print
           方法可以打印出各元素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数(普通参数就可以),
@@ -149,7 +149,7 @@
            }).call(animals[i], i)
        }
 
-       -----------------------------------------------------
+       
        /**使用call()方法调用函数并且指定上下文的this :下面的例子中，当调用greet方法的时候，该方法的 this 值会绑定到 i 对象。**/
        function greet(){
            var reply = [this.person, "Is An Awesome", this.role].join(" ");
@@ -536,3 +536,36 @@
  <div style="overflow: hidden; width: 600px; height: 700px;">
     <img style="width: 100%; height: 100%; " src="./images/JS-原型图.png">
  </div>
+
+
+#### 43 构造函数的方法内可以动态给构造函数添加属性
+```javascript
+    // 订阅者 Watcher
+    function Watcher (vm, node, name, nodeType) {
+        Dependence.target = this;
+        this.name = name;
+        this.node = node;
+        this.vm = vm;
+        this.nodeType = nodeType;
+
+        // 函数内调用 update() 方法，给节点赋值
+        this.update();
+
+        Dependence.target = null;
+    }
+    Watcher.prototype = {
+        update: function () {
+            this.get();
+            if (this.nodeType === "text") {
+                this.node.nodeValue = this.value;
+            }
+            if (this.nodeType === "input") {
+                this.node.value = this.value;
+            }
+        },
+        get: function () {
+            // 在方法内给构造函数添加 value 属性
+            this.value = this.vm[this.name];
+        }
+    };
+```
