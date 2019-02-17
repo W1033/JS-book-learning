@@ -22,7 +22,7 @@
 
 
 
-    function testThis() {
+   /* function testThis() {
         console.log(this);  // window
     }
     testThis();
@@ -36,7 +36,47 @@
     };
 
     let colors = new MyArray("red");
-    colors.getColor();
+    colors.getColor();*/
+
+
+    class Observer {
+        constructor (value) {
+            this.value = value;
+            this.dep = new Dep();
+            this.vmCount = 0;
+            def(value, '__ob__', this);
+            if (Array.isArray(value)) {
+                const augment = hasProto ? protoAugment : copyAugment;
+                augment(value, arrayMethods, arrayKeys)
+                this.observeArray(value)
+            } else {
+                this.walk(value)
+            }
+        }
+
+        /**
+         * Walk through each property and convert them into
+         * getter/setters. This method should only be called when
+         * value type is Object.
+         */
+        walk (obj) {
+            const keys = Object.keys(obj)
+            for (let i = 0; i < keys.length; i++) {
+                defineReactive(obj, keys[i])
+            }
+        }
+
+        /**
+         * Observe a list of Array items.
+         */
+        observeArray (items: Array<any>) {
+            for (let i = 0, l = items.length; i < l; i++) {
+                observe(items[i])
+            }
+        }
+    }
+
+
 
 
 </script>
