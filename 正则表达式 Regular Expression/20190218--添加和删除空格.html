@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>20190218--添加和删除空格</title>
+    <style type="text/css">
+        * { margin: 0; padding: 0; list-style: none; font: 14px "Microsoft YaHei"; }
+        .same-css-line > div:nth-child(1){
+            float:left; width:24%;
+            height:40px; line-height:40px;
+            text-align:right; margin-right:8%;
+        }
+        .same-css-line > div:nth-child(2){ float:left; width:67%; }
+
+        .popups-error-span{
+            font-size:12px; color:#f34f50;
+            line-height:20px; display:block;
+        }
+
+        input.bank-card-input{
+            height:38px; font-size:15px;
+            line-height:38px; width:268px;
+            border: 1px solid #a8abb0;
+            letter-spacing:0;
+            border-radius:4px; text-indent:10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" style="width:600px; height:400px; margin:40px auto">
+        <!--卡号-->
+        <div class="same-css-line over-hid">
+            <div>银行卡号：</div>
+            <div class="over-hid">
+                <input type="text" class="bank-card-input" placeholder="收款人卡号">
+                <span class="popups-error-span bank-card-error-span"></span>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!--卡号-->
+    </div>
+
+
+    <script>
+
+        //给数字添加空格函数
+         var theNum = "78945669457811234561389";
+        function addBlock(num){
+            // \S: 匹配一个非空白字符  \s: 匹配一个空白字符 包括\n,\r,\f,\t,\v等
+            if(/\S{5}/.test(num)){
+                return num.replace(/\s/g, "").replace(/(.{4})/g, "$1 ");
+            }
+        }
+
+
+
+
+        var t = document.getElementById("test");
+        t.onkeydown=change;
+        t.onkeyup=change;
+        t.onkeypress=change;
+
+        function change(){
+            // 替换空格前4位数字为"4位数字加空格"
+            this.value=this.value.replace(/(\d{4})(?=[^\s])/,'$1 ');
+        }
+
+
+
+    </script>
+</body>
+</html>
