@@ -48,6 +48,7 @@
          var theNum = "78945669457811234561389";
         function addBlock(num){
             // \S: 匹配一个非空白字符  \s: 匹配一个空白字符 包括\n,\r,\f,\t,\v等
+            // **`(x)`** : 匹配 x 保存 x 在名为 $1...$9 的变量中。
             if(/\S{5}/.test(num)){
                 return num.replace(/\s/g, "").replace(/(.{4})/g, "$1 ");
             }
@@ -56,16 +57,16 @@
 
 
 
-        var t = document.getElementById("test");
+        /*var t = document.getElementById("test");
         t.onkeydown=change;
         t.onkeyup=change;
         t.onkeypress=change;
 
         function change(){
-            // 替换空格前4位数字为"4位数字加空格"
+            // 替换空格前 4 位数字为 "4位数字加空格"
+            // **`(?=)`** : 正向前瞻型分组
             this.value=this.value.replace(/(\d{4})(?=[^\s])/,'$1 ');
-        }
-
+        }*/
 
 
     </script>
