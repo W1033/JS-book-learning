@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>20190218--添加和删除空格</title>
+    <style type="text/css">
+        * { margin: 0; padding: 0; list-style: none; font: 14px "Microsoft YaHei"; }
+
+        .container {
+            width:600px; height:400px;
+            margin:40px auto;
+            background:lightsteelblue;
+            padding: 20px 0;
+        }
+
+        .same-css-line {
+            width: 100%;
+            height: 60px;
+            overflow: hidden;
+        }
+
+        .same-css-line > div:nth-child(1){
+            float:left; width:24%;
+            height:40px; line-height:40px;
+            text-align:right; margin-right:8%;
+        }
+        .same-css-line > div:nth-child(2){ float:left; width:67%; }
+
+        .popups-error-span{
+            font-size:12px; color:#f34f50;
+            line-height:20px; display:block;
+        }
+
+        input.bank-card-input{
+            height:38px; font-size:15px;
+            line-height:38px; width:268px;
+            border: 1px solid #a8abb0;
+            letter-spacing:0;
+            border-radius:4px; text-indent:10px;
+        }
+
+        #result {
+            width: 200px; height: 40px;
+            line-height: 40px;
+            margin: 20px auto;
+            text-align: center;
+            background: lightcoral;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="container">
+        <!--卡号-->
+        <div class="same-css-line over-hid">
+            <div>银行卡号：</div>
+            <div class="over-hid">
+                <input type="text" class="bank-card-input" id="test" placeholder="收款人卡号">
+                <span class="popups-error-span bank-card-error-span"></span>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!--卡号-->
+        <p id="result"></p>
+    </div>
+
+
+    <script>
+
+        // 给数字添加空格函数
+         var theNum = "78945669457811234561389";
+        function addBlock(num){
+            // \S: 匹配一个非空白字符  \s: 匹配一个空白字符 包括\n,\r,\f,\t,\v等
+            // **`(x)`** : 匹配 x 保存 x 在名为 $1...$9 的变量中。
+            if(/\S{5}/.test(num)){
+                return num.replace(/\s/g, "").replace(/(.{4})/g, "$1 ");
+            }
+        }
+
+        // output: 7894 5669 4578 1123 4561 389
+        console.log("addBlock(theNum): ", addBlock(theNum));
+
+
+
+        // 给表单中实时输入的数字，以 4 位位一体添加空格
+        const t = document.getElementById("test");
+        t.onkeydown=change;
+        t.onkeyup=change;
+        t.onkeypress=change;
+
+        function change(){
+            // (\d{4}) 匹配4位数字，并放到一个分组中(),
+            // `(?=)`: 正向前瞻型分组. \s: 匹配一个空白字符.
+            // (?=[^\s]) 表示匹配前面的分组，但是又不匹配分组内的空白字符。大概意思就是
+            // 通过这个把前面匹配好的空格.... 说不明白，删掉这个正向前瞻型分组对比一下就知道了。
+            this.value=this.value.replace(/(\d{4})(?=[^\s])/,'$1 ');
+        }
+
+        // 删除数字中的空格
+        t.addEventListener("mouseleave", function() {
+            // 把 t.innerHTML 利用 \s 匹配到空白字符，然后利用第二个参数，删除空白字符。
+            document.getElementById("result").innerHTML = t.value.replace(/\s+/g, "");
+        }, false)
+
+    </script>
+</body>
+</html>
