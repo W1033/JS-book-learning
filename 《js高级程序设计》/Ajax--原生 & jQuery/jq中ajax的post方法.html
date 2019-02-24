@@ -28,11 +28,18 @@
         }
 
         function ajax_post() {
-            $.post("action.php", {email: $('#email').val(), address: $('#address').val()},
+            $.post(
+                "action.php",
+                {
+                    email: $('#email').val(),
+                    address: $('#address').val()
+                },
                 function (data) {
                     $('#msg').html(data); //data成功后返回的数据
                 },
-                "text");//这里返回的类型有：json,html,xml,text
+                //这里返回的类型有：json,html,xml,text
+                "text"
+            );
         }
     </script>
 </head>
