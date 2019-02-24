@@ -106,6 +106,69 @@ console.log("~~~~~~~|S|~~~~~~");
 console.log("naming: ", naming);
 console.log("~~~~~~~|O|~~~~~~");
 
+
+/* replace 和 js 正则搭配使用的几个经典案例 */
+// 1. 实现字符串的trim函数，去除字符串两边的空格
+String.prototype.trim = function(){
+
+    //方式一：将匹配到的每一个结果都用""替换
+    /*return this.replace(/(^\s+)|(\s+$)/g,function(){
+        return "";
+    });*/
+
+    //方式二：和方式一的原理相同
+    return this.replace(/(^\s+)|(\s+$)/g,'');
+};
+
+
+// 2. 提取浏览器url中的参数名和参数值，生成一个key/value的对象
+function getUrlParamObj(){
+    var obj = {};
+    //获取url的参数部分
+    var params = window.location.search.substr(1);
+    //[^&=]+ 表示不含&或=的连续字符，加上()就是提取对应字符串
+    params.replace(/([^&=]+)=([^&=]*)/gi,function(rs,$1,$2){
+        obj[$1] = $2;
+    });
+    return obj;
+}
+
+// 3. 在字符串指定位置插入新字符串
+String.prototype.insetAt = function(str,offset){
+    //使用RegExp()构造函数创建正则表达式
+    var regx = new RegExp("(.{"+offset+"})");
+    return this.replace(regx,"$1"+str);
+};
+"abcd".insetAt('xyz',2); //在b和c之间插入xyz
+
+// 4. 将手机号12988886666转化成129 8888 6666
+function telFormat(tel){
+    tel = String(tel);
+    /*//方式一
+    return tel.replace(/(\d{3})(\d{4})(\d{4})/,function (rs,$1,$2,$3){
+        return $1+" "+$2+" "+$3
+    });*/
+    //方式二
+    return tel.replace(/(\d{3})(\d{4})(\d{4})/,"$1 $2 $3");
+}
+
+// 5. 实现函数escapeHtml，将<, >, &, " 进行转义
+function escapeHtml(str) {
+    //匹配< > " &
+    return str.replace(/[<>"&]/g, function(rs) {
+        switch (rs) {
+            case "<":
+                return "<";
+            case ">":
+                return ">";
+            case "&":
+                return "&";
+            case "\"":
+                return "";
+        }
+    });
+}
+
 /** --------------------- replace over ------------------------- */
 
 
