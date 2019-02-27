@@ -6,33 +6,31 @@
 
 #### 2.总要: 关于在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度"的jq和js方法总结:
   - (1).jq方法:
-  ```javascript 
-    // jq获取当前可视窗口的高度和宽度:
-    $(window).height();  $(window).width();
-    // jq获取文档高度和宽度
-    $(document).height();  $(document).height();
-  ```
+    + ```javascript
+        // jq获取当前可视窗口的高度和宽度:
+        $(window).height();  $(window).width();
+        // jq获取文档高度和宽度
+        $(document).height();  $(document).height();
+      ```
   - (2).js方法:
-   ```javascript 
-     // js获取当前页面可视窗口的高度和宽度(前提 `<!DOCTYPE html>` 是这种写法，以前古老的写法除外) IE,FF,Chrome 统一是:
-     document.body.clientHeight
-     // IE9+, FF, Chrome 确定浏览器窗口大小(可视窗口大小)有两个新属性:
-     window.innerHeight;  window.innerWidth;
-     // 获取文档的高度和宽度兼容IE8的写法是:
-     Math.max(document.documentElement.clientHeight,document.body.scrollHeight, document.documentElement.scrollHeight);
-   ```
+    + ```javascript
+       // js获取当前页面可视窗口的高度和宽度(前提 `<!DOCTYPE html>` 是这种写法，以前古老的写法除外) IE,FF,Chrome 统一是:
+       document.body.clientHeight;
+       // IE9+, FF, Chrome 确定浏览器窗口大小(可视窗口大小)有两个新属性:
+       window.innerHeight;  window.innerWidth;
+       // 获取文档的高度和宽度兼容IE8的写法是:
+       Math.max(document.documentElement.clientHeight, document.body.scrollHeight, document.documentElement.scrollHeight);
+      ```
 
 
 #### 3.jq中获取当前元素的索引的方法: 代码如下
-   ```javascript 
-     $(".selFun .closeFun").click(function(){ <br/>
+- ```javascript
+     $(".selFun .closeFun").click(function(){ 
         $(this).css("backgroundColor", "#ccc");
-
         var nIndex = $(".selFun .closeFun").index(this);  //获取当前元素索引的方法
-
-        $(".selFun li").eq(nIndex).css({"display":"none"}); <br/>
+        $(".selFun li").eq(nIndex).css({"display":"none"});
      });
-   ```
+  ```
 
 #### 4.关于清除浮动的问题:
   - (1).如果一个div或者ul没有设置高度，子元素又设置了float:left; 那么在子元素的最后加一个同级元素`<div class="clear"></div>`css中增加.clear{ clear:both; } <br/>
@@ -47,15 +45,17 @@
 #### 6. jquery的fadeIn()是展示，fadeOut()是隐藏
 
 #### 7. js高程:
-  + chapter5: 5.2.7 位置方法ECMAScript 5 为数组实例添加了两个位置方法： indexOf() 和 lastIndexOf() 。
-  + chapter5: 5.6.3 String: 有两个可以从字符串中查找子字符串的方法： indexOf() 和 lastIndexOf() 。这两个方法都是从一个字符串中搜索给定的子字符串，然后返子字符串的位置（如果没有找到该子字符串，则返回 -1 ）。
-  + 这两个方法的区别在于： indexOf() 方法从字符串的开头向后搜索子字符串，而 lastIndexOf() 方法是从字符串的末尾向前搜索子字符串 (注意: 查找是一个从前一个从后，但是我们输出当前项时索引都是从前开始数的)。
+ - chapter5: 5.2.7 -- 位置方法 ES5 为数组实例添加了两个位置方法： indexOf() 和 lastIndexOf() 。
+ - chapter5: 5.6.3 String: 有两个可以从字符串中查找子字符串的方法： indexOf() 和 lastIndexOf()。
+    + 这两个方法都是从一个字符串中搜索给定的子字符串，然后返子字符串的位置（如果没有找到该子字符串，则返回 -1 ）。
+    + 区别在于： indexOf() 方法从字符串的开头向后搜索子字符串，而 lastIndexOf() 方法是从字符串的末尾向前搜索
+        子字符串 (注意: 查找是一个从前一个从后，但是我们输出当前项时索引都是从前开始数的)。
     ​
-#### 8. Chrome de select的option不支持click事件，但是支持 change 事件
-	$("#countryCodeObj").change(function () {
-		var current = this.options[this.selectedIndex].value;
-		$("#countryCode").val(current);
-	});
+#### 8. Chrome 中 select 下的 option 不支持 click 事件，但是支持 change 事件
+$("#countryCodeObj").change(function () {
+    var current = this.options[this.selectedIndex].value;
+    $("#countryCode").val(current);
+});
 
 #### 9. js高程: chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，然后返回包含所有数组项的字符串
     var colors = ["red", "green", "blue"];
@@ -66,101 +66,98 @@
  - call 和 apply 的用途 : 《js编程实践和设计模式》
 
  - apply() 接受2个参数，第一个参数制定了函数体内 this 对象的指向。第二个参数为一个带下标的集合，这个集合可以是数组，也可以为类数组， **apply 方法把这个集合中的元素作为参数传递给被调用的函数。**
+    + ```javascript
+         var func = function(a, b, c) {
+             console.log([a, b, c]);
+         };
+         // 如果传入的第一个参数为 null, 函数体内的 this 会指向默认的宿主对象，在浏览器中则是 window.
+         // 参数 1，2，3 被放在数组中一起传入 func 函数，他们分别对应 func 参数列表中的 a,b,c。
+         func.apply(null, [1, 2, 3]);
+      
+         // 有时候我们使用 call 或者 apply 的目的不在于指定 this 指向，
+         // 而是另有用途，比如借用其他对象的方法，那么我们可以传入 null 来代替某个具体的对象:
+         Math.max.apply(null, [1, 2, 5, 3, 6]);	// 输出 6
+       ```
+    + (1).改变 this 指向: 最常见的用途是改变函数内部的 this 指向
+        - 更多见示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第2章\P33-借用其他对象的方法.js
+        - ```javascript
+            var obj1 = { name: "sven" };
+            var obj2 = { name: "anne" };
+            window.name = "Window";
+            var getName = function () { console.log( this.name ); };
+            getName();
+            getName.call( obj1 );	// sven
+            getName.apply( obj2 );	// anne
+          
+            document.getElementById("div1").onclick = function () {
+                var func = function () {
+                    console.log( this.id );	// div1
+                };
+                func.call( this );
+            }
+          ```
+    + (2.) Function.prototype.bind
+        - 示例见: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第2章\P32-Function.prototype.bind实现.js
+    + (3.) 借用其他对象的方法
+        - ```javascript
+            (function () {
+                Array.prototype.push.call( arguments, 3 );
+                console.log( arguments );	// [ 1, 2, 3 ]
+            })(1, 2)
+          ```
 
-  ```javascript 
-   var func = function(a, b, c) {
-       console.log([a, b, c]);
-   };
-   // 如果传入的第一个参数为 null, 函数体内的 this 会指向默认的宿主对象，在浏览器中则是 window.
-   // 参数 1，2，3 被放在数组中一起传入 func 函数，他们分别对应 func 参数列表中的 a,b,c。
-   func.apply(null, [1, 2, 3]);
-
-   // 有时候我们使用 call 或者 apply 的目的不在于指定 this 指向，
-   // 而是另有用途，比如借用其他对象的方法，那么我们可以传入 null 来代替某个具体的对象:
-   Math.max.apply(null, [1, 2, 5, 3, 6]);	// 输出 6
-   ```
-  + (1).改变 this 指向: 最常见的用途是改变函数内部的 this 指向
-   - 更多见示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第2章\P33-借用其他对象的方法.js
-  ```javascript 
-	var obj1 = { name: "sven" };
-	var obj2 = { name: "anne" };
-	window.name = "Window";
-	var getName = function () { console.log( this.name ); };
-	getName();
-	getName.call( obj1 );	// sven
-	getName.apply( obj2 );	// anne
-
-	document.getElementById("div1").onclick = function () {
-		var func = function () {
-			console.log( this.id );	// div1
-		}
-		func.call( this );
-	}
-  ```
-  + (2.) Function.prototype.bind
-   - 示例见: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第2章\P32-Function.prototype.bind实现.js
-
-  + (3.) 借用其他对象的方法
-  ```javascript 
-  	(function () {
-  		Array.prototyp.push.call( arguments, 3 );
-  		console.log( arguments );	// [ 1, 2, 3 ]
-  	})(1, 2)
-  ```
-
-  **示例:使用call方法调用父构造函数**
-  ```javascript 
-       function Product(name, price){
-           this.name = name;
-           this.price = price;
-           if(price < 0){
-               throw RangeError("Cannot create product" + this.name + "with a negative price")
-           }
-       }
-       function Food(name, price){
-           Product.call(this, name, price);
-           this.category = "food";
-       }
-       /*---上面Food()构造函数调用Product()构造函数 "等同于"(=) 下面这个写法---*/
-
-       function Food(name, price){
-           this.name = name;
-           this.price = price;
-           if(price < 0){
-               throw RangeError("Cannot create product" + this.name + "with a negative price")
-           }
-           this.category = "food";
-       }
-
-
-       /**使用call()方法调用匿名函数 : 在for循环内部，我们创建了一个匿名函数，通过调用该函数的call方法,将每个数组元素作为
-          指定的this值执行了那个匿名函数。这个匿名函数的主要目的是给每个数组元素对象添加一个print方法，这个print
-          方法可以打印出各元素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数(普通参数就可以),
-          目的是为了演示call的用法 **/
-       var animals = [
-           {species:"Lion", name: "XinBa"},
-           {species:"Whale", name: "Blue"}
-       ];
-       for(var i=0; i<animals.length; i++){
-           (function(i){
-               this.print = function(){
-                   console.log("#" + i + "" + this.species + ":" + this.name);
-               }
-           }).call(animals[i], i)
-       }
-
-       
-       /**使用call()方法调用函数并且指定上下文的this :下面的例子中，当调用greet方法的时候，该方法的 this 值会绑定到 i 对象。**/
-       function greet(){
-           var reply = [this.person, "Is An Awesome", this.role].join(" ");
-           console.log(reply);
-       }
-       var called= {
-           person: "Nicholas C.Zakas",
-           role: "Javascript Developer"
-       };
-       greet.call(called); //Nicholas C.Zakas Is An Awesome Javascript Developer
-  ```
+ - **示例:使用call方法调用父构造函数**
+    + ```javascript
+         function Product(name, price){
+             this.name = name;
+             this.price = price;
+             if(price < 0){
+                 throw RangeError("Cannot create product" + this.name + "with a negative price")
+             }
+         }
+         function Food(name, price){
+             Product.call(this, name, price);
+             this.category = "food";
+         }
+         /*---上面Food()构造函数调用Product()构造函数 "等同于"(=) 下面这个写法---*/
+  
+         function Food(name, price){
+             this.name = name;
+             this.price = price;
+             if(price < 0){
+                 throw RangeError("Cannot create product" + this.name + "with a negative price")
+             }
+             this.category = "food";
+         }
+  
+         /**使用call()方法调用匿名函数 : 在for循环内部，我们创建了一个匿名函数，通过调用该函数的call方法,将每个数组元素作为
+            指定的this值执行了那个匿名函数。这个匿名函数的主要目的是给每个数组元素对象添加一个print方法，这个print
+            方法可以打印出各元素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数(普通参数就可以),
+            目的是为了演示call的用法 **/
+         var animals = [
+             {species:"Lion", name: "XinBa"},
+             {species:"Whale", name: "Blue"}
+         ];
+         for(var i=0; i<animals.length; i++){
+             (function(i){
+                 this.print = function(){
+                     console.log("#" + i + "" + this.species + ":" + this.name);
+                 }
+             }).call(animals[i], i)
+         }
+  
+         
+         /**使用call()方法调用函数并且指定上下文的this :下面的例子中，当调用greet方法的时候，该方法的 this 值会绑定到 i 对象。**/
+         function greet(){
+             var reply = [this.person, "Is An Awesome", this.role].join(" ");
+             console.log(reply);
+         }
+         var called= {
+             person: "Nicholas C.Zakas",
+             role: "Javascript Developer"
+         };
+         greet.call(called); //Nicholas C.Zakas Is An Awesome Javascript Developer
+      ```
 
 
 #### 11.表格清除格与格之前的间距的样式: border-collapse: collapse;
@@ -184,44 +181,44 @@
 #### 13.自己常用到的正则判断
   - 1. 判断手机号的: /^0?1[3|4|7|5|8][0-9]\d{8}$/
     ```javascript
-        if(/^0?1[3|4|5|8][0-9]\d{8}$/.test(target.value) && target.value != ""){
-        ​      return null;
-        }else{
-        ​      $(".errorPromptDiv").html("请输入正确的手机号！");
+        if(/^0?1[3|4|5|8][0-9]\d{8}$/.test(1866666666)){
+    ​       return null;
         }
     ```
-  - 2.判断验证码: /^[0-9]{6}$/    <br/>
-  - 3.判断身份证: /(^\d{15}$)|(^\d{17}([0-9]|X)$)/     <br/>
-  - 4.判断银行卡: /([0-9]{17}([0-9]|X|x))|([0-9]{15})/   <br/>
-  - 5.判断邮箱: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/
+  - 2.判断验证码: `/^[0-9]{6}$/` 
+  - 3.判断身份证: `/(^\d{15}$)|(^\d{17}([0-9]|X)$)/`
+  - 4.判断银行卡: `/([0-9]{17}([0-9]|X|x))|([0-9]{15})/` 
+  - 5.判断邮箱: `/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/`
 
 #### 14.字体两端对齐
- `text-align:justify;
-  text-justify:distribute-all-lines;/*ie6-8*/
-  text-align-last:justify;/* ie9*/
-  -moz-text-align-last:justify;/*ff*/
-  -webkit-text-align-last:justify;/*chrome 20+*/`
+ - ```css
+       .sty {
+           text-align:justify;
+           text-justify:distribute-all-lines;/*ie6-8*/
+           text-align-last:justify;/* ie9*/
+           -moz-text-align-last:justify;/*ff*/
+           -webkit-text-align-last:justify;/*chrome 20+*/
+       }
+   ``` 
 ​
 
 ####  15.outerHTML 属性
-    ```javascript
-        // 在读模式下， outerHTML 返回调用它的元素及所有子节点的 HTML 标签。在写模式下，
-        // outerHTML会根据指定的 HTML 字符串创建新的 DOM子树，然后用这个DOM子树完全替换调用元素。下面是一个例子。
-        <div id="content">
-            <p>This is a <strong>paragraph</strong> with a list following it.</p>
-            <ul>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-            </ul>
-        </div>
-        var allContent = content.outerHTML;  // allContent 就输出上面所有的代码
-    ```
+ - ```base
+    // 在读模式下， outerHTML 返回调用它的元素及所有子节点的 HTML 标签。在写模式下，
+    // outerHTML会根据指定的 HTML 字符串创建新的 DOM子树，然后用这个DOM子树完全替换调用元素。下面是一个例子。
+    <div id="content">
+        <p>This is a <strong>paragraph</strong> with a list following it.</p>
+        <ul>
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+    var allContent = content.outerHTML;  // allContent 就输出上面所有的代码
+   ```
 ####  16.cloneNode() 方法
- ```
-    cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。
+ -  cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。
     这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。
- ```
 
 ####  17.函数声明 函数表达式 和 匿名函数
  ```javascript 
@@ -257,13 +254,13 @@
   - @media only screen and (min-width:2000px){} <br>
 
 #### 20.String对象的 ★★★★ split()方法：基于制定的分隔符，把一个字符串分割为一个字符串数组。
- ```base
-        // 取得当前元素的className的数量
-        function getClassNum(ele){
-            //split()基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
-            return ele.className.split(/\s+/);
-        }
- ```
+ - ```javascript
+       // 取得当前元素的className的数量
+       function getClassNum(ele){
+           //split()基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
+           return ele.className.split(/\s+/);
+       }
+    ```
 
 #### 21.mouseover和mouseenter的区别：(js高级 13.4.3节)<br/>
   mouseenter ：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件不冒泡，而且在光标移动到后代元素上不会触发。<br/>
@@ -384,8 +381,8 @@
  - (3). white-space: pre-wrap; 只对中文起作用，强制换行。
 
 ####  30. 合并2个数组到对象中，再把对象推入到数组中
- ```base
-	var types3 =  [];
+- ```javascript
+    var types3 =  [];
     var arr1 = [ '公司类合作', '个人类合作', '混合类合作' ];
     var arr2 = [ 20, 21, 22 ];
     for(var i=0; i<arr1.length; i++){
@@ -400,7 +397,7 @@
         types3.push(nObj);
     }
     console.log(types3);
- ```
+  ```
 
 #### 31 . 相對路徑:
   - ./  当前目录;
@@ -409,7 +406,7 @@
 
 #### 32 . js 表单提交: onlyForm.submit();
 #### 33 . 日期格式化
-```javascript 
+ - ```javascript
     function getTime(time) {
         if (time !== "" || time !== undefined) {
             var data, year, month, day, hour, minute, second;
@@ -418,13 +415,13 @@
             month = data.getMonth() + 1;
             // month = month < 10 ? '0' + month : month;
             day =   data.getDate();
-         // hour =  data.getHours();
-         // minute = data.getMinutes();
-         // second = data.getSeconds();
+            // hour =  data.getHours();
+            // minute = data.getMinutes();
+            // second = data.getSeconds();
             return  year + "-" + month + "-" + day;
         }
     }
-```
+   ```
 #### 34 . 给 placeholder 设置样式
  - input::-webkit-input-placeholder { letter-spacing:1px; }
  - input::-moz-placeholder { letter-spacing:1px; }
@@ -432,6 +429,7 @@
 
 #### 35、银行卡添加和删除空格
  - 见示例: js-sundry-goods\JS--方法总结\2019\20190218--表单数字添加空格.html
+ - [在线示例](https://github.com/PayneW/js-sundry-goods/blob/master/JS--%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/2019/20190218--%E8%A1%A8%E5%8D%95%E6%95%B0%E5%AD%97%E6%B7%BB%E5%8A%A0%E7%A9%BA%E6%A0%BC.html)
 
 #### 36. Array.prototype.
  - 0.将 arguments (类数组对象)转换为数组:  Array.prototype.slice(arguments)
@@ -439,11 +437,49 @@
  - 2.取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
 
 #### 37. Object
-  - ES5 - 提供了 Object.create 方法，可以用来克隆对象。 Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)"):   <br/>
-        - 《js高程》P170 --> ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。这个方法接收两个参数：一
-          个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。在传入一个参数的情况下，
-          Object.create() 与 object() 方法的行为相同。
-      + 示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第1章\1st-面向对象的Javascript.js
+  - ES5 - 提供了 Object.create 方法，可以用来克隆对象。 
+      + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
+      + js高程-P170: ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。这个方法接收两个参数：
+        - 第 1 个: 用作新对象原型的对象。(在传入一个参数的情况下 Object.create() 与 object() 方法的行为相同。)
+        - 第 2 个: 一个为新对象定义额外属性的对象(可选)。
+        - ```javascript
+             // 示例1 : javascript 高程 -- 6.3.4 原型式继承
+             var person = {          
+                 // 基本类型值属性
+                name: "Nicholas",
+                 // 引用类型值属性。(tips-P171: 不过不要忘了，包含引用类型值的属性始终都会共享相应的值，
+                 // 就像使用原型模式一样。)
+                 friends: ["Shelby", "Court", "Van"],
+             };
+             var anotherPerson = Object.create(person);
+             anotherPerson.name = "Grey";
+             anotherPerson.friends.push("Rob");
+            
+             var yetAnotherPerson = Object.create(person);
+             yetAnotherPerson.name = "Linda";
+             yetAnotherPerson.friends.push("Barbie");
+             // person.friends 不仅属于 person 所有，而且会被 anotherPerson 以及 yetAnotherPerson 共享。
+             // 实际上，这就相当于又创建了 person 对象的 2 个副本。
+             console.log(person.friends);    // "Shelby,Court,Van,Rob,Barbie"
+          ```
+        - ```javascript
+              // 示例2 : JS-book-learning/《js设计模式与编程实践》/第一部分--基础知识/第1章/1st-面向对象的Javascript.js
+              const Plane = function () {
+                  this.blood = 100;
+                  this.attackLevel = 1;
+                  this.defenseLevel = 1;
+              };
+              
+              let plane = new Plane();
+              plane.blood = 500;
+              plane.attackLevel = 10;
+              plane.defenseLevel = 7;
+              
+              let clonePlane = Object.create(plane);
+              console.log(clonePlane);            // Plane {}
+              console.log(clonePlane.blood);      // 500
+              console.log(clonePlane.attackLevel);// 10
+          ```
   - ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。
 
       + 示例: github-clone\js-sundry-goods\js--A语法--MDN文档\js高程---Object.keys().js
@@ -456,7 +492,7 @@
       + 示例:《深入理解ES6》-学习笔记\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
 
 #### 38 .localStorage 对象
-```javascript 
+- ```javascript
      // 使用方法存储数据
      localStorage.setItem("name", "Nicholas");
      // 使用属性存储数据
@@ -466,7 +502,7 @@
      var name = localStorage.getItem("name");
      // 使用属性读取数据
      var book = localStorage.book;
-```
+  ```
 
 #### 39. Node.js 和 ES6 导入导出:
   + Node.js 导入 require(), 导出 exports || module.exports
@@ -558,7 +594,7 @@
 
 
 #### 43 构造函数的方法内可以动态给构造函数添加属性
-```javascript 
+- ```javascript
     // Vue-study\Vue--文档+语法\Vue-双向数据绑定\Vue双向绑定-基础示例讲解\Vue双向数据绑定原理-2.html
     // 订阅者 Watcher
     function Watcher (vm, node, name, nodeType) {
@@ -588,4 +624,4 @@
             this.value = this.vm[this.name];
         }
     };
-```
+  ```
