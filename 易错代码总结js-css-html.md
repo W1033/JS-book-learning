@@ -382,19 +382,15 @@ $("#countryCodeObj").change(function () {
 
 ####  30. 合并2个数组到对象中，再把对象推入到数组中
 - ```javascript
+    // 合并2个数组到对象中，再把对象推入到数组中
     var types3 =  [];
     var arr1 = [ '公司类合作', '个人类合作', '混合类合作' ];
     var arr2 = [ 20, 21, 22 ];
     for(var i=0; i<arr1.length; i++){
         var obj = {};
-        var nObj = obj + i;
-        nObj = {
-            label: "",
-            value: ""
-        };
-        nObj.label = arr1[i];
-        nObj.value = arr2[i];
-        types3.push(nObj);
+        obj.label = arr1[i];
+        obj.value = arr2[i];
+        types3.push(obj);
     }
     console.log(types3);
   ```
