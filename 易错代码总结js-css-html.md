@@ -564,7 +564,7 @@ $("#countryCodeObj").change(function () {
 #### 40. 客户区坐标位置 ( clientX 和 clientY ):
   + 鼠标事件都是在浏览器视口中特定位置上发生的。这个位置信息保存在事件对象的 clientX 和 clientY 属性中。
     所有浏览器都支持这两个属性，他们的值标识事件发生时鼠标指针在视口中的水平和垂直坐标。 event.clientX , event.clientY
-
+  + [clientX and clientY](./images/clientX%20and%20clientY.png)
 
 #### 41. 上滑显示错误弹框
  ```javascript 
