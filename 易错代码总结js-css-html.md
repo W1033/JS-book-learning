@@ -265,10 +265,9 @@
         }
  ```
 
-
 #### 21.mouseover和mouseenter的区别：(js高级 13.4.3节)<br/>
-      mouseenter ：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件不冒泡，而且在光标移动到后代元素上不会触发。<br/>
-      mousemove ：当鼠标指针在元素内部移动时重复地触发。
+  mouseenter ：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件不冒泡，而且在光标移动到后代元素上不会触发。<br/>
+  mousemove ：当鼠标指针在元素内部移动时重复地触发。
 
 
 #### 22. $.ajaxSetup()方法设置全局ajax默认选项。
@@ -284,24 +283,52 @@
   })`
 ​
 ####  23.3.6.7 break 和 continue 语句: break和continue语句用于在循环中精确地控制代码的执行。
-  - break 语句会立即退出循环，强制继续执行循环后面的语句。
-  - continue 语句虽然也是立即退出循环，但退出循环后会从循环的顶部继续执行。
+ - break 语句会立即退出循环，强制继续执行循环后面的语句。
+    + ```javascript
+        function breakExample() {
+            var num = 0;
+            for (var i =1; i < 10; i++) {
+                if (i % 5 === 0) {
+                    break;
+                }
+                num++;
+            }
+            return num;
+        }
+        console.log(breakExample())
+      ``` 
+ - continue 语句虽然也是立即退出循环，但退出循环后会从循环的顶部继续执行。
+    + ```javascript
+        function continueExample() {
+            var num = 0;
+            for (var i =1; i < 10; i++) {
+                if (i % 5 === 0) {
+                    continue;
+                }
+                num++;
+            }
+            return num;
+        }
+        console.log(continueExample())
+      ``` 
 
 #### 24.JSON 对象有两个方法： stringify() 和 parse() 在最简单的情况下，这两个方法分别用于把JavaScript对象序列化为 JSON 字符串和把 JSON 字符串解析为原生 JavaScript 值。
 
 ####  25.
-        `function a(){
-             var i=0;
-             function b(){
-                 console.log(++i);
-             }
-             return b;
-         }
-         var c = a();
-         c();
-         /*这里先调用函数a, 然后在a内部执行函数b()，
-         由于作用域链存在(你也可以说成闭包)，b访问父级函数a的i，然后前置递增+1，
-         最后return 返回 b函数的指针赋值给c, c后面加()调用*/`
+ - ```javascript
+       function a(){
+           var i=0;
+           function b(){
+               console.log(++i);
+           }
+           return b;
+        }
+        var c = a();
+        c();
+        /*这里先调用函数a, 然后在a内部执行函数b()，
+        由于作用域链存在(你也可以说成闭包)，b访问父级函数a的i，然后前置递增+1，
+        最后return 返回 b函数的指针赋值给c, c后面加()调用*/
+    ```
 
 #### 26.确定一个值是哪种基本类型可以使用 typeof 操作符，而确定一个值是哪种引用类型可以使用 instanceof 操作符。
 
@@ -382,7 +409,7 @@
 
 #### 32 . js 表单提交: onlyForm.submit();
 #### 33 . 日期格式化
- ```javascript 
+```javascript 
     function getTime(time) {
         if (time !== "" || time !== undefined) {
             var data, year, month, day, hour, minute, second;
@@ -397,27 +424,19 @@
             return  year + "-" + month + "-" + day;
         }
     }
- ```
+```
 #### 34 . 给 placeholder 设置样式
-  - input::-webkit-input-placeholder { letter-spacing:1px; }
-  - input::-moz-placeholder { letter-spacing:1px; }
-  - input:-ms-input-placeholder { letter-spacing:1px; }
+ - input::-webkit-input-placeholder { letter-spacing:1px; }
+ - input::-moz-placeholder { letter-spacing:1px; }
+ - input:-ms-input-placeholder { letter-spacing:1px; }
 
-#### 35 .银行卡添加空格
- ```javascript 
-      function addBlock(num) {
-          if (num !== "" || num !== undefined) {
-              if (/\S{5}/.test(num)) {   // \S: 匹配一个非空白字符
-                  return num.replace(/\s/g, "").replace(/(.{4})/g, "$1 ");
-              }
-          }
-      }
- ```
+#### 35、银行卡添加和删除空格
+ - 见示例: js-sundry-goods\JS--方法总结\2019\20190218--表单数字添加空格.html
 
 #### 36. Array.prototype.
-  - 0.将 arguments (类数组对象)转换为数组:  Array.prototype.slice(arguments)
-  - 1.把 NodeList 对象转换为数组(比如一组li):  Array.prototype.slice.call(lis);
-  - 2.取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
+ - 0.将 arguments (类数组对象)转换为数组:  Array.prototype.slice(arguments)
+ - 1.把 NodeList 对象转换为数组(比如一组li):  Array.prototype.slice.call(lis);
+ - 2.取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
 
 #### 37. Object
   - ES5 - 提供了 Object.create 方法，可以用来克隆对象。 Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)"):   <br/>
