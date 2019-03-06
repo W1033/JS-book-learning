@@ -131,6 +131,29 @@
                 }
                 // 创建一个新的 promise 实例。 作用一: 链式调用。 作用二: 传进 CallbackItem 中，使其能调用 Promise 的方法
                 // new this.constructor() 是个什么意思？？？
+                /**
+                 * 详细示例:《深入理解ES6》\9th chapter--js中的类\es6中的类-class.js
+                 * function Square(length) {
+                 *     console.log("What is the Square this ?: ", this);
+                 *     Rectangle.call(this, length, length);
+                 * }
+
+                 * Square.prototype = Object.create(Rectangle.prototype, {
+                 *     constructor: {
+                 *         // 这种写法等于: Square.prototype.constructor = Square
+                 *         value: Square,
+                 *         enumerable: true,
+                 *         writable: true,
+                 *         configurable: true
+                 *     }
+                 * });
+                 * let square = new Square(3);
+                 * console.log(square.getArea());              // 9
+                 * console.log(square instanceof Square);      // true
+                 * console.log(square instanceof Rectangle);   // true
+                 */
+                console.log("this: ", this);    // Promise
+                console.log("this.constructor: ", this.constructor);
                 const promise = new this.constructor();
                 // 第一次进入 then, 状态时 fulfilled 或 rejected
                 if (this.state !== "pending") {

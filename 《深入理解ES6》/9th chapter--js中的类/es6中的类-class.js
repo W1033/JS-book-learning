@@ -331,7 +331,7 @@ Rectangle.prototype.getArea = function () {
 };
 
 function Square(length) {
-    console.log(this);
+    console.log("What is the Square this ?: ", this);   // Square {}
     Rectangle.call(this, length, length);
 }
 
@@ -399,20 +399,23 @@ Rec.prototype.getArea = function () {
 };
 
 class Squ extends Rec {
-    constructor(length) {
-        super(length, length);
+    constructor(length, width) {
+        super(length, width);
     }
 }
 
-let R = new Rec(4);
-console.log(R.getArea());       //
-console.log(R instanceof Rectangle);
+let R = new Rec(4, 6);
+console.log("R.getArea(): ", R.getArea()); // 24
+console.log("R instanceof Rec: ", R instanceof Rec); // true
+let S = new Squ(2, 6);
+console.log("S.getArea(): ", S.getArea());  // 12
 
 
 // 创建 Mixin
 let SerializableMixin = {
     serialize() {
-        return JSON.stringify(this);
+        console.log("serialize() this: ", this);    // Circle {}
+        return JSON.stringify(this);    //
     }
 };
 let AreaMixin = {
@@ -423,19 +426,25 @@ let AreaMixin = {
 // 4th: 不定参数(...keys): 该参数为一个数组，包含着自它之后传入的所有参数，
 // 通过这个数组名即可逐一访问里面的参数
 function mixin(...mixins) {
-    let base = function () {
-    };
-    // 4th: Object.assign() 实现对象组合的新方法
+    let base = function() {};
+    console.log("base: ", base);
+
+    // base 如果是一个构造函数，那么 base.prototype = {} 这是正常写法，所以 base.prototype 是一个对象
+    console.log("base.prototype: ", base.prototype);
+
+    /// 4th: Object.assign() 实现对象组合的新方法:
+
     Object.assign(base.prototype, ...mixins);
-    console.log("base", base);
+
+    console.log("base2: ", base);
     return base;
 }
 
-class Circle extends mixin(AreaMixin, SerializableMixin) {
+class Circle extends mixin(SerializableMixin, AreaMixin) {
     constructor(length) {
         super();
         this.length = length;
-        this.width = width;
+        // this.width = width;
     }
 }
 
@@ -444,8 +453,9 @@ class Circle extends mixin(AreaMixin, SerializableMixin) {
  * 函数，所以 Square 类就可以基于这个返回的函数用 extends 进行扩展。 △ 请记住，由于使用了 extends
  * 因此在构造函数中需要调用 super(). */
 let w = new Circle();
-console.log(w.getArea());
-console.log(w.serialize());
+console.log("w.serialize(): ", w.serialize());
+console.log("w.getArea(): ", w.getArea());
+
 
 
 /** 继承和派生类 --> 内建对象的继承 */
@@ -458,8 +468,8 @@ class MyArray extends Array {
 
 let colorsArr = new MyArray();
 colorsArr[0] = "red";
-console.log(colorsArr.length);
-colorsArr.length = 0;
+console.log("colorsArr[0]: ", colorsArr[0]);
+/*colorsArr.length = 0;*/
 console.log(colorsArr[0]);
 
 
