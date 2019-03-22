@@ -25,7 +25,7 @@
 
 #### 3.jq中获取当前元素的索引的方法: 代码如下
 - ```javascript
-     $(".selFun .closeFun").click(function(){ 
+     $(".selFun .closeFun").click(function(){
         $(this).css("backgroundColor", "#ccc");
         var nIndex = $(".selFun .closeFun").index(this);  //获取当前元素索引的方法
         $(".selFun li").eq(nIndex).css({"display":"none"});
@@ -73,7 +73,7 @@ $("#countryCodeObj").change(function () {
          // 如果传入的第一个参数为 null, 函数体内的 this 会指向默认的宿主对象，在浏览器中则是 window.
          // 参数 1，2，3 被放在数组中一起传入 func 函数，他们分别对应 func 参数列表中的 a,b,c。
          func.apply(null, [1, 2, 3]);
-      
+
          // 有时候我们使用 call 或者 apply 的目的不在于指定 this 指向，
          // 而是另有用途，比如借用其他对象的方法，那么我们可以传入 null 来代替某个具体的对象:
          Math.max.apply(null, [1, 2, 5, 3, 6]);	// 输出 6
@@ -88,7 +88,7 @@ $("#countryCodeObj").change(function () {
             getName();
             getName.call( obj1 );	// sven
             getName.apply( obj2 );	// anne
-          
+
             document.getElementById("div1").onclick = function () {
                 var func = function () {
                     console.log( this.id );	// div1
@@ -120,7 +120,7 @@ $("#countryCodeObj").change(function () {
              this.category = "food";
          }
          /*---上面Food()构造函数调用Product()构造函数 "等同于"(=) 下面这个写法---*/
-  
+
          function Food(name, price){
              this.name = name;
              this.price = price;
@@ -129,7 +129,7 @@ $("#countryCodeObj").change(function () {
              }
              this.category = "food";
          }
-  
+
          /**使用call()方法调用匿名函数 : 在for循环内部，我们创建了一个匿名函数，通过调用该函数的call方法,将每个数组元素作为
             指定的this值执行了那个匿名函数。这个匿名函数的主要目的是给每个数组元素对象添加一个print方法，这个print
             方法可以打印出各元素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数(普通参数就可以),
@@ -145,8 +145,8 @@ $("#countryCodeObj").change(function () {
                  }
              }).call(animals[i], i)
          }
-  
-         
+
+
          /**使用call()方法调用函数并且指定上下文的this :下面的例子中，当调用greet方法的时候，该方法的 this 值会绑定到 i 对象。**/
          function greet(){
              var reply = [this.person, "Is An Awesome", this.role].join(" ");
@@ -185,9 +185,9 @@ $("#countryCodeObj").change(function () {
     ​       return null;
         }
     ```
-  - 2.判断验证码: `/^[0-9]{6}$/` 
+  - 2.判断验证码: `/^[0-9]{6}$/`
   - 3.判断身份证: `/(^\d{15}$)|(^\d{17}([0-9]|X)$)/`
-  - 4.判断银行卡: `/([0-9]{17}([0-9]|X|x))|([0-9]{15})/` 
+  - 4.判断银行卡: `/([0-9]{17}([0-9]|X|x))|([0-9]{15})/`
   - 5.判断邮箱: `/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/`
 
 #### 14.字体两端对齐
@@ -199,7 +199,7 @@ $("#countryCodeObj").change(function () {
            -moz-text-align-last:justify;/*ff*/
            -webkit-text-align-last:justify;/*chrome 20+*/
        }
-   ``` 
+   ```
 ​
 
 ####  15.outerHTML 属性
@@ -221,7 +221,7 @@ $("#countryCodeObj").change(function () {
     这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。
 
 ####  17.函数声明 函数表达式 和 匿名函数
- ```javascript 
+ ```javascript
    // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明后面不能跟圆括号。
    function(){
       //这里是块级作用域
@@ -293,7 +293,7 @@ $("#countryCodeObj").change(function () {
             return num;
         }
         console.log(breakExample())
-      ``` 
+      ```
  - continue 语句虽然也是立即退出循环，但退出循环后会从循环的顶部继续执行。
     + ```javascript
         function continueExample() {
@@ -307,9 +307,11 @@ $("#countryCodeObj").change(function () {
             return num;
         }
         console.log(continueExample())
-      ``` 
+      ```
 
-#### 24.JSON 对象有两个方法： stringify() 和 parse() 在最简单的情况下，这两个方法分别用于把JavaScript对象序列化为 JSON 字符串和把 JSON 字符串解析为原生 JavaScript 值。
+#### 24.JSON 对象有两个方法：
+ - JSON.stringify(): 把JavaScript对象序列化为 JSON 字符串
+ - JSON.parse(): 把 JSON 字符串解析为原生 JavaScript 值。
 
 ####  25.
  - ```javascript
@@ -433,14 +435,14 @@ $("#countryCodeObj").change(function () {
  - 2.取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
 
 #### 37. Object
-  - ES5 - 提供了 Object.create 方法，可以用来克隆对象。 
+  - ES5 - 提供了 Object.create 方法，可以用来克隆对象。
       + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
       + js高程-P170: ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。这个方法接收两个参数：
         - 第 1 个: 用作新对象原型的对象。(在传入一个参数的情况下 Object.create() 与 object() 方法的行为相同。)
         - 第 2 个: 一个为新对象定义额外属性的对象(可选)。
         - ```javascript
              // 示例1 : javascript 高程 -- 6.3.4 原型式继承
-             var person = {          
+             var person = {
                  // 基本类型值属性
                 name: "Nicholas",
                  // 引用类型值属性。(tips-P171: 不过不要忘了，包含引用类型值的属性始终都会共享相应的值，
@@ -450,7 +452,7 @@ $("#countryCodeObj").change(function () {
              var anotherPerson = Object.create(person);
              anotherPerson.name = "Grey";
              anotherPerson.friends.push("Rob");
-            
+
              var yetAnotherPerson = Object.create(person);
              yetAnotherPerson.name = "Linda";
              yetAnotherPerson.friends.push("Barbie");
@@ -465,12 +467,12 @@ $("#countryCodeObj").change(function () {
                   this.attackLevel = 1;
                   this.defenseLevel = 1;
               };
-              
+
               let plane = new Plane();
               plane.blood = 500;
               plane.attackLevel = 10;
               plane.defenseLevel = 7;
-              
+
               let clonePlane = Object.create(plane);
               console.log(clonePlane);            // Plane {}
               console.log(clonePlane.blood);      // 500
@@ -567,7 +569,7 @@ $("#countryCodeObj").change(function () {
   + ![clientX and clientY](./images/clientX%20and%20clientY.png)
 
 #### 41. 上滑显示错误弹框
- ```javascript 
+ ```javascript
 	var errBoxPosTop = getPosition(errBoxEleConfig.errorBoxWall).top;
 	var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 	function scrollBarRoll() {
