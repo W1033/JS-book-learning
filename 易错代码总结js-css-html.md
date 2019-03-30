@@ -430,9 +430,13 @@ $("#countryCodeObj").change(function () {
  - [在线示例](https://github.com/PayneW/js-sundry-goods/blob/master/JS--%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/2019/20190218--%E8%A1%A8%E5%8D%95%E6%95%B0%E5%AD%97%E6%B7%BB%E5%8A%A0%E7%A9%BA%E6%A0%BC.html)
 
 #### 36. Array.prototype.
- - 0.将 arguments (类数组对象)转换为数组:  Array.prototype.slice(arguments)
- - 1.把 NodeList 对象转换为数组(比如一组li):  Array.prototype.slice.call(lis);
- - 2.取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
+ - 1、将 arguments (类数组对象)转换为数组, 或者把 NodeList 对象转换为数组(比如一组li):
+    + Array.prototype.slice.call(arguments);
+ - 2、取得 arguments 类数组的第一项:
+    + Array.prototype.shift.call(arguments);
+ - 3、取得 arguments 类数组除去第一项剩余的项:
+    + Array.prototype.slice.call(arguments, 1);
+    + (传入参数 1 表示被返回的数组包含从第二个参数开始的所有参数)
 
 #### 37. Object
   - ES5 - 提供了 Object.create 方法，可以用来克隆对象。
