@@ -34,16 +34,17 @@ console.log(items[0]);
 function createArray(arrayCreator, value) {
     return arrayCreator(value);
 }
+// let items2 = createArray(Array.of, value);
 
 /* Array.of() 方法不通过 Symbol.species 属性 (见第9章) 确定返回值得类型，他使用当前构造函数
 * (也就是 of() 方法中的 this 值) 来确定正确的返回数据类型。 */
-let items2 = createArray(Array.of, value);
+
 
 
 /** 1. 创建数组 --> Array.from() 方法: 把类数组转换为数组  */
 // ES5 中把类数组转换为数组: Array.prototype.slice.call(arrayLike);
 // Array.from() 接受可迭代对象或类数组对象作为第一个参数，最终返回一个数组。
-let args = Array.from(args);
+// let args = Array.from(args);
 
 /* 映射转换: 如果想要进一步转化数组，可以提供一个映射函数作为 Array.from() 的第二个参数， 这个
  * 函数用来将类数组对象中的每一个值转换成其他形式，最后将这些结果存储在结果数组的相应索引中。 例下: */
