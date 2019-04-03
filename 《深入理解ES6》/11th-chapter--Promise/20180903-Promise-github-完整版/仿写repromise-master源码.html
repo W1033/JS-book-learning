@@ -154,6 +154,7 @@
                  */
                 console.log("this: ", this);    // Promise
                 console.log("this.constructor: ", this.constructor);
+                // 这里既是: const promise = new Promise();
                 const promise = new this.constructor();
                 // 第一次进入 then, 状态时 fulfilled 或 rejected
                 if (this.state !== "pending") {

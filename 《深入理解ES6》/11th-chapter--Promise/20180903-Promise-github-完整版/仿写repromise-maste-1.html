@@ -8,8 +8,8 @@
 
     <script type="text/javascript">
 
-        /** # (1) Promise 代码基本结构 : 实例化 Promise 对象时传入一个函数 (resolver) 作为执行器,
-         * 有2个函数参数 (resolve 和 reject) 分别将结果变为 "成功态 (fulfilled) " 或 "失败态 (rejected) "。 */
+        /** # (1) Promise 代码基本结构 : 实例化 Promise 对象时传入一个函数 (resolver) 作为执行器,执行器
+         * 有2个函数参数(resolve 和 reject)分别将结果变为 "成功态(fulfilled)" 或 "失败态(rejected)"。 */
         class Promise {
             constructor(resolver) {
                 // 首先判断: resolver 是否存在并且是不是一个函数
@@ -131,7 +131,7 @@
                     return this;
                 }
                 // 创建一个新的 promise 实例。 作用一: 链式调用。 作用二: 传进 CallbackItem 中，使其能调用 Promise 的方法
-                // new this.constructor() 是个什么意思？？？
+                // 这里既是: const promise = new Promise();
                 const promise = new this.constructor();
                 // 第一次进入 then, 状态时 fulfilled 或 rejected
                 if (this.state !== "pending") {
