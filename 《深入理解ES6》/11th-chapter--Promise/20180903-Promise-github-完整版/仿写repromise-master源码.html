@@ -225,7 +225,7 @@
         }
 
         Promise.resolve = function(value) {
-            // 在 Promise.race 中用到，使 Promise 对象: Promise.resolve(1) 和 普通值: 3 之间公平京城。
+            // 在 Promise.race 中用到，使 Promise 对象: Promise.resolve(1) 和 普通值: 3 之间公平竞争。
             // 原理: 避免下一步进入 setTimeout 回调
             if (value instanceof this) return value;
             return this.prototype.executeCallback.call(new Promise(), "fulfilled", value);
