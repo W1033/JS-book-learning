@@ -1,3 +1,18 @@
+# JS-book-learning
+《js高级程序设计》
+《深入理解ES6》
+《js设计模式与编程实践》
+《你不知道的js》
+《单页Web应用Javascript从前端到后端》
+
+
+[js函数式编程](https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/)
+
+管道（|）运算符
+重定向（>）运算符
+
+
+
 ## Created On: 201609023
 
 #### 0.如果在"提交"按钮上绑定了事件(弹出窗口之类)，"提交"按钮就不能用`</button>` 和 `<input type="submit" value="提交">`这两种写法，button和type="submit"这种方法，在点击之后会刷新页面，所以弹出提示的窗口会在闪出一瞬间消失，正确写法可以这样`<input type="button" value="登录"/>`。
@@ -632,3 +647,6 @@ $("#countryCodeObj").change(function () {
  - slice() 方法可以接受一或两个参数，即要返回项的起始和结束位置。在只有一个参数的情况下， slice() 方法返回从
     该参数指定位置开始到当前数组末尾的所有项。如果有两个参数，该方法返回起始和结束位置之间的项——但不包括结束位置的项。
     注意， slice() 方法不会影响原始数组。
+
+
+

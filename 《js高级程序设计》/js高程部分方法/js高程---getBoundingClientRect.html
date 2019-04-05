@@ -46,7 +46,7 @@
             var scrollLeft = document.documentElement.scrollLeft;
 
             if (element.getBoundingClientRect) {
-                if (typeof arguments.callee.offset != "number") {
+                if (typeof arguments.callee.offset !== "number") {
                     var temp = document.createElement("div");
                     temp.style.cssText = "position:absolute;left:0;top:0;";
                     document.body.appendChild(temp);
