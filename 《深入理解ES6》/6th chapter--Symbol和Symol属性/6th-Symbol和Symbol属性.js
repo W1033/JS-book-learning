@@ -72,7 +72,7 @@ console.log("------------------");
 function MyObject() {
 }
 
-// git-clone\js-sundry-goods\js--A语法--MDN文档\js高程---Object.defineProperty.html
+// git-clone\js-sundry-goods\js--A语法--MDN文档\js高程 Object.defineProperty.html
 // 在 MyObject 對象上定義一個訪問器屬性 Symbol.hasInstance (注: 這個定義訪問器屬性的示例中，默認的
 // getter 和 setter 函數都沒有定義)
 Object.defineProperty(MyObject, Symbol.hasInstance, {
