@@ -57,30 +57,90 @@
   - box-shadow: 1px 1px 3px 2px #cfcecf; //横向阴影1px, 纵向阴影1px, 模糊半径3px, 阴影展开半径2px, 颜色值。
   - box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);    //
 
-#### 6. jquery的fadeIn()是展示，fadeOut()是隐藏
 
-#### 7. js高程:
- - chapter5: 5.2.7 -- 位置方法 ES5 为数组实例添加了两个位置方法： indexOf() 和 lastIndexOf() 。
- - chapter5: 5.6.3 String: 有两个可以从字符串中查找子字符串的方法： indexOf() 和 lastIndexOf()。
+## 基本概念 - 3.6 语句
+> 3.6.7 break 和 continue 语句: break和continue语句用于在循环中精确地控制代码的执行。
+- break 语句会立即退出循环，强制继续执行循环后面的语句。
+    + ```javascript
+        function breakExample() {
+            var num = 0;
+            for (var i =1; i < 10; i++) {
+                if (i % 5 === 0) {
+                    break;
+                }
+                num++;
+            }
+            return num;
+        }
+        console.log(breakExample())
+      ```
+- continue 语句虽然也是立即退出循环，但退出循环后会从循环的顶部继续执行。
+    + ```javascript
+        function continueExample() {
+            var num = 0;
+            for (var i =1; i < 10; i++) {
+                if (i % 5 === 0) {
+                    continue;
+                }
+                num++;
+            }
+            return num;
+        }
+        console.log(continueExample())
+      ```
+
+
+
+## 引用类型 - 5.6 基本包装类型 -- String 类型
+- split()方法：基于制定的分隔符，把一个字符串分割为一个字符串数组。
+    ```javascript
+       // 取得当前元素的className的数量
+       function getClassNum(ele){
+           //split()基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
+           return ele.className.split(/\s+/);
+       }
+    ```
+- chapter5: 5.6.3 String: 有两个可以从字符串中查找子字符串的方法： indexOf() 和 lastIndexOf()。
     + 这两个方法都是从一个字符串中搜索给定的子字符串，然后返子字符串的位置（如果没有找到该子字符串，则返回 -1 ）。
-    + 区别在于： indexOf() 方法从字符串的开头向后搜索子字符串，而 lastIndexOf() 方法是从字符串的末尾向前搜索
+    + 区别在于：indexOf() 方法从字符串的开头向后搜索子字符串，而 lastIndexOf() 方法是从字符串的末尾向前搜索
         子字符串 (注意: 查找是一个从前一个从后，但是我们输出当前项时索引都是从前开始数的)。
-    ​
-#### 8. Chrome 中 select 下的 option 不支持 click 事件，但是支持 change 事件
-$("#countryCodeObj").change(function () {
-    var current = this.options[this.selectedIndex].value;
-    $("#countryCode").val(current);
-});
+- chapter5: 5.6.3 String: ECMAScript还提供了三个基于子字符串创建新字符串的方法：slice(), substr() 和 substring()。
+  这三个方法都会返回被操作字符串的一个子字符串，而且也都接受一或两个参数。第一个参数指定子字
+  符串的开始位置，第二个参数（在指定的情况下）表示子字符串到哪里结束。具体来说:
+    + slice() 和 substring() 的第二个参数指定的是子字符串最后一个字符后面的位置。
+    + substr() 的第二个参数指定的则是返回的字符个数.
+    + 如果没有给这些方法传递第二个参数，则将字符串的长度作为结束位置。与 concat() 方法一样， slice() 、
+      substr() 和 substring() 也不会修改字符串本身的值——它们只是返回一个基本类型的字符串值，对原始字符串没有任何影响。
 
-#### 9. js高程: chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，然后返回包含所有数组项的字符串
+
+## 引用类型 - 5.2 Array 类型
+- chapter5: 5.2.7 -- 位置方法 ES5 为数组实例添加了两个位置方法： indexOf() 和 lastIndexOf() 。
+- chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，然后返回包含所有数组项的字符串
+ ```javascript
     var colors = ["red", "green", "blue"];
     alert(colors.join(",")); //red,green,blue
     alert(colors.join("||")); //red||green||blue
+ ```
 
-#### 10. js高级 5.5.5函数属性和方法 apply()和call(): 这两个方法的用途是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。
- - call 和 apply 的用途 : 《js编程实践和设计模式》
+## 引用类型 - 5.5 Function 类型
+- 函数声明 函数表达式 和 匿名函数
+ ```javascript
+   // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明后面不能跟圆括号。
+   function(){
+      //这里是块级作用域
+   }();
 
- - apply() 接受2个参数，第一个参数制定了函数体内 this 对象的指向。第二个参数为一个带下标的集合，这个集合可以是数组，也可以为类数组， **apply 方法把这个集合中的元素作为参数传递给被调用的函数。**
+   // 然而，函数表达式的后面可以跟圆括号。要将函数声明转换成函数表达式，只要像下面这样给它加上一对圆括号即可。
+   (function(){
+        //这里是块级作用域
+   })();
+
+   // 立即执行的匿名函数生命方式还有
+   (function(){
+   }());
+ ```
+-  5.5.5函数属性和方法 apply()和call(): 这两个方法的用途是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。
+- apply() 接受2个参数，第一个参数制定了函数体内 this 对象的指向。第二个参数为一个带下标的集合，这个集合可以是数组，也可以为类数组， **apply 方法把这个集合中的元素作为参数传递给被调用的函数。**
     + ```javascript
          var func = function(a, b, c) {
              console.log([a, b, c]);
@@ -121,7 +181,7 @@ $("#countryCodeObj").change(function () {
             })(1, 2)
           ```
 
- - **示例:使用call方法调用父构造函数**
+- **示例:使用call方法调用父构造函数**
     + ```javascript
          function Product(name, price){
              this.name = name;
@@ -193,64 +253,11 @@ $("#countryCodeObj").change(function () {
    - 取消chrome下textarea可拖动放大：
         + textarea{resize:none}
 
-#### 13.自己常用到的正则判断
-  - 1. 判断手机号的: /^0?1[3|4|7|5|8][0-9]\d{8}$/
-    ```javascript
-        if(/^0?1[3|4|5|8][0-9]\d{8}$/.test(1866666666)){
-    ​       return null;
-        }
-    ```
-  - 2.判断验证码: `/^[0-9]{6}$/`
-  - 3.判断身份证: `/(^\d{15}$)|(^\d{17}([0-9]|X)$)/`
-  - 4.判断银行卡: `/([0-9]{17}([0-9]|X|x))|([0-9]{15})/`
-  - 5.判断邮箱: `/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/`
 
-#### 14.字体两端对齐
- - ```css
-       .sty {
-           text-align:justify;
-           text-justify:distribute-all-lines;/*ie6-8*/
-           text-align-last:justify;/* ie9*/
-           -moz-text-align-last:justify;/*ff*/
-           -webkit-text-align-last:justify;/*chrome 20+*/
-       }
-   ```
-​
-
-####  15.outerHTML 属性
- - ```base
-    // 在读模式下， outerHTML 返回调用它的元素及所有子节点的 HTML 标签。在写模式下，
-    // outerHTML会根据指定的 HTML 字符串创建新的 DOM子树，然后用这个DOM子树完全替换调用元素。下面是一个例子。
-    <div id="content">
-        <p>This is a <strong>paragraph</strong> with a list following it.</p>
-        <ul>
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-        </ul>
-    </div>
-    var allContent = content.outerHTML;  // allContent 就输出上面所有的代码
-   ```
 ####  16.cloneNode() 方法
  -  cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。
     这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。
 
-####  17.函数声明 函数表达式 和 匿名函数
- ```javascript
-   // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明后面不能跟圆括号。
-   function(){
-      //这里是块级作用域
-   }();
-
-   // 然而，函数表达式的后面可以跟圆括号。要将函数声明转换成函数表达式，只要像下面这样给它加上一对圆括号即可。
-   (function(){
-        //这里是块级作用域
-   })();
-
-   // 立即执行的匿名函数生命方式还有
-   (function(){
-   }());
- ```
 
 ####  18.响应式网页的头部
   - viewport 是网页默认的宽度和高度，网页宽度默认等于屏幕宽度 (width = device-width), 原始缩放比例 (initial-scale=1) 为1.0，
@@ -268,14 +275,6 @@ $("#countryCodeObj").change(function () {
   - @media only screen and (min-width:1440px){} <br>
   - @media only screen and (min-width:2000px){} <br>
 
-#### 20.String对象的 ★★★★ split()方法：基于制定的分隔符，把一个字符串分割为一个字符串数组。
- - ```javascript
-       // 取得当前元素的className的数量
-       function getClassNum(ele){
-           //split()基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
-           return ele.className.split(/\s+/);
-       }
-    ```
 
 #### 21.mouseover和mouseenter的区别：(js高级 13.4.3节)<br/>
   mouseenter ：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件不冒泡，而且在光标移动到后代元素上不会触发。<br/>
@@ -293,36 +292,7 @@ $("#countryCodeObj").change(function () {
 ​	  })
 ​	  $.ajax();
   })`
-​
-####  23.3.6.7 break 和 continue 语句: break和continue语句用于在循环中精确地控制代码的执行。
- - break 语句会立即退出循环，强制继续执行循环后面的语句。
-    + ```javascript
-        function breakExample() {
-            var num = 0;
-            for (var i =1; i < 10; i++) {
-                if (i % 5 === 0) {
-                    break;
-                }
-                num++;
-            }
-            return num;
-        }
-        console.log(breakExample())
-      ```
- - continue 语句虽然也是立即退出循环，但退出循环后会从循环的顶部继续执行。
-    + ```javascript
-        function continueExample() {
-            var num = 0;
-            for (var i =1; i < 10; i++) {
-                if (i % 5 === 0) {
-                    continue;
-                }
-                num++;
-            }
-            return num;
-        }
-        console.log(continueExample())
-      ```
+
 
 #### 24.JSON 对象有两个方法：
  - JSON.stringify(): 把JavaScript对象序列化为 JSON 字符串
