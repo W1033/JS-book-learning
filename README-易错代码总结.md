@@ -13,7 +13,10 @@
 
 
 
+
 ## Created On: 201609023
+
+#### childNodes 和 children 区别: 区别就是childNodes包括元素节点和文本节点，而children只包括元素节点。
 
 #### 0.如果在"提交"按钮上绑定了事件(弹出窗口之类)，"提交"按钮就不能用`</button>` 和 `<input type="submit" value="提交">`这两种写法，button和type="submit"这种方法，在点击之后会刷新页面，所以弹出提示的窗口会在闪出一瞬间消失，正确写法可以这样`<input type="button" value="登录"/>`。
 
