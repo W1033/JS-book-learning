@@ -2,35 +2,82 @@
 《js高级程序设计》
 《深入理解ES6》
 《js设计模式与编程实践》
-《你不知道的js》
-《单页Web应用Javascript从前端到后端》
-
 
 [js函数式编程](https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/)
 
-管道（|）运算符
-重定向（>）运算符
+
+# HTML
+- 路徑:
+    + `./`  当前目录;
+    + `../` 父级目录;
+    + `/` 根目录。
+
+
+
+# CSS
+- box-shadow属性:
+  ```css
+      // 横向阴影1px, 纵向阴影1px, 模糊半径3px, 阴影展开半径2px, 颜色值。
+      box-shadow: 1px 1px 3px 2px #cfcecf;
+      box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+  ```
+
+- css强制换行和超出隐藏实现
+   + (1). word-break: break-all; 只对英文起作用，以字母作为换行依据。假设div宽度为450px，它的内容就会到450px自动换行，如果该行末端有个很长的英文单词，它会把单词截断，一部分保持在行尾，另一部分换到下一行。
+   + (2). word-wrap: break-word; 只对英文起作用，以单词作为换行依据。例子与上面一样，但区别就是它会把整个单词看成一个整体，如果该行末端宽度不够显示整个单词，它会自动把整个单词放到下一行，而不会把单词截断。
+   + (3). white-space: pre-wrap; 只对中文起作用，强制换行。
+
+- 表格清除格与格之前的间距的样式: border-collapse: collapse;
+
+- 响应式网页的头部
+  - viewport 是网页默认的宽度和高度，网页宽度默认等于屏幕宽度 (width = device-width), 原始缩放比例 (initial-scale=1) 为1.0，
+    即网页初始大小占屏幕面积的100%, maximum-scale允许用户缩放到的最大比例，user-scalable允许用户是否可以手动缩放* <br>
+      `meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" `
+      `meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"`
+  - 忽略将页面中的数字识别为电话号码，忽略android平台中对邮箱地 址的识别
+    `meta content="telephone=no,email=no" name="format-detection"`
+
+- media总结
+  - @media only screen and (max-width:480px){ /* 不大于480px 包含了iphone 4, 5, 6, 6+ */} <br>
+  - @media only screen and (min-width:480px) and (max-width:960px){ /*不小于480px不大于960px的判断*/ }
+  - @media only screen and (min-width:960px) and (max-width:1440px){/*不小于960px不大于1440px的判断*/}
+  - @media only screen and (min-width:1440px){} <br>
+  - @media only screen and (min-width:2000px){} <br>
+
+- 手机端页面解决ios的button按钮的各种bug问题
+   - 解决点击input textarea出现边框的问题
+        + `input:focus, input:active, input:link, input:visited{ outline:none;border:0;} `
+        + `textarea:focus, textarea:active, textarea:link, textarea:visited{ outline:none;border:0;}`
+   - 解决ios苹果button圆角和渐变的问题
+        + `input[type=button], input[type=submit], input[type=file], button {
+          cursor: pointer;  -webkit-appearance: none; }`
+
+   - 解决ios移动端点击按钮会出现暗色背景的问题
+        + `input{
+                /*去除系统默认的样式*/
+               -webkit-appearance:none;
+                /* 点击高亮的颜色*/
+               -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+           }`
+- 解决 Chrome 下 textarea 的问题
+   + 取消chrome下input和textarea的聚焦边框: `input,button,select,textarea{outline:none}`
+   + 取消chrome下textarea可拖动放大: `textarea{resize:none}`
 
 
 
 
-## Created On: 201609023
+# Javascript
+- childNodes 和 children 区别: childNodes包括元素节点和文本节点，而children只包括元素节点。
 
-#### childNodes 和 children 区别: 区别就是childNodes包括元素节点和文本节点，而children只包括元素节点。
-
-#### 0.如果在"提交"按钮上绑定了事件(弹出窗口之类)，"提交"按钮就不能用`</button>` 和 `<input type="submit" value="提交">`这两种写法，button和type="submit"这种方法，在点击之后会刷新页面，所以弹出提示的窗口会在闪出一瞬间消失，正确写法可以这样`<input type="button" value="登录"/>`。
-
-#### 1.页面 input 中的内容通过 form 交到服务器，必须放在 `<form action="" method="post"></form>`标签对里。
-
-#### 2.总要: 关于在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度"的jq和js方法总结:
-  - (1).jq方法:
+- 2.总要: 关于在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度"的jq和js方法总结:
+  1. jq方法:
     + ```javascript
         // jq获取当前可视窗口的高度和宽度:
         $(window).height();  $(window).width();
         // jq获取文档高度和宽度
         $(document).height();  $(document).height();
       ```
-  - (2).js方法:
+  2. js方法:
     + ```javascript
        // js获取当前页面可视窗口的高度和宽度(前提 `<!DOCTYPE html>` 是这种写法，以前古老的写法除外) IE,FF,Chrome 统一是:
        document.body.clientHeight;
@@ -39,30 +86,44 @@
        // 获取文档的高度和宽度兼容IE8的写法是:
        Math.max(document.documentElement.clientHeight, document.body.scrollHeight, document.documentElement.scrollHeight);
       ```
+- 确定一个值是哪种基本类型可以使用 typeof 操作符， 而确定一个值是那种引用类型使用 instanceof 操作符
+    + ```javascript
+         typeof 123   // "number"
+         typeof false   // "boolean"
 
-
-#### 3.jq中获取当前元素的索引的方法: 代码如下
-- ```javascript
-     $(".selFun .closeFun").click(function(){
-        $(this).css("backgroundColor", "#ccc");
-        var nIndex = $(".selFun .closeFun").index(this);  //获取当前元素索引的方法
-        $(".selFun li").eq(nIndex).css({"display":"none"});
-     });
+         let o = {};
+         let a = [];
+         if (o instanceof Object) { // ... }
+         if (a instanceof Array) { // ... }
+      ```
+- Object.prototype.toString.call(ele): 通过获取 Object 原型上的 toString 方法，让方法
+  中的 this 变为需要检测的数据类型，并且让方法执行。
+  ```javascript
+        var obj = {name: "WANG"};
+        var str = "250";
+        var bool = true;
+        var arr = [20, 30];
+        console.log(Object.prototype.toString.call(obj));     // [object Object]
+        console.log(Object.prototype.toString.call(str));     // [object String]
+        console.log(Object.prototype.toString.call(bool));    // [object Boolean]
+        console.log(Object.prototype.toString.call(arr));     // [object Array]
   ```
 
-#### 4.关于清除浮动的问题:
-  - (1).如果一个div或者ul没有设置高度，子元素又设置了float:left; 那么在子元素的最后加一个同级元素`<div class="clear"></div>`css中增加.clear{ clear:both; } <br/>
-    因为只有这样才可以在试调的时候得到父级元素(div/ul)的高度，而且这种做法是最多使用的一种情况。 <br/>
-  - (2).如果父级元素div/ul设置了高度，那么里面的子元素即使用了float也是不用添加clear清除浮动的，因为在父级元素上增加overflow:hidden;这样已经清除浮动了。<br/>
-  - (3).不清楚浮动父级div/ul会出现的问题，一.背景不能显示。 二.边框不能撑开。 三.margin设置值不能正确显示。<br/>
-
-#### 5.box-shadow属性:
-  - box-shadow: 1px 1px 3px 2px #cfcecf; //横向阴影1px, 纵向阴影1px, 模糊半径3px, 阴影展开半径2px, 颜色值。
-  - box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);    //
 
 
-## 基本概念 - 3.6 语句
-> 3.6.7 break 和 continue 语句: break和continue语句用于在循环中精确地控制代码的执行。
+
+## 第 3 章 -- 基本概念
+> **3.4 ----数据类型**
+- 6 种基本数据类型():
+    + Undefined : Undefined类型，一个没有被赋值的变量会有一个默认值undefined.
+    + Null      : Null类型只有一个值: null。
+    + Boolean   : 布尔类型表示一个逻辑实体，可以有两个值: true和false
+    + Number
+    + String
+    + Symbol (ECMAScript 6新定义)
+- 1 种复杂数据类型: Object
+
+> **3.6 语句 -- 3.6.7 break 和 continue 语句: break和continue语句用于在循环中精确地控制代码的执行。**
 - break 语句会立即退出循环，强制继续执行循环后面的语句。
     + ```javascript
         function breakExample() {
@@ -94,38 +155,36 @@
 
 
 
-## 引用类型 - 5.6 基本包装类型 -- String 类型
-- split()方法：基于制定的分隔符，把一个字符串分割为一个字符串数组。
-    ```javascript
-       // 取得当前元素的className的数量
-       function getClassNum(ele){
-           //split()基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
-           return ele.className.split(/\s+/);
-       }
-    ```
-- chapter5: 5.6.3 String: 有两个可以从字符串中查找子字符串的方法： indexOf() 和 lastIndexOf()。
-    + 这两个方法都是从一个字符串中搜索给定的子字符串，然后返子字符串的位置（如果没有找到该子字符串，则返回 -1 ）。
-    + 区别在于：indexOf() 方法从字符串的开头向后搜索子字符串，而 lastIndexOf() 方法是从字符串的末尾向前搜索
-        子字符串 (注意: 查找是一个从前一个从后，但是我们输出当前项时索引都是从前开始数的)。
-- chapter5: 5.6.3 String: ECMAScript还提供了三个基于子字符串创建新字符串的方法：slice(), substr() 和 substring()。
-  这三个方法都会返回被操作字符串的一个子字符串，而且也都接受一或两个参数。第一个参数指定子字
-  符串的开始位置，第二个参数（在指定的情况下）表示子字符串到哪里结束(tips: 不包含结束位置的数字，即包含头不包尾)。具体来说:
-    + slice() 和 substring() 的第二个参数指定的是子字符串最后一个字符后面的位置。
-    + substr() 的第二个参数指定的则是返回的字符个数.
-    + 如果没有给这些方法传递第二个参数，则将字符串的长度作为结束位置。与 concat() 方法一样， slice() 、
-      substr() 和 substring() 也不会修改字符串本身的值——它们只是返回一个基本类型的字符串值，对原始字符串没有任何影响。
 
 
-## 引用类型 - 5.2 Array 类型
+## 第 5 章 -- 引用类型
+- (1.) Object   类型
+- (2.) Array    类型
+- (3.) Date     类型
+- (4.) RegExp   类型
+- (5.) Function 类型
+- (6.) 基本包装类型
+        +  Boolean 类型
+        +  Number  类型
+        +  String  类型
+- (7.) 单体内置对象
+        + Global 对象
+        + Math   对象
+
+### 5.2 Array 类型
 - chapter5: 5.2.7 -- 位置方法 ES5 为数组实例添加了两个位置方法： indexOf() 和 lastIndexOf() 。
 - chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，然后返回包含所有数组项的字符串
- ```javascript
+   ```javascript
     var colors = ["red", "green", "blue"];
     alert(colors.join(",")); //red,green,blue
     alert(colors.join("||")); //red||green||blue
- ```
+   ```
+-  数组的 slice() 方法: slice() 方法可以接受一或两个参数，即要返回项的起始和结束位置。在只有一
+   个参数的情况下，slice() 方法返回从该参数指定位置开始到当前数组末尾的所有项。如果有两个参数，
+   该方法返回起始和结束位置之间的项——但不包括结束位置的项。注意， slice() 方法不会影响原始数组。
 
-## 引用类型 - 5.5 Function 类型
+
+### 5.5 Function 类型
 - 函数声明 函数表达式 和 匿名函数
  ```javascript
    // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明后面不能跟圆括号。
@@ -142,7 +201,7 @@
    (function(){
    }());
  ```
--  5.5.5函数属性和方法 apply()和call(): 这两个方法的用途是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。
+-  5.5.5函数属性和方法 apply() 和 call(): 这两个方法的用途是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。
 - apply() 接受2个参数，第一个参数制定了函数体内 this 对象的指向。第二个参数为一个带下标的集合，这个集合可以是数组，也可以为类数组， **apply 方法把这个集合中的元素作为参数传递给被调用的函数。**
     + ```javascript
          var func = function(a, b, c) {
@@ -238,63 +297,16 @@
       ```
 
 
-#### 11.表格清除格与格之前的间距的样式: border-collapse: collapse;
-
-#### 12.手机端页面解决ios的button按钮的各种bug问题
-   - 解决点击input textarea出现边框的问题
-        + input:focus, input:active, input:link, input:visited{ outline:none;border:0;} <br/>
-        + textarea:focus, textarea:active, textarea:link, textarea:visited{ outline:none;border:0;} <br/>
-
-   - 解决ios苹果button圆角和渐变的问题
-        + input[type=button], input[type=submit], input[type=file], button { cursor: pointer;  -webkit-appearance: none; } <br/>
-
-   - 解决ios移动端点击按钮会出现暗色背景的问题
-        + input{  -webkit-appearance:none; /*去除系统默认的样式*/ -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* 点击高亮的颜色*/ } <br/>
-#### 12-2 解决 Chrome  下的问题
-   - 取消chrome下input和textarea的聚焦边框：
-        + input,button,select,textarea{outline:none}
-   - 取消chrome下textarea可拖动放大：
-        + textarea{resize:none}
-
 
 ####  16.cloneNode() 方法
  -  cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。
     这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。
 
 
-####  18.响应式网页的头部
-  - viewport 是网页默认的宽度和高度，网页宽度默认等于屏幕宽度 (width = device-width), 原始缩放比例 (initial-scale=1) 为1.0，
-    即网页初始大小占屏幕面积的100%, maximum-scale允许用户缩放到的最大比例，user-scalable允许用户是否可以手动缩放* <br>
-      `meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" `
-      `meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"`
-
-  - 忽略将页面中的数字识别为电话号码，忽略android平台中对邮箱地 址的识别
-    `meta content="telephone=no,email=no" name="format-detection"`
-
-####  19.  media总结
-  - @media only screen and (max-width:480px){ /* 不大于480px 包含了iphone 4, 5, 6, 6+ */} <br>
-  - @media only screen and (min-width:480px) and (max-width:960px){ /*不小于480px不大于960px的判断*/ }
-  - @media only screen and (min-width:960px) and (max-width:1440px){/*不小于960px不大于1440px的判断*/}
-  - @media only screen and (min-width:1440px){} <br>
-  - @media only screen and (min-width:2000px){} <br>
-
-
 #### 21.mouseover和mouseenter的区别：(js高级 13.4.3节)<br/>
   mouseenter ：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件不冒泡，而且在光标移动到后代元素上不会触发。<br/>
   mousemove ：当鼠标指针在元素内部移动时重复地触发。
 
-
-#### 22. $.ajaxSetup()方法设置全局ajax默认选项。
-  为所有AJAX请求设置默认 URL 和 success 函数：
-  `$("button).click(function(){
-​	  $.ajaxSetup({
-​		  url: "demo_ajxa_load.txt",
-​		  success: function(result){
-​			  $("div").html(result);
-​		  }
-​	  })
-​	  $.ajax();
-  })`
 
 
 #### 24.JSON 对象有两个方法：
@@ -317,58 +329,12 @@
         最后return 返回 b函数的指针赋值给c, c后面加()调用*/
     ```
 
-#### 26.确定一个值是哪种基本类型可以使用 typeof 操作符，而确定一个值是哪种引用类型可以使用 instanceof 操作符。
-
-#### 27.最新的ECMSScript标准定义了7中数据类型: (17-5-21)
-```base
-    * 0. js高程--chapter3.4--数据类型
-    *      + 6 种基本数据类型():
-    *          - Undefined : Undefined类型，一个没有被赋值的变量会有一个默认值undefined.
-    *          - Null      : Null类型只有一个值: null。
-    *          - Boolean   : 布尔类型表示一个逻辑实体，可以有两个值: true和false
-    *          - Number
-    *          - String
-    *          - Symbol (ECMAScript 6新定义)
-
-    *      + 1 种复杂数据类型: Object
-    *
-    * 1. js高程--chapter5--应用类型：
-    *      + (1.) Object   类型
-    *      + (2.) Array    类型
-    *      + (3.) Date     类型
-    *      + (4.) RegExp   类型
-    *      + (5.) Function 类型
-    *      + (6.) 基本包装类型
-    *              - Boolean 类型
-    *              - Number  类型
-    *              - String  类型
-    *      + (7.) 单体内置对象
-    *              - Global 对象
-    *              - Math   对象
-    *
-    *
-    * 2. 确定一个值是哪种基本类型可以使用 typeof 操作符， 而确定一个值是那种引用类型使用 instanceof 操作符
-    *
-    * 3. Object.prototype.toString.call(ele) :通过获取 Object 原型上的 toString 方法，让方法中的
-    *  this 变为需要检测的数据类型，并且让方法执行。
-    *      var obj = {name: "WANG"};
-    *      var str =      "250";
-    *      var bool =     true;
-    *      var arr =      [20, 30];
-    *      console.log(Object.prototype.toString.call(obj));     // [object Object]
-    *      console.log(Object.prototype.toString.call(str));     // [object String]
-    *      console.log(Object.prototype.toString.call(bool));    // [object Boolean]
-    *      console.log(Object.prototype.toString.call(arr));     // [object Array]
-```
 
 #### 28."标准的"对象,和函数  (17-5-21)
-  - (1.) 一个 Javascript 对象就是键和值之间的映射.。键是一个字符串（或者 Symbol） ，值可以是任意类型的值。 这使得对象非常符合 哈希表。
+  - (1.) 一个 Javascript 对象就是键和值之间的映射.。键是一个字符串（或者 Symbol） ，值可以是
+        任意类型的值。 这使得对象非常符合 哈希表。
   - (2.) 函数是一个附带可被调用功能的常规对象。(觉得这个解说很好)
 
-#### 29.css强制换行和超出隐藏实现
- - (1). word-break: break-all; 只对英文起作用，以字母作为换行依据。假设div宽度为450px，它的内容就会到450px自动换行，如果该行末端有个很长的英文单词，它会把单词截断，一部分保持在行尾，另一部分换到下一行。
- - (2). word-wrap: break-word; 只对英文起作用，以单词作为换行依据。例子与上面一样，但区别就是它会把整个单词看成一个整体，如果该行末端宽度不够显示整个单词，它会自动把整个单词放到下一行，而不会把单词截断。
- - (3). white-space: pre-wrap; 只对中文起作用，强制换行。
 
 ####  30. 合并2个数组到对象中，再把对象推入到数组中
 - ```javascript
@@ -385,12 +351,7 @@
     console.log(types3);
   ```
 
-#### 31 . 相對路徑:
-  - ./  当前目录;
-  - ../ 父级目录;
-  - / 根目录。
 
-#### 32 . js 表单提交: onlyForm.submit();
 #### 33 . 日期格式化
  - ```javascript
     function getTime(time) {
@@ -408,10 +369,6 @@
         }
     }
    ```
-#### 34 . 给 placeholder 设置样式
- - input::-webkit-input-placeholder { letter-spacing:1px; }
- - input::-moz-placeholder { letter-spacing:1px; }
- - input:-ms-input-placeholder { letter-spacing:1px; }
 
 #### 35、银行卡添加和删除空格
  - 见示例: js-sundry-goods\JS--方法总结\2019\20190218--表单数字添加空格.html
@@ -616,10 +573,6 @@
     };
   ```
 
-#### 44 数组的 slice() 方法:
- - slice() 方法可以接受一或两个参数，即要返回项的起始和结束位置。在只有一个参数的情况下， slice() 方法返回从
-    该参数指定位置开始到当前数组末尾的所有项。如果有两个参数，该方法返回起始和结束位置之间的项——但不包括结束位置的项。
-    注意， slice() 方法不会影响原始数组。
 
 
 
