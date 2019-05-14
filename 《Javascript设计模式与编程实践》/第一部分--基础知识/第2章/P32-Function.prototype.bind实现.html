@@ -6,25 +6,31 @@
 </head>
 <body>
 <script type="text/javascript">
+
+    /**
+     * 在 Function.prototype.bind 的内部实现中，我们先把 func 函数的引用保存起来，然后返回一个
+     * 新的函数。当我们在将来执行 func 函数时，实际上先执行的是这个刚刚返回的新函数。在新函数内部，
+     * self.apply(context, arguments) 这句代码才是执行原来的 func 函数，并且指定 context
+     * 对象为 func 函数体内的 this.
+     * */
+
     Function.prototype.bind = function () {
 
-        // 保存原函数
+        // 保存原函数: this 就是当前 func() 函数
         const self = this;
 
-        // shift() 方法，它能够移除数组中的第一项并返回该项，同时将数组长度减 1。
-        // 需要绑定的 this 上下文
+        // shift() 方法，移除数组中的第一项并返回该项，同时将数组长度减 1。
+        // 当前 bind() 方法传入的第一个参数 obj, 就是需要绑定的 this 上下文
         let context = [].shift.call(arguments);
-        console.log("context", context);
+        console.log("context", context); // obj
 
-        // 取得 arguments 类数组转换为数组去掉第一项后的剩余项
+        // 取得当前 bind() 方法剩余的参数
         let args = [].slice.call(arguments);
-        console.log("掉第一项后的剩余项参数", args);
 
-        // 返回一个新的函数
+        // bind() 方法调用时，返回一个新的函数
         return function () {
             // 执行新的函数的时候，会把之前传入的 context 当作新函数体内的 this
             // 并结合两次分别传入的参数，作为新函数的参数
-            console.log("arguments: ", arguments);
             return self.apply(context, [].concat.call(args, [].slice.call(arguments)));
         };
     };

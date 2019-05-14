@@ -66,10 +66,13 @@
     + 3.构造器调用
         - js 中没有类，但是可以从构造器(构造函数)中创建对象，同时也提供了 new 运算符，使得构造器看起来更像一个类。
         构造器函数(为了和普通函数相区分，构造函数的第一个字符大写)和普通函数一样，他们的区别在于被调用的方式。当用
-        new 运算符调用函数时，该函数总会返回一个对象，通常情况下，**构造函数里的 this 就指向返回的这个对象**。代码如下:
+        new 运算符调用函数时，该函数总会返回一个对象，通常情况下，**构造函数里的 this 指向的是构造函数的实例**。代码如下:
         ```javascript
             let MyClass = function() {
                 this.name = "seven";
+                // 当前的 this 指向的是构造函数的实例， 而且从下面 this.__proto__ 也可以看出来。
+                console.log("this: ", this);
+                console.log("this.__proto__: ", this.__proto__);
             };
             var obj = new MyClass();
             console.log(obj.name);  // output: seven
