@@ -296,6 +296,8 @@
          greet.call(called); //Nicholas C.Zakas Is An Awesome Javascript Developer
       ```
 
+### 5.6.3 String 类型
+- **split():** 方法是基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
 
 
 ####  16.cloneNode() 方法
