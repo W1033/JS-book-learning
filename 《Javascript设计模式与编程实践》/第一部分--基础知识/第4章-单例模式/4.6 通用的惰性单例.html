@@ -94,6 +94,7 @@
     let getSingle = function(fn) {
         let result;
         return function() {
+            // arguments 应该是当前 return 匿名函数的参数
             return result || (result = fn.apply(this, arguments));
         }
     };
