@@ -17,9 +17,11 @@
 # CSS
 - box-shadow属性:
   ```css
-      // 横向阴影1px, 纵向阴影1px, 模糊半径3px, 阴影展开半径2px, 颜色值。
-      box-shadow: 1px 1px 3px 2px #cfcecf;
-      box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+      .box {
+          /*横向阴影1px, 纵向阴影1px, 模糊半径3px, 阴影展开半径2px, 颜色值。*/ 
+          box-shadow: 1px 1px 3px 2px #cfcecf;
+          box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+      }
   ```
 
 - css强制换行和超出隐藏实现
@@ -156,7 +158,6 @@
 
 
 
-
 ## 第 5 章 -- 引用类型
 - (1.) Object   类型
 - (2.) Array    类型
@@ -188,9 +189,9 @@
 - 函数声明 函数表达式 和 匿名函数
  ```javascript
    // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明后面不能跟圆括号。
-   function(){
+   // function(){
       //这里是块级作用域
-   }();
+   // }();
 
    // 然而，函数表达式的后面可以跟圆括号。要将函数声明转换成函数表达式，只要像下面这样给它加上一对圆括号即可。
    (function(){
@@ -300,22 +301,40 @@
 - **split():** 方法是基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
 
 
-####  16.cloneNode() 方法
+
+## 第 7 章 -- 函数表达式
+- 7.1 递归: 
+  ```javascript
+      // 递归: 用命名函数表达式实现递归。可以在严格模式和非严格模式下都行得通。
+      let factorial = (function f(num) {
+          if (num <= 1) {
+              return 1;
+          } else {
+              return num * f(num - 1);
+          }
+      });
+      console.log(factorial(4));      // 24
+  ```
+
+
+
+
+> 16.cloneNode() 方法
  -  cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。
     这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。
 
 
-#### 21.mouseover和mouseenter的区别：(js高级 13.4.3节)<br/>
-  mouseenter ：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件不冒泡，而且在光标移动到后代元素上不会触发。<br/>
-  mousemove ：当鼠标指针在元素内部移动时重复地触发。
+> 21.mouseover和mouseenter的区别：(js高级 13.4.3节)
+ - mouseenter ：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件不冒泡，而且在光标移动到后代元素上不会触发。<br/>
+ - mousemove ：当鼠标指针在元素内部移动时重复地触发。
 
 
 
-#### 24.JSON 对象有两个方法：
+>  24.JSON 对象有两个方法：
  - JSON.stringify(): 把JavaScript对象序列化为 JSON 字符串
  - JSON.parse(): 把 JSON 字符串解析为原生 JavaScript 值。
 
-####  25.
+>   25.
  - ```javascript
        function a(){
            var i=0;
@@ -332,13 +351,13 @@
     ```
 
 
-#### 28."标准的"对象,和函数  (17-5-21)
+>  28."标准的"对象,和函数  (17-5-21)
   - (1.) 一个 Javascript 对象就是键和值之间的映射.。键是一个字符串（或者 Symbol） ，值可以是
         任意类型的值。 这使得对象非常符合 哈希表。
   - (2.) 函数是一个附带可被调用功能的常规对象。(觉得这个解说很好)
 
 
-####  30. 合并2个数组到对象中，再把对象推入到数组中
+> 合并2个数组到对象中，再把对象推入到数组中
 - ```javascript
     // 合并2个数组到对象中，再把对象推入到数组中
     var types3 =  [];
@@ -354,7 +373,7 @@
   ```
 
 
-#### 33 . 日期格式化
+>  33 . 日期格式化
  - ```javascript
     function getTime(time) {
         if (time !== "" || time !== undefined) {
@@ -372,11 +391,11 @@
     }
    ```
 
-#### 35、银行卡添加和删除空格
+>  35、银行卡添加和删除空格
  - 见示例: js-sundry-goods\JS--方法总结\2019\20190218--表单数字添加空格.html
  - [在线示例](https://github.com/PayneW/js-sundry-goods/blob/master/JS--%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/2019/20190218--%E8%A1%A8%E5%8D%95%E6%95%B0%E5%AD%97%E6%B7%BB%E5%8A%A0%E7%A9%BA%E6%A0%BC.html)
 
-#### 36. Array.prototype.
+>  Array.prototype.
  - 1、将 arguments (类数组对象)转换为数组, 或者把 NodeList 对象转换为数组(比如一组li):
     + Array.prototype.slice.call(arguments);
  - 2、取得 arguments 类数组的第一项:
@@ -385,7 +404,7 @@
     + Array.prototype.slice.call(arguments, 1);
     + (传入参数 1 表示被返回的数组包含从第二个参数开始的所有参数)
 
-#### 37. Object
+>  Object
   - ES5 - 提供了 Object.create 方法，可以用来克隆对象。
       + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
       + js高程-P170: ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。这个方法接收两个参数：
@@ -440,7 +459,7 @@
 
       + 示例:《深入理解ES6》-学习笔记\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
 
-#### 38 .localStorage 对象
+>  localStorage 对象
 - ```javascript
      // 使用方法存储数据
      localStorage.setItem("name", "Nicholas");
@@ -453,7 +472,7 @@
      var book = localStorage.book;
   ```
 
-#### 39. Node.js 和 ES6 导入导出:
+>   Node.js 和 ES6 导入导出:
   + Node.js 导入 require(), 导出 exports || module.exports
  ```base
       1. 导出  exports || module.exports
@@ -514,12 +533,12 @@
                import TodoListItem from "./TodoListItem.vue";
 
    ```
-#### 40. 客户区坐标位置 ( clientX 和 clientY ):
+>  40. 客户区坐标位置 ( clientX 和 clientY ):
   + 鼠标事件都是在浏览器视口中特定位置上发生的。这个位置信息保存在事件对象的 clientX 和 clientY 属性中。
     所有浏览器都支持这两个属性，他们的值标识事件发生时鼠标指针在视口中的水平和垂直坐标。 event.clientX , event.clientY
   + ![clientX and clientY](./images/clientX%20and%20clientY.png)
 
-#### 41. 上滑显示错误弹框
+>  41 上滑显示错误弹框
  ```javascript
 	var errBoxPosTop = getPosition(errBoxEleConfig.errorBoxWall).top;
 	var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -536,13 +555,13 @@
 	scrollBarRoll();
  ```
 
-#### 42. js 经典原型图
+>  42 js 经典原型图
  <div style="overflow: hidden; width: 600px; height: 700px;">
     <img style="width: 100%; height: 100%; " src="./images/JS-原型图.png">
  </div>
 
 
-#### 43 构造函数的方法内可以动态给构造函数添加属性
+>  43 构造函数的方法内可以动态给构造函数添加属性
 - ```javascript
     // Vue-study\Vue--文档+语法\Vue-双向数据绑定\Vue双向绑定-基础示例讲解\Vue双向数据绑定原理-2.html
     // 订阅者 Watcher
