@@ -107,9 +107,15 @@ console.log(Object.getOwnPropertyNames(aObj).join("")); // 012acbd
 
 
 /** 20180502-P82 增强对象原型 */
-// 增强对象原型 - 改变对象的原型:
-// ES5 添加的 Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型的真实值被存储在内部专用属性 [[Prototype]] 中，调用 getPrototypeOf() 方法返回存储在其中的值。
-// ES6 添加了 Object.setPrototypeOf() 方法可以改变任意指定对象的原型。接受2个参数: 1.被改变原型的对象 2.替代第一个参数原型的对象。
+/*
+ * - 增强对象原型: ES5 添加的 Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型
+ *   的真实值被存储在内部专用属性 [[Prototype]] 中，调用 getPrototypeOf() 方法返回存储在其中的值。
+ *   (get prototype of 获得原型)
+ *
+ * - 改变对象的原型: ES6 添加了 Object.setPrototypeOf() 方法可以改变任意指定对象的原型。
+ *   接受2个参数: (1)被改变原型的对象。(2)替代第一个参数原型的对象。
+ *
+ */
 let animal = {
     getGreeting() {
         return "Hello";
@@ -121,7 +127,8 @@ let dog = {
     }
 };
 
-// ES5 提供了 Object.create 方法，可以用来克隆对象。 示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\第1章\P14-Object.create.js
+// ES5 提供了 Object.create 方法，可以用来克隆对象。 示例: ECMAScript6-Study\
+// Javascript设计模式与编程实践\第一部分--基础知识\第1章\P14-Object.create.js.
 // 使用 create 方法克隆一个 animal 对象
 let friend = Object.create(animal);
 console.log(friend.getGreeting());          // Hello
