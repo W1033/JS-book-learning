@@ -25,16 +25,15 @@
 <script type="text/javascript">
     window.onload = function () {
         Function.prototype.before = function (beforefn) {
-            // console.log(beforefn);    // function () { console.log(1) }
             const _self = this;
-            console.log(this);    // ƒ () { console.log(2); }
-            return function () {
-                // Arguments [callee: ƒ, Symbol(Symbol.iterator): ƒ]
-                // console.log(arguments);
-                // 这里的 this 就是指向 window
-                /* edit: 20181007 这里还是没有彻底了解？ 大致意思难道是，在全局作用域 window 下执行 beforefn 函数，
-                * 并传入当前函数的参数(注: 这个 arguments 应该是当前代码 beforefn.apply() beforefn 函数的参数 )，
-                * beforefn 函数在 全局 window 作用域下执行，参数为自己？*/
+
+            // ƒ () { console.log(2); }
+            console.log(this);
+            const num1 = 3;
+
+            return function (num1) {
+                // 这里的 this 指向 window
+                console.log("arguments: ", arguments);
                 beforefn.apply(this, arguments);    // 输出: 1
 
                 return _self.apply(this, arguments);

@@ -1,4 +1,3 @@
-// Created on 20180503
 
 /** AOP(面向切面编程)的主要作用是把一些跟核心业务逻辑模块无关的功能抽离出来，这些跟业务逻辑无关的功能通常包括
  *    "日志统计、安全控制、异常处理"等。 把这些功能抽离出来之后，再通过 "动态织入"的方式掺入业务逻辑模块中。
@@ -11,7 +10,7 @@ Function.prototype.before = function (beforefn) {
     const _self = this;
     // 返回包含了原函数和新函数的 "代理" 函数
     return function () {
-        // 执行新函数，修正 this
+        // 执行新函数，修正 this.
         beforefn.apply(this, arguments);
         // 执行原函数
         return _self.apply(this, arguments);
