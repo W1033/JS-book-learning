@@ -53,22 +53,26 @@ console.log(Object.is(+0, -0));   // false
 console.log(Object.is(NaN, NaN));  // true
 
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 // 20180501-P76 - 新增方法: Object.assign():
-// 20180502: 混合(Mixin)是 js 中实现对象组合的一种模式。在一个 mixin 方法中，一个对象接受来自另一个对象的属性和方法，
-// 许多 js 库中都有类似的 mixin 方法:  receiver /rɪ'siːvə/ n.接收器  supplier /səˈplaɪə/ n.提供者
+// 20180502: 混合(Mixin)是 js 中实现对象组合的一种模式。在一个 mixin 方法中，一个对象
+// 接受来自另一个对象的属性和方法，
+// 许多 js 库中都有类似的 mixin 方法:
+// receiver /rɪ'siːvə/ n.接收器  supplier /səˈplaɪə/ n.提供者
 function mixin(receiver, supplier) {
     // github-clone\js-sundry-goods\js--A语法--MDN文档\js高程---Object.keys().js
-    // Object.keys() 方法取得对象上所有可枚举的实例属性。这个方法接受一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。
+    // Object.keys() 方法取得对象上所有可枚举的实例属性。这个方法接受一个对象作为参数，
+    // 返回一个包含所有可枚举属性的字符串数组。
     Object.keys(supplier).forEach(function (key) {
         receiver[key] = supplier[key];
     })
 }
 
-/* mixin() 函数遍历 supplier 的自有属性赋并复制到 receiver 中(此处的复制只是浅复制，当属性值为对象时只复制对象的引用)。
- * 这样一来，receiver 不通过继承就可以获得新属性，请参考这段代码: */
-function EventTarget() { /**/
-}
-
+// mixin() 函数遍历 supplier 的自有属性赋并复制到 receiver 中(此处的复制只是浅复制，
+// 当属性值为对象时只复制对象的引用)。
+// 这样一来，receiver 不通过继承就可以获得新属性，请参考这段代码:
+function EventTarget() { }
 EventTarget.prototype = {
     constructor: EventTarget,
     emit: function (parameter) {
@@ -79,13 +83,17 @@ EventTarget.prototype = {
 };
 const myObj = {};
 mixin(myObj, EventTarget.prototype);
-// myObj 接受 EventTarget.prototype 对象的所有行为从而使 myObj 可以通过 emit() 方法发布事件或通过 on() 方法订阅事件。
+
+// myObj 接受 EventTarget.prototype 对象的所有行为从而使 myObj 可以通过 emit() 方法
+// 发布事件或通过 on() 方法订阅事件。
 myObj.emit("somethingChanged");     // somethingChanged
 
 // 上面的 mixin() 调用可以直接替换为 Object.assign()
 // 201809015-add: 即使这样 Object.assign() 仍然是潜拷贝，深拷贝见: JS集锦.js
 Object.assign(myObj, EventTarget.prototype);
 myObj.emit("somethingChange again");
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 /** 20180502-P81 自由属性枚举顺序 */

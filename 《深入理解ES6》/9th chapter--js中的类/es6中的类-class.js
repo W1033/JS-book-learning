@@ -21,10 +21,10 @@ console.log(person instanceof Object);      // true
 // 践/第一部分--基础知识/第1章--面向对象的javascript.md]
 
 
-// ECMAScript 6 类声明 --> 要声明一个类，首先编写 class 关键字，紧跟着的是类的名字，其他部
-//   分的语法类似于对象字面量的简写形式，但是不需要在类的各元素之间使用逗号分隔。
+// ES6 类声明: 要声明一个类，首先编写 class 关键字，紧跟着的是类的名字，其他部分的语法类似于
+//  对象字面量的简写形式，但是**不需要在类的各元素之间使用逗号分隔**。
 // 每个类都有一个名为 [[Construct]]的内部方法，通过关键字new调用那些不含 [[Construct]] 的
-//   方法会导致程序抛出错误。
+//  方法会导致程序抛出错误。
 // 类声明仅仅是基于已有自定义类型声明的语法糖。
 class PersonClass {
     /**
@@ -413,7 +413,7 @@ let S = new Squ(2, 6);
 console.log("S.getArea(): ", S.getArea());  // 12
 
 
-// 创建 Mixin
+// 创建 Mixin (混合)
 let SerializableMixin = {
     serialize() {
         console.log("serialize() this: ", this);    // Circle {}
