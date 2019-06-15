@@ -18,7 +18,7 @@
 - box-shadow属性:
   ```css
       .box {
-          /*横向阴影1px, 纵向阴影1px, 模糊半径3px, 阴影展开半径2px, 颜色值。*/ 
+          /*横向阴影1px, 纵向阴影1px, 模糊半径3px, 阴影展开半径2px, 颜色值。*/
           box-shadow: 1px 1px 3px 2px #cfcecf;
           box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
       }
@@ -183,10 +183,27 @@
 -  数组的 slice() 方法: slice() 方法可以接受一或两个参数，即要返回项的起始和结束位置。在只有一
    个参数的情况下，slice() 方法返回从该参数指定位置开始到当前数组末尾的所有项。如果有两个参数，
    该方法返回起始和结束位置之间的项——但不包括结束位置的项。注意， slice() 方法不会影响原始数组。
+- chapter5: 5.2.8 -- 迭代方法: ECMAScript 5 为数组定义了 5 个迭代方法。每个方法都接受 2
+    个参数: 第1个参数为每一项上运行的函数 和 运行该函数的作用域对象(可选)。第一个参数运行的函
+    数接受 3 个参数: (1)数组项的值. (2)该项在数组种的位置 和 (3)数组对象本身。以下是 5 个
+    迭代方法的作用。: (tips: 下面 5 个方法发都不会修改数组中包含的值)
+    + every():
+    + filter():
+    + forEach():
+    + map(): 对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组。
+    + some():
+    ```javascript
+        let numbers = [1,2,3,4,5,4,3,2,1];
+        let mapResult = numbers.map(function(item, index, array) {
+            return item * 2;
+        })
+        console.log(mapResult); // [2,4,6,8,10,8,6,4,2]
+    ```
 
 
 ### 5.5 Function 类型
-- 函数声明 函数表达式 和 匿名函数
+- 函数声明 函数表达式 和 匿名函数. 
+- Immediately-Invoked Function Expression. IIFE 立即 调用/(执行) 函数表达式 
  ```javascript
    // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明后面不能跟圆括号。
    // function(){
@@ -303,7 +320,7 @@
 
 
 ## 第 7 章 -- 函数表达式
-- 7.1 递归: 
+- 7.1 递归:
   ```javascript
       // 递归: 用命名函数表达式实现递归。可以在严格模式和非严格模式下都行得通。
       let factorial = (function f(num) {
@@ -448,11 +465,11 @@
               console.log(clonePlane.blood);      // 500
               console.log(clonePlane.attackLevel);// 10
           ```
-  - ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。
-
-      + 示例: github-clone\js-sundry-goods\js--A语法--MDN文档\js高程---Object.keys().js
+  - ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，
+        返回一个包含所有可枚举属性的字符串数组。
+      + 示例: JS-book-learning\《js高级程序设计》\js高程学习笔记\js高程---Object.keys().js
   - ES5 - Object.getOwnPropertyNames(): 【取得自身的属性名】。 js高程 - Chapter 6
-  - ES5 - Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型的真实值被存储在内部专用属性 [[Prototype]] 中，调用 getPrototypeOf() 方法返回存储在其中的值。
+  - ES5 - Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型的真实值被存储在内部专用属性 `[[Prototype]]` 中，调用 getPrototypeOf() 方法返回存储在其中的值。
   - ES6 - Object.is(): [P76] 弥补全等运算符的不准确运算。 比如之前 +0等于-0, NaN不等于NaN
   - ES6 - Object.assign()
   - ES6 - Object.setPrototypeOf() 方法可以改变任意指定对象的原型。接受2个参数: 1.被改变原型的对象 2.替代第一个参数原型的对象。
