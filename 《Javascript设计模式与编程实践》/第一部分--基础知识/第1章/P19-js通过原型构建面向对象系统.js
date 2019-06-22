@@ -1,12 +1,4 @@
-/* Created on 2018/4/8 */
-
-/**
- *  0. 将 arguments (类数组对象)转换为数组:  Array.prototype.slice(arguments)
- *  1. 把 NodeList 对象转换为数组(比如一组li):  Array.prototype.slice.call(lis);
- *  2. 取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
- **/
-
-
+// 先来看如何用 new 运算符从构造器中得到一个对象:
 function Person(name) {
     this.name = name;
 }
@@ -15,14 +7,35 @@ Person.prototype.getName = function () {
     return this.name;
 };
 
+let person = new Person('kell');
+console.log(person.name);
+console.log(person.getName());
+console.log(Object.getPrototypeOf('a') === Person.prototype);
+
+/*
+ * - OK, 在 JavaScript 中没有类的概念，这句话我们已经重复过很多次了。但上面命名命名调用了
+ *    new Person() 吗？
+ * - A: 在这里 Person 并不是类，而是构造函数，JavaScript 的函数既可以作为普通函数被调用，
+ *   也可以作为构造函数被调用。 当使用 new 运算符调用函数时，此时的函数就是一个构造器。用 new
+ *   运算符来创建对象的过程，实际上也只只是先克隆 Object.prototype 对象，再进行一些其他额外
+ *   操作的过程。 具体工程见下面 ObjectFactory 函数。
+ */
+
+
+/**
+ * - (0)、从 Object.prototype 上克隆一个空对象。
+ *      + 用 new 运算符来创建对象的过程，实际上也只是先克隆Object.prototype 对象，
+ *        再进行一些其他额外操作。
+ * - (1)、取得外部传入的构造器，此例是 Person [取得类数组的第一项，赋值给Constructor变量]
+ *      + 取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
+ **/
 const ObjectFactory = function () {
 
     /** javascript 中的根对象是 Object.prototype 对象。*/
-        // 从 Object.prototype 上克隆一个空对象。 用 new 运算符来创建对象的过程，实际上也只是先克隆
-        // Object.prototype 对象，再进行一些其他额外操作。
+    // (0)、
     const obj = new Object();
 
-    // 取得外部传入的构造器，此例是 Person [取得类数组的第一项，赋值给Constructor变量]
+    // (1)、
     let Constructor = Array.prototype.shift.call(arguments);
 
     // 把创建的 obj 对象，指向正确的原型。(此时如果不指定默认的原型是 Object.prototype)
