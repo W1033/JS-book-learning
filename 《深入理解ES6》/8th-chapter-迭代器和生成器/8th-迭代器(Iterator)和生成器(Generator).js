@@ -1,9 +1,14 @@
 /* Create date: 2018-07-04 */
 
-/** ## 什么是迭代器(iterator)?:
- *   迭代器是被设计专用于迭代的对象，带有特定接口。所有的迭代对象都拥有 next() 方法，会返回一个结果对象。
- *  该结果对象有2个属性: (1)对象下一个值的 value. (2)一个布尔类型的 done, 其值为 true 时表示没有更多
- *  值可提供使用。迭代器持有一个指向集合位置的内部指针，每当调用了 next() 方法，迭代器就会返回相应的下一个值。 **/
+/**
+ * ## 什么是迭代器(iterator)?:
+ * - A: 迭代器是被设计专用于迭代的对象，带有特定接口。所有的迭代对象都拥有 next() 方法，会返
+ *   回一个结果对象。 该结果对象有2个属性:
+ *      + (1) 对象下一个值的 value.
+ *      + (2) 一个布尔类型的 done, 其值为 true 时表示没有更多值可提供使用。
+ * - 迭代器持有一个指向集合位置的内部指针，每当调用了 next() 方法，迭代器就会返回相应的
+ *   下一个值。
+ */
 
 // ES5 - 创建迭代器:  createIterator-es5.html
 function es5CreateIterator(items) {
@@ -29,19 +34,22 @@ console.log(es5Iterator.next());   // {done: false, value: 3}
 console.log(es5Iterator.next());   // {done: true, value: undefined}
 
 
-/** ## 什么是生成器(generator)?:
- *   生成器是能返回一个迭代器的函数。生成器函数由放在 function 关键字之
- * 后的一个星号 (*) 来表示，并能使用新的 yield 关键字。将星号紧跟在 function 关键字之后，或是在
- * 中间留出空格，都是没问题的，如下下例: **/
+/**
+ * ## 什么是生成器(generator)?:
+ * - 生成器是一种返回迭代器(iterator)的函数。生成器函数由放在 function 关键字之后的一个
+ *   星号 (*) 来表示，并能使用新的 yield 关键字。将星号紧跟在 function 关键字之后，或是在
+ *   中间留出空格，都是没问题的，如下下例:
+ */
 
 // 生成器
-function* createIterator(items) {
+function * createIterator (items) {
     for (let i = 0; i < items.length; i++) {
         // yield 关键字也是 ES6 新增
-        yield items[i];
+        yield items[i]
     }
 
-    // yield 关键字只能用在生成器内部，用于其他任意位置都是语法错误，即使在生成器内部的函数中也不行，如下例:
+    // yield 关键字只能用在生成器内部，用于其他任意位置都是语法错误，即使在生成器内部的函数中
+    // 也不行，如下例:
     /*
     * function *createIterator (items) {
     *    items.forEach(function (item) {
@@ -51,7 +59,7 @@ function* createIterator(items) {
     * }
     * */
 }
-
+// 生成器的调用和普通函数一样，只不过返回的是一个迭代器。
 let iterator = createIterator([1, 2, 3]);
 
 console.log(iterator.next());   // {done: false, value: 1}
@@ -78,27 +86,33 @@ let o = {
 let secondIterator = o.createIterator([1, 2, 3]);
 
 
-/** ## 可迭代对象与 for-of 循环:
- *     与迭代器紧密相关的是，可迭代对象 (iterable) 是包含 Symbol.iterator 属性的对象。这个
- *  Symbol.iterator 知名符号定义了为指定对象返回迭代器的函数。在 ES6 中，所有的集合对象 (数组，
- *  Set 与 Map) 以及字符串都是可迭代对象，因此他们都被指定了默认的迭代器。 可迭代对象别设计用于
- *  与 ES 新增的 for-of 循环配合使用。  **/
+/**
+ * ## 可迭代对象与 for~of 循环:
+ * - 与迭代器紧密相关的是，可迭代对象 (iterable) 是包含 Symbol.iterator 属性的对象。这个
+ *   Symbol.iterator 知名符号定义了为指定对象返回迭代器的函数。在 ES6 中，所有的集合对象
+ *   (数组，Set集合 与 Map集合) 以及字符串都是可迭代对象，因此他们都被指定了默认的迭代器。
+ *   可迭代对象别设计用于与 ES 新增的 for~of 循环配合使用。
+ */
+
 let values = [1, 2, 3];
-// for-of 循环每执行一次都会调用可迭代对象的 next() 方法，并将迭代器返回的结果对象的 value
-// 属性存储在一个变量中，循环将持续执行这一过程直到返回对象的 done 属性的值为 true.
+
+// - for...of 循环每执行一次都会调用可迭代对象的 next() 方法，并将迭代器返回的结果对象的
+//   value 属性存储在一个变量中，循环将持续执行这一过程直到返回对象的 done 属性的值为 true.
 for (let num of values) {
     console.log(num);
 }
 
-/** 可迭代对象与 for-of 循环 --> 访问默认迭代器 **/
+
+/** 可迭代对象与 for~of 循环 --> 访问默认迭代器 **/
 let nums = [1, 2, 3];
-// 可以使用 symbol.iterator 来访问对象上的默认迭代器，就像这样, 此代码获取了 nums 数组的默认迭代器，
-// 并用它来迭代数组中的项。这个过程与使用 for-of 循环时在后台发生的过程一致。
+
+// - 可以使用 symbol.iterator 来访问对象上的默认迭代器，就像这样, 此代码获取了 nums 数组
+//   的默认迭代器，并用它来迭代数组中的项。这个过程与使用 for-of 循环时在后台发生的过程一致。
 let thirdIterator = nums[Symbol.iterator]();
 console.log(thirdIterator.next());  // { value: 1, done: false }
 console.log(thirdIterator.next());  // { value: 2, done: false }
 
-// 既然 Symbol.iterator 指定了默认迭代器，你就可以使用它来检测一个对象是否能进行迭代，正如下例:
+// 既然 Symbol.iterator 指定了默认迭代器，你就可以使用它来检测一个对象是否能进行迭代，如下例:
 function isIterable(object) {
     return typeof object[Symbol.iterator] === "function";
 }
@@ -110,9 +124,11 @@ console.log(isIterable(new Set()));     // true
 console.log(isIterable(new WeakMap())); // false
 console.log(isIterable(new WeakSet())); // false
 
-/** 可迭代对象与 for-of 循环 --> 创建可迭代对象 **/
-// 开发者自定义对象默认情况下不是可迭代对象，但你可以创建一个包含生成器的 Symbol.iterator 属性,
-// 让他成为可迭代对象:
+
+/** 可迭代对象与 for~of 循环 --> 创建可迭代对象 **/
+
+// - 开发者自定义对象默认情况下不是可迭代对象，但你可以创建一个包含生成器的 Symbol.iterator
+//   属性, 让他成为可迭代对象:
 let collection = {
     items: [],
     * [Symbol.iterator]() {
@@ -121,50 +137,91 @@ let collection = {
         }
     }
 };
-collection.item.push(1);
-collection.item.push(2);
-collection.item.push(3);
+collection.items.push(1);
+collection.items.push(2);
+collection.items.push(3);
 for (let x of collection) {
     console.log(x);
 }
 
+console.log('*'.repeat(66));
 
-/** ## 内置的迭代器 **/
 
-/** 内置的迭代器 --> 集合的迭代器: **/
-// ES6 具有 3 种集合对象类型: 数组、Map 与 Set. 这三种类型都有如下的迭代器，有助于搜索他们的内容:
+/** ## 内置迭代器 **/
 
-// + entries() 迭代器: 返回一个包含键值对的迭代器
+/**
+ *  - 内置迭代器 --> 集合对象迭代器(iterator):
+ *      + ES6 具有 3 种集合对象类型 (tip: Python 中'组'包含3种数据类型(列表/Set/字典)):
+ *          - (1) 数组
+ *          - (2) Map 集合
+ *          - (3) Set 集合
+ *      + 为了更好的访问对象的内容，这 3 种对象都内建了以下 3 种迭代器: (tips: 这 3 个方法
+ *        都可以访问集合的迭代器.)
+ *          - (1) entries(): 返回一个迭代器，其值为多个键值对。
+ *          - (2) values(): 返回一个迭代器，其值为集合的值。
+ *          - (3) keys(): 返回一个迭代器，其值为集合种的所有键名。
+ *      + 不同集合的默认迭代器: 每个集合类型都有一个默认的迭代器，在 for~of 循环中，如果没有
+ *        显式指定则使用默认的迭代器。数组 和 Set集合的默认迭代器是 values() 方法， Map集合
+ *        默认迭代器是 entries() 方法。
+ */
+
+// + (1) entries() 迭代器: 每次调用 next() 方法时，entries() 迭代器都会返回一个数组，
+//   数组中的 2 个元素分别表示集合中每个元素的键与值。
 let colors = ["red", "green", "blue"];
-let tracking = new Set([1234, 5678, 9012]);
-let data = new Map();
 
+let tracking = new Set([1234, 5678, 9012]);
+console.log("tracking Set: ", tracking);
+
+let data = new Map();
 data.set("title", "Understanding ES6");
 data.set("format", "ebook");
 
 for (let entry of colors.entries()) {
     console.log(entry);
 }
+console.log('\n');
 
 for (let entry of tracking.entries()) {
     console.log(entry);
 }
+console.log('\n');
+
 for (let entry of data.entries()) {
     console.log(entry);
 }
+console.log('\n');
 
-// + values() 迭代器: 返回一个包含集合中的值得迭代器
+
+// + (2) values() 迭代器: 调用 values() 迭代器时会返回集合中所存的所有值。例如:
 for (let value of colors.values()) {
-    console.log(value);
+    console.log('colors.values(): ', value);
 }
+console.log('\n');
 for (let value of tracking.values()) {
-    console.log(value);
+    console.log('tracking.values(): ', value);
 }
+console.log('\n');
 for (let value of data.values()) {
-    console.log(value);
+    console.log('data.values(): ', value);
+}
+console.log('\n');
+
+
+// + (3) keys() 迭代器: 返回集合中存在的每一个键。
+for (let key of colors.keys()) {
+    console.log('colors.keys(): ', key);
+}
+console.log('\n');
+for (let key of tracking.keys()) {
+    console.log('tracking.keys(): ', key);
+}
+console.log('\n');
+for (let key of data.keys()) {
+    console.log('data.keys(): ', key);
 }
 
-// + keys() 迭代器:  返回一个包含集合中的键的迭代器
+
+console.log('*'.repeat(33), 'Over', '*'.repeat(33));
 
 
 // 解构与 for-of 循环
@@ -198,10 +255,10 @@ for (let c of text) {
 }
 
 /** 内置的迭代器 --> NodeList 的迭代器 **/
-let divs = document.getElementsByTagName("div");
-for (let div of divs) {
-    console.log(div.id);
-}
+// let divs = document.getElementsByTagName("div");
+// for (let div of divs) {
+//     console.log(div.id);
+// }
 
 
 /** ## 扩展运算符(...)与非数组的可迭代对象 **/
