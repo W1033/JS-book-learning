@@ -28,6 +28,7 @@ const ObjectFactory = function () {
 
     /** javascript 中的根对象是 Object.prototype 对象。*/
 
+    // (A)
     const obj = new Object();   // (0)
     let Constructor = Array.prototype.shift.call(arguments);    // (1)
     obj.__proto__ = Constructor.prototype;  // (3)
@@ -43,6 +44,17 @@ console.log(a);     // Person { name: 'seven' }
 console.log(a.name);
 console.log(a.getName());
 console.log(Object.getPrototypeOf(a) === Person.prototype);
+
+/*
+ * - A: 在 《JavaScript 高级程序设计》内的 6.2.2 构造函数模式中，对于使用 new 操作符，调用
+ *      创建构造函数的实例时，是这样解说的:
+ *      + P145: 要创建 Person 的新实例，必须使用 new 操作符。以这种方式调用构造函数实际上
+ *        会经历以下 4 个步骤:
+ *          - (1) 创建一个新对象。 (tip: 即上面的 const obj = new Object)
+ *          - (2) 将构造函数的作用域赋值给新对象 (因此 this 就指向了这个新对象)
+ *          - (3) 执行构造函数中的代码 (为这个新对象添加属性。tip: 对应上面的(4))
+ *          - (4) 返回新对象。
+ */
 
 /*
  * - (0)、从 Object.prototype 上克隆一个空对象。
