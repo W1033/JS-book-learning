@@ -1,13 +1,23 @@
-/* Create date: 2018-07-04 */
+//  Create date: 201807. edit: 201906
+/**
+ * # 第 8 章: 迭代器 (Iterator) 和生成器 (Generator)
+ *  > 用循环语句迭代数据时，必须要初始化一个变量来记录每一次迭代在数据集合中的位置，而在许多
+ *    编程语言中，已经开始通过程序化的方式用**迭代器对象**返回过程中集合的每一个元素。
+ *  > 迭代器的使用可以极大地简化数据操作，于是 ES6 也向 JS 中添加了这个迭代器特性。新的数据
+ *    方法 和 新的集合类型 (例如: Set 集合， Map 集合) 都依赖迭代器的实现，你会发现在语言的
+ *    其他特性中也都有迭代器的身影: 新的 for~of 循环，展开运算符(...)，甚至连异步编程都可以
+ *    使用迭代器。
+ */
+
 
 /**
  * ## 什么是迭代器(iterator)?:
- * - A: 迭代器是被设计专用于迭代的对象，带有特定接口。所有的迭代对象都拥有 next() 方法，会返
- *   回一个结果对象。 该结果对象有2个属性:
- *      + (1) 对象下一个值的 value.
- *      + (2) 一个布尔类型的 done, 其值为 true 时表示没有更多值可提供使用。
- * - 迭代器持有一个指向集合位置的内部指针，每当调用了 next() 方法，迭代器就会返回相应的
- *   下一个值。
+ * - 迭代器是一种特殊对象，它具有一些专门为迭代过程设计的专有接口。所有的迭代对象都有一个
+ *   next() 方法，每次调用都返回一个结果对象。结果对象有2个属性:
+ *      + (1) 一个是 value, 表示下一个将要返回的值。
+ *      + (2) 另一个是 done, 它是一个布尔类型的值，当没有更多可返回数据时返回 true。
+ * - 迭代器还会保存一个内部指针，用来指向当前集合中值的位置，每调用一次 next() 方法，都会返
+ *   回下一个可用的值。
  */
 
 // ES5 - 创建迭代器:  createIterator-es5.html
@@ -36,9 +46,11 @@ console.log(es5Iterator.next());   // {done: true, value: undefined}
 
 /**
  * ## 什么是生成器(generator)?:
- * - 生成器是一种返回迭代器(iterator)的函数。生成器函数由放在 function 关键字之后的一个
- *   星号 (*) 来表示，并能使用新的 yield 关键字。将星号紧跟在 function 关键字之后，或是在
- *   中间留出空格，都是没问题的，如下下例:
+ *  > 生成器是一种返回迭代器(iterator)的函数。生成器函数由放在 function 关键字之后的一个
+ *    星号 (*) 来表示，并能使用新的 yield 关键字。将星号紧跟在 function 关键字之后，或是在
+ *    中间留出空格，都是没问题的，如下例:
+ *  - (1)、生成器函数表达式
+ *  - (2)、生成器对象方法
  */
 
 // 生成器
@@ -48,16 +60,14 @@ function * createIterator (items) {
         yield items[i]
     }
 
-    // yield 关键字只能用在生成器内部，用于其他任意位置都是语法错误，即使在生成器内部的函数中
-    // 也不行，如下例:
-    /*
-    * function *createIterator (items) {
-    *    items.forEach(function (item) {
-    *       // 语法错误
-    *       yield item + 1;
-    *    })
-    * }
-    * */
+    // yield 关键字只能用在生成器内部，用于其他任意位置都是语法错误，即使在生成器内部的
+    // 函数中也不行，如下例:
+    // function *createIterator (items) {
+    //     items.forEach(function (item) {
+    //          // 语法错误
+    //          yield item + 1;
+    //     })
+    // }
 }
 // 生成器的调用和普通函数一样，只不过返回的是一个迭代器。
 let iterator = createIterator([1, 2, 3]);
@@ -68,14 +78,14 @@ console.log(iterator.next());   // {done: false, value: 3}
 console.log(iterator.next());   // {done: true, value: undefined}
 
 
-/** 什么是生成器? --> 生成器函数表达式 **/
+/* - (1)、生成器函数表达式 **/
 let createIterator2 = function* (items) {
     // 代码同上
 };
 // 调用同上
 
 
-/** 什么是生成器? --> 生成器对象方法: **/
+/* - (2)、生成器对象方法: **/
 let o = {
     createIterator: function* (items) {
         for (let i = 0; i < items.length; i++) {
@@ -84,35 +94,50 @@ let o = {
     }
 };
 let secondIterator = o.createIterator([1, 2, 3]);
+console.log("secondIterator.next(): ", secondIterator.next());
+
 
 
 /**
- * ## 可迭代对象与 for~of 循环:
- * - 与迭代器紧密相关的是，可迭代对象 (iterable) 是包含 Symbol.iterator 属性的对象。这个
- *   Symbol.iterator 知名符号定义了为指定对象返回迭代器的函数。在 ES6 中，所有的集合对象
- *   (数组，Set集合 与 Map集合) 以及字符串都是可迭代对象，因此他们都被指定了默认的迭代器。
- *   可迭代对象别设计用于与 ES 新增的 for~of 循环配合使用。
+ * ## 可迭代对象 (Iterables) 与 for~of 循环:
+ *  > 与迭代器紧密相关的是，可迭代对象 (iterable) 是包含 Symbol.iterator 属性的对象。这个
+ *    Symbol.iterator 知名符号定义了为指定对象返回迭代器的函数。在 ES6 中，所有的集合对象
+ *    (数组，Set集合 与 Map集合) 以及字符串都是可迭代对象，因此他们都被指定了默认的迭代器。
+ *    可迭代对象别设计用于与 ES 新增的 for~of 循环配合使用。
+ *  - 1> 访问默认迭代器
+ *  - 2> 创建迭代对象
  */
 
+/*
+ * - for~of 循环每执行一次都会调用可迭代对象的 next() 方法，并将迭代器返回的结果对象的
+ *   value 属性存储在一个变量中，循环将持续执行这一过程直到返回对象的 done 属性的值为
+ *   true. 例如下面这个示例:  e.g_01
+ * - e.g_01 这段 for~0f 循环的代码通过用 values 数组的 Symbol.iterator 方法来获取
+ *   迭代器，这一过程是在 JavaScript 引擎背后完成的。随后迭代器的 next() 方法被多次调用，
+ *   从其返回对象的 value 属性读取值并存储在变量 num 中，依次为 1、2 和 3，当结果对象的
+ *   done 属性值为 true 时循环退出，所以 num 不会被赋值为 undefined.
+ */
+// e.g_01
 let values = [1, 2, 3];
-
-// - for...of 循环每执行一次都会调用可迭代对象的 next() 方法，并将迭代器返回的结果对象的
-//   value 属性存储在一个变量中，循环将持续执行这一过程直到返回对象的 done 属性的值为 true.
 for (let num of values) {
     console.log(num);
 }
 
 
-/** 可迭代对象与 for~of 循环 --> 访问默认迭代器 **/
+/*
+ * - 1> 访问默认迭代器
+ *   + 可以使用 Symbol.iterator 来访问对象上的默认迭代器，就像这样, 此代码获取了
+ *     nums 数组的默认迭代器，并用它来迭代数组中的项。这个过程与使用 for~of 循环时
+ *     在后台发生的过程一致。
+ */
 let nums = [1, 2, 3];
+let thirdIte = nums[Symbol.iterator]();
+console.log(thirdIte.next());  // { value: 1, done: false }
+console.log(thirdIte.next());  // { value: 2, done: false }
 
-// - 可以使用 symbol.iterator 来访问对象上的默认迭代器，就像这样, 此代码获取了 nums 数组
-//   的默认迭代器，并用它来迭代数组中的项。这个过程与使用 for-of 循环时在后台发生的过程一致。
-let thirdIterator = nums[Symbol.iterator]();
-console.log(thirdIterator.next());  // { value: 1, done: false }
-console.log(thirdIterator.next());  // { value: 2, done: false }
 
-// 既然 Symbol.iterator 指定了默认迭代器，你就可以使用它来检测一个对象是否能进行迭代，如下例:
+// 由于具有 Symbol.iterator 属性的对象都有默认的迭代器，因此可以用它来检测对象是否为可迭代
+// 对象. 代码如下:
 function isIterable(object) {
     return typeof object[Symbol.iterator] === "function";
 }
@@ -125,10 +150,13 @@ console.log(isIterable(new WeakMap())); // false
 console.log(isIterable(new WeakSet())); // false
 
 
-/** 可迭代对象与 for~of 循环 --> 创建可迭代对象 **/
+/*
+ * - 2> 创建可迭代对象
+ *   + 默认情况下，开发者定义的对象都是不可迭代对象，但如果给 Symbol.iterator 属性添加
+ *     一个生成器
+ */
 
-// - 开发者自定义对象默认情况下不是可迭代对象，但你可以创建一个包含生成器的 Symbol.iterator
-//   属性, 让他成为可迭代对象:
+//
 let collection = {
     items: [],
     * [Symbol.iterator]() {
@@ -147,10 +175,10 @@ for (let x of collection) {
 console.log('*'.repeat(66));
 
 
-/** ## 内置迭代器 **/
 
 /**
- *  - 内置迭代器 --> 集合对象迭代器(iterator):
+ *  ## 内置迭代器
+ *  - 1)、集合对象迭代器(iterator):
  *      + ES6 具有 3 种集合对象类型 (tip: Python 中'组'包含3种数据类型(列表/Set/字典)):
  *          - (1) 数组
  *          - (2) Map 集合
@@ -163,6 +191,10 @@ console.log('*'.repeat(66));
  *      + 不同集合的默认迭代器: 每个集合类型都有一个默认的迭代器，在 for~of 循环中，如果没有
  *        显式指定则使用默认的迭代器。数组 和 Set集合的默认迭代器是 values() 方法， Map集合
  *        默认迭代器是 entries() 方法。
+ *
+ *  - 2)、字符串迭代器
+ *
+ *  - 3)、NodeList 迭代器
  */
 
 // + (1) entries() 迭代器: 每次调用 next() 方法时，entries() 迭代器都会返回一个数组，
@@ -262,8 +294,8 @@ for (let c of text) {
 
 
 /** ## 扩展运算符(...)与非数组的可迭代对象 **/
-// 你可以不限次数地在数组字面两种使用扩展运算符，而且可以在任意位置用扩展运算符将了迭代对象的多个项
-// 插入到数组，这些项在新数组中将会出现在扩展运算符对应的位置:
+// 你可以不限次数地在数组字面两种使用扩展运算符，而且可以在任意位置用扩展运算符将了迭代对象的
+// 多个项插入到数组，这些项在新数组中将会出现在扩展运算符对应的位置:
 let smallNumbers = [1, 2, 3],
     bigNumbers = [100, 101, 102],
     allNumbers = [0, ...smallNumbers, ...bigNumbers];
