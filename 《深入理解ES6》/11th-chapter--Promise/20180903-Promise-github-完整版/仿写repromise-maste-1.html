@@ -78,7 +78,7 @@
                     try {
                         thenable = this.getThen(value);
                     } catch (e) {
-                        return  this.executeCallback.call(this, "rejectd", e)
+                        return  this.executeCallback.call(this, "rejected", e)
                     }
                 }
                 // 如果是 thenable 对象而且是 fulfilled 状态 (Promise.reject() 会返回参数值)
