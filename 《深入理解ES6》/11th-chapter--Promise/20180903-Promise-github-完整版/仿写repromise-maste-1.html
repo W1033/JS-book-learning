@@ -5,219 +5,225 @@
     <title>仿写repromise-master源码</title>
 </head>
 <body>
+<script type="text/javascript">
 
-    <script type="text/javascript">
-
-        /** # (1) Promise 代码基本结构 : 实例化 Promise 对象时传入一个函数 (resolver) 作为执行器,执行器
-         * 有2个函数参数(resolve 和 reject)分别将结果变为 "成功态(fulfilled)" 或 "失败态(rejected)"。 */
-        class Promise {
-            constructor(resolver) {
-                // 首先判断: resolver 是否存在并且是不是一个函数
-                if (resolver && typeof resolver !== "function") {
-                    throw new Error(`Promise resolver ${resolver} is not a function (参数 resolver 不是一个函数) `)
-                }
-                // 初始化 state 为等待态
-                this.state = "pending";
-                this.data = undefined;
-                // 保存回调函数的数组
-                this.callbackArr = [];
-                // 如果执行者 resolver 是函数就立即调用当前构造函数的 executeResolve() 方法执行 resolver
-                if (typeof resolver === "function") {
-                    this.executeResolve(resolver);
-                }
+    /**
+     * # (1) Promise 代码基本结构:
+     *  - 实例化 Promise 对象时传入一个函数 (resolver) 作为执行器,执行器有 2 个函数参数
+     *  (resolve 和 reject)分别将结果变为 "成功态(fulfilled)" 或 "失败态(rejected)"。
+     */
+    class Promise {
+        constructor(resolver) {
+            // 首先判断: resolver 是否存在并且是不是一个函数
+            if (resolver && typeof resolver !== "function") {
+                throw new Error(`Promise resolver ${resolver} is not a
+                     function (参数 resolver 不是一个函数) `)
             }
+            // 初始化 state 为等待态
+            this.state = "pending";
+            this.data = undefined;
+            // 保存回调函数的数组
+            this.callbackArr = [];
+            // 如果执行者 resolver 是函数就立即调用当前构造函数的 executeResolve()
+            // 方法执行 resolver
+            if (typeof resolver === "function") {
+                this.executeResolve(resolver);
+            }
+        }
 
-            executeResolve(resolver) {
-                const that = this;
-                // 定义一个保存回调函数的变量 cb 默认值为 false
-                let cb = false;
-                // 定义执行成功时的 onSuccess 函数: 也即是 (符合规范的Promise-0.html) 中的 resolve() 函数,
-                const onSuccess = function(value) {
-                    // console.log("value",value);
-                    // console.log("cb", cb);
+        executeResolve(resolver) {
+            const that = this;
+            // 定义一个保存回调函数的变量 cb 默认值为 false
+            let cb = false;
+            // 定义执行成功时的 onSuccess 函数: 也即是 (符合规范的Promise-0.html)
+            // 中的 resolve() 函数,
+            const onSuccess = function(value) {
+                // console.log("value",value);
+                // console.log("cb", cb);
 
-                    // 这个 if 的意思大概时 cb 不存在的时候直接 return
-                    if (cb) return;
-                    cb = true;
-                    // execute callback 执行回调函数，传入2个参数
-                    that.executeCallback("fulfilled", value);
-                };
-                // 定义当执行失败时用来报错的 reject() 函数
-                const onError = function(value) {
-                    if (cb) return;
-                    cb = true;
-                    that.executeCallback("rejected", value)
-                };
+                //
+                if (cb) return;
+                cb = true;
+                // execute callback 执行回调函数，传入2个参数
+                that.executeCallback("fulfilled", value);
+            };
+            // 定义当执行失败时用来报错的 reject() 函数
+            const onError = function(value) {
+                if (cb) return;
+                cb = true;
+                that.executeCallback("rejected", value)
+            };
 
-                // try{}catch(){} 会在当前方法发调用时立即执行
+            // try{}catch(){} 会在当前方法发调用时立即执行
+            try {
+                // 把上面定义的 onSuccess 函数和 onError 函数的"指针"传入到 resolver
+                // 执行器函数内，
+                // 注: 传入函数的指针，不会调用函数
+                resolver(onSuccess, onError);
+            } catch (e) {
+                onError(e);
+            }
+        }
+
+
+        /** 注: executeCallback 是执行同步回调函数，即 new Promise((resolve, reject) =>
+         * { resolve(0) }) 实例内不含有 setTimeout() 超时调用的情况  */
+        // 执行 new Promise() 实例中的 resolve(0), reject(1);
+        // 参数: (1) type = "fulfilled / rejected"
+        // (2) value 为 resolve() 或 reject() 调用的参数 (注: value 复杂点也有可能是
+        //  Promise.resolve())
+        executeCallback(type, value) {
+            // console.log("executeCallBack value parameter", value);
+            // 如果 type="fulfilled" 则 isResolve = true;
+            const isResolve = type === "fulfilled";
+            // thenable 只会在出现 /** # 特殊测试: */ 这样的调用时才会存在
+            let thenable;
+            // 如果 isResolve 为 true 并且 value 为对象，或者 value 为 function 执行 if 判断
+            if (isResolve && (Object.prototype.toString.call(value) === "[object Object]") ||
+                (typeof (value) === "function")) {
                 try {
-                    // 把上面定义的 onSuccess 函数和 onError 函数的"指针"传入到 resolver 执行器函数内，
-                    // 注: 传入函数的指针，不会调用函数
-                    resolver(onSuccess, onError);
+                    thenable = this.getThen(value);
                 } catch (e) {
-                    onError(e);
+                    return  this.executeCallback.call(this, "rejected", e)
                 }
             }
+            // 如果是 thenable 对象而且是 fulfilled 状态 (Promise.reject() 会返回参数值)
+            if (isResolve && thenable) {
+                // 最终会将 thenable 对象里的值*个抽出到 this.data 中
+                this.executeResolve(thenable);
+            }
+            // promise 状态一旦改变便不可更改
+            else if (this.state === "pending") {
+                this.state = isResolve ? "fulfilled" : "rejected";
+                this.data = value;
+                console.log("this.callbackArr", this.callbackArr);
+                this.callbackArr.forEach(function(fn) {
+                    fn[type](value)
+                }) // ④
+            }
+            // 直接调用 Promise.resolve() Promise.reject() 用得到
+            return this;
+        }
 
 
-            /** 注: executeCallback 是执行同步回调函数，即 new Promise((resolve, reject) =>
-             * { resolve(0) }) 实例内不含有 setTimeout() 超时调用的情况  */
-            // 执行 new Promise() 实例中的 resolve(0), reject(1);
-            // 注:
-            // 参数: (1) type = "fulfilled / rejected"
-            //      (2) value 为 resolve() 或 reject() 调用的参数 (注: value 复杂点也有可能是 Promise.resolve())
-            executeCallback(type, value) {
-                // console.log("executeCallBack value parameter", value);
-                // 如果 type="fulfilled" 则 isResolve = true;
-                const isResolve = type === "fulfilled";
-                // thenable 只会在出现 /** # 特殊测试: */ 这样的调用时才会存在
-                let thenable;
-                // 如果 isResolve 为 true 并且 value 为对象，或者 value 为 function 执行 if 判断
-                if (isResolve && (Object.prototype.toString.call(value) === "[object Object]") ||
-                    (typeof (value) === "function")) {
-                    try {
-                        thenable = this.getThen(value);
-                    } catch (e) {
-                        return  this.executeCallback.call(this, "rejected", e)
-                    }
+        /** 注: execute Async callback 执行异步调用， 即这种含有超时调用的情况: new Promise(
+         * (resolve, reject) => { setTimeout(() => { resolve(0) }, 500) } ) */
+        executeAsyncCallback(callback, value) {
+            const that = this;
+            setTimeout(() => {
+                let res;
+                try {
+                    res = callback(value);
+                } catch(e) {
+                    // 目的: 使捕获到的错误进入 Promise.catch() 中
+                    that.executeCallback("rejected", e);
                 }
-                // 如果是 thenable 对象而且是 fulfilled 状态 (Promise.reject() 会返回参数值)
-                if (isResolve && thenable) {
-                    // 最终会将 thenable 对象里的值*个抽出到 this.data 中
-                    this.executeResolve(thenable);
+                // 2.3.1 如果放回的值与原 promise 相等，则使无穷循环
+                if (res === that) {
+                    that.executeCallback("rejected", new TypeError(`Chaining cycle detected for promise #<Promise>`));
+                } else {
+                    // 事件循环知识点需巩固: 比较巧妙  ③ ⑥
+                    that.executeCallback("fulfilled", res);
                 }
-                // promise 状态一旦改变便不可更改
-                else if (this.state === "pending") {
-                    this.state = isResolve ? "fulfilled" : "rejected";
-                    this.data = value;
-                    console.log("this.callbackArr", this.callbackArr);
-                    this.callbackArr.forEach(function(fn) {
-                        fn[type](value)
-                    }) // ④
-                }
-                // 直接调用 Promise.resolve() Promise.reject() 用得到
+            });
+        }
+
+
+        then(onResolved, onRejected) {
+            // 如果 onResolved / onRejected 不是函数 并且 this.state = "fulfilled / rejected" 直接返回
+            if ((typeof (onResolved) !== "function") && this.state === "fulfilled" ||
+                (typeof (onRejected) !== "function") && this.state === "rejected") {
+                // 配合 done() 食用
                 return this;
             }
+            // 创建一个新的 promise 实例。 作用一: 链式调用。 作用二: 传进 CallbackItem 中，使其能调用 Promise 的方法
+            // 这里既是: const promise = new Promise();
+            const promise = new this.constructor();
+            // 第一次进入 then, 状态时 fulfilled 或 rejected
+            if (this.state !== "pending") {
+                const callback = this.state === "fulfilled" ? onResolved : onRejected;
+                console.log("then this.state: ", this.state);
+                // 绑定 this 到 promise   ①
+                this.executeAsyncCallback.call(promise, callback, this.data);
+            }
+            // 从第二次开始以后，进入 then 状态时 pending
+            else {
+                // 这里的 this 也是指向 "上一个" promise  ②
+                this.callbackArr.push(new CallbackItem(promise, onResolved, onRejected));
+            }
+            return promise;
+        }
 
 
-            /** 注: execute Async callback 执行异步调用， 即这种含有超时调用的情况: new Promise(
-             * (resolve, reject) => { setTimeout(() => { resolve(0) }, 500) } ) */
-            executeAsyncCallback(callback, value) {
-                const that = this;
+
+        catch(onRejected) {
+            // 加上 return, 相当于返回 promise
+            return this.then(null, onRejected);
+        }
+
+        // 非 ES6 标准
+        done(onResolved, onRejected) {
+            this.then(onResolved, onRejected).catch((reason) => {
                 setTimeout(() => {
-                    let res;
-                    try {
-                        res = callback(value);
-                    } catch(e) {
-                        // 目的: 使捕获到的错误进入 Promise.catch() 中
-                        that.executeCallback("rejected", e);
-                    }
-                    // 2.3.1 如果放回的值与原 promise 相等，则使无穷循环
-                    if (res === that) {
-                        that.executeCallback("rejected", new TypeError(`Chaining cycle detected for promise #<Promise>`));
-                    } else {
-                        // 事件循环知识点需巩固: 比较巧妙  ③ ⑥
-                        that.executeCallback("fulfilled", res);
-                    }
-                });
-            }
-
-
-            then(onResolved, onRejected) {
-                // 如果 onResolved / onRejected 不是函数 并且 this.state = "fulfilled / rejected" 直接返回
-                if ((typeof (onResolved) !== "function") && this.state === "fulfilled" ||
-                    (typeof (onRejected) !== "function") && this.state === "rejected") {
-                    // 配合 done() 食用
-                    return this;
-                }
-                // 创建一个新的 promise 实例。 作用一: 链式调用。 作用二: 传进 CallbackItem 中，使其能调用 Promise 的方法
-                // 这里既是: const promise = new Promise();
-                const promise = new this.constructor();
-                // 第一次进入 then, 状态时 fulfilled 或 rejected
-                if (this.state !== "pending") {
-                    const callback = this.state === "fulfilled" ? onResolved : onRejected;
-                    console.log("then this.state: ", this.state);
-                    // 绑定 this 到 promise   ①
-                    this.executeAsyncCallback.call(promise, callback, this.data);
-                }
-                // 从第二次开始以后，进入 then 状态时 pending
-                else {
-                    // 这里的 this 也是指向 "上一个" promise  ②
-                    this.callbackArr.push(new CallbackItem(promise, onResolved, onRejected));
-                }
-                return promise;
-            }
-
-
-
-            catch(onRejected) {
-                // 加上 return, 相当于返回 promise
-                return this.then(null, onRejected);
-            }
-
-            // 非 ES6 标准
-            done(onResolved, onRejected) {
-                this.then(onResolved, onRejected).catch((reason) => {
-                    setTimeout(() => {
-                        throw reason;
-                    }, 0)
-                })
-            }
-
-        }
-
-
-        class CallbackItem {
-            constructor(promise, onResolved, onRejected) {
-                // 相应地， 这里存储的 promise 是来自下一个 then 的
-                this.promise = promise;
-                this.onResolved = typeof (onResolved) === "function" ? onResolved : (value) => {
-                    return value;
-                };
-                this.onRejected = typeof (onRejected) === "function" ? onRejected : (err) => {
-                    throw err;
-                }
-            }
-            fulfilled(value) {
-                //  ⑤
-                this.promise.executeAsyncCallback(this.onResolved, value);
-            }
-            rejected(value) {
-                this.promise.executeAsyncCallback(this.onRejected, value);
-            }
-        }
-
-        Promise.resolve = function(value) {
-            // 在 Promise.race 中用到，使 Promise 对象: Promise.resolve(1) 和 普通值: 3 之间公平京城。
-            // 原理: 避免下一步进入 setTimeout 回调
-            if (value instanceof this) return value;
-            return this.prototype.executeCallback.call(new Promise(), "fulfilled", value);
-        };
-
-        Promise.reject = function(value) {
-            if (value instanceof this) return value;
-            return this.prototype.executeCallback.call(new Promise(), "rejected", value);
-        };
-
-
-
-        /** # 1. 基础测试  */
-        function pms1() {
-            return new Promise(function (resolve, reject) {
-                setTimeout(function() {
-                    console.log('执行任务1');
-                    resolve(0);
-                }, 500)
+                    throw reason;
+                }, 0)
             })
         }
 
-        pms1().then(function (data) {
-                console.log(`第一个回调：${data}`)
-            });
-        // 执行任务1
-        // 第一个回调：执行任务1成功
+    }
 
 
-    </script>
+    class CallbackItem {
+        constructor(promise, onResolved, onRejected) {
+            // 相应地， 这里存储的 promise 是来自下一个 then 的
+            this.promise = promise;
+            this.onResolved = typeof (onResolved) === "function" ? onResolved : (value) => {
+                return value;
+            };
+            this.onRejected = typeof (onRejected) === "function" ? onRejected : (err) => {
+                throw err;
+            }
+        }
+        fulfilled(value) {
+            //  ⑤
+            this.promise.executeAsyncCallback(this.onResolved, value);
+        }
+        rejected(value) {
+            this.promise.executeAsyncCallback(this.onRejected, value);
+        }
+    }
+
+    Promise.resolve = function(value) {
+        // 在 Promise.race 中用到，使 Promise 对象: Promise.resolve(1) 和 普通值: 3 之间公平京城。
+        // 原理: 避免下一步进入 setTimeout 回调
+        if (value instanceof this) return value;
+        return this.prototype.executeCallback.call(new Promise(), "fulfilled", value);
+    };
+
+    Promise.reject = function(value) {
+        if (value instanceof this) return value;
+        return this.prototype.executeCallback.call(new Promise(), "rejected", value);
+    };
+
+
+
+    /** # 1. 基础测试  */
+    function pms1() {
+        return new Promise(function (resolve, reject) {
+            setTimeout(function() {
+                console.log('执行任务1');
+                resolve(0);
+            }, 500)
+        })
+    }
+
+    pms1().then(function (data) {
+            console.log(`第一个回调：${data}`)
+        });
+    // 执行任务1
+    // 第一个回调：执行任务1成功
+
+
+</script>
 </body>
 </html>
