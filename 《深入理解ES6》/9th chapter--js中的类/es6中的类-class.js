@@ -1,13 +1,16 @@
 /** Date 2017-12-7 21:56 */
 
-// ECMAScript 5 中的近类结构 --> 自定义类型: 首先创建一个构造函数，然后定义另外一个方法赋值
-// 给构造函数的原型。如下:
+// - ECMAScript 5 中的近类结构为 -> 自定义类型: 首先创建一个构造函数，然后定义另外一个方法
+//   赋值给构造函数的原型。代码如下:
+//      + (1)、创建自定义类型的最常见方式，就是组合使用构造函数模式与原型模式
+//      + (2)、构造函数模式用于定义实例属性，而原型模式用于定义方法和共享的属性。
+//      +
 
-// 创建自定义类型的最常见方式，就是组合使用构造函数模式与原型模式
+// (1)
 function PersonType(name) {
     this.name = name;
 }
-// 构造函数模式用于定义实例属性，而原型模式用于定义方法和共享的属性。
+// (2)
 PersonType.prototype.sayName = function () {
     console.log(this.name);  // Nicholas
 };
@@ -19,6 +22,10 @@ console.log(person instanceof Object);      // true
 
 // js中所有对象的根对象是 Object.prototype [详细讲解见: ../../Javascript设计模式与编程实
 // 践/第一部分--基础知识/第1章--面向对象的javascript.md]
+
+
+// ~~~~~~~~~~ ~~~~~~~~~~ ~~~~~~~~~~ ~~~~~~~~~~
+
 
 
 // ES6 类声明: 要声明一个类，首先编写 class 关键字，紧跟着的是类的名字，其他部分的语法类似于
@@ -327,11 +334,9 @@ function Rectangle(length, width) {
     this.length = length;
     this.width = width;
 }
-
 Rectangle.prototype.getArea = function () {
     return this.length * this.width;
 };
-
 function Square(length) {
     console.log("What is the Square this ?: ", this);   // Square {}
     Rectangle.call(this, length, length);
@@ -362,14 +367,13 @@ class Rectangle2 {
         this.length = length;
         this.width = width;
     }
-
     getArea() {
         return this.length * this.width;
     }
 }
 
-/* Square2 类通过 extends 关键字继承 Rectangle2 类，在 Square2 构造函数中通过 super()
- * 调用 Rectangle2 构造函数并传入相应参数。 继承自其他类的类被称为派生类 (derived classes)   */
+// Square2 类通过 extends 关键字继承 Rectangle2 类，在 Square2 构造函数中通过 super()
+// 调用 Rectangle2 构造函数并传入相应参数。继承自其他类的类被称为派生类 (derived classes)
 class Square2 extends Rectangle2 {
     constructor(length) {
         // 与 Rectangle.call(this, length, length) 相同
@@ -378,13 +382,13 @@ class Square2 extends Rectangle2 {
 }
 
 let square2 = new Square2(3);
-
 console.log(square2.getArea());                 // 9
 console.log(square2 instanceof Square2);        // true
 console.log(square2 instanceof Rectangle2);     // true
 
 
 /** 继承和派生类 --> 屏蔽类方法 */
+
 /** 继承和派生类 --> 继承静态成员 */
 
 /** 继承和派生类 --> 派生自表达式的类 */
@@ -395,11 +399,9 @@ function Rec(length, width) {
     this.length = length;
     this.width = width;
 }
-
 Rec.prototype.getArea = function () {
     return this.length * this.width;
 };
-
 class Squ extends Rec {
     constructor(length, width) {
         super(length, width);
@@ -411,6 +413,9 @@ console.log("R.getArea(): ", R.getArea()); // 24
 console.log("R instanceof Rec: ", R instanceof Rec); // true
 let S = new Squ(2, 6);
 console.log("S.getArea(): ", S.getArea());  // 12
+
+
+// ~~~~~~~~~~ ~~~~~~~~~~ ~~~~~~~~~~ ~~~~~~~~~~
 
 
 // 创建 Mixin (混合)
@@ -431,7 +436,8 @@ function mixin(...mixins) {
     let base = function() {};
     console.log("base: ", base);
 
-    // base 如果是一个构造函数，那么 base.prototype = {} 这是正常写法，所以 base.prototype 是一个对象
+    // base 如果是一个构造函数，那么 base.prototype = {} 这是正常写法，所以
+    // base.prototype 是一个对象
     console.log("base.prototype: ", base.prototype);
 
     /// 4th: Object.assign() 实现对象组合的新方法:
@@ -441,7 +447,6 @@ function mixin(...mixins) {
     console.log("base2: ", base);
     return base;
 }
-
 class Circle extends mixin(SerializableMixin, AreaMixin) {
     constructor(length) {
         super();
@@ -450,10 +455,10 @@ class Circle extends mixin(SerializableMixin, AreaMixin) {
     }
 }
 
-/* 此示例使用 mixin 函数代替传统的继承方法，它可以接受任意数量的 mixin 对象作为参数，首先创建
- * 一个函数 base, 再将每一个 mixin 对象的属性赋值给 base 的原型，最后 mixin 函数返回这个 base
- * 函数，所以 Square 类就可以基于这个返回的函数用 extends 进行扩展。 △ 请记住，由于使用了 extends
- * 因此在构造函数中需要调用 super(). */
+/* 此示例使用 mixin 函数代替传统的继承方法，它可以接受任意数量的 mixin 对象作为参数，首先
+ * 创建一个函数 base, 再将每一个 mixin 对象的属性赋值给 base 的原型，最后 mixin 函数返回
+ * 这个 base 函数，所以 Square 类就可以基于这个返回的函数用 extends 进行扩展。 △ 请记住，
+ * 由于使用了 extends 因此在构造函数中需要调用 super(). */
 let w = new Circle();
 console.log("w.serialize(): ", w.serialize());
 console.log("w.getArea(): ", w.getArea());
@@ -462,8 +467,8 @@ console.log("w.getArea(): ", w.getArea());
 
 /** 继承和派生类 --> 内建对象的继承 */
 
-/* ES6 中的类继承则与之相反，先由基类 (Array) 创建 this 的值，然后派生类的构造函数 (MyArray)
- * 再修改这个值。以下示例是一个基于类生成特殊数组的实践: */
+// ES6 中的类继承则与之相反，先由基类 (Array) 创建 this 的值，然后派生类的构造函数
+// (MyArray) 再修改这个值。以下示例是一个基于类生成特殊数组的实践:
 class MyArray extends Array {
     // blank 空白
 }

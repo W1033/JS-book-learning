@@ -2768,7 +2768,7 @@
                 }
             }
 
-            // Compile and execute a filtering function
+            // compile and execute a filtering function
             // Provide `match` to avoid retokenization if we modified the selector above
             compile(selector, match)(
                 seed,

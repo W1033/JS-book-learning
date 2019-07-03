@@ -487,7 +487,7 @@ console.log(view1.byteLength);              // 10
 console.log(view2.byteLength);              // 2
 ```
 
-In this code, the two views are both `Int8Array` instances that use `buffer`. Both `view1` and `view2` have the same `buffer`, `byteOffset`, and `byteLength` properties that exist on `DataView` instances. It's easy to switch to using a typed array wherever you use a `DataView` so long as you only work with one numeric type.
+In this code, the two views are both `Int8Array` instances that use `buffer`. Both `view1` and `view2` have the same `buffer`, `byteOffset`, and `byteLength` properties that exist on `DataView` instances. It's easy to switches to using a typed array wherever you use a `DataView` so long as you only work with one numeric type.
 
 The second way to create a typed array is to pass a single number to the constructor. That number represents the number of elements (not bytes) to allocate to the array. The constructor will create a new buffer with the correct number of bytes to represent that number of array elements, and you can access the number of elements in the array by using the `length` property. For example:
 

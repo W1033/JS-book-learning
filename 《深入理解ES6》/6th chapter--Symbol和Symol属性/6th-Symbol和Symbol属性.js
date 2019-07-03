@@ -1,12 +1,40 @@
 // Created on 20180503
 
-/** ES5 中包含 5 种原始类型: strings(字符串类型)， numbers(数字型)，booleans(布尔型) ，null 和 undefined。
- *  ES6 引入了第6种原始类型: Symbol. **/
+/**
+ * - ES5 中包含 5 种原始类型:
+ *      + strings(字符串类型)
+ *      + numbers(数字型)
+ *      + booleans(布尔型)
+ *      + null 和
+ *      + undefined。
+ *      + ES6 引入了第 6 种原始类型: Symbol.
+ */
 
-/** ------ 20180503-P108: 创建 Symbol  ------ **/
-/* Symbol 函数接受一个可选参数，其可以让你添加一段文本来描述即将创建的 Symbol, 这段描述不可用于属性访问，
- * 主要用于阅读代码和调试 Symbol 程序。 Symbol 的描述被存储在内部的 [[Description]] 属性中，只有当调用
- * Symbol 的 toString() 方法时才可以读取这个属性。 */
+// 20190621- add: https://github.com/lukehoban/es6features#symbols
+// let MyClass = (function() {
+//     // module scoped symbol
+//     const key = Symbol('key');
+//
+//     function MyClass(privateData) {
+//         this[key] = privateData;
+//     }
+//
+//     MyClass.prototype = {
+//         constructor: MyClass,
+//         doStuff: function() {
+//             // ... this[key] ...
+//         }
+//     };
+//     return MyClass;
+// })();
+// let c = new MyClass('Hello');
+// c['key'] === undefined;
+
+
+/** ------ P108: 创建 Symbol  ------ **/
+// Symbol 函数接受一个可选参数，其可以让你添加一段文本来描述即将创建的 Symbol, 这段描述
+// 不可用于属性访问，主要用于阅读代码和调试 Symbol 程序。 Symbol 的描述被存储在内部的
+// [[Description]] 属性中，只有当调用 Symbol 的 toString() 方法时才可以读取这个属性。
 let firstName = Symbol("first name");
 let person = {};
 person[firstName] = "Nicholas";
@@ -17,7 +45,8 @@ console.log("------------------");
 
 
 /** ------ 20180503-P100: Symbol 共享体系  ------ **/
-// 如果想创建一个可共享的 Symbol, 要使用 Symbol.for() 方法。 也只接受一个参数，作用同上面的 Symbol()一样。
+// 如果想创建一个可共享的 Symbol, 要使用 Symbol.for() 方法。 也只接受一个参数，
+// 作用同上面的 Symbol()一样。
 let uid = Symbol.for("uid");
 let obj = {};
 obj[uid] = "12345";
@@ -27,7 +56,8 @@ console.log(uid);           // Symbol(uid)
 let uid2 = Symbol.for("uid");
 console.log(uid === uid2);  // true
 
-// 還有一個與 Symbol 共享有關的特性: 可以 Symbol.keyFor() 方法在 Symbol 全局註冊表中檢索與 Symbol 有關的鍵。e.g:
+// 還有一個與 Symbol 共享有關的特性: 可以 Symbol.keyFor() 方法在 Symbol
+// 全局註冊表中檢索與 Symbol 有關的鍵。e.g:
 let uId = Symbol.for("uId");
 console.log(Symbol.keyFor(uId));    // uId
 let uId2 = Symbol.for("uId");
@@ -37,12 +67,11 @@ console.log(Symbol.keyFor(uId3));  // undefined
 
 
 /** 20180503-P100- Symbol 共享体系 --> Symbol 属性检索 **/
-/* Object.keys() 和 Object.getOwnPropertyNames()方法可以检索对象中所有的属性: 前一个返回所有可枚举的属性名；
- * 后一个方法不考虑属性的可枚举性一律返回。
- *
- * ES6 添加了一个 Object.getOwnPropertySymbols() 来检索对象中的 Symbol 属性。 返回值是一个包含所有 Symbol
- * 自有属性的数组。
- * */
+// - Object.keys() 和 Object.getOwnPropertyNames()方法可以检索对象中所有的属性:
+//   + 前一个返回所有可枚举的属性名；
+//   + 后一个方法不考虑属性的可枚举性一律返回。
+// - ES6 添加了一个 Object.getOwnPropertySymbols() 来检索对象中的 Symbol 属性。
+//   返回值是一个包含所有 Symbol 自有属性的数组。
 let uflag = Symbol("u flag");
 let aObj = {
     // aObj 有一个 名为 uflag 的 Symbol 属性
@@ -57,16 +86,16 @@ console.log("------------------");
 
 
 /** 20180520-P113- 通過 well-know (眾所周知的) Symbol 暴露內部操作 **/
-
 /* (1.) Symbol.hasInstance 方法 :
- *  每個函數中都有一個 Symbol.hasInstance 方法，用於確定對象是否為函數的實例。該方法是 Function.prototype
- *  中定義，所以所有函數都繼承了 instanceof 屬性的默認行為。
- *  Symbol.hasInstance 方法只接受一個參數，紀要檢查的值。如果傳入的值是函數的實例。則返回 true. 為了更好理解
+ *  每個函數中都有一個 Symbol.hasInstance 方法，用於確定對象是否為函數的實例。該方法是
+ *  Function.prototype 中定義，所以所有函數都繼承了 instanceof 屬性的默認行為。
+ *  Symbol.hasInstance 方法只接受一個參數，紀要檢查的值。如果傳入的值是函數的實例。則返回
+ *  true. 為了更好理解。
  *  Symbol.hasInstance 的運作機制，我們看一下這行代碼:
  *      obj instanceof  Array  ===(等價于)  Array[Symbol.hasInstance](obj);
- *   本質上 ES6 中只是將 instanceof 操作符重新定義為此方法的簡寫語法(上句中前面是後面的簡寫)。現在引入方法調用後，
- *   就可以隨意改變 instanceof 的運行方式了。
- * */
+ *   本質上 ES6 中只是將 instanceof 操作符重新定義為此方法的簡寫語法(上句中前面是後面的簡寫)
+ * 。現在引入方法調用後，就可以隨意改變 instanceof 的運行方式了。
+ */
 
 // 定義一個無實例的函數，就可以將 Symbol.hasInstance 的返回值硬編碼為 false:
 function MyObject() {
@@ -83,13 +112,14 @@ Object.defineProperty(MyObject, Symbol.hasInstance, {
 let obje = new MyObject();
 console.log(obje instanceof MyObject);    // false
 
-// 也可以基於(于) 任意條件，通過值檢查來確定被檢測的是否為實例。For example, 可以將 1~100 的數字定位為一個特殊數字
-// 類型的實例，具體實現的代碼如下:
+// 也可以基於(于) 任意條件，通過值檢查來確定被檢測的是否為實例。For example, 可以將
+// 1~100 的數字定位為一個特殊數字類型的實例，具體實現的代碼如下:
 function SpecialNumber() {
 }
 
-// 定義一個 Symbol.hasInstance 方法，當值為 Number 的實例且其值在 1~100 之間時返回 true。所以即使 SpecialNumber
-// 的函數和變量 two 之間沒有直接關係，變量 two 也被認為 SpecialNumber 的實例。
+// 定義一個 Symbol.hasInstance 方法，當值為 Number 的實例且其值在 1~100 之間時
+// 返回 true。所以即使 SpecialNumber 的函數和變量 two 之間沒有直接關係，變量 two
+// 也被認為 SpecialNumber 的實例。
 Object.defineProperty(SpecialNumber, Symbol.hasInstance, {
     value: function (v) {
         // Number 對象在這裡

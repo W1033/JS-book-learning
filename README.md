@@ -29,6 +29,12 @@
       }
   ```
 
+- 2、CSS 单位
+| 单位 | 描述 |
+|:---:|:---:|
+| %  | 百分比 |
+| px | 像素。计算机屏幕上的一个点为 1px. |
+
 - css强制换行和超出隐藏实现
    + (1). word-break: break-all; 只对英文起作用，以字母作为换行依据。假设div宽度为
      450px，它的内容就会到450px自动换行，如果该行末端有个很长的英文单词，它会把单词截断，
@@ -50,16 +56,6 @@
       `meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"`
   - 忽略将页面中的数字识别为电话号码，忽略android平台中对邮箱地 址的识别
     `meta content="telephone=no,email=no" name="format-detection"`
-
-- media总结
-  - @media only screen and (max-width:480px){ /* 不大于480px 包含了
-    iphone 4, 5, 6, 6+ */}
-  - @media only screen and (min-width:480px) and (max-width:960px)
-    { /*不小于480px不大于960px的判断*/ }
-  - @media only screen and (min-width:960px) and (max-width:1440px)
-    {/*不小于960px不大于1440px的判断*/}
-  - @media only screen and (min-width:1440px){} <br>
-  - @media only screen and (min-width:2000px){} <br>
 
 - 手机端页面解决ios的button按钮的各种bug问题
    - 解决点击input textarea出现边框的问题
@@ -89,6 +85,10 @@
 
 # Javascript
 - childNodes 和 children 区别: childNodes包括元素节点和文本节点，而children只包括元素节点。
+
+- js中的根对象是 Object.prototype 对象。Object.prototype 对象是一个空的对象，我们在 
+  js 中遇到的每个对象，实际上都是从 Object.prototype 对象克隆而来的，
+  Object.prototype 对象就是他们的原型。
 
 - 关于在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度"的jq和js方法总结:
   1. jq方法:
@@ -205,6 +205,16 @@
 - (7.) 单体内置对象
         + Global 对象
         + Math   对象
+
+### 5.0 Object 类型
+- 一般来说，**访问对象属性时使用的都是点表示法**，这也是很多面向对象语言中通用的语法。不过，在 
+  JavaScript 中也可以使用方括号表示法来访问对象的属性。在使用方括号语法时，应将要访问的属性以
+  字符串的形式放在方括号中。
+  + ```javascript
+        const person = {name: "Wang"};
+        console.log(person.name);
+        console.log(person['name']);
+    ```
 
 ### 5.2 Array 类型
 - chapter5: 5.2.7 -- 位置方法 ES5 为数组实例添加了两个位置方法： indexOf() 和 
