@@ -456,8 +456,6 @@
       + 示例:《深入理解ES6》\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
 
 
-
-
 ## 第 7 章 -- 函数表达式
 - 7.1 递归:
   ```javascript
@@ -471,7 +469,6 @@
       });
       console.log(factorial(4));      // 24
   ```
-
 
 
 
@@ -532,8 +529,10 @@
     }
    ```
 
+
 > **35、银行卡添加和删除空格**
  - 见示例: js-sundry-goods\JS--方法总结\2019\20190218--表单数字添加空格.html
+ 
  
 > **Array.prototype.**
  - 1、将 arguments (类数组对象)转换为数组, 或者把 NodeList 对象转换为数组(比如一组li):
@@ -557,6 +556,7 @@
      // 使用属性读取数据
      let book = localStorage.book;
   ```
+
 
 > **Node.js 和 ES6 导入导出:**
 - Node.js 导入 `require()`, 导出 `exports || module.exports`
@@ -617,6 +617,7 @@
         import TodoListItem from "./TodoListItem.vue";
       ```
       
+      
 > **40. 客户区坐标位置 ( clientX 和 clientY ):**
   + 鼠标事件都是在浏览器视口中特定位置上发生的。这个位置信息保存在事件对象的 clientX 和 
     clientY 属性中。
@@ -624,8 +625,9 @@
      event.clientX , event.clientY
   + ![clientX and clientY](./images/clientX%20and%20clientY.png)
 
+
 > **41 上滑显示错误弹框**
- - ```base
+ - ```javascript
 	let errBoxPosTop = getPosition(errBoxEleConfig.errorBoxWall).top;
 	let scrollTop = document.documentElement.scrollTop 
 	    || document.body.scrollTop;
@@ -642,10 +644,12 @@
 	scrollBarRoll();
    ```
 
+
 > **42 js 经典原型图**
  <div style="overflow: hidden; width: 600px; height: 700px;">
     <img style="width: 100%; height: 100%; " src="./images/JS-原型图.png">
  </div>
+
 
 > **43 构造函数的方法内可以动态给构造函数添加属性**
 - ```javascript
@@ -682,5 +686,38 @@
   ```
 
 
+> **44 声明构造函数较常用的两种方法:**
+- 方法 1:
+    + ```javascript
+          function PersonType(name) {
+              this.name = name;
+          }
+          
+          PersonType.prototype.sayName = function () {
+              console.log(this.name);  // Nicholas
+          };
+          
+          let person = new PersonType("Nicholas");
+          person.sayName();
+          console.log(person instanceof PersonType);  // true
+          console.log(person instanceof Object);      // true
+      ```
+- 方法 2:  
+    + ```javascript
+        function Dropdown() {
+            // 这种方式就是在构造函数内直接调用原型上的 initialize() 方法，因为 this 都
+            // 的构造函数的实例，所以这种方法书写本质上和第一种没有什么不同。
+            this.initialize.apply(this, arguments);
+        }
+        Dropdown.prototype = {
+            constructor: Dropdown,
+            initialize: function(dropdownData, dropdownUl) {
+                this.dropdownData = dropdownData;
+                this.dropdownUl  = dropdownUl;
+            },
+            createEle: function() {},
+        };
+        let dropdownInstance = new Dropdown(dropdownData, dropdownUl[0]);
+      ```
 
 
