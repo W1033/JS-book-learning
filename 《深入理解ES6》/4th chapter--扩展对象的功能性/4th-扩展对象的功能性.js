@@ -1,6 +1,10 @@
-// Created 20180501
+/**
+ * Created on 20180501
+ * 20190705 edit
+ */
 
-// 20180501-P73 - 属性初始值的简写: 当一个对象的属性与本地变量同名时，不必再写冒号和值，简单地只写属性名即可。
+// 20180501-P73 - 属性初始值的简写: 当一个对象的属性与本地变量同名时，不必再写冒号和值，
+// 简单地只写属性名即可。
 function createperson(name, age) {
     return {
         // 原始写法 name: name,  age: age
@@ -19,18 +23,18 @@ const person = {
 
 
 // 20180501-P75 - 可计算属性名 (Computed Property Name)
-let people = {},
-    lastName = "last name";
+let people = {};
+let lastName = "last name";
 // 如果想通过计算得到属性名，就需要用方括号来代替点记法。
 people["first name"] = "Nicholas";
 people[lastName] = 'Zakas';
 console.log(people["first name"]);
 console.log(people[lastName]);
 
+// 示例:
 // 20180913-add: 来自: https://vuex.vuejs.org/zh/guide/mutations.html
 // mutation-types.js
 export const SOME_MUTATION = "SOME_MUTATION";
-
 // store.js
 import { SOME_MUTATION } from "./mutation-types"
 const store = new Vuex.Store({
@@ -59,19 +63,8 @@ console.log(Object.is(NaN, NaN));  // true
  * - receiver /rɪ'siːvə/ ~~~n.接收器
  * - supplier /səˈplaɪə/ ~~~n.提供者*/
 
-/* - 20180501: P76-新增方法: Object.assign():
- * - 20180502: 混合(Mixin)是 js 中实现对象组合的一种模式。在一个 mixin 方法中，一个对象
- *   接受来自另一个对象的属性和方法。许多 js 库中都有类似的 mixin 方法: */
-/* - (1)、
- *   + Object.keys() 方法取得对象上所有可枚举的实例属性。这个方法接受一个对象作为参数，
- *      返回一个包含所有可枚举属性的字符串数组。
- *   + 示例见: 《js高级程序设计》\js高程学习笔记\js高程--Object.keys().js
- *
- * - (2)、
- *   + mixin() 函数遍历 supplier 的自有属性赋并复制到 receiver 中(此处的复制只是浅复制，
- *      当属性值为对象时只复制对象的引用)。这样一来，receiver 不通过继承就可以获得新属性，
- *      请参考这段代码:
- */
+// - 混合(Mixin)是 js 中实现对象组合的一种模式。在一个 mixin 方法中，一个对象
+//   接受来自另一个对象的属性和方法。许多 js 库中都有类似的 mixin 方法:
 function mixin(receiver, supplier) {
     // (1)、
     Object.keys(supplier).forEach(function (key) {
@@ -91,14 +84,24 @@ EventTarget.prototype = {
 const myObj = {};
 // (2)、
 mixin(myObj, EventTarget.prototype);
-
+/* - (1)、
+ *   + Object.keys() 方法取得对象上所有可枚举的实例属性。这个方法接受一个对象作为参数，
+ *      返回一个包含所有可枚举属性的字符串数组。
+ *   + 示例见: 《js高级程序设计》\js高程学习笔记\js高程--Object.keys().js
+ *
+ * - (2)、
+ *   + mixin() 函数遍历 supplier 的自有属性赋并复制到 receiver 中(此处的复制只是浅复制，
+ *      当属性值为对象时只复制对象的引用)。这样一来，receiver 不通过继承就可以获得新属性，
+ *      请参考这段代码:
+ */
 // myObj 接受 EventTarget.prototype 对象的所有行为从而使 myObj 可以通过 emit() 方法
 // 发布事件或通过 on() 方法订阅事件。
 myObj.emit("somethingChanged");     // somethingChanged
 
-/* - 上面的 mixin() 调用可以直接替换为 -- ES6 的 Object.assign()
- * - 201809015-add: 即使这样 Object.assign() 仍然是潜拷贝。 深拷贝见:
- * - js-sundry-goods\20190405-浅拷贝+深拷贝\20190108 jq拷贝继承(深拷贝).html */
+
+// - ES6 新增方法: Object.assign():
+//  + 上面的 mixin() 调用可以直接替换为 -- ES6 的 Object.assign().
+//    即使这样 Object.assign() 仍然是潜拷贝。
 Object.assign(myObj, EventTarget.prototype);
 myObj.emit("somethingChange again");
 
