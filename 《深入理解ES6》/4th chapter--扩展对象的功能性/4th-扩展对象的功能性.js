@@ -48,7 +48,7 @@ const store = new Vuex.Store({
 });
 
 
-// 20180501-P76 - 新增方法: Object.is(): 弥补全等运算符的不准确运算。 比如之前
+// P76 - 新增方法: Object.is(): 弥补全等运算符的不准确运算。 比如之前
 // +0等于-0, NaN不等于NaN, 使用后:
 console.log(+0 === -0);            // true
 console.log(NaN === NaN);          // false
@@ -109,9 +109,10 @@ myObj.emit("somethingChange again");
 
 
 /** 20180502-P81 自由属性枚举顺序 */
-    // ES5 Object.getOwnPropertyNames(): 【取得自身的属性名】
-// ES6 规定了对象的自有属性被枚举时的返回顺序，这会影响到 Object.getOWnPropertyNames()【取得自身的属性名】方法及
-// Reflect.ownKeys (将在第 12 章讲解) 返回属性的方式， Object.assign() 方法处理属性的顺序也将随之改变。 例如:
+// - ES5 Object.getOwnPropertyNames(): 【取得自身的属性名】
+// - ES6 规定了对象的自有属性被枚举时的返回顺序，这会影响到 Object.getOWnPropertyNames()
+//   【取得自身的属性名】方法及 Reflect.ownKeys (将在第 12 章讲解) 返回属性的方式，
+//   Object.assign() 方法处理属性的顺序也将随之改变。 例如:
 let aObj = {
         a: 1,
         0: 1,
@@ -121,21 +122,22 @@ let aObj = {
         1: 1
     };
 aObj.d = 1;
-// js高程: chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，返回包含所有数组项的字符串。
-console.log(Object.getOwnPropertyNames(aObj));          // [ '0', '1', '2', 'a', 'c', 'b', 'd' ]
+
+// js高程: chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，
+// 返回包含所有数组项的字符串。
+console.log(Object.getOwnPropertyNames(aObj)); // [ '0', '1', '2', 'a', 'c', 'b', 'd' ]
 console.log(Object.getOwnPropertyNames(aObj).join("")); // 012acbd
 
 
-/** 20180502-P82 增强对象原型 */
-/*
- * - 增强对象原型: ES5 添加的 Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型
- *   的真实值被存储在内部专用属性 [[Prototype]] 中，调用 getPrototypeOf() 方法返回存储在其中的值。
- *   (get prototype of 获得原型)
- *
- * - 改变对象的原型: ES6 添加了 Object.setPrototypeOf() 方法可以改变任意指定对象的原型。
- *   接受2个参数: (1)被改变原型的对象。(2)替代第一个参数原型的对象。
- *
- */
+/** P82 增强对象原型 */
+// - 增强对象原型: ES5 添加的 Object.getPrototypeOf() 方法返回任意指定对象的原型。
+//   对象原型的真实值被存储在内部专用属性 [[Prototype]] 中，调用 getPrototypeOf() 方法
+//   返回存储在其中的值。(get prototype of 获得原型)
+// - 改变对象的原型:
+//      + ES6 添加了 Object.setPrototypeOf() 方法可以改变任意指定对象的原型。
+//        接受2个参数:
+//          - (1) 被改变原型的对象。
+//          - (2) 替代第一个参数原型的对象。
 let animal = {
     getGreeting() {
         return "Hello";
@@ -161,5 +163,8 @@ console.log(friend.getGreeting());          // woof
 console.log(Object.getPrototypeOf(friend) === dog);    // true
 
 
-/** 20180502-P83 简化原型访问的 Super 引用 */
+/** P83 简化原型访问的 Super 引用 */
+// - 正如前面所提及的，原型对于 JavaScript 而言非常重要，ECMAScript 6 中许多改进的
+//   最终目标就是为了使其更易用。以此为目标，ECMAScript 6 引入了 Super 应用的特性，使用它
+//   可以更便捷地访问对象原型。举个例子，
 

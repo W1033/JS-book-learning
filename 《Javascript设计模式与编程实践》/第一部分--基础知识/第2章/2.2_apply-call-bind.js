@@ -23,7 +23,7 @@ let func = function(a, b, c) {
     // 当使用 apply/call 的时候，如果我们传入的第一个参数为 null,
     // 函数体内的 this 会指向默认的宿主对象，在浏览器中则是 window.
     // console.log(this === window); // true
-}
+};
 // func.apply(null, [1, 2, 3])
 
 let callFunc = function(a,b, c) {
@@ -31,7 +31,7 @@ let callFunc = function(a,b, c) {
     // 但如果在严格模式下, 函数体内的 this 还是 null。
     console.log(this === null); // true
     console.log([a, b, c]);
-}
+};
 // callFunc.call(null, 4, 5, 6);
 
 /**
@@ -51,7 +51,7 @@ let obj2 = {
 // window.name = 'window';
 let getName = function() {
     console.log(this.name)
-}
+};
 // getName();  // window
 // getName.call(obj1); // seven
 // getName.call(obj2); // anne
@@ -109,11 +109,11 @@ Function.prototype.bind = function() {
         // 并且组合两次分别传入的参数，作为新函数的参数
         return self.apply(context, [].concat.call(args, [].slice.call(arguments)))
     }
-}
+};
 let theObj = { name: 'Seven' };
 let theFunc = function(a, b, c, d){
     // 输出 Seven
-    console.log(this.name)
+    console.log(this.name);
     console.log([a, b, c, d])
 }.bind(theObj, 1, 2);
 
@@ -129,4 +129,4 @@ let max = Math.max.apply(null, [11, 22, 33, 44, 34, 24, 46])
 (function(){
     Array.prototype.push.call(arguments, 3);
         console.log(arguments);
-})(111, 222)
+})(111, 222);

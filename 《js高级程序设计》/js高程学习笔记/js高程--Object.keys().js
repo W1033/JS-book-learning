@@ -28,7 +28,7 @@ console.log(p1keys);        // [ 'name', 'age' ]
 /** ~~~~~~ 示例 2: ~~~~~~ */
 
 /* - assign [ə'saɪn] ~~~v.分配，指定, 派，调派
- * - receiver /rɪ'siːvə/ ~~~n.接收器
+ * - receiver /rɪ'siːvə/ ~~~n.接收者
  * - supplier /səˈplaɪə/ ~~~n.提供者*/
 
 // - 混合(Mixin)是 js 中实现对象组合的一种模式。在一个 mixin 方法中，一个对象
