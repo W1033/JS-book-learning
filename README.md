@@ -249,7 +249,7 @@
         console.log(Array.prototype.join.call(a, '-'))    // "f-o-o"
         let c = Array.prototype.map.call(a, function(item) {
             return item.toUpperCase() + ".";
-        }).join("")
+        }).join("");
         console.log(c)    // "F.O.O"
    ```
 -  数组的 slice() 方法: slice() 方法可以接受一或两个参数，即要返回项的起始和结束位置。在只有一
@@ -268,7 +268,7 @@
         let numbers = [1,2,3,4,5,4,3,2,1];
         let mapResult = numbers.map(function(item, index, array) {
             return item * 2;
-        })
+        });
         console.log(mapResult); // [2,4,6,8,10,8,6,4,2]
     ```
 
@@ -572,10 +572,10 @@
         // 1. 导出  exports || module.exports
          let funName = function () {
              return "The nam is ....";
-         }
+         };
          exports.funName = funName;
         
-         module.exports = { a: 2 }
+         module.exports = { a: 2 };
         
         // 2. 导入: require 一個模块，赋值给变量
          let foo = require("./foo.js");
