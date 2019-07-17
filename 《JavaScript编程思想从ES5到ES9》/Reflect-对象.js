@@ -1,3 +1,7 @@
+/** # 第 13 章 -- Reflect 对象 */
+
+
+/* ## 13.1 Reflect 对象介绍（ES6） */
 
 // 13-1_Reflect-object.js
 let candy_amount = {
@@ -50,4 +54,5 @@ console.log(candy_amount[symbol01]);
 
 
 
-
+/* ## 13.2 间接应用特定函数（ES6） */
+// 通过函数 Reflect.apply(), 可以传入多个数据，至即将被间接应用的其他函数。

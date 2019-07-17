@@ -91,7 +91,8 @@
 
         // ~~~~~~~~~~~~~
         /** reduce方法在数组对象中的运用： */
-        const arrObj =  [ {name: 'brick11'}, {name: 'brick12'}, {name: 'brick13'} ];
+        const arrObj =  [ {name: 'brick11'}, {name: 'brick12'}, 
+            {name: 'brick13'} ];
         // brick /brɪk/ n.砖，砖头
         function carryBricks(arr){
             return arr.reduce(function(prev, current, index, array){
@@ -110,7 +111,8 @@
         console.log(carryBricks(arrObj));
 
 
-        const arrObj2 =  [ {name: 'brick11'}, {name: 'brick12'}, {name: 'brick13'} ];
+        const arrObj2 =  [ {name: 'brick11'}, {name: 'brick12'}, 
+            {name: 'brick13'} ];
         const bricks = 'brick1, brick2, brick3';  //已经堆好的砖
         function carryBricksAgain(arr){
             return arr.reduce(function(prev, current, index, array){

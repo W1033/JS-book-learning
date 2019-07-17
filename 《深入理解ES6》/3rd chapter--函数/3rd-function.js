@@ -1,12 +1,10 @@
-/* Date 2017-12-7 */
-
 // parametric  /ˌpærə'metrik/ adj.参数的
 // parameter   /pə'ræmɪtə/     n. 参数
 // statement   /'steɪtm(ə)nt/  n. 声明, 陈述
 // expression  /ɪk'spreʃ(ə)n/  n. 表达， 表现
 
 
-/** 20180428-P46: ES5 中的无命名参数 */
+/** ES5 中的无命名参数 */
 let book = {
     title: "Understanding ECMAScript 6",
     author: "Nicholas C. Zakas",
@@ -43,7 +41,8 @@ function pick2(obj, ...keys) {
 }
 
 let bookData2 = pick2(book, "author", "year");
-console.log("bookData2.author: " + bookData2.author);      // bookData2.author: Nicholas C. Zakas
+// bookData2.author: Nicholas C. Zakas
+console.log("bookData2.author: " + bookData2.author); 
 
 // 不定参数的使用示例
 let func = function(a, b, ...args) {
@@ -93,7 +92,8 @@ console.log(person.sayName.name);   // sayName
 const descriptor = Object.getOwnPropertyDescriptor(person, "firstName");
 console.log(descriptor.get.name);   // get firstName
 
-// P53: 通过 bind() 函数创建的函数，其名称将带有 "bound" 前缀; 通过 Function 构造函数创建的函数，其名称
+// P53: 通过 bind() 函数创建的函数，其名称将带有 "bound" 前缀; 通过 Function 
+// 构造函数创建的函数，其名称
 // 将是 "anonymous"(/ə'nɒnɪməs/ adj.匿名)。 示例如下:
 const doSome = function () {
     // 空函数
@@ -103,7 +103,8 @@ console.log((new Function()).name);     // anonymous
 
 
 // P54 Chapter3-函数 【 在 ECMAScript 5 中判断函数被调用的方法 】
-// (1.) 在ES5中如果想确定一个函数是否通过 new 关键字被调用(或者说，判断该函数是否作为构造函数被调用),最流行的方式是使用 instanceof, 例如:
+// (1.) 在ES5中如果想确定一个函数是否通过 new 关键字被调用(或者说，判断该函数是否作为
+//      构造函数被调用),最流行的方式是使用 instanceof, 例如:
 function Person(name) {
     if (this instanceof Person) {
         this.name = name;
@@ -114,7 +115,8 @@ function Person(name) {
 
 // (2.) 还有一种在库中常见的写法是:  add-20180428
 function SendVerCode() {
-    if (typeof this === "undefined" || Object.getPrototypeOf(this) !== SendVerCode.prototype) {
+    if (typeof this === "undefined" || Object.getPrototypeOf(this) 
+        !== SendVerCode.prototype) {
         return new SendVerCode();
     }
 }
@@ -130,19 +132,20 @@ function Person2(name) {
 }
 
 let person2 = new Person2("Nicholas");                  // Nicholas
-let anotherPerson = Person2.call(person, "Michael");    // 必须通过 new 关键字来调用 Person.
+let anotherPerson = Person2.call(person, "Michael"); // 必须通过 new 关键字来调用 Person.
 
 
 /*
- * 箭头函数: 所谓箭头函数，目的其实就是为了实现函数式的 lambda 表达式的，它本身就是为了函数式而添加进去的新概念，
- * 所谓“方便写”只是附带的特性。然而，函数式和面向对象两种编程语言范式是冲突的，冲突的点在于数据组织的方式不一致。
- * 面向对象是利用 “对象” 来集合一组数据和方法，而函数式是通过函数来集合一组数据，并且他的方法是和数据分开的。
- * 所以在函数式里面不会存在 this 这种上下文概念。
- * */
-// 箭头函数: 一个箭头函数表达式的语法比一个"函数表达式"更短，并且不绑定自己的this, arguments,super或new.target。
-// 这些函数表达式最适合用于非方法函数，并且不能用作构造函数。
+ * 箭头函数: 所谓箭头函数，目的其实就是为了实现函数式的 lambda 表达式的，它本身就是为了
+ * 函数式而添加进去的新概念，所谓“方便写”只是附带的特性。然而，函数式和面向对象两种编程语言
+ * 范式是冲突的，冲突的点在于数据组织的方式不一致。面向对象是利用 “对象” 来集合一组数据和
+ * 方法，而函数式是通过函数来集合一组数据，并且他的方法是和数据分开的。所以在函数式里面不会
+ * 存在 this 这种上下文概念。
+ */
+// 箭头函数: 一个箭头函数表达式的语法比一个"函数表达式"更短，并且不绑定自己的this, 
+// arguments,super或new.target。这些函数表达式最适合用于非方法函数，并且不能用作构造函数。
 
-// 20180501 - P59: 箭头函数:
+// P59: 箭头函数:
 // (1.) 没有 this、super、arguments 和 new.target 绑定。
 // (2.) 不能通过 new 关键字调用
 // (3.) 没有原型

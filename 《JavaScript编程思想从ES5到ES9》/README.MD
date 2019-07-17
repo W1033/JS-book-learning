@@ -9,7 +9,7 @@
     + 处理数值(number)、字符串（string）、数组（array）、自定义对象（custom object / 
       user-defined object）与日期和时间（data and time）
     + DOM（document object model）的事件处理器 （event handler）和元素实例
-     （element instance）
+     （element instance）__
     + Reflect、Proxy 和 Intl 对象（object）
     + window.navigator、window.document 和 BOM（browser object model）
       对象实例（object instance）

@@ -15,6 +15,31 @@
     + `../` 父级目录;
     + `/` 根目录。
 
+> **HTML5 新增元素**
+- 新增的结构元素
+    + 结构元素分为：主体结构元素 和 非主体结构元素
+        - 主体结构元素：article、aside、nav、pubdate、section、time、figure。
+        - 非主体结构元素：address、header、hgroup、footer、main。
+- 新增的其他元素：
+    + 1、video 元素：用于定义视频，实现播放视频资源。
+    + 2、audio 元素：用于定义音频、实现播放音频资源。
+    + 3、embed
+    + 4、mark：高亮显示
+    + 5、progress
+    + 6、ruby 
+        - rp
+        - rt
+    + 7、wbr 软换行
+    + 8、canvas：用于定义徒刑图像。它只是一个容器画布，绘制图形时需要使用脚本。
+    + 9、command
+    + 10、details：与 summary 元素配合使用
+    + 11、datalist
+    + 12、datagrid
+    + 13、keygen
+    + 14、output
+    + 15、source：为媒体元素（video 和 audio）引入媒介资源。
+    + 16、menu
+
 
 
 > ~~~~~~ CSS ~~~~~~
@@ -237,24 +262,27 @@
         }
     ```
     
-- chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，然后返回包含所有数组项的字符串
+- chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，然后返回包含所有
+  数组项的字符串
    ```javascript
-        var colors = ["red", "green", "blue"];
+        let colors = ["red", "green", "blue"];
         console.log(colors.join(",")); //red,green,blue
         console.log(colors.join("||")); //red||green||blue
         
         // 字符串通过"借用"数组的非变更方法来处理字符串: 
         let a = "foo";
         let b = ['f', 'o', 'o'];
-        console.log(Array.prototype.join.call(a, '-'))    // "f-o-o"
+        console.log(Array.prototype.join.call(a, '-'));    // "f-o-o"
         let c = Array.prototype.map.call(a, function(item) {
             return item.toUpperCase() + ".";
         }).join("");
         console.log(c)    // "F.O.O"
    ```
--  数组的 slice() 方法: slice() 方法可以接受一或两个参数，即要返回项的起始和结束位置。在只有一
-   个参数的情况下，slice() 方法返回从该参数指定位置开始到当前数组末尾的所有项。如果有两个参数，
-   该方法返回起始和结束位置之间的项——但不包括结束位置的项。注意， slice() 方法不会影响原始数组。
+-  数组的 slice() 方法: slice() 方法可以接受一或两个参数，即要返回项的起始和结束位置。
+   在只有一个参数的情况下，slice() 方法返回从该参数指定位置开始到当前数组末尾的所有项。
+   如果有两个参数该方法返回起始和结束位置之间的项——但不包括结束位置的项。
+   注意， slice() 方法不会影响原始数组。
+   
 - chapter5: 5.2.8 -- 迭代方法: ECMAScript 5 为数组定义了 5 个迭代方法。每个方法都接受 2
     个参数: 第1个参数为每一项上运行的函数 和 运行该函数的作用域对象(可选)。第一个参数运行的函
     数接受 3 个参数: (1)数组项的值. (2)该项在数组种的位置 和 (3)数组对象本身。以下是 5 个
@@ -301,9 +329,10 @@
          var func = function(a, b, c) {
              console.log([a, b, c]);
          };
-         // 如果传入的第一个参数为 null, 函数体内的 this 会指向默认的宿主对象，在浏览器中则是 window.
-         // 参数 1，2，3 被放在数组中一起传入 func 函数，他们分别对应 func 参数列表中的 a,b,c。
-         func.apply(null, [1, 2, 3]);
+         // 如果传入的第一个参数为 null, 函数体内的 this 会指向默认的宿主对象，
+         // 在浏览器中是 window. 参数 1，2，3 被放在数组中一起传入 func 函数，
+         // 他们分别对应 func 参数列表中的 a,b,c。
+         func.apply(null, [1, 2, 3]);****
 
          // 有时候我们使用 call 或者 apply 的目的不在于指定 this 指向，
          // 而是另有用途，比如借用其他对象的方法，那么我们可以传入 null 来代替某个具体的对象:
@@ -313,19 +342,19 @@
         - 更多见示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识
                     \第2章\P33-借用其他对象的方法.js
         - ```javascript
-            var obj1 = { name: "sven" };
-            var obj2 = { name: "anne" };
+            let obj1 = {name: "sven"};
+            let obj2 = {name: "anne"};
             window.name = "Window";
-            var getName = function () { console.log( this.name ); };
+            let getName = function () {console.log(this.name);};
             getName();
-            getName.call( obj1 );	// sven
-            getName.apply( obj2 );	// anne
+            getName.call(obj1);	// sven
+            getName.apply(obj2);	// anne
 
-            document.getElementById("div1").onclick = function () {
-                var func = function () {
-                    console.log( this.id );	// div1
+            document.getElementById("div1").onclick = function() {
+                let func = function() {
+                    console.log(this.id);	// div1
                 };
-                func.call( this );
+                func.call(this);
             }
           ```
     + (2.) Function.prototype.bind
@@ -333,9 +362,9 @@
                  第2章\P32-Function.prototype.bind实现.js
     + (3.) 借用其他对象的方法
         - ```javascript
-            (function () {
-                Array.prototype.push.call( arguments, 3 );
-                console.log( arguments );	// [ 1, 2, 3 ]
+            (function() {
+                Array.prototype.push.call(arguments, 3);
+                console.log(arguments);	// [ 1, 2, 3 ]
             })(1, 2)
           ```
 
