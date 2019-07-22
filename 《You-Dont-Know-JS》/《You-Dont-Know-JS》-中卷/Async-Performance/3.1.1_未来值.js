@@ -34,6 +34,6 @@ function fetchY() {
 }
 
 // fetchX() 和 fetchY() 返回相应值的 promise，可能已经就绪，也可能以后就绪
-add(fetchX(), fetchY()).then(function(sum) {
-    console.log("sum: ", sum);  // sum:  204
-});
+// add(fetchX(), fetchY()).then(function(sum) {
+//     console.log("sum: ", sum);  // sum:  204
+// });

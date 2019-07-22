@@ -6,8 +6,7 @@
 [js函数式编程](https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/)
 
 
-
-> ~~~~~~ HTML ~~~~~~
+-----------------HTML-----------------
 
 # HTML
 - 路徑:
@@ -42,7 +41,7 @@
 
 
 
-> ~~~~~~ CSS ~~~~~~
+-----------------CSS-----------------
 
 # CSS
 - box-shadow属性:
@@ -114,7 +113,8 @@
 
 
 
-> ~~~~~~ Javascript ~~~~~~
+-----------------JavaScript-----------------
+
 
 # Javascript
 - childNodes 和 children 区别: childNodes包括元素节点和文本节点，而children只包括元素节点。
@@ -523,6 +523,17 @@
 
 > **24.JSON 对象有两个方法:**
  - JSON.stringify(): 把JavaScript对象序列化为 JSON 字符串
+ ```javascript
+    let book = {
+        title: 'Professional JavaScript',
+        authors: ['Nicholas C. Zakas'],
+        edition: 3,
+        year: 2011
+    }
+    // {"title":"Professional JavaScript","authors":["Nicholas C. Zakas"],
+    //  "edition":3,"year":2011}
+    let jsonText = JSON.stringify(book);
+ ```
  - JSON.parse(): 把 JSON 字符串解析为原生 JavaScript 值。
 
 

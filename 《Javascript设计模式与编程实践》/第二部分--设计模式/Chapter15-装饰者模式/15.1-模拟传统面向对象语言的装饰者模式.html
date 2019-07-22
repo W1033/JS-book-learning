@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>模拟传统面向对象语言的装饰者模式</title>
+</head>
+<body>
+    <script type="text/javascript">
+        /**
+         * > 15.1 模拟传统面向对象语言的装饰者模式 
+         * - 导弹类和原子弹类的构造函数都接受参数 plane 对象，并且保存好这个参数，在它们的
+         *   fire 方法中，除了执行自身的操作之外，还调用 plane 对象的 fire 方法。
+         * - 这种给对象动态增加职责的方式，并没有真正地改动对象自身，而是将对象放入另一个
+         *   对象之中，这些对象以一条链的方式进行引用，形成一个聚合对象。这些对象都拥有相同
+         *   的接口 (fire 方法)，当请求达到链中的某个对象时，这个对象会执行自身的操作，随后
+         *   把请求转发给链中的下一个对象。
+         * - 因为装饰者对象和它所装饰的对象拥有一致的接口，所以它们对使用该对象的客户来说是
+         *   透明的，被装饰的对象也并不需要了解它曾经被装饰过，这种透明性使得我们可以递归的
+         *   嵌套任意多个装饰者对象，如图 15-1 所以。（P211）
+         *   ```
+         *     AtomDecorator.fire --> MissileDecorator.fire --> Plane.fire
+         *   ```
+         */
+
+
+
+
+        let Plane = function() {};
+    
+        Plane.prototype.fire = function() {
+            console.log("发射普通子弹");
+        };
+    
+        // 接下来增加两个装饰类，分别是导弹和原子弹：
+        // missile ['mɪsaɪl] ~~~n.导弹，投射物
+        // atom ['ætəm] ~~~n.原子
+        let MissileDecorator = function(plane) {
+            this.plane = plane;
+        };
+        MissileDecorator.prototype.fire = function() {
+            this.plane.fire();
+            console.log("发射导弹");
+        };
+    
+        let AtomDecorator = function(plane) {
+            this.plane = plane;
+        };
+        AtomDecorator.prototype.fire = function() {
+            this.plane.fire();
+            console.log("发射原子弹");
+        };
+    
+        let plane = new Plane();
+        plane = new MissileDecorator(plane);
+        plane = new AtomDecorator(plane);
+    
+        // 发射普通子弹
+        // 发射导弹
+        // 发射原子弹
+        plane.fire();
+    </script>
+    
+</body>
+</html>
