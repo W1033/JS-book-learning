@@ -19,7 +19,7 @@ console.log('\n' +  '//' + ('*'.repeat(66)) + '\n');
  *    new Person() 吗？
  * - A: 在这里 Person 并不是类，而是构造函数，JavaScript 的函数既可以作为普通函数被调用，
  *   也可以作为构造函数被调用。 当使用 new 运算符调用函数时，此时的函数就是一个构造器。用 new
- *   运算符来创建对象的过程，实际上也只只是先克隆 Object.prototype 对象，再进行一些其他额外
+ *   运算符来创建对象的过程，实际上也只是先克隆 Object.prototype 对象，再进行一些其他额外
  *   操作的过程。 具体工程见下面 ObjectFactory 函数。
  */
 

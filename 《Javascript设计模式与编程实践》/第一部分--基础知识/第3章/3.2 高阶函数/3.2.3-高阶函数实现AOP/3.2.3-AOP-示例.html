@@ -52,14 +52,16 @@
         let func = function () {
             console.log(2);
         };
-        // func = func.before(function () { console.log(1); }).after(function () { console.log(3); });
+        // func = func.before(function () { console.log(1); }).after(
+        // function () { console.log(3); });
 
         func = func.before(function () {
             console.log(1);
         });
 
         /*
-        * 此时输出 func 是上面 func.before() 执行返回的 匿名函数， this 就是指向 window, arguments 是
+        * 此时输出 func 是上面 func.before() 执行返回的 匿名函数， this 就是指向
+        * window, arguments 是
         * func.before() 内传入的函数参数 :
         *   function () {
         *       beforefn.apply(this, arguments);

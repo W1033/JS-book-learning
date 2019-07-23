@@ -86,8 +86,8 @@
          let obj1 = new Object();
          let obj2 = {};
          // 可以利用 ES5 提供的 Object.getPrototypeOf 来查看这两个对象的原型:
-         console.log( Object.getPrototypeOf( obj1 ) === Object.prototype );  // true
-         console.log( Object.getPrototypeOf( obj2 ) === Object.prototype );  // true
+         console.log(Object.getPrototypeOf( obj1 ) === Object.prototype);  // true
+         console.log(Object.getPrototypeOf( obj2 ) === Object.prototype);  // true
      ```
 - 2).要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它。
  + 上面的示例只需要显式地调用 var Obj1 = new Object() 此时引擎内部就会从 
