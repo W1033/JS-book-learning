@@ -61,14 +61,20 @@ Son.prototype.sayAge = function () {
     console.log(this.age);
 };
 
+console.log('~~~~~~~~~');
+
 const instance1 = new Son("Nicholas", 29);
 instance1.colors.push("black");
 console.log(instance1.colors);
 instance1.sayName();
 instance1.sayAge();
 
+console.log('');
+
 const instance2 = new Son("Greg", 27);
-console.log(instance2);
+console.log(instance2.colors);
 instance2.sayName();
 instance2.sayAge();
 
+
+/** 继承示例 2 */ 

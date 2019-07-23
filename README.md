@@ -117,6 +117,7 @@
 
 
 # Javascript
+
 - childNodes 和 children 区别: childNodes包括元素节点和文本节点，而children只包括元素节点。
 
 - js中的根对象是 Object.prototype 对象。Object.prototype 对象是一个空的对象，我们在 
