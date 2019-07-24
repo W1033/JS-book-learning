@@ -18,3 +18,5 @@ let arr2 = [1, 3, 13, 5, 4, 6, 2, 9].sort(function(a, b) {
 });
 // arr2: [13, 9, 6, 5, 4, 3, 2, 1]
 console.log("arr2: ", arr2);
+
+
