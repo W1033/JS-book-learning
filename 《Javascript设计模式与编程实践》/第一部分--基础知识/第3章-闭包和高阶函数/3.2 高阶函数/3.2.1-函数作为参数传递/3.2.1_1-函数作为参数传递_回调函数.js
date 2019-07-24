@@ -19,6 +19,17 @@ let getUserInfo = function(userId, callback) {
 //     console.log(data.userName);
 // });
 
+// 示例3 -- 把函数作为参数传递
+// Tip:（来自汤姆大叔的博客--《深入理解JavaScript系列》（16）: 闭包（Closures））
+// 讲解 把匿名函数传入到 exampleFunc 和把一个匿名函数赋值给变量 funArg 是一个道理。
+(function() {
+    function exampleFunc(funArg) {
+        funArg();
+    }
+    exampleFunc(function() {
+        console.log("我是被当做参数传递的函数");
+    });
+})();
 
 
 
@@ -35,10 +46,8 @@ let getUserInfo = function(userId, callback) {
 //             }
 //         }
 //     };
-
 //     // 我们把 div.style.display = 'none' 抽出来，用回调函数的形式传入 appendDiv 方法：
 //     appendDiv(function(node) {
 //         node.style.display = 'none';
 //     });
 // })();
-
