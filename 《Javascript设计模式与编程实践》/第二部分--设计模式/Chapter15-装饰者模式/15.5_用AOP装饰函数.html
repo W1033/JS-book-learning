@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>15.5 用 AOP 装饰函数</title>
+    <style type="text/css">
+        * {font-size: 13px; list-style: none;}
+        #btn { width: 200px; line-height: 36px; border-radius: 2px;
+                background-color:lightsalmon; text-align: center;
+                cursor: pointer;}
+    </style>
+</head>
+<body>
+    <div id="btn">我是点击按钮</div>
+    <script>
+        /**
+         * ### 15.5 用 AOP 装饰函数
+         * - 首先用到 `3.2.3-高阶函数实现AOP/3.2.3-高阶函数实现AOP.html` 中写过的
+         *   Function.prototype.before 方法和 Function.prototype.after 方法：
+         *
+         */
+        Function.prototype.before = function(beforefn) {
+            let _self = this;
+            return function() {
+                beforefn.apply(this, arguments);
+                return _self.apply(this, arguments);
+            }
+        };
+        Function.prototype.after = function(afterfn) {
+            let _self = this;
+            return function() {
+                let ret = _self.apply(this, arguments);
+                afterfn.apply(this, arguments);
+                return ret;
+            }
+        };
+
+        let getId = function(id) {
+            return typeof id === 'string' ? document.getElementById(id) : id;
+        };
+
+        /*document.getElementById = document.getElementById.before(function() {
+            console.log(1);
+        });
+        let btn = document.getElementById('btn');
+        console.log(btn);*/
+
+        window.onload = function() {
+            console.log(1);
+        };
+        // 功能真是强大
+        window.onload = (window.onload || function() {})
+            .after(function() {console.log(2);})
+            .after(function() {console.log(3);})
+            .after(function() {console.log(4);});
+
+
+        // - 上面的 AOP 实现是在 Function.prototype 上添加 before 和 after 方法，
+        //   但许多人不喜欢这种污染原型的方式，那么我们可以做一些变通，把原函数和新函数
+        //   都作为参数传入 before 或者 after 方法：
+        let before = function(fn, beforefn) {
+            return function() {
+                beforefn.apply(this, arguments);
+                return fn.apply(this, arguments);
+            }
+        };
+        let a = before(
+            function() {console.log(3);},
+            function() {console.log(2)}
+        );
+        a = before(a, function() {console.log(1);});
+        a();
+    </script>
+</body>
+</html>

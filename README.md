@@ -255,10 +255,10 @@
     lastIndexOf() 。
     + ```javascript
         const aa = "Hello World!";
-        if (aa.indexOf('lo') != -1) {
+        if (aa.indexOf('lo') !== -1) {
             // 找到匹配
         }
-        if (aa.indexOf('lo') == -1) {
+        if (aa.indexOf('lo') === -1) {
             // 没找到匹配
         }
     ```
@@ -302,9 +302,34 @@
     ```
 
 ### 5.5 Function 类型
-- 函数声明 函数表达式 和 匿名函数. 
-- Immediately-Invoked Function Expression. IIFE 立即 调用/(执行) 函数表达式 
- ```
+- 在 ECMAScript 中函数实际上是对象。每个函数都是 Function 类型的实例，而且都与其他
+  引用类型一样具有属性和方法。由于函数是对象，因此函数名实际上也是一个指向函数对象的指针，
+  不会与某个函数绑定。
+    + (1)、函数通常使用 **"函数声明"** 语法定义，如下
+      ```javascript
+          function sum(num1, num2) {
+              return num1 + num2;
+          }
+      ```
+    + (2)、这与下面使用 **"函数表达式"** 定义函数的方式几乎相差无几。
+      ```javascript
+          let sum = function(num1, num2) {
+              return num1 + num2;
+          };
+      ```
+    + (3)、最后一种定义函数的方式是 **"使用 Function 构造函数"**。 Function 构造函数
+      可以接收任意数量的参数，但最后一个参数始终都被看成是函数体，而前面的参数则枚举除了
+      新函数的参数。来看下面的例子：
+      ```javascript
+          // 不推荐，因为这种语法会导致解析两次代码(第一次是解析常规 ECMAScript 代码，
+          // 第二次是解析传入构造函数中的字符串)从而影响性能。不过这种语法对于理解 
+          // "函数是对象，函数名是指针" 的概念到时非常直观的。
+          let sum = new Function("num1", "num2", "return num1 + num2"); 
+      ```
+    + **Tip:通过 函数声明/函数表达式 定义的普通函数应看作是 Function 构造函数的直接实例**
+
+- 立即 调用/(执行) 函数表达式 (Immediately-Invoked Function Expression. IIFE) 
+ ```javascript
    // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明
    // 后面不能跟圆括号。
    // function(){
@@ -333,7 +358,7 @@
          // 如果传入的第一个参数为 null, 函数体内的 this 会指向默认的宿主对象，
          // 在浏览器中是 window. 参数 1，2，3 被放在数组中一起传入 func 函数，
          // 他们分别对应 func 参数列表中的 a,b,c。
-         func.apply(null, [1, 2, 3]);****
+         func.apply(null, [1, 2, 3]);
 
          // 有时候我们使用 call 或者 apply 的目的不在于指定 this 指向，
          // 而是另有用途，比如借用其他对象的方法，那么我们可以传入 null 来代替某个具体的对象:
@@ -359,8 +384,8 @@
             }
           ```
     + (2.) Function.prototype.bind
-        - 示例见: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识\
-                 第2章\P32-Function.prototype.bind实现.js
+        - 示例见: 《Javascript设计模式与编程实践》/第一部分--基础知识
+            /第2章-this_call_apply/2.2_apply-call-bind.js
     + (3.) 借用其他对象的方法
         - ```javascript
             (function() {

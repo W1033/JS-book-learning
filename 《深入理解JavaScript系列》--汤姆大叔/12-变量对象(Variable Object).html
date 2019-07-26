@@ -27,8 +27,8 @@
 
 
         // - ECMAScript 规范指出独立作用域只能通过 '函数(function)' 代码类型的执行上下文
-        // （Context）创建。也就是说，相对于于 C/C++ 来说，ECMAScript 里的 for 循环
-        // 并不能创建一个局部的上下文。
+        //  （Context）创建。也就是说，相对于于 C/C++ 来说，ECMAScript 里的 for 循环
+        //   并不能创建一个局部的上下文。
         for (var k in {a:1, b: 2}) {
             // k: a
             // k: b
@@ -174,11 +174,14 @@
         console.log("~~~~~~~~~");
         (function() {
             // 因为 a 在下面声明，根据变量作用域提升，所以这里输出的结果是定义（defined）了，
-            // 但是未初始化（undefined）
-            console.log("a", a);
+            // 但是未初始化（undefined）。[Tips: 把定义说成 defined， 而 undefined 
+            // 却说成 '未初始化' 不说成'未定义'；是的，就是这么奇怪，这个问题在 
+            // 《You-dont-know-js》中也被作者吐槽过，但这是 js 遗留的老问题了，所以不做
+            // 讨论，记得就行了。]
+            console.log("a", a);    // undefined
 
             b = 12;
-            console.log("b", b);    // 代码执行节点创建
+            console.log("b", b);    // 代码执行阶段创建
 
             var a = 20;
             console.log("Second a : ", a);

@@ -64,8 +64,8 @@ console.log(Object.getPrototypeOf(a) === Person.prototype);
  *      + 取得 arguments 类数组的第一项: Array.prototype.shift.call(arguments);
  * - (3)、把创建的 obj 对象，指向正确的原型。(此时如果不指定默认的原型是 Object.prototype)
  *      + Io 语言或者 js 语言中的原型链查找机制，每个对象至少要先记住它自己的原型。就 js
- *          真正的实现来说，其实并不能说对象有原型，而只能说对象的构造器有原型。对于 "对象把
- *          请求委托给它自己的原型"这句话，更好的说法是对象把请求委托给它的构造器(构造函数)的原型。
+ *        真正的实现来说，其实并不能说对象有原型，而只能说对象的构造器有原型。对于 "对象把
+ *        请求委托给它自己的原型"这句话，更好的说法是对象把请求委托给它的构造器(构造函数)的原型。
  * - (4)、借用外部传入的构造器给 obj 设置属性。
  *      + 这句是重点: 在第二章的 <2.2 call和apply> 方法中有详细的讲解: ES3给 Function
  *        的原型定义了2个方法: Function.prototype.call 和 Function.prototype.apply。

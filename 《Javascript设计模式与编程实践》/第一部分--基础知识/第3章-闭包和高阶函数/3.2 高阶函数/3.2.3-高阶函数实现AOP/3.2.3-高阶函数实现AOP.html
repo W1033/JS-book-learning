@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AOP 示例</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 76%;
+            margin: 20px auto;
+            min-height: 30rem;
+            background: lightsteelblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"></div>
+
+    <script type="text/javascript">
+        /**
+         * ### 3.2.3 高阶函数实现 AOP
+         * - AOP(面向切面编程)的主要作用是把一些跟核心业务逻辑模块无关的功能抽离出来，这些
+         *   跟业务逻辑无关的功能通常包括 "日志统计、安全控制、异常处理"等。 把这些功能抽离
+         *   出来之后，再通过"动态织入" 的方式掺入业务逻辑模块中。
+         *
+         * - 在 Java 语言中，可以通过反射和动态代理机制来实现 AOP 技术。 而在 js 这种
+         *   动态语言中，AOP 的实现更加简单，这是 js 与生俱来的能力。
+         * - 通常，在 js 中实现 AOP，都是把一个函数 "动态织入" 到另外一个函数之中，具体的
+         *   实现技术有很多，本节通过扩展 Function.prototype 来做到这一点。 代码如下:
+         **/
+
+        // 在 Function 构造函数的原型上扩展了 before 和 after 方法
+        Function.prototype.before = function (beforefn) {
+            // Function 构造函数的原型内，this 肯定是指构造函数的实例，当前即是 func
+            const _self = this;
+
+            // ƒ () { console.log(2); }
+            // console.log(this);
+
+            // 返回包含了原函数和新函数的 "代理" 函数
+            return function () {
+
+                // 执行到此时 return 把当前匿名函数放到全局作用域中（Global Scope）了，
+                // 所以 this 指向 window
+                console.log("this: ", this);
+
+                // - arguments 即当前 before 方法利用保存的传入的参数，从下面调用
+                //   可以看到是一个匿名函数
+
+                // - book note: 执行新函数，且保证 this 不被劫持，新函数接受的参数也会
+                //   被原封不动传入原函数，新函数在原函数之前执行。
+                beforefn.apply(this, arguments);    // 输出: 1
+
+
+                // - book note: 执行原函数并返回原函数的执行结果，并保证 this 不被劫持
+                return _self.apply(this, arguments);
+            }
+        };
+
+        Function.prototype.after = function (afterfn) {
+            const _self = this;
+            return function () {
+                let ret = _self.apply(this, arguments);
+
+                // 这里输出 ret 为 undefined 是为什么？ 不明白，待解答！！！
+                console.log("ret:", ret);
+
+                afterfn.apply(this, arguments);
+                return ret;
+            }
+        };
+
+
+        let func = function () {
+            console.log(2);
+        };
+
+        // - (1)、代码从这里开始执行，上面定义了 func 函数 (普通函数都是 Function
+        //   构造函数的实例)，此处初始化调用 Function 构造函数的原型上自定义的 
+        //   before/after 方法，把 before/after 内的匿名函数利用闭包放置到全局执行
+        //   环境(这里的知识可以看：《深入理解JavaScript系列》--汤姆大叔
+        //   /12-变量对象(Variable Object).html 和 同级文件夹中的 "12-1_理解
+        //   JavaScript的Scope.md");
+        //   说一下为什么在浏览器中打断点时两个已经在全局作用域中的匿名函数，先执行了一下
+        //   var let = _self.apply(this, arguments); 的问题，实际上这就是执行到
+        //   函数上下文的活动对象时，内部定义的 变量/函数 要首先提升作用域被推入到 栈/堆
+        //   中，这样当再次真正的执行函数内部的代码时，在给声明的 变量赋值并做其他操作。
+        func = func
+            .before(function () { console.log(1); })
+            .after(function () { console.log(3); });
+
+
+        // func = func.before(function () {console.log(1);});
+        // func = func.after(function () {console.log(3);});
+
+        func();
+    </script>
+</body>
+</html>

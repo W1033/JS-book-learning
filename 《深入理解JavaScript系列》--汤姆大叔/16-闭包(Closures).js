@@ -7,7 +7,7 @@
  *   特殊的名字和结构。
  */
 
-// 用命名函数表达式实现递归. Tip: 这种写法实现了尾调函数优化
+// 用命名函数表达式实现递归（和普通的写法相比，可能强调的是函数内部没有再次使用原始函数名。）.
 let factorial = (function f(num) {
     if (num <=1) {
         return 1;
@@ -17,7 +17,8 @@ let factorial = (function f(num) {
 });
 console.log(factorial(5));
 
-
+// 这里牵扯到 "12-变量对象(Variable Object).html" 中讲的 '作用域 [[Scope]]' 属性，
+// 实际上就是 foo() 函数保存了全局作用域的 '变量/函数/对象'，就是一个链式操作
 let x = 10;
 function foo() {
     console.log("x:", x);
