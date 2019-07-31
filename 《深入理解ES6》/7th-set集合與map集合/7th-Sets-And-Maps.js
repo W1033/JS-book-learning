@@ -19,9 +19,9 @@
  * */
 
 
-
 /** 20180602-P131: ES6 中的 Set 集合  **/
-//  ES6 中新增的 Set 類型是一種有序列表，其中含有一些相互獨立的非重複值，通過 Set 集合可以快速訪問其中的數據，更有效追踪各种离散值。
+//  ES6 中新增的 Set 類型是一種有序列表，其中含有一些相互獨立的非重複值，通過 Set 集合
+//  可以快速訪問其中的數據，更有效追踪各种离散值。
 
 /** 3. ES6 中的 Set 集合 --> P131: 创建 Set 集合并添加元素，删除元素 **/
 // (1).創建 Set 集合， 使用 add() 方法添加元素
@@ -59,6 +59,8 @@ set3.forEach(function (value, key, ownerSet) {
 
 // processor /'prəʊsesə/ n.处理器
 let set4 = new Set([1, 3, 5, 7]);
+// set4:  Set { 1, 3, 5, 7 }
+console.log("set4: ", set4);
 let processor = {
     output(value) {
         console.log(value);
@@ -69,7 +71,8 @@ let processor = {
             this.output(value);
         }, this)
 
-        // 这里可以用 ES6 的箭头函数简写为: 箭头函数从外围的 process() 函数读取 this 值，所以可以把 this.output() 方法正确得解析为 processor.output()
+        // 这里可以用 ES6 的箭头函数简写为: 箭头函数从外围的 process() 函数读取 this 值，
+        // 所以可以把 this.output() 方法正确得解析为 processor.output()
         // dataSet.forEach ( value => this.output ( value ) )
 
     }

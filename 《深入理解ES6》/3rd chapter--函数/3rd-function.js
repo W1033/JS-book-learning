@@ -69,7 +69,7 @@ console.log(Math.max(...values2, 0));   // 0
 let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
 console.log("x", x);
 console.log("y", x);
-console.log("...z", ...z);
+// console.log("...z", ...z);
 
 
 /** 20180428-P52: name 属性 */
@@ -162,22 +162,22 @@ let getName = () => "Nicholas";
 
 let sum2 = (sum1, sum2) => {
     return num1 + num2;
-}
+};
 
 let doNothing = () => {
 };
 
-let getTempItem = id => ({id: id, name: "Temp"});
-
-// P62 - 创建立即执行函数表达式
-let people = ((name) => {
-    return {
-        getName: function () {
-            return name;
-        }
-    }
-})("Nicholas");
-console.log(people.getName);
+// let getTempItem = id => ({id: id, name: "Temp"});
+//
+// // P62 - 创建立即执行函数表达式
+// let people = ((name) => {
+//     return {
+//         getName: function () {
+//             return name;
+//         }
+//     }
+// })("Nicholas");
+// console.log(people.getName);
 
 // P65 - 箭头函数和数组
 let numsArr = [1, 6, 4, 8, 2, -1, -20];
@@ -196,7 +196,7 @@ console.log(arrowFunction());   // 5
 // P69 - 如果利用尾调优化   factorial /fæk'tɔːrɪəl/ n.阶乘
 function factorial(n, p = 1) {
     if (n <= 1) {
-        return 1 * p;
+        return p;
     } else {
         let result = n * p;
 

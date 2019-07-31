@@ -54,16 +54,16 @@
   ```
 
 - 2、CSS 单位
-
-|  单位  |  描述  |
-|------ | ------ |
-| `%`  | 百分比 |
-| `px` | 像素。计算机屏幕上的一个点为 1px. |
-| `em` | 相对单位。相对于父元素计算，假如某个 p 元素为 `font-size:12px` ，在它内部的 span 标签，设置 `font-size: 2em`, 那么， 这时候的 span 字体大小为 12*2 = 24px |
-| `rem`| 相对单位。 相对于根元素 html 的 `font-size`. 例如 html 为 `font-=size: 12px`, 那么在其内的 div 设置为 `font-size: 2rem`, div 字体大小就为 24px.|
-| `rpx`| 微信小程序相对单位。1rpx = 屏幕宽度/750px. 在 750px 的设计稿上， 1rpx = 1px |
-| `pt` | 略 |
-| `ex` | 略 |
+    + `%`：百分比
+    + `px`：像素。计算机屏幕上的一个点为 1px. |
+    + `em`：相对单位。相对于父元素计算，假如某个 p 元素为 `font-size:12px`, 在它内部的 
+      span 标签，设置 `font-size: 2em`, 那么， 这时候的 span 字体大小为 12*2 = 24px。
+    + `rem`：相对单位。 相对于根元素 html 的 `font-size`. 例如 html 为 
+      `font-=size: 12px`, 那么其内的 div 设置为 `font-size: 2rem`, div 字体大小就
+       为 24px.
+    + `rpx`：微信小程序相对单位。1rpx = 屏幕宽度/750px. 在 750px 的设计稿上，1rpx = 1px
+    + `pt`：略
+    + `ex`：略
 
 
 
@@ -249,6 +249,19 @@
         console.log(person.name);
         console.log(person['name']);
     ```
+
+### 5.1 引用类型
+- 一般来说，访问对象属性时使用的都是点表示法，这也是很多面向对象语言中通用的语法。不过，在 
+  JavaScript 中也可以使用方括号表示法来访问对象的属性。在使用方括号语法时，应该将要访问的
+  **属性以字符串的形式放在方括号中**，如下面的例子所示。
+  ```javascript
+    let person = {
+        name : "Nicholas",
+        age : 29
+    };
+    console.log(person["name"]);    // "Nicholas"
+    console.log(person.name);   // "Nicholas"
+  ```
 
 ### 5.2 Array 类型
 - chapter5: 5.2.7 -- 位置方法 ES5 为数组实例添加了两个位置方法： indexOf() 和 
