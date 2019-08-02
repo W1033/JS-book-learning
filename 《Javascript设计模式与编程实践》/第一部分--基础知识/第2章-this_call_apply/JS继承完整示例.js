@@ -128,4 +128,3 @@ let square2 = new Square2(3);
 console.log(square2.getArea());
 console.log(square2 instanceof Square2);
 console.log(square2 instanceof Rectangle2);
-

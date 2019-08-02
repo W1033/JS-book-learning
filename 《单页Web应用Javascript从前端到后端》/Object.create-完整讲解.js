@@ -47,13 +47,16 @@ var secondPrisoner3 = makePrisoner("Sam", "2BC");*/
 /*----------------------------------------------*/
 
 
-/** MDN -- Object.create();
- Object.create()方法会使用指定的原型对象及其属性去创建一个新的对象。(这里的示例并没有上面《单页Web应用》中讲的易懂)
- 1. 语法:  Object.create(proto, [propertiesObject]):
- (1.) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要要赋值给构造函数的原型的对象)
- (2.) propertiesObject: 可选。该参数对象是一组属性和值，该对象的属性名称将是新创建的对象的属性名称，值是属性
- 描述符(这些属性描述符的结构与Object.defineProperties()的第二个参数一样)。注意：该参数对象不能是 undefined,
- 另外只有对象中自身拥有的不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
+/**
+ * ## MDN -- Object.create();
+ * > Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象。
+ * - 1. 语法: Object.create(proto, [propertiesObject]):
+ *   + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要要赋值给构造函数的
+ *     原型的对象)
+ *   + (2) propertiesObject: 可选。该参数对象是一组属性和值，该对象的属性名称将是新创建
+ *     的对象的属性名称，值是属性描述符(这些属性描述符的结构与 Object.defineProperties()
+ *     的第二个参数一样)。注意：该参数对象不能是 undefined,另外只有对象中自身拥有的
+ *     不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
  */
 
 //2. 使用Object.create方法实现类式继承
@@ -80,8 +83,10 @@ Rectangle.prototype.constructor = Rectangle;
 
 var rect = new Rectangle();
 
-console.log("Is rect an instance of Rectangle?(rect是Rectangle的实例吗) ", rect instanceof Rectangle);
-console.log("Is rect an instance of Shape?(rect是Shape的实例吗?) ", rect instanceof Shape);
+console.log("Is rect an instance of Rectangle?(rect是Rectangle的实例吗) ",
+    rect instanceof Rectangle);
+console.log("Is rect an instance of Shape?(rect是Shape的实例吗?) ",
+    rect instanceof Shape);
 rect.move(1, 2);
 
 /**
@@ -89,35 +94,6 @@ rect.move(1, 2);
  示例代码见: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create
  */
 
-
-/**描述:可以让call()中的对象调用当前对象所拥有的function.可以使用call()来实现继承:写一个方法然后让另外一个新的对象来继承他
- (而不是在新对象中在写一次这个方法) <br/>**示例:使用call方法调用父构造函数 */
-
-function Product(name, price) {
-    this.name = name;
-    this.price = price;
-    if (price < 0) {
-        throw RangeError("Cannot create product" + this.name + "with a negative price")
-    }
-}
-
-function Food(name, price) {
-    Product.call(this, name, price);
-    this.category = "food";
-}
-
-/*---上面Food()构造函数调用Product()构造函数 "等同于"(=) 下面这个写法---*/
-
-/*
-function Food(name, price){
-   this.name = name;
-   this.price = price;
-   if(price < 0){
-       throw RangeError("Cannot create product" + this.name + "with a negative price")
-   }
-   this.category = "food";
-}
-*/
 
 
 
