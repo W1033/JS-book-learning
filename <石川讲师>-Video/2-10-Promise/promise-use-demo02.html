@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise 使用示例2 -- 石川</title>
+    <script src="ajax.js"></script>
+<!--    <script src="jquery-v3.1.0.js"></script>-->
+</head>
+<body>
+    <script type="text/javascript">
+        // let p01 = new Promise(function(resolve, reject) {
+        //     ajax({
+        //         url: "data/arr.txt",
+        //         success(arr) {
+        //             resolve(arr);
+        //         },
+        //         error(err) {
+        //             reject(err);
+        //         }
+        //     });
+        // });
+        //
+        // let p02 = new Promise((resolve, reject) => {
+        //     ajax({
+        //         url: "data/data.json",
+        //         success(json) {
+        //             resolve(json);
+        //         },
+        //         error(err) {
+        //             reject(err);
+        //         }
+        //     })
+        // });
+
+        let createPromise = function(url) {
+            return new Promise((resolve, reject) => {
+                ajax({
+                    url: url,
+                    success(json) {
+                        resolve(json);
+                    },
+                    error(err) {
+                        reject(err);
+                    }
+                })
+            })
+        };
+
+        Promise.all([
+            // p01, p02
+            createPromise('data/arr.txt'),
+            createPromise('data/data.json')
+
+        ]).then(function(all) {
+            let [arr, data] = all;
+            console.log('arr: ' +arr);
+            console.log('data: ' + data);
+        }, function(err) {
+            console.log(`失败： ${err}`);
+        });
+
+
+    </script>
+</body>
+</html>

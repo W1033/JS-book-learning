@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>generator</title>
+    <script src="../2-10-Promise/jquery-v3.1.0.js"></script>
+    <script src="runner.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        runner(function *() {
+           console.log("欢迎");
+
+           let arr = yield $.ajax({
+               url: '../2-10-Promise/data/arr.txt',
+               dataType: 'json'
+           });
+
+           console.log("接收到了数组： ", arr);
+
+           let json = yield $.ajax({
+               url: '../2-10-Promise/data/data.json',
+               dataType: 'json'
+           });
+
+           console.log("接受到了JSON：", json);
+
+           console.log("数据都读完了！");
+
+        });
+
+
+        // 《深入理解ES6》-- 的示例
+        (function() {
+            // function *createIterator(items) {
+            //     for (let i =0; i< items.length; i++) {
+            //         yield items[i];
+            //     }
+            // }
+            //
+            // let arr = [1, 2, 3];
+            // let iterator = createIterator(arr);
+            //
+            // for (let num of arr) {
+            //     console.log("调用: ", iterator.next());
+            // }
+        })();
+    </script>
+</body>
+</html>

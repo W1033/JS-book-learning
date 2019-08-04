@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise 使用示例 -- 石川</title>
+    <script src="ajax.js"></script>
+<!--    <script src="jquery-v3.1.0.js"></script>-->
+</head>
+<body>
+    <script type="text/javascript">
+        let promise = new Promise(function(resolve, reject) {
+            ajax({
+                url: "data/arr.txt",
+                success(arr){
+                    resolve(arr);
+                },
+                error(err) {
+                    reject(err);
+            }
+
+            })
+        }).then(function(data) {
+            console.log(`成功接收数据： ${JSON.stringify(data)}`);
+        }, function(err) {
+            console.log(`失败： ${err}`);
+        });
+
+
+
+    </script>
+</body>
+</html>
