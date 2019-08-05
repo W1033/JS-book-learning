@@ -1,4 +1,3 @@
-//  Create date: 201807. edit: 201906
 /**
  * # 第 8 章: 迭代器 (Iterator) 和生成器 (Generator)
  *  > 用循环语句迭代数据时，必须要初始化一个变量来记录每一次迭代在数据集合中的位置，而在许多
@@ -21,32 +20,34 @@
  */
 
 // ES5 - 创建迭代器:  createIterator-es5.html
-function es5CreateIterator(items) {
-    let i = 0;
-    return {
-        next: function () {
-            let done = (i >= items.length);
-            let value = !done ? items[i++] : undefined;
+(function() {
+    function es5CreateIterator(items) {
+        let i = 0;
+        return {
+            next: function () {
+                let done = (i >= items.length);
+                let value = !done ? items[i++] : undefined;
 
-            return {
-                done: done,
-                value: value
+                return {
+                    done: done,
+                    value: value
+                }
             }
         }
     }
-}
 
-let es5Iterator = es5CreateIterator([1, 2, 3]);
+    let es5Iterator = es5CreateIterator([1, 2, 3]);
 
-console.log(es5Iterator.next());   // {done: false, value: 1}
-console.log(es5Iterator.next());   // {done: false, value: 2}
-console.log(es5Iterator.next());   // {done: false, value: 3}
-console.log(es5Iterator.next());   // {done: true, value: undefined}
+    console.log(es5Iterator.next());   // {done: false, value: 1}
+    console.log(es5Iterator.next());   // {done: false, value: 2}
+    console.log(es5Iterator.next());   // {done: false, value: 3}
+    console.log(es5Iterator.next());   // {done: true, value: undefined}
+})();
 
 
 /**
  * ## 什么是生成器(generator)?:
- *  > 生成器是一种返回迭代器(iterator)的函数。生成器函数由放在 function 关键字之后的一个
+ *  > 生成器是一种返回迭代器 (iterator) 的函数。生成器函数由放在 function 关键字之后的一个
  *    星号 (*) 来表示，并能使用新的 yield 关键字。将星号紧跟在 function 关键字之后，或是在
  *    中间留出空格，都是没问题的，如下例:
  *  - (1)、生成器函数表达式
@@ -266,8 +267,9 @@ for (let [key, value] of data) {
 }
 
 /** 内置的迭代器 --> 字符串的迭代器 **/
-// ES5标准化了字符串的方括号表示法，用于访问其中的字符(即: 使用 text[0] 来获取第一个字符，以此类推)。
-// 不过方括号标识发工作在码元而非字符上，因此它不能被用于正确访问双字节的字符，如此例演示:
+// - ES5标准化了字符串的方括号表示法，用于访问其中的字符(即: 使用 text[0] 来获取
+//   第一个字符，以此类推)。不过方括号标识发工作在码元而非字符上，因此它不能被用于正确访问
+//   双字节的字符，如此例演示:
 let message = "A    B";
 for (let i = 0; i < message.length; i++) {
     console.log(message[i]);
@@ -279,9 +281,10 @@ for (let i = 0; i < text.length; i++) {
     console.log(text[i]);
 }
 
-// 由于双字节字符被当做2个分离的码元来对待，此处的输出在 A 与 B 之间就有 4 个空行。 ES6 旨在为 Unicode
-// 提供完全支持(相见第二章markdown)，字符串的默认迭代器就是解决字符串迭代问题的一种尝试。这样一来，借助
-// 字符串默认迭代器就能处理字符而不是码元。 把上面的循环改为 for-of 得到合理的输出
+// - 由于双字节字符被当做2个分离的码元来对待，此处的输出在 A 与 B 之间就有 4 个空行。
+//   ES6 旨在为 Unicode 提供完全支持(相见第二章markdown)，字符串的默认迭代器就是解决
+//   字符串迭代问题的一种尝试。这样一来，借助字符串默认迭代器就能处理字符而不是码元。
+//   把上面的循环改为 for-of 得到合理的输出
 for (let c of text) {
     console.log(c);
 }
@@ -294,8 +297,8 @@ for (let c of text) {
 
 
 /** ## 扩展运算符(...)与非数组的可迭代对象 **/
-// 你可以不限次数地在数组字面两种使用扩展运算符，而且可以在任意位置用扩展运算符将了迭代对象的
-// 多个项插入到数组，这些项在新数组中将会出现在扩展运算符对应的位置:
+// - 你可以不限次数地在数组字面中使用扩展运算符，而且可以在任意位置用扩展运算符将可迭代对象
+//   的多个项插入到数组，这些项在新数组中将会出现在扩展运算符对应的位置:
 let smallNumbers = [1, 2, 3],
     bigNumbers = [100, 101, 102],
     allNumbers = [0, ...smallNumbers, ...bigNumbers];
@@ -305,29 +308,50 @@ console.log(allNumbers);
 /** ## 迭代器高级功能 **/
 
 /** 迭代器高级功能 --> 传递参数给迭代器 **/
-// 你可以通过 next() 方法向迭代器传递参数。 当一个参数被传递给 next() 方法时，该参数就会成为生成器
-// 内部 yield 语句的值。 这种能力对于更多高级功能(例如异步编程)来说是非常重要的。下面是个基本范例:
-function* createIte() {
-    let first = yield 1;
-    let second = yield first + 2; // 4 + 2
-    yield second + 3;   // 5 + 3
-}
+// - 你可以通过 next() 方法向迭代器传递参数。 当一个参数被传递给 next() 方法时，该参数
+//   就会成为生成器 内部 yield 语句的值。 这种能力对于更多高级功能(例如异步编程)来说是
+//   非常重要的。下面是个基本范例:
+(function() {
+    function *createIterator() {
+        let first = yield 1;
+        let second = yield first + 2;
+        yield second + 3;
+    }
+    let iterator = createIterator();
 
-let ite = createIte();
-// 对于 next() 的首次调用是一个特殊情况，传给它的任意参数都会被忽略。由于传递给 next() 的参数会成为 yield
-// 语句的值，该 yield 语句指的是上次生成器中断执行处的语句; 而 next() 方法第一次被调用时，生成器函数才
-// 刚刚开始执行，没有所谓的 "上一次中断处的 yield 语句" 可供赋值。因此在第一次调用 next() 时，不存在任何
-// 向其传递参数的理由。
-console.log(ite.next(2));   // { value: 1, done: false }
-console.log(ite.next(4));   // { value: 6, done: false }
-console.log(ite.next(5));   // { value: 8, done: false }
-// 生成器内只有 yield first 和 yield second 现在传第三个参数 8 但函数内找不到对应 yield 语句
-// 所以 value = undefined
-console.log(ite.next(8));   // { value: undefined, done: true }
-console.log(ite.next());    // { value: undefined, done: true }
+    // - (1)
+    console.log(iterator.next());
+    // - (2)
+    console.log(iterator.next(4));
+    // - (3)
+    console.log(iterator.next(5));
+
+    /**
+     * - (1). 我们可以通过 next() 方法向迭代器传递参数。当一个参数被传递给 next 方法时，
+     *   该参数就会成为生成器内部 yield 语句的值。但对于 next() 的首次调用是一个特殊情况，
+     *   传递给它的任意参数都会被忽略。由于传递给 next() 的参数会成为 yield 语句的值，该
+     *   yield 语句指的是上次生成器中断执行处的语句；而 next() 方法第一次被调用时，生成器
+     *   函数才刚刚开始执行，没有所谓的 "上一次中断处的 yield 语句" 可供复制。因此在第一次
+     *   调用 next() 时，不存在任何向其传递参数的理由。
+     *
+     * - (2). 第 2 次调用 next() 时， 4 作为参数被传递进去，这个 4 最终被复制给了生成器
+     *   函数内部的 first 变量。在包含赋值操作的第一个 yield 语句中，表达式右侧在第一次
+     *   调用 next() 时被计算，而表达式左侧则在第二次调用 next() 方法时、并在生成器函数
+     *   继续执行前被计算。由于第二次调用 next() 传入了 4， 这个值就被赋给了 first 变量，
+     *   之后生成器继续执行。
+     *
+     * - (3). 第 2 个 yield 使用了第一个 yield 的结果并加上了 2，也就是返回了一个 6. 当
+     *   next() 第 3 次被调用时，传入了参数 5. 这个值被赋给了 second 变量，并随后用在了
+     *   第 3 个 yield 语句中，返回了 8。
+     *
+     */
+
+})();
 
 
 /** 迭代器高级功能 --> 在迭代器器中抛出错误 **/
+
+
 /** 迭代器高级功能 --> 生成器的 Return 语句 **/
 function* createReturnIte() {
     yield 1;
@@ -342,8 +366,9 @@ console.log(returnIte.next());
 
 
 /** 迭代器高级功能 --> 生成器委托 **/
-// 在某些情况下，将2个迭代器的值合并在一起会更有用。生成器可以用星号 (*) 配合 yield 这以特殊形式来委托
-// 其他的迭代器。正如生成器的定义，星号出现在何处是不重要的，只要落在 yield 关键字与生成器函数之间即可。
+// - 在某些情况下，将2个迭代器的值合并在一起会更有用。生成器可以用星号 (*) 配合 yield
+//   这以特殊形式来委托其他的迭代器。正如生成器的定义，星号出现在何处是不重要的，只要落在
+//   yield 关键字与生成器函数之间即可。
 function* createNumberIterator() {
     yield 1;
     yield 2;
@@ -373,8 +398,8 @@ console.log(combinedIte.next());
 
 /** ## 异步任务运行 **/
 /** 异步任务运行 --> 一个简单的任务运行器 **/
-// 由于 yield 能停止运行，并在重新开始运行前等待 next() 方法被调用，你就可以在没有回调函数的情况下
-// 实现异步调用。首先，你需要一个能够调用生成器并启动迭代器的函数，就像这样:
+// - 由于 yield 能停止运行，并在重新开始运行前等待 next() 方法被调用，你就可以在没有
+//   回调函数的情况下实现异步调用。首先，你需要一个能够调用生成器并启动迭代器的函数，像这样:
 function run(taskDef) {
     // 创建迭代器，让他在别处可用
     let task = taskDef();
@@ -407,8 +432,9 @@ function run(taskDef) {
 }
 
 let fs = require("fs");
-// 这个 readFile() 方法接受单个参数，即文件名，并返回一个能执行回调函数的函数。次回调函数会被直接传递给
-// fs.readFile() 方法， 后者会在操作完成后执行回调。
+// - 这个 readFile() 方法接受单个参数，即文件名，并返回一个能执行回调函数的函数。
+//   此回调函数会被直接传递给 fs.readFile() 方法， 后者会在操作完成后执行回调。
+//   接下来你就可以使用 yield 来运行这个任务
 function readFile(filename) {
     return function (callback) {
         fs.readFile(filename, callback);
