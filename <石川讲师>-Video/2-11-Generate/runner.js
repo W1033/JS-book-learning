@@ -1,3 +1,5 @@
+// 基本的 async 用法的封装
+
 function runner(_gen) {
     return new Promise((resolve, reject) => {
         let gen = _gen();

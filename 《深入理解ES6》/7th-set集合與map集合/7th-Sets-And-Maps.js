@@ -29,7 +29,7 @@ let set = new Set();
 set.add(5);
 set.add("5");
 set.add(5);     // 使用 add() 方法传入相同的值作为参数会直接被忽略
-console.log(set.size);      // 2
+console.log("set: ", set);      // 2
 
 let set2 = new Set(),
     key1 = {},
@@ -83,6 +83,7 @@ processor.process(set4);
 /** 3. ES6 中的 Set 集合 --> P136: 将 set 集合转换成数组 **/
 let set5 = new Set([1, 2, 3, 3, 3, 4, 5]),
     arr = [...set5];
+console.log("set5: ", set5);
 console.log(arr);           // [1, 2, 3, 4, 5]
 
 // 创建一个无重复值的新数组
@@ -92,7 +93,7 @@ function eliminateDuplicates(items) {
 
 let numbers = [1, 2, 3, 4, 4, 4, 5],
     noDuplicates = eliminateDuplicates(numbers);
-console.log(noDuplicates);   // [1, 2, 3, 4, 5]
+console.log('noDuplicates: ', noDuplicates);   // [1, 2, 3, 4, 5]
 
 
 /** 3. ES6 中的 Set 集合 --> P136: Weak Set:

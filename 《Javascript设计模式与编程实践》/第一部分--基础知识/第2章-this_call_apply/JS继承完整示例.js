@@ -58,22 +58,53 @@ Son.prototype.sayAge = function () {
     console.log(this.age);
 };
 
-console.log('~~~~~~~~~' + '\n');
-
 const instance1 = new Son("Nicholas", 29);
 instance1.colors.push("black");
 console.log(instance1.colors);
 instance1.sayName();
 instance1.sayAge();
 
-console.log('');
-
-const instance2 = new Son("Greg", 27);
-console.log(instance2.colors);
-instance2.sayName();
-instance2.sayAge();
-
 console.log('~~~~~~~~~' + '\n');
+
+
+/** ~~~~~~~~~ js高程- 6.3.6 寄生组合式继承 ~~~~~~~~~ */
+(function() {
+    // Douglas Crockford
+    function object(o) {
+        function F(){}
+        F.prototype = o;
+        return new F();
+    }
+    function inheritPrototype(subType, superType) {
+        // - 创建超类型原型的一个副本
+        let prototype = object(superType.prototype);
+        // - 为创建的副本添加 constructor 属性，指向子构造函数，
+        //   弥补因重写原型而失去的默认 constructor 属性。
+        prototype.constructor = subType;
+        // 将创建的 superType 对象的实例赋值给子类型的原型
+        subType.prototype = prototype;
+    }
+
+    function SuperType(name) {
+        this.name = name;
+        this.colors = ['red', 'blue', 'green'];
+    }
+    SuperType.prototype.sayName = function() {
+        console.log(this.name);
+    };
+    function SubType(name, age) {
+        SuperType.call(this, name);
+        this.age = age;
+    }
+    inheritPrototype(SubType, SuperType);
+    SubType.prototype.sayAge = function() {
+        console.log(this.age);
+    };
+    let sub = new SubType('Jone', 30);
+    sub.colors.push('yellow');
+    console.log(sub.colors);
+    sub.sayAge();
+})();
 
 
 /** ~~~~~~~~~ 《深入理解 ES6》- ES5 继承示例  ~~~~~~~~~ */
@@ -90,6 +121,10 @@ function Square(length) {
     Rectangle.call(this, length, length);
 }
 
+// - Note: 《JS高程》--6.3.4-原型式继承-P170：ES5 通过新增 Object.create(): 方法规规范
+//   化了原型式继承。这个方法接收 2 个参数: (1).用作新对象原型的对象 和 (2).一个(可选的)
+//   为新对象定义额外属性的对象。在传入一个参数的情况下 Object.create() 与 Object() 方法
+//   的行为相同。
 Square.prototype = Object.create(Rectangle.prototype, {
     constructor: {
         // 这种写法等于: Square.prototype.constructor = Square
