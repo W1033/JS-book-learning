@@ -1,17 +1,16 @@
-/* Date: 2017-12-17 */
 
-// 20180502 - P90 许多语言都通过极少量的语法实现了结构功能，而 ES6 中的实现实际上利用了你早已熟悉的语法: **对象和数组字面量的语法**。
+// - P90 许多语言都通过极少量的语法实现了结构功能，而 ES6 中的实现实际上利用了你早已熟悉
+//   的语法: **对象和数组字面量的语法**。
 
 
-/**
- * ------ 201805-P90: 对象解构 ------
- * */
+/** - P90: 对象解构 */
 let node = {
     type: "Identifier",
     name: "foo"
 };
-// 注意: 如果使用 var, let 或 const 解构声明变量，则必须提供初始化程序(也就是等号右侧的值)。
-// 如果不使用结构功能，var 和 let 不需要初始化值，但是 const (constant) 是无论如何都要提供初始化程序。
+// - 注意: 如果使用 var, let 或 const 解构声明变量，则必须提供初始化程序(也就是等号右侧的值)。
+// - 如果不使用结构功能，var 和 let 不需要初始化值，但是 const (constant) 是无论如何
+//   都要提供初始化程序。
 let {type, name} = node;
 console.log(type);
 console.log(name);
@@ -26,7 +25,8 @@ let obj = {
 let type2 = "Literal",
     name2 = "5";
 
-// 使用解构语法为多个变量赋值: obj 对象内的属性名要和解构赋值左侧的变量同名。(注意: 外围的小括号是一定要的)
+// - 使用解构语法为多个变量赋值: obj 对象内的属性名要和解构赋值左侧的变量同名。
+//   (注意: 外围的小括号是一定要的)
 ({type2, name2} = obj);
 console.log("type2",type2);
 console.log("name2", name2);
@@ -71,16 +71,15 @@ let local = {
         }
     }
 };
-// 含义: 找到 local 对象下的 start属性后，应当深入一层继续查找 line 属性。所有冒号前的标识符都代表
-// 在对象中的检索位置，其右侧为被赋值的变量名；如果冒号后是花括号，则意味着要赋值的最终只嵌套在对象内部更深层的层级中。
+// - 含义: 找到 local 对象下的 start属性后，应当深入一层继续查找 line 属性。所有冒号前的
+//   标识符都代表在对象中的检索位置，其右侧为被赋值的变量名；如果冒号后是花括号，则意味着要
+//   赋值的最终只嵌套在对象内部更深层的层级中。
 let {start: {line}} = local;
 console.log(line.horizontal);   // first horizontal line
 console.log("---------- ----------");
 
 
-/**
- * ------ 201805-P97: 数组解构 ------
- * */
+/** - P97: 数组解构 */
 let colorArr = ["red", "green", "black"];
 let [fir, sec] = colorArr;
 console.log(fir);
@@ -91,7 +90,7 @@ let [, , thi] = colorArr;
 console.log(thi);
 
 
-/** P97: 数组解构 ---> 解构赋值 */
+/** - P97: 数组解构 ---> 解构赋值 */
 // ES5 交换变量
 let a = 1,
     b = 2,
@@ -110,7 +109,7 @@ console.log(c);     // 2
 console.log(d);     // 1
 
 
-/** P97: 数组解构 ---> 嵌套数组解构 */
+/** - P97: 数组解构 ---> 嵌套数组解构 */
 let colors = ["red", ["green", "lightgreen"], "blue"];
 let [firstColor, [, thirdColor]] = colors;
 console.log(firstColor);    // red
@@ -125,7 +124,8 @@ console.log(restAnimals.length);
 console.log(restAnimals[0]);
 
 
-// ES5 通过 concat()方法克隆数组: concat()方法设计初衷是连接2个数组，如果调用时不传递参数就会返回当前数组的副本。
+// - ES5 通过 concat()方法克隆数组: concat()方法设计初衷是连接2个数组，如果调用时
+//   不传递参数就会返回当前数组的副本。
 let arr1 = ["purple", "yellow", "white"];
 let arr2 = arr1.concat();
 console.log(arr2);          // [ 'purple', 'yellow', 'white' ]
@@ -135,9 +135,7 @@ console.log(cloneArr1);     // [ 'purple', 'yellow', 'white' ]
 console.log("------------------");
 
 
-/**
- * ------ 20180503-P101: 混合解构 ------
- * */
+/** - P101: 混合解构 */
 let nodeObj = {
     type: "identifier",
     name: "foo",
@@ -153,8 +151,9 @@ let nodeObj = {
     },
     range: [0, 3]
 };
-/* P101: 解构模式中的 loc: 和 range: 代表他们在 nodeObj 对象中所处的位置(也就是该对象的属性)。
-   当使用混合解构的语法时，则可以从 nodeObj 提取任意想要的信息。 */
+
+// - P101: 解构模式中的 loc: 和 range: 代表他们在 nodeObj 对象中所处的位置
+//   (也就是该对象的属性)。当使用混合解构的语法时，则可以从 nodeObj 提取任意想要的信息。
 let {loc: {begin}, range: [startIndex]} = nodeObj;
 console.log(begin.line);        // 1
 console.log(begin.column);      // 1
@@ -162,10 +161,9 @@ console.log(startIndex);        // 0
 console.log("------------------");
 
 
-/**
- * ------ 20180503-P102: 解构参数 ------
- * */
-// 解构参数支持本章中已讲解的所有解构特性。 可以使用默认值，混合对象和数组的解构模式及非同名变量存储提取出来的信息。
+/** - P102: 解构参数 */
+// - 解构参数支持本章中已讲解的所有解构特性。 可以使用默认值，混合对象和数组的解构模式及
+//   非同名变量存储提取出来的信息。
 function setCookie(name, value, {secure, path, domain, expires}) {
     // 设置 cookie 的代码
 }

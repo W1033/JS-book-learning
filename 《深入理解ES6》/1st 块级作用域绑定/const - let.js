@@ -1,26 +1,25 @@
-/** Creation Date 2017-12-15 22:52 */
+// - constant /'kɒnst(ə)nt/  n.常数，常量  adj.不变的，恒定的
 
-// constant /'kɒnst(ə)nt/  n.常数，常量  adj.不变的，恒定的
+// - const 和 let : IE11开始支持
+// - const 声明的是常量，其值一旦被设定后不可改变。因此，每个通过 const 声明的常量必须
+//   进行初始化。
+// - const 与 let 声明的都是块级标识符，所以常量也只有在当前代码块内有效，一旦执行到块外
+//   会立即销毁。 常量同样也不会被提升到作用域顶部。
 
-// const 和 let : IE11开始支持
-// const 声明的是常量，其值一旦被设定后不可改变。因此，每个通过const声明的常量必须进行初始化。
-// const 与 let 声明的都是块级标识符，所以常量也只有在当前代码块内有效，一旦执行到块外
-// 会立即销毁。 常量同样也不会被提升到作用域顶部。
-
-/*if(condition) {
+/* if (condition) {
     const maxItems = 5;
 }*/
 // 此处无法访问 maxItems
 
-// 用 const 声明不允许修改绑定，但允许修改值。这也就意味着用 const 声明对象后，可以修改
-// 该对象的属性值。 例如:
+// - 用 const 声明不允许修改绑定，但允许修改值。这也就意味着用 const 声明对象后，
+//   可以修改该对象的属性值。 例如:
 const person = {
     name: "Nicholas",
 };
 person.name = "Greg";
 
 
-// 循環中的函數
+// - 循环中的函数
 let funcs = [];
 let a = 0;
 for (; a < 10; a++) {
@@ -35,10 +34,10 @@ for (; a < 10; a++) {
 
 funcs.forEach(function (item) {
     item();
-})
+});
 
 
-// 20180426 add: P9 循环中的 let 声明
+// - P9 循环中的 let 声明
 let arr = [];
 for (let i = 0; i < 10; i++) {
     arr.push(function () {

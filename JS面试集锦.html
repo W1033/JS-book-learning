@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+          maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>面试题集锦</title>
+</head>
+<body>
+    <script type="text/javascript">
+
+        // 判断一个对象是否为数组
+        function isArray(arg) {
+            if (arg && typeof arg === "object") {
+                return Object.prototype.toString.call(arg) === "[object Array]";
+            }
+            return false;
+        }
+
+
+        console.log("****************************************" + '\n');
+
+        // - 数组的 splice() 方法: js高程 5.2.6
+        let myArr = [1, 2, 3, 4, 5];
+        // - splice(): 參數1: 要删除的第一项的位置  參數2: 删除的项数
+        //   从索引为 1 開始刪除 3 项，删除后把 5,2,1 插入
+        myArr.splice(1, 3, 5, 2, 1);         // 输出: [1, 5, 2, 1, 5]
+        console.log(myArr);
+
+
+        console.log("****************************************" + '\n');
+
+        const a = {};
+        const b = {key: 'b'};
+        const c = {key: 'c'};
+        a[b] = 123;
+        a[c] = 456;
+        console.log(a[b]);
+
+
+        console.log("****************************************" + '\n');
+
+        Function.prototype.bind = function() {
+            // 保存原函数
+            let self = this;
+            // 需要绑定的 this 上下文
+            let context = [].shift.call(arguments);
+            // 剩余的参数转成数组
+            let args = [].slice.call(arguments);
+            return function() {
+                // 执行新的函数的时候，会把之前传入的 context 当作新参数体内的 this
+                // 并且组合两次分别传入的参数，作为新函数的参数
+                return self.apply(context, [].concat.call(args, [].slice.call(arguments)))
+            }
+        };
+
+        const person = { name: "Lydia" };
+        function sayHi(age) {
+            console.log(`${this.name} is ${age}`);
+        }
+
+        // sayHi.call(person, 21);
+        sayHi.bind(person, 21)();
+
+
+        console.log("****************************************" + '\n');
+
+        /**
+         * - css 实现垂直居中的方法？
+         *   + (1)、绝对定位 + margin-top/margin-left 设为自身宽度的一半 + 负号(-)
+         *   + (2)、绝对定位 + left/top 设为自身宽度的一半 + 百分号(%)
+         *   + (3)、flex 布局 (display:flex)
+         *   + (4)、table -> table-cell 布局
+         */
+
+        /**
+         * - 网页配置样式的三种方式：
+         *   + (1)、内联 (行内) 样式 [Inline Style]
+         *      - <img src="img.jpg" style="width:100px; height: 40px;">
+         *   + (2)、内嵌样式 [Embedding Style]
+         *      - <style>...</style>
+         *   + (3)、外联 (引用) 样式 [Linking Style]
+         *      - <link href="xx.css" rel="stylesheet" type="text/css">
+         *   + Note：还有一种使用 @import 引入样式
+         *      - @import [url (] "xx.css" [) ]
+         *
+         * - css 各种选择器的优先级规则？
+         *   + !important
+         *   + > 内联样式
+         *   + > id 选择器
+         *   + > 伪类 (:hover)        --> a:hover {}
+         *   + > 属性选择器            --> input[type="text"] {}
+         *   + > 类 选择器            --> .loading {}
+         *   + > 元素 (类型) 选择器    --> h1{}
+         *   + > 通用选择器 (*)
+         *
+         * - css 样式优先级计算规则：
+         *   + 元素，伪元素：   +1 (0,0,0,1)
+         *   + 类、伪类、属性： +10 (0,0,1,0)
+         *   + ID：          +100 (0,1,0,1)
+         *   + 内联样式：     +1000 (1,0,0,0)
+         */
+
+        (function() {
+            var a = 'a';
+            function A() {
+                console.log(a); // undefined
+                var a = 'b';
+                console.log(a); // b
+            }
+            // A();
+
+            function A2() {
+                // console.log(a); // ReferenceError 引用错误
+                let a = 'b';
+                console.log(a);
+            }
+            // A2();
+
+
+            // - 4.以下函数执行的执行结果是啥？
+            let obj = {
+                name: "obj",
+                hello() {
+                    console.log(this.name);
+                }
+            };
+            // 直接访问 obj 的 hello() 方法
+            // obj.hello();    // obj
+
+            // 把 obj.hello 方法的指针赋值给 h，此时 hello 会放到全局上下文中，
+            // 但是 全局上下文 window 中并没有声明 name 属性
+            let h = obj.hello;
+            // h();    // undefined;
+
+
+            // - 4-2
+            let obj02 = {
+                name: 'obj',
+                hi() {
+                    // 箭头函数不会绑定 this 值，会访问上一级的 this
+                    return () => {
+                        console.log(this.name);
+                    }
+                }
+            };
+            let h2 = obj02.hi();
+            // h2();   // obj
+
+            // obj02.hi().call(obj, window);   // obj
+
+
+            // - 5 请写一个闭包？ A:「函数」和「函数内部能访问到的变量」（也叫环境）的总和，
+            //   就是一个闭包。
+            //   + 示例 1
+            function plus(num1, num2) {
+                let total = 0;
+                return function() {
+                    return total = num1 + num2;
+                }
+            }
+            // console.log(plus(3, 6)());
+
+            //   + 示例 2
+            function foo() {
+                let local = 1;
+                function bar() {
+                    local++;
+                    return local;
+                }
+                return bar;
+            }
+            let func = foo();
+            // func();
+
+
+            // - 6.请把下下面的数组扁平化，再去重？
+            let nums = [1, [1, [2, [3, [4]]]]];
+            let result = nums.toString().split(',').concat();
+
+            // ES5 for 循环去重
+            let save = [];
+            for (let i = 0; i< result.length; i++) {
+               if (save.indexOf(result[i]) === -1) {
+                   save.push(result[i]);
+               }
+            }
+
+            // ES6 利用 展开运算符(...) 和 new Set() 去重
+            let save02 = [...new Set(result)];
+            console.log("save02: ", save02);
+
+            console.log(save);  // ["1", "2", "3", "4"]
+
+
+            // - 7.提取一下字符串中的所有数字 (正则)
+            let str = 'today is 2019-07-19';
+            let reg = /(\d{4})-(\d{2})-(\d{2})/;
+            let splicing = "";
+            if (reg.test(str)) {
+                splicing += RegExp.$1 + RegExp.$2 + RegExp.$3;
+            }
+            console.log(splicing);  // 20190719
+
+
+
+            // - 8.一下函数执行的结果是啥？ (Promise)
+            function P() {
+                let a = Math.floor(Math.random() * 10);
+                if (a > 5) {
+                    return Promise.resolve('a');
+                } else {
+                    return Promise.reject('b');
+                }
+            }
+            P().then(
+                m => {console.log(m);},
+                n => {console.log(n)}
+            );
+
+
+            // - 9.给对象 obj 添加访问器属性 name，并可以设置 obj.name = 'a' 时，
+            //   控制台打印 'a'
+            let accessorObj = {};
+            Object.defineProperty(accessorObj, "name", {
+                enumerable: true,
+                get() {
+                    console.log('我是 get 默认值');
+                },
+                set(newVal) {
+                    console.log(newVal);
+                }
+            });
+            accessorObj.name = "a";
+            console.log(accessorObj.name); // 'a'
+
+        })();
+
+
+        console.log("****************************************" + '\n');
+
+        // - 浏览器缓存 / 页面缓存
+        // - https://juejin.im/post/5b9346dcf265da0aac6fbe57
+        (function() {
+        })();
+
+
+        console.log("****************************************" + '\n');
+
+        // - 解析 Vue 2.0 的 DOM-diff 算法
+        // - https://github.com/aooy/blog/issues/2
+        (function() {
+        })();
+
+
+        console.log("****************************************" + '\n');
+
+        // - 什么是堆和栈 ?
+        // - https://cloud.tencent.com/developer/article/1053972
+        (function() {
+        })();
+
+
+        console.log("****************************************" + '\n');
+
+        // ~~~ js高程- 6.3.6 寄生组合式继承
+        (function() {
+            // Douglas Crockford
+            function object(o) {
+                function F(){}
+                F.prototype = o;
+                return new F();
+            }
+            function inheritPrototype(subType, superType) {
+                // - 创建超类型原型的一个副本
+                // let prototype = object(superType.prototype);
+
+                // - Note: 这里可以使用 ES5 提供的 Object.create() 方法代替上面的
+                //   Douglas Crockford 自定义的 object() 方法
+                let prototype = Object.create(superType.prototype);
+
+                // - 为创建的副本添加 constructor 属性，指向子构造函数，
+                //   弥补因重写原型而失去的默认 constructor 属性。
+                prototype.constructor = subType;
+                // 将创建的 superType 对象的实例赋值给子类型的原型
+                subType.prototype = prototype;
+            }
+
+            function SuperType(name) {
+                this.name = name;
+                this.colors = ['red', 'blue', 'green'];
+            }
+            SuperType.prototype.sayName = function() {
+                console.log(this.name);
+            };
+            function SubType(name, age) {
+                SuperType.call(this, name);
+                this.age = age;
+            }
+            inheritPrototype(SubType, SuperType);
+            SubType.prototype.sayAge = function() {
+                console.log(this.age);
+            };
+            let sub = new SubType('Jone', 30);
+            sub.colors.push('yellow');
+            console.log("sub.colors", sub.colors);
+            sub.sayAge();
+        })();
+
+
+        console.log("****************************************" + '\n');
+
+        // - 前端安全问题：
+        (function() {
+        })();
+
+
+        console.log("****************************************" + '\n');
+
+        // - this / bind()
+        (function() {
+            function test(person) {
+                person.age = 26;
+                person = {
+                    name: 'yyy',
+                    age: 30
+                };
+
+                return person
+            }
+            const p1 = {
+                name: 'yck',
+                age: 25
+            };
+            const p2 = test(p1);
+            // - 详细讲解见:《You-Dont-Know-JS》-中卷/Types-Grammar/chapter02-值.js
+            // - 一句话概括为: 由于引用指向的是值本身而非变量，所以一个引用无法更改另一个引用的指向
+            console.log("p1: ", p1); // {name: "yck", age: 26}
+            console.log("p2", p2);   // {name: "yyy", age: 30}
+
+
+            // - this 指向
+            function foo() {
+                console.log("this.a: ", this.a);    // undefined
+            }
+            let a  = 1;
+            // - 对于直接调用 foo 来说，不管 foo 函数被放在了什么地方， this 一定是 window
+            foo();
+
+            const obj = {
+                a: 2,
+                foo: foo,
+            };
+            // - 对调用了函数，谁就是 this
+            obj.foo();  // this.a: 2
+
+            // - 把普通函数 foo 当做构造函数调用
+            const c = new foo();
+
+            // - 箭头函数
+            function aa() {
+                return () => {
+                    return () => {
+                        console.log(this);
+                    }
+                }
+            }
+            console.log(aa()()());  // this: window
+
+            // - 多次 bind
+            let m = {};
+            let fn = function() {console.log("bind.bind's this: ", this)};
+            // - 不管我们给函数 bind 几次， fn 中的 this 永远由第一次 bind 决定，
+            //   所以结果永远是 window
+            fn.bind().bind(m)();    // bind.bind's this: window
+
+            // - 上面的多次 bind 就等于下面这种写法
+            let fn2 = function fn1() {
+                return function() {
+                    return fn.apply();
+                }.apply(m)
+            };
+            fn2();
+        })();
+
+
+        console.log("****************************************" + '\n');
+
+        // - Object.keys() / Object.getOwnPropertyNames()
+        (function() {
+            // - 要取得对象上所有可枚举的实例属性，可以使用 ES5 的 Object.keys() 方法。
+            //   这个方法接受一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。
+            function Person(name, age, job) {
+                this.name = name;
+                this.age = age;
+                this.job = job
+            }
+
+            Person.prototype.sayName = function () {
+                console.log(this.name);
+            };
+
+            let p1 = new Person("Rob", 36, 'Software Engineer');
+
+            let keys = Object.keys(Person.prototype);
+            console.log("keys:",keys);          // ['job', 'sayName' ]
+
+            let p1keys = Object.keys(p1);
+            console.log(p1keys);        // [ 'name', 'age', 'job' ]
+
+
+            // ~~~~~~ 示例 2: ~~~~~~
+            let introduction = {
+                name: 'W',
+                age: 30,
+                job: 'Software Engineer',
+                doing: true
+            };
+            // [ 'name', 'age', 'job', 'doing' ]
+            console.log(Object.keys( introduction));
+
+            // - 如果想得到所有实例属性，无论它是否可枚举，可以使用
+            //   Object.getOwnPropertyNames() 【取得自身属性名】方法:
+            let keys2 = Object.getOwnPropertyNames(Person.prototype);
+
+            // - 注意结果包含了不可枚举的 constructor 属性
+            console.log("keys2:", keys2); // keys2: [ 'constructor', 'sayName' ]
+
+
+        })();
+
+
+        console.log("****************************************" + '\n');
+
+        // - for...in 和 for...of 的区别
+        // - https://segmentfault.com/q/1010000006658882
+        (function() {
+
+        })();
+
+    </script>
+</body>
+</html>
