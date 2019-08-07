@@ -77,7 +77,12 @@ console.log('~~~~~~~~~' + '\n');
     }
     function inheritPrototype(subType, superType) {
         // - 创建超类型原型的一个副本
-        let prototype = object(superType.prototype);
+        // let prototype = object(superType.prototype);
+
+        // - Note: 这里可以使用 ES5 提供的 Object.create() 方法代替上面的
+        //   Douglas Crockford 自定义的 object() 方法
+        let prototype = Object.create(superType.prototype);
+
         // - 为创建的副本添加 constructor 属性，指向子构造函数，
         //   弥补因重写原型而失去的默认 constructor 属性。
         prototype.constructor = subType;

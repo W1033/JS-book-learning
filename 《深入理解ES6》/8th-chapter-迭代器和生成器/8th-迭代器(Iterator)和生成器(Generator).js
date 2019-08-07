@@ -110,7 +110,7 @@ console.log("secondIterator.next(): ", secondIterator.next());
  */
 
 /*
- * - for~of 循环每执行一次都会调用可迭代对象的 next() 方法，并将迭代器返回的结果对象的
+ * - for...of 循环每执行一次都会调用可迭代对象的 next() 方法，并将迭代器返回的结果对象的
  *   value 属性存储在一个变量中，循环将持续执行这一过程直到返回对象的 done 属性的值为
  *   true. 例如下面这个示例:  e.g_01
  * - e.g_01 这段 for~0f 循环的代码通过用 values 数组的 Symbol.iterator 方法来获取

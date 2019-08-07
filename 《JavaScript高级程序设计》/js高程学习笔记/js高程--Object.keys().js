@@ -4,25 +4,44 @@
  */
 
 /** ~~~~~~ 示例 1: ~~~~~~ */
-function Person(name, age) {
+function Person(name, age, job) {
     this.name = name;
     this.age = age;
+    this.job = job
 }
 
-Person.prototype.name = "Nicholas";
-Person.prototype.age = 34;
-Person.prototype.job = "Software Engineer";
 Person.prototype.sayName = function () {
     console.log(this.name);
 };
-let keys = Object.keys(Person.prototype);
-console.log(keys);          // [ 'name', 'age', 'job', 'sayName' ]
 
-let p1 = new Person("Rob", 36);
-// p1.name = "Rob";
-// p1.age = 36;
+let p1 = new Person("Rob", 36, 'Software Engineer');
+
+let keys = Object.keys(Person.prototype);
+console.log("keys:",keys);          // ['job', 'sayName' ]
+
 let p1keys = Object.keys(p1);
-console.log(p1keys);        // [ 'name', 'age' ]
+console.log(p1keys);        // [ 'name', 'age', 'job' ]
+
+
+/** ~~~~~~ 示例 3: ~~~~~~ */
+let introduction = {
+    name: 'W',
+    age: 30,
+    job: 'Software Engineer',
+    doing: true
+};
+console.log(Object.keys( introduction));  // [ 'name', 'age', 'job', 'doing' ]
+
+/**
+ * - 如果想得到所有实例属性，无论它是否可枚举，可以使用
+ *   Object.getOwnPropertyNames() 【取得自身属性名】方法:
+ */
+let keys2 = Object.getOwnPropertyNames(Person.prototype);
+// 注意结果包含了不可枚举的 constructor 属性
+console.log("keys2:", keys2);    // keys2: [ 'constructor', 'sayName' ]
+
+
+
 
 
 /** ~~~~~~ 示例 2: ~~~~~~ */
@@ -71,14 +90,3 @@ myObj.emit("somethingChanged");     // somethingChanged
 Object.assign(myObj, EventTarget.prototype);
 myObj.emit("somethingChange again");
 
-
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  */
-
-/**
- * ## 如果想得到所有实例属性，无论它是否可枚举，都可以使用 Object.getOwnPropertyNames()
- *    【取得自身属性名】方法:
- */
-let keys2 = Object.getOwnPropertyNames(Person.prototype);
-// 注意结果包含了不可枚举的 constructor 属性
-console.log(keys2);         // [ 'constructor', 'name', 'age', 'job', 'sayName' ]
