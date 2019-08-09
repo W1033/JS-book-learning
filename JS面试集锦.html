@@ -130,8 +130,8 @@
             // 直接访问 obj 的 hello() 方法
             // obj.hello();    // obj
 
-            // 把 obj.hello 方法的指针赋值给 h，此时 hello 会放到全局上下文中，
-            // 但是 全局上下文 window 中并没有声明 name 属性
+            // - 把 obj.hello 方法的指针赋值给 h，此时 hello 会放到全局上下文中，
+            //   但是 全局上下文 window 中并没有声明 name 属性
             let h = obj.hello;
             // h();    // undefined;
 
