@@ -5,11 +5,10 @@
     <title>仿写repromise-master源码</title>
 </head>
 <body>
-
     <script type="text/javascript">
 
-        /** # (1) Promise 代码基本结构 : 实例化 Promise 对象时传入一个函数 (resolver) 作为执行器, 执行器
-         * 有2个函数参数 (resolve 和 reject) 分别将结果变为 "成功态 (fulfilled) " 或 "失败态 (rejected) "。 */
+        /** - (1) Promise 代码基本结构 : 实例化 Promise 对象时传入一个函数 (resolver)
+         *    作为执行器, 执行器有2个函数参数 (resolve 和 reject) 分别将结果变为 "成功态 (fulfilled) " 或 "失败态 (rejected) "。 */
         class Promise {
             /*
              * executor /ɪg'zekjʊtə/ n. 执行者
@@ -131,30 +130,6 @@
                 }
                 // 创建一个新的 promise 实例。 作用一: 链式调用。 作用二: 传进
                 // CallbackItem 中，使其能调用 Promise 的方法
-                // new this.constructor() 是个什么意思？？？
-                /**
-                 * 详细示例:《深入理解ES6》\9th chapter--js中的类\es6中的类-class.js
-                 * function Square(length) {
-                 *     console.log("What is the Square this ?: ", this);
-                 *     Rectangle.call(this, length, length);
-                 * }
-
-                 * Square.prototype = Object.create(Rectangle.prototype, {
-                 *     constructor: {
-                 *         // 这种写法等于: Square.prototype.constructor = Square
-                 *         value: Square,
-                 *         enumerable: true,
-                 *         writable: true,
-                 *         configurable: true
-                 *     }
-                 * });
-                 * let square = new Square(3);
-                 * console.log(square.getArea());              // 9
-                 * console.log(square instanceof Square);      // true
-                 * console.log(square instanceof Rectangle);   // true
-                 */
-                console.log("this: ", this);    // Promise
-                console.log("this.constructor: ", this.constructor);
                 // 这里既是: const promise = new Promise();
                 const promise = new this.constructor();
                 // 第一次进入 then, 状态时 fulfilled 或 rejected
