@@ -5,7 +5,7 @@
 
     class Promise{
         constructor(resolver) {
-            if (resovlver && typeof resolver !== 'function') {
+            if (resolver && typeof resolver !== 'function') {
                 throw new Error(`Promise resolve ${resolver} is not a function`)
             }
             this.state = PENDING;
