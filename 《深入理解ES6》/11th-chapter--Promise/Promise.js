@@ -39,10 +39,10 @@
             }
         }
 
+        executeCallback() {}
+
         // - 获取 thenable 对象
         getThen(value) {}
-
-        executeCallback() {}
 
         executeAsyncCallback() {}
 
