@@ -352,18 +352,24 @@
             // - 对于直接调用 foo 来说，不管 foo 函数被放在了什么地方， this 一定是 window
             foo();
 
+            // - 作为对象的方法调用
+            // - 详细讲解见：《Javascript设计模式与编程实践》/第一部分--基础知识/
+            //   第2章-this_call_apply/第2章--this.md
             const obj = {
                 a: 2,
                 foo: foo,
             };
-            // - 对调用了函数，谁就是 this
+            // - 谁调用了函数，谁就是 this
             obj.foo();  // this.a: 2
 
             // - 把普通函数 foo 当做构造函数调用
             const c = new foo();
 
-            // - 箭头函数
+
+            // - 当函数不作为对象的属性被调用是，也就是我们常说的普通函数方式，此时的 this
+            //   总是指向全局对象，在浏览器的js 里，这个全局对象是 window 对象:
             function aa() {
+                // - 箭头函数: 没有 this 绑定
                 return () => {
                     return () => {
                         console.log(this);
@@ -371,6 +377,7 @@
                 }
             }
             console.log(aa()()());  // this: window
+
 
             // - 多次 bind
             let m = {};
@@ -445,7 +452,7 @@
 
 
         console.log("****************************************" + '\n');
-        
+
         // > ES6 解构赋值原理 ?
         // - 解构是 ES6 提供的语法糖，其内在是针对 `可迭代对象` 的 `Iterator 接口`，
         //   通过 `遍历器` 按顺序获取对应的值进行赋值。
@@ -456,7 +463,7 @@
 
         // > Web Worker 是什么？
         // - Tip: [文章来源](http://xgfe.github.io/2017/05/03/LexHuang/web-worker/)
-        // - Web Worker 是一种不在页面线程而是在后台线程中执行脚本的技术。 Web Worker 
+        // - Web Worker 是一种不在页面线程而是在后台线程中执行脚本的技术。 Web Worker
         //   的优点在于可以将 "计算密集型" 和 "I/O 密集型" 的操作放在一个单独的后台线程
         //   中执行，进而使得主线程 (通常是 UI 线程) 能够不被阻塞，也不会被减缓。
         // - (1)、Web Worker 概念
@@ -465,8 +472,48 @@
         // - (4)、数据传输
         // - (5)、线程安全
         // - (6)、内容安全策略
-    
 
+
+        console.log("****************************************" + '\n');
+        // js 合并2个较大的数组
+        (function() {
+            let a = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
+            let b = [2, 14, 3, 4, 5, 6, 6, 7, 8, 9, 12];
+            let c = [12, 16, 13, 14, 25, 26, 36, 57, 78, 99, 12];
+            let d = c.concat(a, b);
+            console.log(d);
+        })();
+
+        console.log("****************************************" + '\n');
+        (function() {
+            let arr = [1, 2];
+            let arr02 = arr.map((item) => {
+                return item +1;
+            });
+            // [1, 2]
+            console.log("arr: ", arr);
+            // [2, 3]
+            console.log("arr02: ", arr02);
+
+            let objArr = [{a: 1}, {a: 2}];
+            let objArr02 = objArr.map((item) => {
+                return item.a + 1;
+            });
+            // [{a: 1}, {a: 2}];
+            console.log("objArr: ", objArr);
+            // [{a: 2}, {a: 3}];
+            console.log("objArr02: ", objArr02);
+
+            // Promise 中 this 指向问题
+            new Promise(function(resolve, reject) {
+                console.log(this);  // Window
+                resolve("传入then 中的数据");
+            }).then(function(data) {
+                console.log(data);
+                console.log("then this", this); // window
+            });
+
+        })();
 
 
     </script>

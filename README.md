@@ -113,6 +113,20 @@
 
 
 
+-----------------HTTP-----------------
+
+# HTTP
+> 最常见的 URL 组成部分分析:
+- `http://www.joes-hardware.com/inventory-check.cgi?item=12731&color=blue`
+    + `http:` -- 方案(scheme)
+    + `www.joes-hardware.com:80` -- 主机(host) 和 端(port)，此处端口省略
+    + `inventory-check.cgi` -- 路径(path)
+    + `item=12731&color=blue` -- 查询(query)
+
+
+
+
+
 -----------------JavaScript-----------------
 
 
@@ -168,6 +182,12 @@
         console.log(Object.prototype.toString.call(bool));    // [object Boolean]
         console.log(Object.prototype.toString.call(arr));     // [object Array]
   ```
+- 关于 js 中 this 指向的讲解: 
+   + `《Javascript设计模式与编程实践》/第一部分--基础知识/第2章-this_call_apply/第2章--this.md`
+   + 要分清楚 this 和 作用域 Scope 之间的区别， this 是当前对象的指向问题，Scope 是作用域
+    （全局作用域 和 本地作用域）的问题，Scope 讲解见:
+        - `《深入理解JavaScript系列》--汤姆大叔/12-1_理解JavaScript的Scope.md`
+        - `《深入理解JavaScript系列》--汤姆大叔/12-变量对象(Variable Object).html`
 
 
 ## 第 3 章 -- 基本概念
@@ -226,7 +246,6 @@
   -中卷中的解释，《JS高程》这里的的讲解很绕。)
 > **《你不知道得JavaScript》-中卷**
 - 更多传递参数的解释见: 《You-Dont-Know-JS》-中卷\chapter02-值.js
-
 
 
 

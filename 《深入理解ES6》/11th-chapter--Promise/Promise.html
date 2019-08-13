@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+          maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script type="text/javascript">
+    // (function(scope) {
+    //     const PENDING = 'pending';
+    //     const FULFILLED = 'fulfilled';
+    //     const REJECTED = 'rejected';
+    //
+    //     class Promise{
+    //         // - executor /ɪg'zekjʊtə/ n.执行器，执行者
+    //         // - Tip: 我们把 new Promise(function(resolve, reject) {}) 传入的匿名函数
+    //         //   称为执行器(executor)
+    //         constructor(executor) {
+    //             // - 确定 executor 是个函数
+    //             if (executor && typeof executor !== 'function') {
+    //                 throw new Error(`Promise resolve ${executor} is not a function`)
+    //             }
+    //             this.state = PENDING;
+    //             this.data = undefined;
+    //             // - 定义一个保存回调函数的数组
+    //             this.callbackArr = [];
+    //             if (typeof(executor) === 'function') {
+    //                 // - 调用执行器 call Executor
+    //                 this.callExecutor(executor);
+    //             }
+    //         }
+    //
+    //         callExecutor(executor) {
+    //             const that = this;
+    //             let cb = false;
+    //             // - onSuccess 和 onError 只会执行一个
+    //             // - Tip: onSuccess/onError 在下面 try...catch 中被调用，value 参数是
+    //             const onResolve = function(value) {
+    //                 // - 如果 cb = true 立马退出
+    //                 if (cb) {return}
+    //                 cb = true;
+    //                 // - execute ['eksɪkjuːt] --vt.执行，实施，履行
+    //                 // - 我们从执行器(executor) 的函数体中({}),可以看出，是直接调用了当
+    //                 //   前的 onResolve 或者下面的 onReject,
+    //                 that.executeCallback('fulfilled', value);
+    //             };
+    //             const onReject = function(value) {
+    //                 if (cb) {return}
+    //                 cb = true;
+    //                 that.executeCallback('rejected', value);
+    //             };
+    //             try {
+    //                 // - 执行 new Promise() 传入的 executor(执行器)函数，并把上面定义的
+    //                 //   onResolve 和 OnReject 函数传入其中。
+    //                 executor(onResolve, onReject);
+    //             } catch(e) {
+    //                 // - new Promise() 中抛错，这里不用 that.executeCallback('reject',e)
+    //                 //   ，有错误的话提前终止不进入 onSuccess / onError
+    //                 onReject(e);
+    //             }
+    //         }
+    //
+    //         executeCallback() {}
+    //
+    //         // - 获取 thenable 对象
+    //         getThen(value) {}
+    //
+    //         executeAsyncCallback() {}
+    //
+    //         then() {}
+    //
+    //         catch() {}
+    //
+    //         // - 非 ES6 标准
+    //         done() {}
+    //
+    //     }
+    //
+    //     class CallbackItem {
+    //
+    //     }
+    //
+    //     // - Promise 类上添加的静态方法(类方法)
+    //     Promise.resolve = function() {};
+    //
+    //     Promise.reject = function() {};
+    //
+    //     Promise.all = function() {};
+    //
+    //     Promise.race = function() {};
+    //
+    //     //
+    //     Promise.deferred = Promise.defer = function() {};
+    //
+    //     Promise.wrap = function() {};
+    //
+    //     try {
+    //         module.exports = Promise;
+    //     } catch(e) {
+    //         scope.Promise = Promise;
+    //     }
+    //
+    //
+    // })(this);
+
+    // let promise = new Promise(function(resolve, reject) {
+    //     console.log("看看当前 Executor 执行器有没有执行");
+    //     let val = '我是传入 resolve 函数的值';
+    //     resolve(val);
+    // });
+
+    // new Promise(function(resolve, reject) {
+    //     console.log(this);  // Window
+    //     resolve("传入then 中的数据");
+    // }).then(function(data) {
+    //     console.log(data);
+    //     console.log("then this", this); // window
+    // });
+
+</script>
+</body>
+</html>
