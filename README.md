@@ -207,6 +207,7 @@
 
 > **3.6 语句 -- 3.6.7 break 和 continue 语句: break和continue语句用于在循环中精确地
     控制代码的执行。**
+    + continue [kən'tɪnjuː] --vt.继续
 - break 语句会立即退出循环，强制继续执行循环后面的语句。
     + ```javascript
         function breakExample() {
