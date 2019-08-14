@@ -480,8 +480,13 @@
             let a = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
             let b = [2, 14, 3, 4, 5, 6, 6, 7, 8, 9, 12];
             let c = [12, 16, 13, 14, 25, 26, 36, 57, 78, 99, 12];
-            let d = c.concat(a, b);
-            console.log(d);
+
+
+            console.log("Array.prototype.push.apply(a, b)");
+            console.log(Array.prototype.push.apply(a, b));
+
+            // let d = c.concat(a, b);
+            // console.log(d);
         })();
 
         console.log("****************************************" + '\n');

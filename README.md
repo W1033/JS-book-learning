@@ -110,8 +110,8 @@
    + 取消chrome下input和textarea的聚焦边框: 
      `input,button,select,textarea{outline:none}`
    + 取消chrome下textarea可拖动放大: `textarea{resize:none}`
-
-
+- css 的盒模型:
+    + content+padding+border即内容的(宽高)+内边距的再加上边框，而不加上margin。
 
 -----------------HTTP-----------------
 
@@ -188,6 +188,41 @@
     （全局作用域 和 本地作用域）的问题，Scope 讲解见:
         - `《深入理解JavaScript系列》--汤姆大叔/12-1_理解JavaScript的Scope.md`
         - `《深入理解JavaScript系列》--汤姆大叔/12-变量对象(Variable Object).html`
+        - `深入理解JavaScript系列》--汤姆大叔/13-this/13-this.html`
+- 箭头函数的特性:
+    + (1) 默认绑定外层 this
+    ```javascript
+      // 示例来源: https://juejin.im/post/5aa1eb056fb9a028b77a66fd
+      (function() {
+          // - 示例 1
+          const obj = {
+              a: function() {
+                  console.log(this)
+                  window.setTimeout(() => { 
+                      console.log(this) 
+                  }, 1000)
+              }
+          }
+          obj.a.call(obj); //第一个this是obj对象，第二个this还是obj对象
+      })();  
+      (function() {
+        // - 示例 2
+        const obj = {
+            a: function() { console.log(this) },
+            b: {
+            	c: function() {console.log(this)}
+        	}
+        }
+        obj.a();  // 打出的是obj对象, 相当于obj.a.call(obj)
+        obj.b.c(); //打出的是obj.b对象, 相当于obj.b.c.call(obj.b)
+    })();
+    ```
+    + (2) 不能用 call 方法修改里面的 this
+    + (3) 没有 this、super、arguments 和 new.target 绑定。
+    + (4) 不能通过 new 关键字调用
+    + (5) 没有原型
+    + (6) 不支持 arguments 对象
+    + (7) 不支持重复的命名参数
 
 
 ## 第 3 章 -- 基本概念

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0,
+          maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>this 详解</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * ## This? Yes, this
+         * - link: https://www.cnblogs.com/TomXu/archive/2012/01/17/2310479.html
+         */
+
+        /**
+         * - (1) ES 中的 this 到底是什么？
+         *   + this 是执行上下文中的一个属性:
+         *     ```
+         *          activeExecutionContext = {
+         *              // - VO 是前一章讨论的变量对象
+         *              VO: {...},
+         *              // - this 与上下文可执行代码的类型有直接关系，this 值在进入上下文时
+         *              //   确定，并且在上下文运行期间永久不变。
+         *              this: thisValue。
+         *          }
+         *     ```
+         *  - (2) 全局代码中的 this:
+         *    + 在全局代码中(全局执行上下文 global execution context)，this 始终是
+         *      全局对象本身。(浏览器中的全局执行上下文为 window)
+         *
+         *  - (3) 函数代码中的 this:
+         *    + 在函数中使用 this 值的首要特点 (或许是最主要的) 是它不是静态的绑定到一个函数。
+         *    + this 是进入上下文时确定的，在一个函数代码中，这个值在每一次运行时可能完全不同。
+         *    + 不管怎么，在代码运行时的 this 值是不变的，也就是说，因为他不是一个变量，就不可能
+         *      为其分配一个新值。(相反，在 Python 编程语言中，它明确的定义为对象本身，在
+         *      运行期间可以不断改变。)
+         */
+        (function () {
+            let foo = {
+                x: 10
+            };
+            let bar = {
+                x: 20,
+                test: function () {
+                    // this = foo;   // - 错误，任何时候不能改变 this 的值。
+                    console.log("this 是否等于 bar: ", this === bar);
+                    console.log(this.x);
+                }
+            };
+
+            // - 首先, 在通常的函数调用中，this 是由激活上下文代码的调用者来提供的，
+            //   即调用函数的 父上下文(parent context). this 取决于调用函数的方式。
+            // - 当前，在进入上下文的时候，this 被当成 bar 对象
+            // this 是否等于 bar:  true
+            bar.test(); // 20
+
+            foo.test = bar.test;
+            // this 是否等于 bar:  false
+            foo.test(); // 10
+
+
+            // - 看下面的这个调用
+            function person() {
+                console.log("person this: ", this);
+            }
+            person();
+            console.log(person === person.prototype.constructor); // true
+            // - 但是同一个 function 的不同的调用表达式，this 是不同的。
+            // - Tip: 这里的输出和文章里不一样。
+            // console.log(person.prototype.constructor());    // undefined
+        })();
+
+
+        /**
+         * - △ 那么调用函数的方式如何影响了 this 值？
+         *   + 为了充分理解 this 值的确定，需要详细分析其内部类型之一的
+         *     —— 引用类型(Reference type)
+         *
+         * ## 引用类型 (Reference type)
+         * - 使用伪代码我们可以将引用类型的值表示为拥有两个属性的对象 --
+         *   + (1)base: 即拥有属性的那个对象
+         *   + (2)propertyName: base 中的 propertyName
+         *  ```
+         *      var valueOfReferenceType = {
+         *          base: <base object>
+         *          propertyName: <property name>
+         *      }
+         *  ```
+         * - 引用类型的值只有 2 种情况：
+         *   + 1.当我们处理一个标识符时；
+         *     (所谓标识符，就是指变量、函数、属性的名字，或者函数的参数)
+         *   + 2.或一个属性访问器
+         */
+        (function () {
+            let foo = 10;
+            function bar() {}
+
+            // - 在操作的中间结果中，引用类型对应的值如下:
+            let fooReference = {
+                // - Tip: 因为 foo / bar() 都在全局执行环境中，所以 base 指向 global
+                // base: global,
+                propertyName: 'foo'
+            };
+            let barReference = {
+                // base: global,
+                propertyName: 'bar'
+            };
+
+            // - 为了从引用类型中得到一个对象真正的值，伪代码中的 GetValue 方法可以做如下描述:
+            function GetValue(value) {
+                if (Type(value) != Reference) {
+                    return value;
+                }
+                // let base = GetBase(value);
+                if (base === null) {
+                    throw new ReferenceError;
+                }
+                // return base.[[Get]](GetPropertyName(value))
+            }
+
+            // - 内部的 [[Get]] 方法返回对象属性真正的值，包括对原型链中继承的属性分析。
+            // GetValue(fooReference); // 10
+            // GetValue(barReference) // function object 'bar' 
+        })();
+
+        /** 
+         * - AA: 引用类型的值与函数上下文中的 this 值如何相关？ -- 从最重要的意义来说。
+         *   这个关联的过程是这篇文章的核心。一个函数上下文中确定 this 值的通用规则如下: 
+         *   + 在一个函数上下文中，this 由调用者提供，由调用函数的方式来决定。如果调用括号
+         *     ()的左边是引用类型的值，this 将设为引用类型值的 base 对象 (base object),
+         *     在其他情况下 (与引用类型不同的任何其他属性)，这个值为 null。不过，实际不存在
+         *     this 值为 null 的情况，因为当 this 的值为 null 的时候，其值会被隐式转换
+         *     为全局对象。
+         *     (Tip: 第 5 版的 ES 中，已经不强迫转换成全局变量了，而是赋值为 undefined)
+         */
+        (function () {
+            // - (1) 我们看第一个例子
+            function foo() {
+                return this;
+            }
+
+            // - 我们看到在调用括号的左边是一个引用类型值 (因为 foo 是一个标识符)
+            console.log("foo return this: ", foo()); // window
+            // - 相应地，this 也设置为引用类型的 base 对象。即全局对象。
+            let fooReference = {
+                // - 根据上面 (AA) 的解说，我们知道 this 被设置为引用类型值的 base 对象.
+                //  （Tips: 但这里有一点要明白的是，这个 base 对象的值是要我们自己根据执行
+                //   上下文来判断的。 因为 foo() 在全局执行上下文中被调用，所以 base 为
+                //   window / global)。
+                // base: global,
+                // propertyName: 'foo'
+            };
+
+            // - (2) 第二个示例我们使用属性访问器:
+            let foo_02 = {
+                bar: function () {
+                    return this;
+                }
+            };
+            foo_02.bar();
+            // - 我们再次拥有一个引用类型，其base 是foo_02 对象，在函数bar 激活是用作this.
+            let foo_02BarReference = {
+                base: foo,
+                propertyName: 'bar'
+            };
+
+            // - 但是我们用另外一种形式激活相同的函数，我们得到其他的 this 值。
+            // - Tips: 实际上也可以理解为 foo_02.bar 把匿名函数 f() 赋值给了变量 test，
+            //   当 test 运行时已经在全局执行环境中了。
+            let test = foo_02.bar;
+            test(); // window / global
+            // - △ 因为 test 作为标识符，生成了引用类型的其他值，其 base (值为全局对象)
+            //   用作了 this 值。
+            let testReference = {
+                // base: global,
+                // propertyName: 'test'
+            };
+        })();
+
+        /**
+         * - 现在可以明确的告诉你，为什么用不同形式的表达式激活同一个函数会有不同的this 值，
+         *   答案在于 引用类型 (Reference type) 不同的中间值。
+         */
+
+
+        /** ### 函数调用 和 非引用类型 */ 
+        // - 因此, 正如我们已经指出，当调用括号的左边不是引用类型而是其他类型，这个值自动设置
+        //   为 null, 结果为全局对象。 
+        // - 让我们再思考这种表达式: 在这个例子中，我们有一个函数对象但不是应用类型的对象 
+        //   (它不是标识符，也不是属性访问器)，相应地，this 值最终设为全局对象。
+        (function() {
+            console.log(this);  // null => global
+        })(); 
+
+        // - 更为复杂的例子:
+        (function() {
+            let foo = {
+                bar: function() {
+                    console.log("foo.bar inner this: ", this);
+                }
+            };
+
+            // (1)
+            foo.bar();      // 为变量 foo 引用的对象
+            // (2)
+            (foo.bar)();    // foo
+            // (3)
+            (foo.bar = foo.bar)()   // window
+            
+            // - (1). 很明显的引用类型，结果是 this 为 base 对象，即 foo。
+            // - (2). 第二个例子中，组运算符并不适用，想想上面提到的，从引用类型总获得一个
+            //   对象真正的值的方法，如 GetValue。相应的，在组运算的返回中 -- 我们得到仍
+            //   是一个引用类型。这就是 this 值为什么再次设为 base 对象， 即 foo。
+            //   (Tips: 也可以理解为 (foo.bar)() 只是自执行)
+            // - (3) 第三个例子中，与组运算符不同，赋值运算符调用了 GetValue 方法。返回的
+            //   结果是函数对象（但不是引用类型）
+        })();
+        
+        
+
+
+        // - 下面代码输出什么？
+        const shape = {
+            radius: 10,
+            diameter() {
+                return this.radius * 2;
+            },
+            // - 箭头函数的特性： 默认绑定外层 this
+            // - Tip: 因为 shape 是定义在全局上下文中，所以本身的 this 指向是 window，
+            //   箭头函数的 this 默认指向是外层 this 指向，所以内部箭头函数内部  this
+            //   也为 window
+            perimeter: () => {
+                return 2 * Math.PI * this.radius;
+            }
+        };
+        console.log("shape.diameter(): ", shape.diameter());    // 20
+        console.log("shape.perimeter(): ", shape.perimeter());  // NaN
+    </script>
+</body>
+
+</html>
