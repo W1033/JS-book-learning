@@ -109,6 +109,12 @@
 
         (function() {
             console.log(this);  // null => global
+            
+            let str = "2503";
+            // - js 的这种转换并没有得到 2503 正确的 8 进制数值，正确值为 4707
+            console.log(parseInt(str, 8));
+            
+            
         })(); 
     </script>
 </body>
