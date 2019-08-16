@@ -226,11 +226,10 @@
 
 
 ## 第 3 章 -- 基本概念
-
-> 3.1.2 标识符：
+> **3.1.2 标识符：**
 - 所谓标识符，就是指变量、函数、属性的名字，或者函数的参数。
 
-> **3.4 ----数据类型**
+> **3.4 数据类型**
 - 6 种基本数据类型:
     + Undefined (未定义): Undefined类型，一个没有被赋值的变量会有一个默认值undefined.
     + Null (空值):        Null类型只有一个值: null。
@@ -240,9 +239,8 @@
     + Symbol (符号， ES6 中新增)
 - 1 种复杂数据类型: Object
 
-> **3.6 语句 -- 3.6.7 break 和 continue 语句: break和continue语句用于在循环中精确地
-    控制代码的执行。**
-    + continue [kən'tɪnjuː] --vt.继续
+> **3.6 语句 --> 3.6.7 break 和 continue 语句:** 
+>> break 和 continue 语句用于在循环中精确地控制代码的执行。
 - break 语句会立即退出循环，强制继续执行循环后面的语句。
     + ```javascript
         function breakExample() {
@@ -258,6 +256,7 @@
         console.log(breakExample())
       ```
 - continue 语句虽然也是立即退出循环，但退出循环后会从循环的顶部继续执行。
+    + continue [kən'tɪnjuː] --vt.继续
     + ```javascript
         function continueExample() {
             var num = 0;
@@ -271,6 +270,11 @@
         }
         console.log(continueExample())
       ```
+
+> **3.7 函数 --> 3.7.1 理解参数**
+- 其实，arguments 对象只是与数组类似 (它并不是 Array 的实例)，因为可以使用方括号语法访问
+  它的每一个元素 (arguments[0]、arguments[1]), 使用 length 属性来确定传递进来多少个
+  参数。
 
 
 ## 第 4 章 -- 变量、作用域和内存
@@ -299,8 +303,7 @@
         + Global 对象
         + Math   对象
         
-### 5.0 Object 类型
-### 5.1 引用类型
+> **5.0 Object 类型 --> 5.1 引用类型**
 - 一般来说，访问对象属性时使用的都是点表示法，这也是很多面向对象语言中通用的语法。不过，在 
   JavaScript 中也可以使用方括号表示法来访问对象的属性。在使用方括号语法时，应该将要访问的
   **属性以字符串的形式放在方括号中**，如下面的例子所示。
@@ -313,7 +316,7 @@
     console.log(person.name);   // "Nicholas"
   ```
 
-### 5.2 Array 类型
+> **5.0 Object 类型 --> 5.2 Array 类型**
 - chapter5: 5.2.3 -- 栈方法:
     + ECMAScript 数组也提供了一种让数组的行为类似于其他数据结构的方法。具体说来，数组可以
       表现得就像栈一样，后者是一种可以限制插入和删除项的数据结构。栈是一种 LIFO
@@ -391,7 +394,7 @@
         console.log(mapResult); // [2,4,6,8,10,8,6,4,2]
     ```
 
-### 5.5 Function 类型
+> **5.5 Function 类型**
 - 在 ECMAScript 中函数实际上是对象。每个函数都是 Function 类型的实例，而且都与其他
   引用类型一样具有属性和方法。由于函数是对象，因此函数名实际上也是一个指向函数对象的指针，
   不会与某个函数绑定。
@@ -436,180 +439,87 @@
    (function(){
    }());
  ```
-- 5.5.5函数属性和方法 apply() 和 call(): 这两个方法的用途是在特定的作用域中调用函数，实际
-  上等于设置函数体内this对象的值。
+
+> **5.5 Function 类型 -> 5.5.5函数属性和方法 apply() 和 call():**
+- 这两个方法的用途是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。
 - apply() 接受2个参数，第一个参数制定了函数体内 this 对象的指向。第二个参数为一个带下标的
   集合，这个集合可以是数组，也可以为类数组， **apply 方法把这个集合中的元素作为参数传递给被
   调用的函数。**
-    + ```javascript
-         var func = function(a, b, c) {
-             console.log([a, b, c]);
-         };
-         // 如果传入的第一个参数为 null, 函数体内的 this 会指向默认的宿主对象，
-         // 在浏览器中是 window. 参数 1，2，3 被放在数组中一起传入 func 函数，
-         // 他们分别对应 func 参数列表中的 a,b,c。
-         func.apply(null, [1, 2, 3]);
-
-         // 有时候我们使用 call 或者 apply 的目的不在于指定 this 指向，
-         // 而是另有用途，比如借用其他对象的方法，那么我们可以传入 null 来代替某个具体的对象:
-         Math.max.apply(null, [1, 2, 5, 3, 6]);	// 输出 6
-       ```
-    + (1).改变 this 指向: 最常见的用途是改变函数内部的 this 指向
-        - 更多见示例: ECMAScript6-Study\Javascript设计模式与编程实践\第一部分--基础知识
-                    \第2章\P33-借用其他对象的方法.js
-        - ```javascript
-            let obj1 = {name: "sven"};
-            let obj2 = {name: "anne"};
-            window.name = "Window";
-            let getName = function () {console.log(this.name);};
-            getName();
-            getName.call(obj1);	// sven
-            getName.apply(obj2);	// anne
-
-            document.getElementById("div1").onclick = function() {
-                let func = function() {
-                    console.log(this.id);	// div1
-                };
-                func.call(this);
-            }
-          ```
-    + (2.) Function.prototype.bind
-        - 示例见: 《Javascript设计模式与编程实践》/第一部分--基础知识
-            /第2章-this_call_apply/2.2_apply-call-bind.js
-    + (3.) 借用其他对象的方法
-        - ```javascript
-            (function() {
-                Array.prototype.push.call(arguments, 3);
-                console.log(arguments);	// [ 1, 2, 3 ]
-            })(1, 2)
-          ```
-
-- **示例:使用call方法调用父构造函数**
-    + ```javascript
-         function Product(name, price){
-             this.name = name;
-             this.price = price;
-             if(price < 0){
-                 throw RangeError("Cannot create product" + this.name + 
-                      "with a negative price")
-             }
-         }
-         function Food(name, price){
-             Product.call(this, name, price);
-             this.category = "food";
-         }
-   
-         /*---上面Food()构造函数调用Product()构造函数 "等同于"(=) 下面这个写法---*/
-
-         function Food2(name, price){
-             this.name = name;
-             this.price = price;
-             if(price < 0){
-                 throw RangeError("Cannot create product" + this.name + 
-                      "with a negative price")
-             }
-             this.category = "food";
-         }
-
-         /* 使用call()方法调用匿名函数 : 在 for 循环内部，我们创建了一个匿名函数，通过调用该
-          * 函数的call方法,将每个数组元素作为指定的 this 值执行了那个匿名函数。这个匿名函数的
-          * 主要目的是给每个数组元素对象添加一个 print 方法，这个 print 方法可以打印出各元
-          * 素在数组中的正确索引号。当然，这里不是必须得让数组元素作为this值传入那个匿名函数
-          * (普通参数就可以),目的是为了演示call的用法 */
-         var animals = [
-             {species:"Lion", name: "XinBa"},
-             {species:"Whale", name: "Blue"}
-         ];
-         for(var i=0; i<animals.length; i++){
-             (function(i){
-                 this.print = function(){
-                     console.log("#" + i + "" + this.species + ":" + this.name);
-                 }
-             }).call(animals[i], i)
-         }
+    + (1) 改变 this 指向(最常见)
+    + (2) Function.prototype.bind
+    + (3) 借用其他对象的方法
+    + 1/2/3 的示例见: Javascript设计模式与编程实践》/第一部分--基础知识
+        /第2章-this_call_apply/2.2_apply-call-bind.js
 
 
-         /* 使用 call() 方法调用函数并且指定上下文的 this :下面的例子中，当调用 greet 
-          * 方法的时候，该方法的 this 值会绑定到 i 对象。**/
-         function greet(){
-             var reply = [this.person, "Is An Awesome", this.role].join(" ");
-             console.log(reply);
-         }
-         var called= {
-             person: "Nicholas C.Zakas",
-             role: "Javascript Developer"
-         };
-         greet.call(called); //Nicholas C.Zakas Is An Awesome Javascript Developer
-      ```
-
-### 5.6.3 String 类型
+> **5.6.3 String 类型**
 - **split():** 方法是基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
 
 
 ## 第 6 章 -- 面向对象程序设计
-### 6.3.4 原型式继承
-  - ES5 - 提供了 Object.create 方法，可以用来克隆对象。
-      + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
-      + js高程-P170: ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。
-        这个方法接收两个参数：
-        - 第 1 个: 用作新对象原型的对象。(在传入一个参数的情况下 Object.create() 与 
-          object() [tips: 6.3.4 自定义的 object() 方法] 方法的行为相同。)
-        - 第 2 个: 一个为新对象定义额外属性的对象(可选)。
-        - ```javascript
-             // 示例1 : javascript 高程 -- 6.3.4 原型式继承
-             let person = {
-                 // 基本类型值属性
-                 name: "Nicholas",
-                 // 引用类型值属性。(tips-P171: 不过不要忘了，包含引用类型值的属性始终
-                 // 都会共享相应的值，就像使用原型模式一样。)
-                 friends: ["Shelby", "Court", "Van"],
-             };
-             let anotherPerson = Object.create(person);
-             anotherPerson.name = "Grey";
-             anotherPerson.friends.push("Rob");
+> **6.3.4 原型式继承**
+- ES5 - 提供了 Object.create 方法，可以用来克隆对象。
+    + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
+    + js高程-P170: ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。
+    这个方法接收两个参数：
+    - 第 1 个: 用作新对象原型的对象。(在传入一个参数的情况下 Object.create() 与 
+        object() [tips: 6.3.4 自定义的 object() 方法] 方法的行为相同。)
+    - 第 2 个: 一个为新对象定义额外属性的对象(可选)。
+    - ```javascript
+            // 示例1 : javascript 高程 -- 6.3.4 原型式继承
+            let person = {
+                // 基本类型值属性
+                name: "Nicholas",
+                // 引用类型值属性。(tips-P171: 不过不要忘了，包含引用类型值的属性始终
+                // 都会共享相应的值，就像使用原型模式一样。)
+                friends: ["Shelby", "Court", "Van"],
+            };
+            let anotherPerson = Object.create(person);
+            anotherPerson.name = "Grey";
+            anotherPerson.friends.push("Rob");
 
-             let yetAnotherPerson = Object.create(person);
-             yetAnotherPerson.name = "Linda";
-             yetAnotherPerson.friends.push("Barbie");
-             // person.friends 不仅属于 person 所有，而且会被 anotherPerson 以及 
-             // yetAnotherPerson 共享。实际上这就相当于又创建了 person 对象的 2 个副本。
-             console.log(person.friends);    // "Shelby,Court,Van,Rob,Barbie"
-          ```
-        - ```javascript
-              // 示例2 : JS-book-learning/《js设计模式与编程实践》/第一部分--基础知识
-              // /第1章/1st-面向对象的Javascript.js
-              const Plane = function () {
-                  this.blood = 100;
-                  this.attackLevel = 1;
-                  this.defenseLevel = 1;
-              };
+            let yetAnotherPerson = Object.create(person);
+            yetAnotherPerson.name = "Linda";
+            yetAnotherPerson.friends.push("Barbie");
+            // - person.friends 不仅属于 person 所有，而且会被 anotherPerson 以及 
+            //   yetAnotherPerson 共享。实际上这就相当于又创建了 person 对象的 2 个副本。
+            console.log(person.friends);    // "Shelby,Court,Van,Rob,Barbie"
+        ```
+    - ```javascript
+            // - 示例来源: 《Javascript设计模式与编程实践》/第一部分--基础知识
+            //   /第1章-面形对象的JavaScript/Chapter01-面向对象的javascript.md
+            const Plane = function () {
+                this.blood = 100;
+                this.attackLevel = 1;
+                this.defenseLevel = 1;
+            };
 
-              let plane = new Plane();
-              plane.blood = 500;
-              plane.attackLevel = 10;
-              plane.defenseLevel = 7;
+            let plane = new Plane();
+            plane.blood = 500;
+            plane.attackLevel = 10;
+            plane.defenseLevel = 7;
 
-              let clonePlane = Object.create(plane);
-              console.log(clonePlane);            // Plane {}
-              console.log(clonePlane.blood);      // 500
-              console.log(clonePlane.attackLevel);// 10
-          ```
-  - ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，
-        返回一个包含所有可枚举属性的字符串数组。
-      + 示例: 《js高级程序设计》\js高程学习笔记\js高程---Object.keys().js
-  - ES5 - Object.getOwnPropertyNames(): 【取得自身的属性名】。 js高程 - Chapter 6
-  - ES5 - Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型的真实值被存储在
-    内部专用属性 `[[Prototype]]` 中，调用 getPrototypeOf() 方法返回存储在其中的值。
-  - ES6 - Object.is(): [P76] 弥补全等运算符的不准确运算。比如之前 +0等于-0, NaN不等于NaN
-  - ES6 - Object.assign()
-  - ES6 - Object.setPrototypeOf() 方法可以改变任意指定对象的原型。接受2个参数: 
-      + 1).被改变原型的对象 
-      + 2).替代第一个参数原型的对象。
-      + 示例:《深入理解ES6》\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
+            let clonePlane = Object.create(plane);
+            console.log(clonePlane);            // Plane {}
+            console.log(clonePlane.blood);      // 500
+            console.log(clonePlane.attackLevel);// 10
+        ```
+- ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，
+    返回一个包含所有可枚举属性的字符串数组。
+    + 示例: 《js高级程序设计》\js高程学习笔记\js高程---Object.keys().js
+- ES5 - Object.getOwnPropertyNames(): 【取得自身的属性名】。 js高程 - Chapter 6
+- ES5 - Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型的真实值被存储在
+内部专用属性 `[[Prototype]]` 中，调用 getPrototypeOf() 方法返回存储在其中的值。
+- ES6 - Object.is(): [P76] 弥补全等运算符的不准确运算。比如之前 +0等于-0, NaN不等于NaN
+- ES6 - Object.assign()
+- ES6 - Object.setPrototypeOf() 方法可以改变任意指定对象的原型。接受2个参数: 
+    + 1).被改变原型的对象 
+    + 2).替代第一个参数原型的对象。
+    + 示例:《深入理解ES6》\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
 
 
 ## 第 7 章 -- 函数表达式
-- 7.1 递归:
+> **7.1 递归:**
   ```javascript
       // 递归: 用命名函数表达式实现递归。可以在严格模式和非严格模式下都行得通。
       let factorial = (function f(num) {
@@ -814,7 +724,7 @@
  </div>
 
 
-> **43 构造函数的方法内可以动态给构造函数添加属性**
+> **构造函数的方法内可以动态给构造函数添加属性**
 - ```javascript
     // Vue-study\Vue--文档+语法\Vue-双向数据绑定\Vue双向绑定-基础示例讲解
     // \Vue双向数据绑定原理-2.html
@@ -847,40 +757,3 @@
         }
     };
   ```
-
-
-> **44 声明构造函数较常用的两种方法:**
-- 方法 1:
-    + ```javascript
-          function PersonType(name) {
-              this.name = name;
-          }
-          
-          PersonType.prototype.sayName = function () {
-              console.log(this.name);  // Nicholas
-          };
-          
-          let person = new PersonType("Nicholas");
-          person.sayName();
-          console.log(person instanceof PersonType);  // true
-          console.log(person instanceof Object);      // true
-      ```
-- 方法 2:  
-    + ```javascript
-        function Dropdown() {
-            // 这种方式就是在构造函数内直接调用原型上的 initialize() 方法，因为 this 都
-            // 的构造函数的实例，所以这种方法书写本质上和第一种没有什么不同。
-            this.initialize.apply(this, arguments);
-        }
-        Dropdown.prototype = {
-            constructor: Dropdown,
-            initialize: function(dropdownData, dropdownUl) {
-                this.dropdownData = dropdownData;
-                this.dropdownUl  = dropdownUl;
-            },
-            createEle: function() {},
-        };
-        let dropdownInstance = new Dropdown(dropdownData, dropdownUl[0]);
-      ```
-
-

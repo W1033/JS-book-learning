@@ -1,27 +1,28 @@
 /**
  * ## 2.2 call 和 apply
- *   ECMAScript 3 给 Function 的原型定义了 2 个 方法，他们是 Function.prototype.call
- *    和 Function.prototype.apply. 在实际开发中，特别是在一些函数式风格的代码编写中，apply
- *    和 call 尤为有用。 在 JavaScript 版本的设计模式中，这 2 个方法的应用也非常广泛，能
- *    熟练运用这两个方法，是我们真正成为一名 JavaScript 程序员的重要一步。
+ * - ECMAScript 3 给 Function 的原型定义了 2 个 方法，他们是 Function.prototype.call
+ *   和 Function.prototype.apply. 在实际开发中，特别是在一些函数式风格的代码编写中，apply
+ *   和 call 尤为有用。 在 JavaScript 版本的设计模式中，这 2 个方法的应用也非常广泛，能
+ *   熟练运用这两个方法，是我们真正成为一名 JavaScript 程序员的重要一步。
  */
 
-/** > 2.2.1  apply 和 call 的区别 */
-// - apply 接收 2 个参数，第一个参数制定了函数体内 this 对象的指向， 第二个参数为一个带下表
-// 的集合，这个集合可以为 "数组" 或 "类数组"， apply 方法把这个集合中的元素作为参数传递给被
-// 调用的函数。
+/**
+ * > 2.2.1  apply 和 call 的区别 
+ * - apply 接收 2 个参数，第一个参数制定了函数体内 this 对象的指向， 第二个参数为一个带下表
+ *   的集合，这个集合可以为 "数组" 或 "类数组"， apply 方法把这个集合中的元素作为参数传递给
+ *   被调用的函数。
+ * - call 方法是包装在 apply 上面的语法糖，所以 apply 比 call 更常用。(call 接收的第一个
+ *   参数也是代表函数体内的 this 指向，但从第二个参数开始往后，每个参数被依次传入函数。)
+ * - 实际上 js 的参数在内部就是用一个数组来表示的。从这个意义上说，apply 比 call 的使用率
+ *   更高，我们不必关心具体有多少参数被传入函数，只要用 apply 一股脑地推过去就可以了。
+ */
 
-// - call 方法是包装在 apply 上面的语法糖，所以 apply 比 call 更常用。( call 接收的第一个
-// 参数也是代表函数体内的 this 指向，但从第二个参数开始往后，每个参数被依次传入函数。)
-
-// - 实际上 js 的参数在内部就是用一个数组来表示的。从这个意义上说，apply 比 call 的使用率更高，
-// 我们不必关心具体有多少参数被传入函数，只要用 apply 一股脑地推过去就可以了。
 
 let func = function(a, b, c) {
     console.log([a, b, c]);
 
-    // 当使用 apply/call 的时候，如果我们传入的第一个参数为 null,
-    // 函数体内的 this 会指向默认的宿主对象，在浏览器中则是 window.
+    // - 当使用 apply/call 的时候，如果我们传入的第一个参数为 null,函数体内的 this 会指
+    //   向默认的宿主对象，在浏览器中则是 window.
     // console.log(this === window); // true
 };
 // func.apply(null, [1, 2, 3])
@@ -63,7 +64,7 @@ let getName = function() {
         console.log(this.id);
     };
     // func();  // 如果这样直接调用，输出结果为: undefined
-    // 纠正 func 函数中 this 指向 window 的问题
+    // - 纠正 func 函数中 this 指向 window 的问题
     func.all(this);
 }*/
 
@@ -118,7 +119,6 @@ let theFunc = function(a, b, c, d){
 }.bind(theObj, 1, 2);
 
 theFunc(3, 4);
-
 
 
 
