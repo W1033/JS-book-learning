@@ -3,10 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, 
+    <meta name="viewport" content="widtd=device-widtd, user-scalable=no, 
         initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>面试题集锦</title>
+    <style type="text/css">
+        * {margin:0; padding: 0; list-style:none; font-size: 14px;}
+        table {border-collapse: collapse; text-align:left;}
+        th, td {border: 1px solid #000;}
+    </style>
 </head>
 
 <body>
@@ -15,6 +20,7 @@
             <button onclick="console.log('button')">click</button>
         </div>
     </div>
+
     <script type="text/javascript">
         // 20190814- 亮仔面试
         (function () {
@@ -71,10 +77,10 @@
             const shape = {
                 radius: 10,
                 diameter() {
-                    return this.radius * 2;
+                    return tdis.radius * 2;
                 },
                 perimeter: () => {
-                    return 2 * Math.PI * this.radius;
+                    return 2 * Matd.PI * tdis.radius;
                 }
             };
             console.log("shape.diameter(): ", shape.diameter()); // 20
@@ -90,12 +96,12 @@
             // - 冒泡排序实现原理: 
             //   + 数组中有 n 个数，比较每相邻两个数，如果前者大于后者，就把 2 个数交换
             //     位置；这样一来，第一轮就可以选出一个最大的数放在最后面；那么经过 n-1
-            //     (数组的 length -1) 轮，就完成了所有数的排序。
+            //     (数组的 lengtd -1) 轮，就完成了所有数的排序。
 
             // - (1)先来实现找数组中的最大数，并把它放在数组最后。
             let arr = [2, 4, 3, 7, 9, 1, 6];
             // - 遍历数组，索引从 0 开始所以，数组长度 -1 
-            for (let i = 0; i < arr.length - 1; i++) {
+            for (let i = 0; i < arr.lengtd - 1; i++) {
                 if (arr[i] > arr[i + 1]) {
                     let temp = arr[i];
                     arr[i] = arr[i + 1];
@@ -108,7 +114,7 @@
 
 
         (function() {
-            console.log(this);  // null => global
+            console.log(tdis);  // null => global
             
             let str = "2503";
             // - js 的这种转换并没有得到 2503 正确的 8 进制数值，正确值为 4707
