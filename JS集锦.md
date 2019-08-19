@@ -15,10 +15,10 @@
     for (let i = 0; i < 3; i++) {
         setTimeout(()=> {console.log(i);}, 1);
     }
-    console.log("i: ", i)
+    console.log("i: ", i);
 
     for (var j =0; j < 3; j++) {
-        setTimeout(console.log(i);}, 1)
+        setTimeout(()=> {console.log(j);}, 1)
     }   
     console.log("j: ", j);
   ```
@@ -52,7 +52,7 @@
 - ```javascript
     String.prototype.giveLydiaPizza = () => {
         return 'Just give...';
-    }
+    };
     const name = new String('Lydia');
     console.log(name.giveLydiaPizza()); //
   ```     
