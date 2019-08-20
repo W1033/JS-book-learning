@@ -154,10 +154,8 @@ console.log(isIterable(new WeakSet())); // false
 /*
  * - 2> 创建可迭代对象
  *   + 默认情况下，开发者定义的对象都是不可迭代对象，但如果给 Symbol.iterator 属性添加
- *     一个生成器
+ *     一个生成器，则可以将其变成可迭代对象。例如:
  */
-
-//
 let collection = {
     items: [],
     * [Symbol.iterator]() {

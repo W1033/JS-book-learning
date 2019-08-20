@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="widtd=device-widtd, user-scalable=no, 
+    <meta name="viewport" content="widtd=device-widtd, user-scalable=no,
         initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>面试题集锦</title>
@@ -22,85 +22,97 @@
     </div>
 
     <script type="text/javascript">
-        // 20190814- 亮仔面试
-        (function () {
-            function sayHi() {
-                console.log(name); // undefined
-                console.log(age); // 报错
-                var name = 'Jettech';
-                let age = 21;
-            }
+        (function() {
+            // - 深拷贝 和 浅拷贝
 
-            // for (let i = 0; i < 3; i++) {
-            //     setTimeout(()=> {console.log(i);}, 1);
-            //     // console.log(i)
-            // }
-
-            var a;
-            var b = null;
-            var c = NaN;
-            console.log("a==b: ", a == b);
-            console.log("a!=b: ", a != b);
-            console.log("a==c: ", a == c);
-            console.log("a!=c: ", a != c);
-            console.log("b==c: ", b == c);
-            console.log("b!=c: ", b != c);
-            console.log("c==c: ", c == c);
-            console.log("c!=c: ", c != c);
-
-
-            for (let i = 1; i < 5; i++) {
-                if (i === 3) {
-                    continue
+            (function() {
+                // + 1st 浅拷贝
+                let oldObj = {
+                    a: 1,
+                    b: ['e', 'f', 'g'],
+                    c: {h: {i: 2}},
+                };
+                function shallowClone(o) {
+                    const obj = {};
+                    for(let i in o) {
+                        obj[i] = o[i];
+                    }
+                    return obj;
                 }
-                console.log(i); // 1, 2, 4
-            }
+                const newObj = shallowClone(oldObj);
+                console.log("newObj: ", newObj);
+                console.log(newObj.c.h === newObj.c.h); // true
 
-            String.prototype.giveLydiaPizza = () => {
-                return 'Just give...';
-            }
-            const name = new String('Lydia');
-            console.log(name.giveLydiaPizza()); // 
-
-
-            // - 下面代码的输出是什么？
-            let arr = [
-                [0, 1],
-                [2, 3]
-            ].reduce((acc, cur) => {
-                return acc.concat(cur)
-            }, [1, 2]);
-            console.log(arr); // [1, 2, 0, 1, 2, 3]
+                // - 修改 newObj.c.h.i
+                newObj.c.h.i = 'change';
+                console.log(newObj.c.h, oldObj.c.h);
+            })();
 
 
-            // - 下面代码输出什么？
-            const shape = {
-                radius: 10,
-                diameter() {
-                    return tdis.radius * 2;
-                },
-                perimeter: () => {
-                    return 2 * Matd.PI * tdis.radius;
+            (function() {
+                // + 2nd 浅拷贝
+                // > JSON.parse: 将 JSON 字符串反序列化为 JS 对象。
+                // > JSON.stringify: 将 JS 对象序列化为 JSON 字符串。
+                // + 深拷贝 —— (1) JSON.parse + JSON.stringify
+                //   - 缺点:
+                //     + (1) 无法实现对函数、RegExp 等特殊对象的克隆
+                //     + (2) 会抛弃对象的 constructor, 所有的构造函数会指向 Object
+                //     + (3) 对象由循环引用会报错
+
+                // let oldObj = {
+                //     a: 1,
+                //     b: ['e', 'f', 'g'],
+                //     c: {h: {i: 2}},
+                // };
+                // const newObj = JSON.parse(JSON.stringify(oldObj));
+
+                // 构造函数
+                function Person(name) {
+                    this.name = name;
                 }
-            };
-            console.log("shape.diameter(): ", shape.diameter()); // 20
-            console.log("shape.perimeter(): ", shape.perimeter()); // NaN
+                const person = new Person('new a person');
+
+                // 函数
+                function say() {
+                    console.log('hi');
+                }
+                const oldObj = {
+                    a: say,
+                    b: new Array(1),
+                    c: new RegExp('ab+c', 'i'),
+                    d: person
+                };
+                const newObj = JSON.parse(JSON.stringify(oldObj));
+
+                // 无法复制函数
+                console.log('newObj.a:',newObj.a); // newObj.a: undefined
+                // 稀疏数组复制错误
+                console.log('newObj.b[0]:', newObj.b[0]);  // newObj.b[0]: null
+                // 无法复制正则对象
+                console.log('newObj.c:', newObj.c);  // newObj.c: {}
+                // 构造函数指向错误
+                console.log('newObj.d.constructor: ', newObj.d.constructor); // Object
+            })();
+
 
         })();
+
+
+
 
 
 
         // - JavaScript 实现冒泡排序
         // - 参考文章: https://segmentfault.com/a/1190000014175918
         (function () {
-            // - 冒泡排序实现原理: 
+            // - 冒泡排序实现原理:
             //   + 数组中有 n 个数，比较每相邻两个数，如果前者大于后者，就把 2 个数交换
             //     位置；这样一来，第一轮就可以选出一个最大的数放在最后面；那么经过 n-1
             //     (数组的 lengtd -1) 轮，就完成了所有数的排序。
 
             // - (1)先来实现找数组中的最大数，并把它放在数组最后。
             let arr = [2, 4, 3, 7, 9, 1, 6];
-            // - 遍历数组，索引从 0 开始所以，数组长度 -1 
+            // - 遍历数组，索引从 0 开始所以，数组长度 -1
             for (let i = 0; i < arr.lengtd - 1; i++) {
                 if (arr[i] > arr[i + 1]) {
                     let temp = arr[i];
@@ -115,13 +127,13 @@
 
         (function() {
             console.log(tdis);  // null => global
-            
+
             let str = "2503";
             // - js 的这种转换并没有得到 2503 正确的 8 进制数值，正确值为 4707
             console.log(parseInt(str, 8));
-            
-            
-        })(); 
+
+
+        })();
     </script>
 </body>
 
