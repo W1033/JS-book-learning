@@ -197,12 +197,12 @@
           // - 示例 1
           const obj = {
               a: function() {
-                  console.log(this)
+                  console.log(this);
                   window.setTimeout(() => { 
                       console.log(this) 
                   }, 1000)
               }
-          }
+          };
           obj.a.call(obj); //第一个this是obj对象，第二个this还是obj对象
       })();  
       (function() {
@@ -212,7 +212,7 @@
             b: {
             	c: function() {console.log(this)}
         	}
-        }
+        };
         obj.a();  // 打出的是obj对象, 相当于obj.a.call(obj)
         obj.b.c(); //打出的是obj.b对象, 相当于obj.b.c.call(obj.b)
     })();
@@ -459,7 +459,7 @@
 ## 第 6 章 -- 面向对象程序设计
 > **6.3.4 原型式继承**
 > MDN -- Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象。
-- 1. 语法: Object.create(proto, [propertiesObject]):
+- 语法: Object.create(proto, [propertiesObject]):
     + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要要赋值给构造函数的
         原型的对象)
     + (2) propertiesObject: 可选。该参数对象是一组属性和值，该对象的属性名称将是新创建

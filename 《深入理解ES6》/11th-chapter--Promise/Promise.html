@@ -34,7 +34,7 @@
                 }
             }
             
-            // - 定义执行构造器(call executor)的
+            // - 定义执行构造器(call executor)
             callExecutor(executor) {
                 const that = this;
                 let cb = false;
@@ -66,11 +66,12 @@
                     onReject(e);
                 }
             }
-    
+            
+            // - status: fulfilled/rejected 
             executeCallback(status, value) {
                 console.log("输出 resolve/reject 回调函数的传入的参数: ", value);
                 // - Tip: type == 'fulfilled';
-                const complete = type == 'fulfilled';
+                const isResolve = status == 'fulfilled';
                 let thenable;
                 // - 如果 value 仍然是 对象 / 函数
                 if (complete && Object.prototype.toString.call(value) 
@@ -79,22 +80,36 @@
                         thenable = this.getThen(value);
                     } catch(e) {
                         // - this 为当前构造函数的实例
-                        return this.callExecutor.call(this, 'rejected', e);
+                        return this.executeCallback.call(this, 'rejected', e);
                     }
                 }
-
+                // - 如果是 thenable 对象而且是 fulfilled 状态 (Promise.reject() 
+                //   会返回参数值)
+                if (isResolve && thenable) {
+                    // -最终会将 thenable 对象里的值抽出到 this.data 中
+                    this.callExecutor(thenable);
+                } else if (this.state === PENDING) {
+                    // - promise 状态一旦改变便不可更改
+                    this.state = isResolve ? FULFILLED : REJECTED;
+                    this.data = value;
+                    this.callbackArr.forEach(fn => fn[status](value));
+                }
+                // - 直接调用 Promise.resolve() Promise.reject() 用得到
+                return this;
             }
     
             // - 获取 thenable 对象
             // - thenable 指的是一个具有 .then 方法的对象。
             getThen(value) {
+                // - 避免 then 内 get 方法多次的调用，对应特殊测试.html
                 const then = value.then;
                 if (Object.prototype.toString.call(value) === '[object Object]'
                     && typeof(then) === 'function') {
-                    
                     return function() {
                         then.apply(value, arguments);
                     }
+                } else {
+                    return false;
                 }
             }
     
@@ -150,6 +165,16 @@
     //     console.log("then this", this); // window
     // });
     
+    
+
+    // - 语法: Object.create(proto, [propertiesObject]):
+    // + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要要赋值给构造函数的
+    //     原型的对象)
+    // + (2) propertiesObject: 可选。该参数对象是一组属性和值，该对象的属性名称将是新创建
+    //   的对象的属性名称，值是属性描述符(这些属性描述符的结构与 Object.defineProperties()
+    //   的第二个参数一样)。注意：该参数对象不能是 undefined,另外只有对象中自身拥有的
+    //   不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
+
     // - 对象含有 then 属性的测试
     let numberOfTimesThenWasRetrieved = 0;
     let obj = Object.create(null, {
