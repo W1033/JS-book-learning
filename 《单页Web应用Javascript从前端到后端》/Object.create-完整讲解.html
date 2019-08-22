@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**《单页Web应用》的讲解:*/
+
+        //1.古老的用 new Function()创建调用对象的实例
+        var proto = {
+            sentence: 4,
+            probation: 2
+        };
+        var Prisoner = function (name, id) { 
+            this.name = name;
+            this.id = id;
+        };
+        Prisoner.prototype = proto;  //把proto对象赋值给Prisoner构造函数的原型
+        //step4
+        var firstPrisoner = new Prisoner("Joe", "12A");
+        console.log("firstPrisoner:", firstPrisoner);
+        console.log(firstPrisoner.__proto__);
+        var secondPrisoner = new Prisoner("Sam", "2BC");
+        console.log('secondPrisoner:', secondPrisoner);
+
+
+        /**
+         * ## MDN -- Object.create();
+         * > Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象。
+         * - 1. 语法: Object.create(proto, [propertiesObject]):
+         *   + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要要赋值给构造函数的
+         *     原型的对象)
+         *   + (2) propertiesObject: 可选。该参数对象是一组属性和值，该对象的属性名称将是新创建
+         *     的对象的属性名称，值是属性描述符(这些属性描述符的结构与 Object.defineProperties()
+         *     的第二个参数一样)。注意：该参数对象不能是 undefined,另外只有对象中自身拥有的
+         *     不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
+         */
+
+        //2. 使用Object.create方法实现类式继承
+        //shape - superclass (形状 - 超类)
+        function Shape() {
+            this.x = 0;
+            this.y = 0;
+        }
+
+        Shape.prototype.move = function (x, y) { //在Shape的原型上定义一个move()方法
+            this.x += x;
+            this.y += y;
+            console.info("Shape moved.(图形发生了变化)");
+        };
+
+        //Rectangle - subclass (矩形 - 子类)
+        function Rectangle() {
+            Shape.call(this);  // call super constructor. 调用超类构造函数
+        }
+
+        //subclass extends superclass 子类扩展超类
+        Rectangle.prototype = Object.create(Shape.prototype);
+        Rectangle.prototype.constructor = Rectangle;
+
+        var rect = new Rectangle();
+
+        console.log("Is rect an instance of Rectangle?(rect是Rectangle的实例吗) ",
+            rect instanceof Rectangle);
+        console.log("Is rect an instance of Shape?(rect是Shape的实例吗?) ",
+            rect instanceof Shape);
+        rect.move(1, 2);
+
+        /**
+         3. 使用 Object.create的 propertyObject参数
+        示例代码见: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+        */
+
+    </script>
+</body>
+</html>

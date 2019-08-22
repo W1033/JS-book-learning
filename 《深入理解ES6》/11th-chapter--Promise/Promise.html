@@ -86,7 +86,17 @@
             }
     
             // - 获取 thenable 对象
-            getThen(value) {}
+            // - thenable 指的是一个具有 .then 方法的对象。
+            getThen(value) {
+                const then = value.then;
+                if (Object.prototype.toString.call(value) === '[object Object]'
+                    && typeof(then) === 'function') {
+                    
+                    return function() {
+                        then.apply(value, arguments);
+                    }
+                }
+            }
     
             executeAsyncCallback() {}
     
@@ -139,7 +149,23 @@
     //     console.log(data);
     //     console.log("then this", this); // window
     // });
-
+    
+    // - 对象含有 then 属性的测试
+    let numberOfTimesThenWasRetrieved = 0;
+    let obj = Object.create(null, {
+        then: {
+            get: function() {
+                ++numberOfTimesThenWasRetrieved;
+                return function(resolve) {
+                    resolve();
+                }
+            }
+        }
+    })
+    console.log('obj:', obj);
+    Promise.resolve(obj).then(() => {
+        console.log(numberOfTimesThenWasRetrieved); // 1
+    });
 </script>
 </body>
 </html>

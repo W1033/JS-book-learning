@@ -11,7 +11,7 @@ function getURL(URL) {
         };
         req.onerror = function() {
             reject(new Error(req.statusText));
-        }
+        };
         xhr.send()
 
         // var xhr = new XMLHttpRequest()
