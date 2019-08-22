@@ -16,7 +16,7 @@ The project is aim to understand the Promise/A+ better and try to realize an exp
 
 - [x] Promise.resolve(): 返回一个状态为 RESOLVED 的 promise 对象
 
-- [x] Promise.reject(): 返回一个状态为 RESOLVED 的 promise 对象
+- [x] Promise.reject(): 返回一个状态为 REJECTED 的 promise 对象
 
 - [x] Promise.all(arr): 当数组内所有元素状态都发生改变后，按照顺序返回结果数组
 

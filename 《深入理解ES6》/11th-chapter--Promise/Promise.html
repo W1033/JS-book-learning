@@ -71,12 +71,12 @@
                 console.log("输出 resolve/reject 回调函数的传入的参数: ", value);
                 // - Tip: type == 'fulfilled';
                 const complete = type == 'fulfilled';
-                let thenAble;
+                let thenable;
                 // - 如果 value 仍然是 对象 / 函数
                 if (complete && Object.prototype.toString.call(value) 
                     === '[object Object]' || (value instanceof Function)) {
                     try{
-                        thenAble = this.getThen(value);
+                        thenable = this.getThen(value);
                     } catch(e) {
                         // - this 为当前构造函数的实例
                         return this.callExecutor.call(this, 'rejected', e);
