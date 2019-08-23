@@ -15,92 +15,60 @@
     const REJECTED = 'rejected';
 
     class Promise{
-        // - executor /ɪg'zekjʊtə/ n.执行器，执行者
-        // - Tip: 我们把 new Promise(function(resolve, reject) {}) 传入的匿名函数
-        //   称为执行器(executor)
         constructor(executor) {
-            // - 确定 executor 是个函数
             if (executor && typeof executor !== 'function') {
                 throw new Error(`Promise resolve ${executor} is not a function`)
             }
             this.state = PENDING;
             this.data = undefined;
-            // - 定义一个保存回调函数的数组
             this.callbackArr = [];
             if (typeof(executor) === 'function') {
-                // - 调用执行器 call Executor
                 this.callExecutor(executor);
             }
         }
 
-        // - 运行执行器(call executor)
         callExecutor(executor) {
             const that = this;
             let cb = false;
-            // - onSuccess 和 onError 只会执行一个，在构造函数的执行器(executor)
-            //   的函数体内只会传入其中一个。
-            // - Tip: onSuccess/onError 在下面 try...catch 中被调用，value 参数
-            //   是 执行器(executor) 的函数体中，调用当前 onSuccess() 传入的参数
-            const onResolve = function(value) {
-                // - 如果 cb = true 立马退出
+            const onSuccess = function(value) {
                 if (cb) {return}
                 cb = true;
-                // - execute ['eksɪkjuːt] --vt.执行，实施，履行
-                // - 我们从执行器(executor) 的函数体中({}),可以看出，是直接调用了当
-                //   前的 onResolve 或者下面的 onReject,
                 that.executeCallback('fulfilled', value);
             };
-            const onReject = function(value) {
+            const onError = function(value) {
                 if (cb) {return}
                 cb = true;
                 that.executeCallback('rejected', value);
             };
             try {
-                // - 执行 new Promise() 传入的 executor(执行器)函数，并把上面定义的
-                //   onResolve 和 OnReject 函数传入其中。
-                executor(onResolve, onReject);
+                executor(onSuccess, onError);
             } catch(e) {
-                // - new Promise() 中抛错，这里不用 that.executeCallback('reject',e)
-                //   ，有错误的话提前终止不进入 onSuccess / onError
-                onReject(e);
+                onError(e);
             }
         }
 
-        // - status: fulfilled/rejected
         executeCallback(status, value) {
-            // - Tip: type == 'fulfilled';
-            const isResolve = status == 'fulfilled';
+            const isResolve = status === 'fulfilled';
             let thenable;
-            // - 如果 value 仍然是 对象 / 函数
-            if (status && Object.prototype.toString.call(value)
-                    === '[object Object]' || (value instanceof Function)) {
+            if (isResolve && Object.prototype.toString.call(value)
+                    === '[object Object]' || (typeof (value) === 'function')) {
                 try{
                     thenable = this.getThen(value);
                 } catch(e) {
-                    // - this 为当前构造函数的实例
                     return this.executeCallback.call(this, 'rejected', e);
                 }
             }
-            // - 如果是 thenable 对象而且是 fulfilled 状态 (Promise.reject()
-            //   会返回参数值)
             if (isResolve && thenable) {
-                // -最终会将 thenable 对象里的值抽出到 this.data 中
                 this.callExecutor(thenable);
             } else if (this.state === PENDING) {
-                // - promise 状态一旦改变便不可更改
                 this.state = isResolve ? FULFILLED : REJECTED;
                 this.data = value;
-                // - Q1: 这个 callbackArr 数组，在哪里推入项的？
                 this.callbackArr.forEach(fn => fn[status](value));
             }
-            // - 直接调用 Promise.resolve() Promise.reject() 用得到
             return this;
         }
 
-        // - 获取 thenable 对象
-        // - thenable 指的是一个具有 .then 方法的对象。
         getThen(value) {
-            // - 避免 then 内 get 方法多次的调用，对应特殊测试.html
             const then = value.then;
             if (Object.prototype.toString.call(value) === '[object Object]'
                     && typeof(then) === 'function') {
@@ -120,10 +88,8 @@
                 try {
                     res = callback(value);
                 } catch (e) {
-                    // - 目的: 使捕获到的错误进入 Promise。catch() 中
                     that.executeCallback('rejected', e);
                 }
-                // - 如果放回的值域原 Promise 相等，则是无穷循环
                 if (res === that) {
                     that.executeCallback('rejected',
                             new TypeError('Chaining cycle detected for promise # <Promise>'));
@@ -136,32 +102,20 @@
         then(onResolved, onRejected) {
             if ((typeof (onResolved) !== 'function' && this.state === FULFILLED)
                     || (typeof (onRejected) !== 'function' && this.state === REJECTED)) {
-                // - 配合 done() 使用
                 return this;
             }
-            // - 创建一个新的 promise 实例，作用一: 链式调用。 作用二: 传入
-            //   CallbackItem 中使其能调用 Promise 的方法
             const promise = new this.constructor();
-            // - 第一次进入 then, 状态是 FULFILLED 或者 REJECTED
             if (this.state !== PENDING) {
                 const callback = this.state === FULFILLED ? onResolved : onRejected;
-                // - Tip: this.data 在上面 executeCallback 中已经被赋值
-                // - 绑定 this 到 promise   (1)
                 this.executeAsyncCallback.call(promise, callback, this.data);
             }
-            // - 从第二次开始以后，进入 then 状态是 PENDING
             else {
-                // - 这里的 this 也是指向 "上一个" promise  (2)
-                // - Tip: 上一句上一个 'promise' 意思应该是指 promise 为
-                //   new this.constructor() 通过当前 Promise 构造函数创建的。
                 this.callbackArr.push(new CallbackItem(promise, onResolved, onRejected));
-                console.log('this.callbackArr:', this.callbackArr);
             }
             return promise;
         }
 
         catch(onRejected) {
-            // - 加上 return 相当于返回 promise
             return this.then(null, onRejected);
         }
 
@@ -179,8 +133,6 @@
 
     class CallbackItem {
         constructor(promise, onResolved, onRejected) {
-            // - 相应地，这里存储的 promise 是来自下一个 then 的
-            // - Tip: 上面一句不太理解 promise 来自下一个 then 是什么意思？
             this.promise = promise;
             this.onResolved = typeof (onResolved) === 'function' ? onResolved
                     : (v) => {return v;};
@@ -199,9 +151,7 @@
 
     // - Promise 类上添加的静态方法(类方法)
     Promise.resolve = function(value) {
-        // - 在 Promise.race 中用到，使 Promise 对象: Promise.resolve(1) 和普通
-        //   值: 3 之间公平竞争。
-        // - 原理: 避免下一行进入 setTimeout 回调
+        console.log('resolve inner this:', this);
         if (value instanceof this) return value;
         return this.prototype.executeCallback.call(new Promise(), 'fulfilled', value);
     };
@@ -213,7 +163,6 @@
 
     Promise.all = function(arr) {
         const that = this;
-        // - Tip: new this() 虽然理解就是 new Promise() 但是这种写法还是第一次遇到。
         return new this(function(resolve, reject) {
             let res = [];
             let count = 0;
@@ -238,57 +187,22 @@
 
     function pms2() {
         return new Promise((resolve, reject) => {
-            console.log('我是 pms2 的输出');
+            console.log("我是 pms2 内的内容");
             resolve(Promise.resolve('执行任务2成功'))
         })
     }
 
     let psm1 = function() {
         return new Promise(function(resolve, reject) {
-            console.log('我是 psm1 内的内容');
             let val = '我是 psm1 的 value';
             resolve(val);
         })
-    }
+    };
     psm1().then((data) => {
         console.log(data);
-        pms2();
+        return pms2();
     }).then((data) => {
         console.log(data);
-    });
-
-    // new Promise(function(resolve, reject) {
-    //     console.log(this);  // Window
-    //     resolve("传入then 中的数据");
-    // }).then(function(data) {
-    //     console.log(data);
-    //     console.log("then this", this); // window
-    // });
-    
-
-    // - 语法: Object.create(proto, [propertiesObject]):
-    // + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要要赋值给构造函数的
-    //     原型的对象)
-    // + (2) propertiesObject: 可选。该参数对象是一组属性和值，该对象的属性名称将是新创建
-    //   的对象的属性名称，值是属性描述符(这些属性描述符的结构与 Object.defineProperties()
-    //   的第二个参数一样)。注意：该参数对象不能是 undefined,另外只有对象中自身拥有的
-    //   不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
-
-    // - 对象含有 then 属性的测试
-    let numberOfTimesThenWasRetrieved = 0;
-    let obj = Object.create(null, {
-        then: {
-            get: function() {
-                ++numberOfTimesThenWasRetrieved;
-                return function(resolve) {
-                    resolve();
-                }
-            }
-        }
-    })
-    console.log('obj:', obj);
-    Promise.resolve(obj).then(() => {
-        console.log(numberOfTimesThenWasRetrieved); // 1
     });
 
 
