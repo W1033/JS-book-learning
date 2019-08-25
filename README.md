@@ -53,15 +53,24 @@
       }
   ```
 
-- 2、CSS 单位
-    + `%`：百分比
-    + `px`：像素。计算机屏幕上的一个点为 1px. |
-    + `em`：相对单位。相对于父元素计算，假如某个 p 元素为 `font-size:12px`, 在它内部的 
-      span 标签，设置 `font-size: 2em`, 那么， 这时候的 span 字体大小为 12*2 = 24px。
-    + `rem`：相对单位。 相对于根元素 html 的 `font-size`. 例如 html 为 
-      `font-=size: 12px`, 那么其内的 div 设置为 `font-size: 2rem`, div 字体大小就
-       为 24px.
-    + `rpx`：微信小程序相对单位。1rpx = 屏幕宽度/750px. 在 750px 的设计稿上，1rpx = 1px
+- 2、CSS 单位  
+  + | 单位   | 解释 |
+    | ----  | ---- |
+    | `%`   | 百分比|
+    | `px`  | 像素。计算机屏幕上的一个点为 1px. |
+    | `em`  | 相对单位。相对于父元素计算，假如某个 p 元素为 `font-size:12px`,在它内部的 span 标签，设置 `font-size: 2em`, 那么， 这时候的 span 字体大小为 12*2 = 24px。|
+    | `rem` | 相对单位。 相对于根元素 html 的 `font-size`. 例如 html 为 `font-size: 12px`, 那么其内的 div 设置为 `font-size: 2rem`, div 字体大小就为 24px. |
+    | `rpx` | 微信小程序相对单位。1rpx = 屏幕宽度/750px. 在 750px 的设计稿上，1rpx = 1px |
+    | `pt`  | 略 |
+    | `ex`  | 略 |
+
+    
+    
+    + 
+    + `px`： |
+    + `em`：
+    + `rem`：
+    + `rpx`：
     + `pt`：略
     + `ex`：略
 
@@ -240,7 +249,8 @@
 - 1 种复杂数据类型: Object
 
 > **3.6 语句 --> 3.6.7 break 和 continue 语句:** 
->> break 和 continue 语句用于在循环中精确地控制代码的执行。
+>
+> > break 和 continue 语句用于在循环中精确地控制代码的执行。
 - break 语句会立即退出循环，强制继续执行循环后面的语句。
     + ```javascript
         function breakExample() {
@@ -296,12 +306,12 @@
 - (4.) RegExp   类型
 - (5.) Function 类型
 - (6.) 基本包装类型
-        +  Boolean 类型
-        +  Number  类型
-        +  String  类型
+    +  Boolean 类型
+    +  Number  类型
+    +  String  类型
 - (7.) 单体内置对象
-        + Global 对象
-        + Math   对象
+    + Global 对象
+    + Math   对象
         
 > **5.0 Object 类型 --> 5.1 引用类型**
 - 一般来说，访问对象属性时使用的都是点表示法，这也是很多面向对象语言中通用的语法。不过，在 
@@ -323,7 +333,7 @@
       (Last-In-First-Out， 后进先出)的数据结构，也就是最新添加的项最早被移除。而栈中
       项的插入(叫做推入)和移除(叫做 弹出)，只发生在一个位置——栈的顶部。ECMAScript 为数组
       专门提供了 push()和 pop()方法，以便 实现类似栈的行为。
-      
+    
 - chapter5: 5.2.7 -- 位置方法 ES5 为数组实例添加了两个位置方法： indexOf() 和 
     lastIndexOf() 。
     + ```javascript
@@ -334,6 +344,9 @@
         if (aa.indexOf('lo') === -1) {
             // 没找到匹配
         }
+        ```
+    ```
+    
     ```
     
 - chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，然后返回包含所有
@@ -466,7 +479,7 @@
         的对象的属性名称，值是属性描述符(这些属性描述符的结构与 Object.defineProperties()
         的第二个参数一样)。注意：该参数对象不能是 undefined,另外只有对象中自身拥有的
         不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
-        
+    
 - ES5 - 提供了 Object.create 方法，可以用来克隆对象。
     + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
     + js高程-P170: ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。
@@ -515,6 +528,7 @@
         ```
 - ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，
     返回一个包含所有可枚举属性的字符串数组。
+    
     + 示例: 《js高级程序设计》\js高程学习笔记\js高程---Object.keys().js
 - ES5 - Object.getOwnPropertyNames(): 【取得自身的属性名】。 js高程 - Chapter 6
 - ES5 - Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型的真实值被存储在
@@ -614,8 +628,8 @@
 
 > **35、银行卡添加和删除空格**
  - 见示例: js-sundry-goods\JS--方法总结\2019\20190218--表单数字添加空格.html
- 
- 
+
+
 > **Array.prototype.**
  - 1、将 arguments (类数组对象)转换为数组, 或者把 NodeList 对象转换为数组(比如一组li):
     + `Array.prototype.slice.call(arguments);`
