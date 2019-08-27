@@ -2,9 +2,8 @@
 
 // - ECMAScript 5 中的近类结构为 -> 自定义类型: 首先创建一个构造函数，然后定义另外一个方法
 //   赋值给构造函数的原型。代码如下:
-//      + (1)、创建自定义类型的最常见方式，就是组合使用构造函数模式与原型模式
-//      + (2)、构造函数模式用于定义实例属性，而原型模式用于定义方法和共享的属性。
-//      +
+//   + (1)、创建自定义类型的最常见方式，就是组合使用构造函数模式与原型模式
+//   + (2)、构造函数模式用于定义实例属性，而原型模式用于定义方法和共享的属性。
 
 // (1)
 function PersonType(name) {
@@ -20,32 +19,31 @@ person.sayName();
 console.log(person instanceof PersonType);  // true
 console.log(person instanceof Object);      // true
 
-// js中所有对象的根对象是 Object.prototype [详细讲解见: ../../Javascript设计模式与编程实
-// 践/第一部分--基础知识/第1章--面向对象的javascript.md]
+// - Tips: js中所有对象的根对象是 Object.prototype [详细讲解见: 
+//   Javascript设计模式与编程实践/第一部分--基础知识/第1章--面向对象的javascript.md]
 
 
 // ~~~~~~~~~~ ~~~~~~~~~~ ~~~~~~~~~~ ~~~~~~~~~~
 
 
-
-// ES6 类声明: 要声明一个类，首先编写 class 关键字，紧跟着的是类的名字，其他部分的语法类似于
-//  对象字面量的简写形式，但是**不需要在类的各元素之间使用逗号分隔**。
-// 每个类都有一个名为 [[Construct]]的内部方法，通过关键字new调用那些不含 [[Construct]] 的
-//  方法会导致程序抛出错误。
-// 类声明仅仅是基于已有自定义类型声明的语法糖。
+// - ES6 类声明: 要声明一个类，首先编写 class 关键字，紧跟着的是类的名字，其他部分的语法
+//   类似于对象字面量的简写形式，但是 **不需要在类的各元素之间使用逗号分隔** 。
+// - 每个类都有一个名为 [[Construct]] 的内部方法，通过关键字 new 调用那些不含 
+//   [[Construct]] 的方法会导致程序抛出错误。(Tip: TypeScript 文档[接口--> 类类型]说
+//   constructor 方法为类的静态方法，但是看不到内部源码，所以不知如何实现的。)
+// - 类声明仅仅是基于已有自定义类型声明的语法糖。
 class PersonClass {
-    /**
-     * 等价于 PersonType 构造函数 : 直接在类中通过特殊的 constructor 方法名来定义构造函数，
-     * 且由于这种类使用简洁语法来定义方法，因而不需要添加 function 关键字。除了 constructor
-     * 外没有其他保留的方法名，所以可以尽情添加方法。 自有属性是实例中的属性，不会出现在原型上，
-     * 且只能在类的构造函数或方法中创建，此例中的 name 就是一个自有属性。这里建议你在构造函数
-     * 中创建所有的自有属性，从而只通过一处就可以控制类中的所有自有属性。
-     */
+    // - 等价于 PersonType 构造函数 : 直接在类中通过特殊的 constructor 方法名来定义
+    //   构造函数，且由于这种类使用简洁语法来定义方法，因而不需要添加 function 关键字。
+    //   除了 constructor 外没有其他保留的方法名，所以可以尽情添加方法。 自有属性是
+    //   实例中的属性，不会出现在原型上，且只能在类的构造函数或方法中创建，此例中的 name 
+    //   就是一个自有属性。这里建议你在构造函数中创建所有的自有属性，从而只通过一处就可以
+    //   控制类中的所有自有属性。
     constructor(name) {
         this.name = name;
     }
 
-    // 等价于 PersonType.prototype.sayName
+    // - 等价于 PersonType.prototype.sayName
     sayName() {
         console.log(this.name);
     }
@@ -65,64 +63,55 @@ console.log(typeof PersonClass.prototype.sayName);  // "function"
 // ---------------------- 我是分割线 -----------------------
 
 
-// P184. (2) 等价于PersonClass : 这个示例可以看出，尽管可以在不使用 new 语法的前提下实现类
-// 的所有功能，但如此一来，代码变得极为复杂。
+// - P184. (2) 等价于PersonClass : 这个示例可以看出，尽管可以在不使用 new 语法的前提
+//   下实现类的所有功能，但如此一来，代码变得极为复杂。
 let PersonType2 = (function () {
-
     "use strict";
     const PersonType2 = function (name) {
-
-        // 确保通过关键字 new 调用该函数
+        // - 确保通过关键字 new 调用该函数
         if (typeof new.target === "undefined") {
             throw new Error("必须通过关键字new调用构造函数");
         }
-
         this.name = name;
     };
-
-    // 在 PersonType2.prototype 原型对象上定义一个访问器属性 sayName
+    // - 在 PersonType2.prototype 原型对象上定义一个访问器属性 sayName
     Object.defineProperty(PersonType2.prototype, "sayName", {
         value: function () {
-            // 确保不會通过关键字 new 调用该方法
+            // - 确保不會通过关键字 new 调用该方法
             if (typeof  new.target !== "undefined") {
                 throw new Error("不可使用关键字new调用该方法");
             }
 
             console.log(this.name);
         },
-
         enumerable: false,
         writable: true,
         configurable: true
-
     });
-
     return PersonType2;
-
 }());
 
 
 // ---------------------- 我是分割线 -----------------------
 
 
-// 类表达式: 类和函数都有两种存在形式: 声明形式 和 表达式形式。声明形式的函数和类都由相应的关键
-// 字(分别为 function 和 class)进行定义，随后紧跟一个标识符; 表达式形式的函数和类与之类似，只
-// 是不需要在关键字后添加标识符。类表达式的设计初衷是为了声明相应变量或传入函数作为参数。
+// - 类表达式: 类和函数都有两种存在形式: 声明形式 和 表达式形式。声明形式的函数和类都由
+//   相应的关键字(分别为 function 和 class)进行定义，随后紧跟一个标识符; 表达式形式的
+//   函数和类与之类似，只是不需要在关键字后添加标识符。类表达式的设计初衷是为了声明相应变量
+//   或传入函数作为参数。
 
-// 基本的类表达式
+// - 基本的类表达式
 let PersonClass2 = class {
     constructor(name) {
         this.name = name;
     }
-
     sayName() {
         console.log(this.name);
     }
 };
 
-
-// 《js高程》命名函数表达式: 7th chapter - 7.1 递归: 用命名函数表达式实现递归。可以在严格模
-// 式和非严格模式下都行得通。
+// -《js高程》命名函数表达式: 7th chapter - 7.1 递归: 用命名函数表达式实现递归。可以
+//   在严格模式和非严格模式下都行得通。
 var factorial = (function f(num) {
     if (num <= 1) {
         return 1;
@@ -133,16 +122,15 @@ var factorial = (function f(num) {
 console.log(factorial(4));      // 24
 
 
-// 命名类表达式: 其实类和函数一样都可以定义命名表达式，声明时，在关键字 class 后添加一个标识符即可定义为命名类表达式。
-// 在js引擎中，类表达式的实现与类声明稍有不同。对于类声明来说，通过 let 定义的外部绑定与通过 const 定义的内部绑定具有
-// 相同名称; 而命名类表达式通过 const 定义名称，从而 PersonClass33 只能在类的内部使用
+// - 命名类表达式: 其实类和函数一样都可以定义命名表达式，声明时，在关键字 class 后添加
+//   一个标识符即可定义为命名类表达式。在js引擎中，类表达式的实现与类声明稍有不同。对于
+//   类声明来说，通过 let 定义的外部绑定与通过 const 定义的内部绑定具有相同名称; 而
+//   命名类表达式通过 const 定义名称，从而 PersonClass33 只能在类的内部使用
 let PersonCla3 = class PersonClass33 {
-
     // 等價于 PersonType 構造函數
     consturctor(name) {
         this.name = name;
     }
-
     // 等價于 PersonType.prototype.sayName
     sayName() {
         console.log(this.name);
@@ -180,8 +168,8 @@ let obj = createObject(class {
 });
 obj.sayHi();
 
-/* 类表达式另外一種使用方式: 通过立即调用类构造函数可以创建单例(Singleton)。用 new 調用類表達式，緊接著通過一對
- * 小括號調用這個表達式 */
+// - 类表达式另外一種使用方式: 通过立即调用类构造函数可以创建单例(Singleton)。
+//   用 new 調用類表達式，緊接著通過一對小括號調用這個表達式.
 let anotherPerson = new class {
     constructor(name) {
         this.name = name;
