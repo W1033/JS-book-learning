@@ -459,21 +459,20 @@
 > **6.3.4 原型式继承**
 > MDN -- Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象。
 - 语法: Object.create(proto, [propertiesObject]):
-    + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要要赋值给构造函数的
+    + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要赋值给构造函数的
         原型的对象)
     + (2) propertiesObject: 可选。该参数对象是一组属性和值，该对象的属性名称将是新创建
         的对象的属性名称，值是属性描述符(这些属性描述符的结构与 Object.defineProperties()
         的第二个参数一样)。注意：该参数对象不能是 undefined,另外只有对象中自身拥有的
         不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
-    
 - ES5 - 提供了 Object.create 方法，可以用来克隆对象。
     + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
     + js高程-P170: ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。
       这个方法接收两个参数：
-    - 第 1 个: 用作新对象原型的对象。(在传入一个参数的情况下 Object.create() 与 
-        object() [tips: 6.3.4 自定义的 object() 方法] 方法的行为相同。)
-    - 第 2 个: 一个为新对象定义额外属性的对象(可选)。
-    - ```javascript
+        - 第 1 个: 用作新对象原型的对象。(在传入一个参数的情况下 Object.create() 与 
+          object() [tips: 6.3.4 自定义的 object() 方法] 方法的行为相同。)
+        - 第 2 个: 一个为新对象定义额外属性的对象(可选)。
+        - ```javascript
             // 示例1 : javascript 高程 -- 6.3.4 原型式继承
             let person = {
                 // 基本类型值属性
@@ -492,8 +491,8 @@
             // - person.friends 不仅属于 person 所有，而且会被 anotherPerson 以及 
             //   yetAnotherPerson 共享。实际上这就相当于又创建了 person 对象的 2 个副本。
             console.log(person.friends);    // "Shelby,Court,Van,Rob,Barbie"
-        ```
-    - ```javascript
+          ```
+        - ```javascript
             // - 示例来源: 《Javascript设计模式与编程实践》/第一部分--基础知识
             //   /第1章-面形对象的JavaScript/Chapter01-面向对象的javascript.md
             const Plane = function () {
@@ -511,7 +510,7 @@
             console.log(clonePlane);            // Plane {}
             console.log(clonePlane.blood);      // 500
             console.log(clonePlane.attackLevel);// 10
-        ```
+          ```
 - ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，
     返回一个包含所有可枚举属性的字符串数组。
     
@@ -540,6 +539,28 @@
       });
       console.log(factorial(4));      // 24
   ```
+
+## 第 10 章 -- DOM
+- DOM (Document Object Model 文档对象模型) 是针对 HTML 和 XML 文档的一个 API (应用
+  程序编程接口)。DOM 描绘了一个层次化的节点树，允许开发人员添加、移除 和 修改页面的某一部分。
+> 10.1.1 Node 类型
+- DOM1 级定义了一个 Node 接口，该接口将由 DOM 中的所有节点类型实现。这个 Node 接口在 js
+  中是作为 Node 类型实现的；js 中的所有节点类型都继承自 Node 类型，因此所有节点类型都共享
+  着相同的基本属性和方法。
+- 每个节点都有一个 nodeType 属性，用于表明节点的类型。节点类型由在 Node 类型中定义的下列
+  12 个数值常量来表示，任何接地啊你类型都必居其一:
+    + Node.element_node(1);
+    + Node.attribute_node(2);
+    + Node.text_node(3);
+    + Node.cdata_section_node(4);
+    + Node.entity_reference_node(5);
+    + Node.entity_node(6);
+    + Node.processing_instruction_node(7);
+    + Node.comment_node(8);
+    + Node.document_node(9);
+    + Node.document_type_node(10);
+    + Node.document_fragment_node(11);
+    + Node.notation_node(12); 
 
 
 
