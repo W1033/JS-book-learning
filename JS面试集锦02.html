@@ -8,9 +8,22 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>面试题集锦</title>
     <style type="text/css">
-        * {margin:0; padding: 0; list-style:none; font-size: 14px;}
-        table {border-collapse: collapse; text-align:left;}
-        th, td {border: 1px solid #000;}
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 14px;
+        }
+
+        table {
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+        }
     </style>
 </head>
 
@@ -22,118 +35,188 @@
     </div>
 
     <script type="text/javascript">
-        (function() {
-            // - 深拷贝 和 浅拷贝
+        // (function() {
+        //     // - 深拷贝 和 浅拷贝
 
-            (function() {
-                // + 1st 浅拷贝
-                let oldObj = {
-                    a: 1,
-                    b: ['e', 'f', 'g'],
-                    c: {h: {i: 2}},
-                };
-                function shallowClone(o) {
-                    const obj = {};
-                    for(let i in o) {
-                        obj[i] = o[i];
-                    }
-                    return obj;
+        //     (function() {
+        //         // + 1st 浅拷贝
+        //         let oldObj = {
+        //             a: 1,
+        //             b: ['e', 'f', 'g'],
+        //             c: {h: {i: 2}},
+        //         };
+        //         function shallowClone(o) {
+        //             const obj = {};
+        //             for(let i in o) {
+        //                 obj[i] = o[i];
+        //             }
+        //             return obj;
+        //         }
+        //         const newObj = shallowClone(oldObj);
+        //         console.log("newObj: ", newObj);
+        //         console.log(newObj.c.h === newObj.c.h); // true
+
+        //         // - 修改 newObj.c.h.i
+        //         newObj.c.h.i = 'change';
+        //         console.log(newObj.c.h, oldObj.c.h);
+        //     })();
+
+        //     (function() {
+        //         // + 2nd 浅拷贝
+        //         // > JSON.parse: 将 JSON 字符串反序列化为 JS 对象。
+        //         // > JSON.stringify: 将 JS 对象序列化为 JSON 字符串。
+        //         // + 深拷贝 —— (1) JSON.parse + JSON.stringify
+        //         //   - 缺点:
+        //         //     + (1) 无法实现对函数、RegExp 等特殊对象的克隆
+        //         //     + (2) 会抛弃对象的 constructor, 所有的构造函数会指向 Object
+        //         //     + (3) 对象由循环引用会报错
+
+        //         // let oldObj = {
+        //         //     a: 1,
+        //         //     b: ['e', 'f', 'g'],
+        //         //     c: {h: {i: 2}},
+        //         // };
+        //         // const newObj = JSON.parse(JSON.stringify(oldObj));
+
+        //         // 构造函数
+        //         function Person(name) {
+        //             this.name = name;
+        //         }
+        //         const person = new Person('new a person');
+
+        //         // 函数
+        //         function say() {
+        //             console.log('hi');
+        //         }
+        //         const oldObj = {
+        //             a: say,
+        //             b: new Array(1),
+        //             c: new RegExp('ab+c', 'i'),
+        //             d: person
+        //         };
+        //         const newObj = JSON.parse(JSON.stringify(oldObj));
+
+        //         // 无法复制函数
+        //         console.log('newObj.a:',newObj.a); // newObj.a: undefined
+        //         // 稀疏数组复制错误
+        //         console.log('newObj.b[0]:', newObj.b[0]);  // newObj.b[0]: null
+        //         // 无法复制正则对象
+        //         console.log('newObj.c:', newObj.c);  // newObj.c: {}
+        //         // 构造函数指向错误
+        //         console.log('newObj.d.constructor: ', newObj.d.constructor); // Object
+        //     })();
+
+        // })();
+
+
+        // // - JavaScript 实现冒泡排序
+        // // - 参考文章: https://segmentfault.com/a/1190000014175918
+        // (function () {
+        //     // - 冒泡排序实现原理:
+        //     //   + 数组中有 n 个数，比较每相邻两个数，如果前者大于后者，就把 2 个数交换
+        //     //     位置；这样一来，第一轮就可以选出一个最大的数放在最后面；那么经过 n-1
+        //     //     (数组的 lengtd -1) 轮，就完成了所有数的排序。
+
+        //     // - (1)先来实现找数组中的最大数，并把它放在数组最后。
+        //     let arr = [2, 4, 3, 7, 9, 1, 6];
+        //     // - 遍历数组，索引从 0 开始所以，数组长度 -1
+        //     for (let i = 0; i < arr.lengtd - 1; i++) {
+        //         if (arr[i] > arr[i + 1]) {
+        //             let temp = arr[i];
+        //             arr[i] = arr[i + 1];
+        //             arr[i + 1] = temp;
+        //         }
+        //     }
+        //     console.log("arr: ", arr); // arr:  (7) [2, 3, 4, 7, 1, 6, 9]
+        // })();
+
+
+
+        // (function() {
+        //     console.log(tdis);  // null => global
+
+        //     let str = "2503";
+        //     // - js 的这种转换并没有得到 2503 正确的 8 进制数值，正确值为 4707
+        //     console.log(parseInt(str, 8));
+        // })();
+
+
+
+        // > 第 1 天: 用递归算法实现,数组长度为 5 且元素的随机数在 2 - 32 间不重复的值.
+        // - 这是一道大题目, 把考点拆成了 4 个小项; 需要候选人用递归算法实现 (限制 15 行
+        //   代码以内实现; 限制时间为 10 分钟内完成):
+        //     + a) 创建一个长度为 5 的空数组 arr.
+        //     + b) 生成一个 (2 - 32) 之间的随机整数 random
+        //     + c) 把随机数插入到数组 arr 内, 如果数组内已存在 random 相同的数字, 则
+        //       重新生成随机数并插入到 arr 内 (需要使用递归实现, 不能使用 for/while 等
+        //       循环)
+        //     + d) 最终输出一个长度为 5, 且内容不重复的数组 arr.
+        (function () {
+
+            // - 1.使用 include 做判断 +  生成固定长度数组
+            function random(arr, length, min, max) {
+                let num = Math.floor(Math.random() * (max - min + 1) + min);
+                // 这里不能用 indexOf() 
+                if (!arr.includes(num)) {
+                    arr.push(num);
                 }
-                const newObj = shallowClone(oldObj);
-                console.log("newObj: ", newObj);
-                console.log(newObj.c.h === newObj.c.h); // true
+                return arr.length === length ? arr : random(arr, length, min, max);
+            }
+            var result = random([], 5, 2, 32);
+            console.log(result);
 
-                // - 修改 newObj.c.h.i
-                newObj.c.h.i = 'change';
-                console.log(newObj.c.h, oldObj.c.h);
-            })();
+            // ------
 
 
-            (function() {
-                // + 2nd 浅拷贝
-                // > JSON.parse: 将 JSON 字符串反序列化为 JS 对象。
-                // > JSON.stringify: 将 JS 对象序列化为 JSON 字符串。
-                // + 深拷贝 —— (1) JSON.parse + JSON.stringify
-                //   - 缺点:
-                //     + (1) 无法实现对函数、RegExp 等特殊对象的克隆
-                //     + (2) 会抛弃对象的 constructor, 所有的构造函数会指向 Object
-                //     + (3) 对象由循环引用会报错
-
-                // let oldObj = {
-                //     a: 1,
-                //     b: ['e', 'f', 'g'],
-                //     c: {h: {i: 2}},
-                // };
-                // const newObj = JSON.parse(JSON.stringify(oldObj));
-
-                // 构造函数
-                function Person(name) {
-                    this.name = name;
+            // - 2.使用 object 实现去重 +  生成固定长度数组
+            function randomArray(length, min, max, cache) {
+                cache = cache || {};
+                const random = Math.floor(Math.random()* (max - min +1) + min);
+                if (!cache[random]) {
+                    length -= 1;
+                    cache[random] = true;
+                    console.log(cache);
                 }
-                const person = new Person('new a person');
 
-                // 函数
-                function say() {
-                    console.log('hi');
-                }
-                const oldObj = {
-                    a: say,
-                    b: new Array(1),
-                    c: new RegExp('ab+c', 'i'),
-                    d: person
-                };
-                const newObj = JSON.parse(JSON.stringify(oldObj));
-
-                // 无法复制函数
-                console.log('newObj.a:',newObj.a); // newObj.a: undefined
-                // 稀疏数组复制错误
-                console.log('newObj.b[0]:', newObj.b[0]);  // newObj.b[0]: null
-                // 无法复制正则对象
-                console.log('newObj.c:', newObj.c);  // newObj.c: {}
-                // 构造函数指向错误
-                console.log('newObj.d.constructor: ', newObj.d.constructor); // Object
-            })();
-
+                // - Object.keys(): 取得对象上所有可枚举的实例属性
+                // - Array.prototype.map(): 详见: 
+                //   JS--方法总结/20190920_Array.prototype.map.js
+                return length ? randomArray(length, min, max, cache): 
+                    Object.keys(cache).map(Number);
+            }
+            console.log(randomArray(5, 2, 32));
 
         })();
 
 
+        // - Object 和 Array.prototype.includes 去重性能对比代码:
+        (function() {
+            const arr = [];
+            const obj = {};
+            const len = 1000;
+            for (let i = 0; i <= len; i++) {
+                arr.push(i);
+                obj[i] = true;
+            }
 
+            console.time("Array.includes");
+            for (let i = 0; i <= len; i++) {
+                arr.includes(i);
+            }
+            console.timeEnd("Array.includes");
 
-
-
-        // - JavaScript 实现冒泡排序
-        // - 参考文章: https://segmentfault.com/a/1190000014175918
-        (function () {
-            // - 冒泡排序实现原理:
-            //   + 数组中有 n 个数，比较每相邻两个数，如果前者大于后者，就把 2 个数交换
-            //     位置；这样一来，第一轮就可以选出一个最大的数放在最后面；那么经过 n-1
-            //     (数组的 lengtd -1) 轮，就完成了所有数的排序。
-
-            // - (1)先来实现找数组中的最大数，并把它放在数组最后。
-            let arr = [2, 4, 3, 7, 9, 1, 6];
-            // - 遍历数组，索引从 0 开始所以，数组长度 -1
-            for (let i = 0; i < arr.lengtd - 1; i++) {
-                if (arr[i] > arr[i + 1]) {
-                    let temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
+            console.time("Object.keys");
+            for (let i = 0; i <= len; i++) {
+                // obj[i];
+                if (i === len) {
+                    // - 
+                    Object.keys(obj).map(Number);
                 }
             }
-            console.log("arr: ", arr); // arr:  (7) [2, 3, 4, 7, 1, 6, 9]
+            console.timeEnd("Object.keys");
         })();
 
-
-
-        (function() {
-            console.log(tdis);  // null => global
-
-            let str = "2503";
-            // - js 的这种转换并没有得到 2503 正确的 8 进制数值，正确值为 4707
-            console.log(parseInt(str, 8));
-
-
-        })();
+        
     </script>
 </body>
 

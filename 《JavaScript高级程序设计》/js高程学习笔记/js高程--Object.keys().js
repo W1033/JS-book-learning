@@ -17,7 +17,7 @@ Person.prototype.sayName = function () {
 let p1 = new Person("Rob", 36, 'Software Engineer');
 
 let keys = Object.keys(Person.prototype);
-console.log("keys:",keys);          // ['job', 'sayName' ]
+console.log("keys:",keys);          // ['sayName']
 
 let p1keys = Object.keys(p1);
 console.log(p1keys);        // [ 'name', 'age', 'job' ]

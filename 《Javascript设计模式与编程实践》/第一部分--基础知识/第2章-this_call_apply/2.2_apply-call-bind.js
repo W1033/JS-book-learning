@@ -123,7 +123,7 @@ theFunc(3, 4);
 
 
 /** - 3、借用其他对象的方法 */
-let max = Math.max.apply(null, [11, 22, 33, 44, 34, 24, 46])
+// let max = Math.max.apply(null, [11, 22, 33, 44, 34, 24, 46])
 // console.log(max);   // 46
 
 (function(){
