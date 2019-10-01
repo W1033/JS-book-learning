@@ -3,19 +3,19 @@
  *  - 当一个对象的属性与本地变量同名时，不必再写冒号和值，简单地只写属性名即可。
  */
 function createperson(name, age) {
-    return {
-        // 原始写法 name: name,  age: age
-        // 简写
-        name, age
-    }
+	return {
+		// 原始写法 name: name,  age: age
+		// 简写
+		name, age
+	}
 }
 
 /** ### P74 - 对象方法的简写语法 */
 const person = {
-    name: "Nicholas",
-    sayName() {
-        console.log(this.name);
-    }
+	name: "Nicholas",
+	sayName() {
+		console.log(this.name);
+	}
 };
 
 
@@ -63,20 +63,20 @@ console.log(Object.is(NaN, NaN));  // true
 // - 混合(Mixin)是 js 中实现对象组合的一种模式。在一个 mixin 方法中，一个对象
 //   接受来自另一个对象的属性和方法。许多 js 库中都有类似的 mixin 方法:
 function mixin(receiver, supplier) {
-    // (1)、
-    Object.keys(supplier).forEach(function (key) {
-        receiver[key] = supplier[key];
-    })
+	// (1)、
+	Object.keys(supplier).forEach(function (key) {
+		receiver[key] = supplier[key];
+	})
 }
 
 function EventTarget() { }
 EventTarget.prototype = {
-    constructor: EventTarget,
-    emit: function (parameter) {
-        console.log(parameter);
-    },
-    on: function () { /**/
-    }
+	constructor: EventTarget,
+	emit: function (parameter) {
+		console.log(parameter);
+	},
+	on: function () { /**/
+	}
 };
 const myObj = {};
 // (2)、
@@ -111,13 +111,13 @@ myObj.emit("somethingChange again");
 //   【取得自身的属性名】方法及 Reflect.ownKeys (将在第 12 章讲解) 返回属性的方式，
 //   Object.assign() 方法处理属性的顺序也将随之改变。 例如:
 let aObj = {
-        a: 1,
-        0: 1,
-        c: 1,
-        2: 1,
-        b: 1,
-        1: 1
-    };
+		a: 1,
+		0: 1,
+		c: 1,
+		2: 1,
+		b: 1,
+		1: 1
+	};
 aObj.d = 1;
 
 // js高程: chapter5: join()方法：数组方法。只接收一个参数，即用作分隔符的字符串，
@@ -136,14 +136,14 @@ console.log(Object.getOwnPropertyNames(aObj).join("")); // 012acbd
 //          - (1) 被改变原型的对象。
 //          - (2) 替代第一个参数原型的对象。
 let animal = {
-    getGreeting() {
-        return "Hello";
-    }
+	getGreeting() {
+		return "Hello";
+	}
 };
 let dog = {
-    getGreeting() {
-        return "woof";
-    }
+	getGreeting() {
+		return "woof";
+	}
 };
 
 // ES5 提供了 Object.create 方法，可以用来克隆对象。 示例: ECMAScript6-Study\
@@ -166,26 +166,26 @@ console.log(Object.getPrototypeOf(friend) === dog);    // true
 //   可以更便捷地访问对象原型。
 
 let person02= {
-    getGreeting() {
-        return "Hello";
-    }
+	getGreeting() {
+		return "Hello";
+	}
 };
 let dog02 = {
-    getGreeting() {
-        return "Woof";
-    }
+	getGreeting() {
+		return "Woof";
+	}
 };
 let friend02 = {
-    getGreeting() {
-        // - ES5 中如果你想重写对象实例的方法，又需要调用与它同名的原型方法的写法。
-        // return Object.getPrototypeOf(this).getGreeting.call(this) + ", hi!";
+	getGreeting() {
+		// - ES5 中如果你想重写对象实例的方法，又需要调用与它同名的原型方法的写法。
+		// return Object.getPrototypeOf(this).getGreeting.call(this) + ", hi!";
 
-        // - ES6 为了减少上面调用原型上的方法的复杂度，引入了 super 关键字。简单来说，
-        //   Super 引用相当于指向对象原型的指针，实际上也就是 Object.getPrototypeOf(this)
-        //   的值。调用 super.getGreeting() 方法 相当于 调用上面 ES5 写法。
-        //   🔺 注意: super 的写法必须要在使用简写方法的对象中使用。(即: getGreeting(){})
-        return super.getGreeting() + ", hi!";
-    }
+		// - ES6 为了减少上面调用原型上的方法的复杂度，引入了 super 关键字。简单来说，
+		//   Super 引用相当于指向对象原型的指针，实际上也就是 Object.getPrototypeOf(this)
+		//   的值。调用 super.getGreeting() 方法 相当于 调用上面 ES5 写法。
+		//   🔺 注意: super 的写法必须要在使用简写方法的对象中使用。(即: getGreeting(){})
+		return super.getGreeting() + ", hi!";
+	}
 };
 
 // 将原型设置为 person02
@@ -209,23 +209,23 @@ console.log(Object.getPrototypeOf(friend02) === dog02); // true
  *    从属的对象。
  */
 (function() {
-    // (1)、
-    let person = {
-        // 是方法
-        getGreeting() {
-            return "Hello";
-        }
-    };
+	// (1)、
+	let person = {
+		// 是方法
+	    getGreeting() {
+			return "Hello";
+		}
+	};
 
-    // 不是方法
-    function shareGreeting() {
-        return "Hi!";
-    }
+	// 不是方法
+	function shareGreeting() {
+		return "Hi!";
+	}
 
-    // > 注释:
-    // - (1)、这个示例中定义了 person 对象，它有一个 getGreeting() 方法，由于直接把函数
-    //   赋值给了 person 对象，因而 getGreeting() 方法的 [[HomeObject]] 属性值为
-    //   person。而创建 shareGreeting() 函数时，由于未将其赋值给一个对象，因而该方法没有
-    //   明确定义 [[HomeObject]] 属性。在大多数情况下这点小差别无关紧要，但是当使用 Super
-    //   引用时这就变得非常重要了。
+	// > 注释:
+	// - (1)、这个示例中定义了 person 对象，它有一个 getGreeting() 方法，由于直接把函数
+	//   赋值给了 person 对象，因而 getGreeting() 方法的 [[HomeObject]] 属性值为
+	//   person。而创建 shareGreeting() 函数时，由于未将其赋值给一个对象，因而该方法没有
+	//   明确定义 [[HomeObject]] 属性。在大多数情况下这点小差别无关紧要，但是当使用 Super
+	//   引用时这就变得非常重要了。
 })();
