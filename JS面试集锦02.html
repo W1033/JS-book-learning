@@ -35,78 +35,75 @@
     </div>
 
     <script type="text/javascript">
-        // (function() {
-        //     // - 深拷贝 和 浅拷贝
+        // - 深拷贝 和 浅拷贝
+        (function() {
+            // + 1st 浅拷贝
+            let oldObj = {
+                a: 1,
+                b: ['e', 'f', 'g'],
+                c: {h: {i: 2}},
+            };
+            function shallowClone(o) {
+                const obj = {};
+                for(let i in o) {
+                    obj[i] = o[i];
+                }
+                return obj;
+            }
+            const newObj = shallowClone(oldObj);
+            console.log("newObj: ", newObj);
+            console.log(newObj.c.h === newObj.c.h); // true
 
-        //     (function() {
-        //         // + 1st 浅拷贝
-        //         let oldObj = {
-        //             a: 1,
-        //             b: ['e', 'f', 'g'],
-        //             c: {h: {i: 2}},
-        //         };
-        //         function shallowClone(o) {
-        //             const obj = {};
-        //             for(let i in o) {
-        //                 obj[i] = o[i];
-        //             }
-        //             return obj;
-        //         }
-        //         const newObj = shallowClone(oldObj);
-        //         console.log("newObj: ", newObj);
-        //         console.log(newObj.c.h === newObj.c.h); // true
+            // - 修改 newObj.c.h.i
+            newObj.c.h.i = 'change';
+            console.log(newObj.c.h, oldObj.c.h);
+        })();
 
-        //         // - 修改 newObj.c.h.i
-        //         newObj.c.h.i = 'change';
-        //         console.log(newObj.c.h, oldObj.c.h);
-        //     })();
+        (function() {
+            // + 2nd 浅拷贝
+            // > JSON.parse: 将 JSON 字符串反序列化为 JS 对象。
+            // > JSON.stringify: 将 JS 对象序列化为 JSON 字符串。
+            // + 深拷贝 —— (1) JSON.parse + JSON.stringify
+            //   - 缺点:
+            //     + (1) 无法实现对函数、RegExp 等特殊对象的克隆
+            //     + (2) 会抛弃对象的 constructor, 所有的构造函数会指向 Object
+            //     + (3) 对象由循环引用会报错
 
-        //     (function() {
-        //         // + 2nd 浅拷贝
-        //         // > JSON.parse: 将 JSON 字符串反序列化为 JS 对象。
-        //         // > JSON.stringify: 将 JS 对象序列化为 JSON 字符串。
-        //         // + 深拷贝 —— (1) JSON.parse + JSON.stringify
-        //         //   - 缺点:
-        //         //     + (1) 无法实现对函数、RegExp 等特殊对象的克隆
-        //         //     + (2) 会抛弃对象的 constructor, 所有的构造函数会指向 Object
-        //         //     + (3) 对象由循环引用会报错
+            // let oldObj = {
+            //     a: 1,
+            //     b: ['e', 'f', 'g'],
+            //     c: {h: {i: 2}},
+            // };
+            // const newObj = JSON.parse(JSON.stringify(oldObj));
 
-        //         // let oldObj = {
-        //         //     a: 1,
-        //         //     b: ['e', 'f', 'g'],
-        //         //     c: {h: {i: 2}},
-        //         // };
-        //         // const newObj = JSON.parse(JSON.stringify(oldObj));
+            // 构造函数
+            function Person(name) {
+                this.name = name;
+            }
+            const person = new Person('new a person');
 
-        //         // 构造函数
-        //         function Person(name) {
-        //             this.name = name;
-        //         }
-        //         const person = new Person('new a person');
+            // 函数
+            function say() {
+                console.log('hi');
+            }
+            const oldObj = {
+                a: say,
+                b: new Array(1),
+                c: new RegExp('ab+c', 'i'),
+                d: person
+            };
+            const newObj = JSON.parse(JSON.stringify(oldObj));
 
-        //         // 函数
-        //         function say() {
-        //             console.log('hi');
-        //         }
-        //         const oldObj = {
-        //             a: say,
-        //             b: new Array(1),
-        //             c: new RegExp('ab+c', 'i'),
-        //             d: person
-        //         };
-        //         const newObj = JSON.parse(JSON.stringify(oldObj));
+            // 无法复制函数
+            console.log('newObj.a:',newObj.a); // newObj.a: undefined
+            // 稀疏数组复制错误
+            console.log('newObj.b[0]:', newObj.b[0]);  // newObj.b[0]: null
+            // 无法复制正则对象
+            console.log('newObj.c:', newObj.c);  // newObj.c: {}
+            // 构造函数指向错误
+            console.log('newObj.d.constructor: ', newObj.d.constructor); // Object
+        })();
 
-        //         // 无法复制函数
-        //         console.log('newObj.a:',newObj.a); // newObj.a: undefined
-        //         // 稀疏数组复制错误
-        //         console.log('newObj.b[0]:', newObj.b[0]);  // newObj.b[0]: null
-        //         // 无法复制正则对象
-        //         console.log('newObj.c:', newObj.c);  // newObj.c: {}
-        //         // 构造函数指向错误
-        //         console.log('newObj.d.constructor: ', newObj.d.constructor); // Object
-        //     })();
-
-        // })();
 
 
         // // - JavaScript 实现冒泡排序
@@ -116,7 +113,6 @@
         //     //   + 数组中有 n 个数，比较每相邻两个数，如果前者大于后者，就把 2 个数交换
         //     //     位置；这样一来，第一轮就可以选出一个最大的数放在最后面；那么经过 n-1
         //     //     (数组的 lengtd -1) 轮，就完成了所有数的排序。
-
         //     // - (1)先来实现找数组中的最大数，并把它放在数组最后。
         //     let arr = [2, 4, 3, 7, 9, 1, 6];
         //     // - 遍历数组，索引从 0 开始所以，数组长度 -1
@@ -134,7 +130,6 @@
 
         // (function() {
         //     console.log(tdis);  // null => global
-
         //     let str = "2503";
         //     // - js 的这种转换并没有得到 2503 正确的 8 进制数值，正确值为 4707
         //     console.log(parseInt(str, 8));
@@ -149,6 +144,51 @@
         let nums = [1, [1, [2, [3, [4]]]]];
         // 1,1,2,3,4
         console.log(nums.toString());
+
+
+        (function () {
+            // - 请写出下面代码的运行结果
+            async function async1() {
+                console.log("async1 start");
+                await async2();
+                console.log("async1 end");
+            }
+            async function async2() {
+                console.log("async2");
+            }
+            console.log("script start");
+            setTimeout(function() {
+                console.log("setTimeout");
+            }, 0);
+            async1();
+            new Promise(function(resolve) {
+                console.log("promise1");
+                resolve(); 
+            }).then(function() {
+                console.log("promise2");
+            });
+            console.log("script end");
+
+            // - 大致的执行顺序:
+            // - Tip: js 代码的执行顺序是从上往下依次执行的
+            //     + (1) 事件循环从微任务 async 开始, 把 async1 放置到微任务队列
+            //     + (2) 把 async2 放置到微任务队列
+            //     + (3) 执行同步代码输出: <1>."script start"
+            //     + (4) 把 setTimeout() 放置到宏任务队列
+            //     + (5) 执行微任务函数 async1: <2>."async1 start" 然后调用微任务函数
+            //       async2, 因为 await 会等待 async2 函数执行完毕才会继续执行 async1 
+            //       函数内接下来的代码, 所以此时执行 async2 函数后, 输出: <3>."async2"
+            //       
+            //     + (6) 
+            //     + (7) 
+        })();
+
+        (function() {
+            var arr = [[1, 2, 3],[3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10];
+            var c = arr.concat().toString().split(",");
+            var removeRepeat = new Set(...arr.concat());
+            
+        })();
         
     </script>
 </body>
