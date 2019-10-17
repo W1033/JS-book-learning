@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let _items = Symbol();
+        class Stack {
+            constructor() {
+                this[_items] = [];
+                console.log(_items);
+            }
+            // - 向栈添加元素
+            push(element) {
+                this[_items].push(element);
+                console.log(this[_items]);
+            }
+            // - 从栈移除元素
+            pop() {
+                return this[_items].pop();
+            }
+            // - 查看栈顶元素
+            peek() {
+                return this[_items][this[_items].length -1];
+            } 
+            // - 检查栈是否为空
+            isEmpty() {
+                return this[_items].length === 0;
+            }
+            // - 清空栈
+            clear() {
+                this[_items] = [];
+            }
+            // - 打印栈元素
+            print() {
+                console.log(this[_items].toString());
+            }
+        }
+
+        let stack = new Stack();
+        stack.push(5);
+        stack.push(8);
+        
+    </script>
+</body>
+</html>

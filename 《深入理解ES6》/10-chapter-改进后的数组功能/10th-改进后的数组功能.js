@@ -70,8 +70,8 @@ function translate2() {
 let numbers2 = translate2(1, 2, 3);
 console.log(numbers2);
 
-// 用 Array.from() 转换可迭代对象: Array.from() 方法可以处理类数组对象和可迭代对象，也就是说改方法
-// 能够将所有含有 Symbol.iterator 属性的对象转换为数组。例如:
+// - 用 Array.from() 转换可迭代对象: Array.from() 方法可以处理类数组对象和可迭代对象，
+//   也就是说该方法能够将所有含有 Symbol.iterator 属性的对象转换为数组。例如:
 let nums = {
     * [Symbol.iterator]() {
         yield 1;
