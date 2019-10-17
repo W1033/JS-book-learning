@@ -500,7 +500,6 @@
           ```
 - ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，
     返回一个包含所有可枚举属性的字符串数组。
-    
     + 示例: 《js高级程序设计》\js高程学习笔记\js高程---Object.keys().js
 - ES5 - Object.getOwnPropertyNames(): 【取得自身的属性名】。 js高程 - Chapter 6
 - ES5 - Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型的真实值被存储在
