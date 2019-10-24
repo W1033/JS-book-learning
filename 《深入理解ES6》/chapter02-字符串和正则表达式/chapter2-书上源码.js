@@ -1,29 +1,5 @@
 /** UTF-16 码位 **/
-// "𠮷"为日文字，不是中文"吉"
-let text = '𠮷'
-console.log(text.length)           // 2     :   变量text的长度事实上为1，但它的length属性值为2
-console.log(/^.$/.test(text))      // false :   text被判断为2个字符，因此匹配单一字符的正则表达式会失效。
-console.log(text.charAt(0))        // ""    :   前后两个16位的编码单元都不表示任何可打印的字符，因此 charAt()方法不会返回合法的字符。
-console.log(text.charAt(1))        // ""    :   同上
-console.log(text.charCodeAt(0))    // 55362 :   charCodeAt()方法同样不能正确地识别字符，它会返回每个16位编码单元对应的数值，在ECMAScript5中，这是能得到的最近text真实的结果了。
 
-
-/** CodePointAt() : 这个方法接受编码单元的位置而非字符位置作为参数，返回与字符串中给定位置对应的码位，即一个整数值。 **/
-console.log(text.codePointAt(0))   // 134071
-console.log(text.codePointAt(1))   // 57271
-
-// 要检测一个字符占用的编码单元数量，最简单的方法是调用字符的 codePointAt() 方法，可以写这一样一个函数来检测:
-function is32Bit(c) {
-    // 用 16 位表示的字符集上界为十六进制 FFFF, 所有超过这个上界的码位一定由两个编码单元来表示，总共有 32 位。
-    return c.codePointAt(0) > 0xFFFF
-}
-
-console.log(is32Bit('𠮷'))         // true
-console.log(is32Bit('a'))          // false
-
-
-/** String.fromCodePoint() 方法根据指定的码位生成一个字符。(和上面的 codePointAt()相反的方法。) **/
-console.log(String.fromCodePoint(134071))    //"𠮷"
 
 
 /** normalize()方法      /ˈnɔ:məˌlaɪz/  n.标准化，正常化  vt&vi (使)正常化 **/
@@ -50,11 +26,7 @@ console.log(normalized)  // 这里生成了一个新数组
 
 
 /** u 修饰符 **/
-// 还是上面的 "𠮷"
-console.log(text.length)         // 2
-// /^.$/匹配所有单字符字符串 : "小数点" 匹配除换行符之外的任何单个字符
-console.log(/^.$/.test(text))    // false
-console.log(/^.$/u.test(text))   // true
+
 
 
 /** 计算码位数量 **/
