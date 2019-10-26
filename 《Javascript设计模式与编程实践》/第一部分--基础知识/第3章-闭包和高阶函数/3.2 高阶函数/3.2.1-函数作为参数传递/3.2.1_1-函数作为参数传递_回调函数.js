@@ -7,7 +7,7 @@
 
 /* > 把函数作为参数传递 -- 1.回调函数 */
 
-// 示例1 -- Ajax 回调函数
+// -示例1: Ajax 回调函数
 let getUserInfo = function(userId, callback) {
     $.get('http://xxx.com/getUserInfo?' + userId, function(data) {
         if (typeof callback === 'function') {
@@ -19,9 +19,32 @@ let getUserInfo = function(userId, callback) {
 //     console.log(data.userName);
 // });
 
-// 示例3 -- 把函数作为参数传递
-// Tip:（来自汤姆大叔的博客--《深入理解JavaScript系列》（16）: 闭包（Closures））
-// 讲解 把匿名函数传入到 exampleFunc 和把一个匿名函数赋值给变量 funArg 是一个道理。
+// ------
+
+// - 示例2: 在页面中创建 100 个 div 节点，然后把这些 div 节点都设置为隐藏。
+// - Tip: 此示例内部有 DOM 操作，只能在 HTML 中执行。
+(function() {
+    let appendDiv = function(callback) {
+        for (let i=0; i < 100; i++) {
+            let div = document.createElement('div');
+            div.innerHTML = i;
+            document.body.appendChild(div);
+            if (typeof callback === "function") {
+                callback(div);
+            }
+        }
+    };
+    // 我们把 div.style.display = 'none' 抽出来，用回调函数的形式传入 appendDiv 方法：
+    appendDiv(function(node) {
+        node.style.display = 'none';
+    });
+})();
+
+// ------
+
+// - 示例3: 把函数作为参数传递
+// - Tip:（来自汤姆大叔的博客--《深入理解JavaScript系列》（16）: 闭包（Closures））
+//   讲解 把匿名函数传入到 exampleFunc 和把一个匿名函数赋值给变量 funArg 是一个道理。
 (function() {
     function exampleFunc(funArg) {
         funArg();
@@ -30,24 +53,3 @@ let getUserInfo = function(userId, callback) {
         console.log("我是被当做参数传递的函数");
     });
 })();
-
-
-
-// 示例2 -- 在页面中创建 100 个 div 节点，然后把这些 div 节点都设置为隐藏。
-// Tip: 此自执行匿名函数不能在当前 JS 文件中执行，内部有 DOM 操作，只能在 HTML 中执行。
-// (function() {
-//     let appendDiv = function(callback) {
-//         for (let i=0; i < 100; i++) {
-//             let div = document.createElement('div');
-//             div.innerHTML = i;
-//             document.body.appendChild(div);
-//             if (typeof callback === "function") {
-//                 callback(div);
-//             }
-//         }
-//     };
-//     // 我们把 div.style.display = 'none' 抽出来，用回调函数的形式传入 appendDiv 方法：
-//     appendDiv(function(node) {
-//         node.style.display = 'none';
-//     });
-// })();
