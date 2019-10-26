@@ -49,8 +49,8 @@
                 return fn.apply(this, args);
             } else {
                 [].push.apply(args, arguments);
-                // 《JS高程》7.1：arguments.callee 是一个指向正在执行的函数的指针。
-                // 但在严格模式下（即在js文件头部添加："use strict" ）
+                // - 《js高程》7.1：arguments.callee 是一个指向正在执行的函数的指针。
+                //   但在严格模式下（即在js文件头部添加："use strict"）访问他会导致错误.
                 return arguments.callee;
             }
         }
