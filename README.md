@@ -435,7 +435,7 @@
     + (2) Function.prototype.bind
     + (3) 借用其他对象的方法
     + 1/2/3 的示例见: Javascript设计模式与编程实践》/第一部分--基础知识
-        /第2章-this_call_apply/2.2_apply-call-bind.js
+        /第2章-this_call_apply/
 
 
 > **5.6.3 String 类型**

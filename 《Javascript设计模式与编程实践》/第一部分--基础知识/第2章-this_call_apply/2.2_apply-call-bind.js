@@ -35,6 +35,24 @@ let callFunc = function(a,b, c) {
 };
 // callFunc.call(null, 4, 5, 6);
 
+
+/* P34 Array.prototype.push 实际上是一个属性复制的过程，把参数按照下标依次添加到被
+ * push 的对象上面，顺便修改了这个对象的 length 属性。至于被修的对象是谁，到底是数组还是
+ * 类数组对象，这一点并不重要。
+ */
+let a = {};
+[].push.call(a, "first");
+[].push.call(a, "this is second item");
+
+// a:  { '0': 'first', '1': 'this is second item', length: 2 }
+console.log("a: ", a);
+
+console.log("a.length: ", a.length);
+console.log("a[0]: ", a[0]);
+
+
+
+
 /**
  *  > 2.2.2  apply 和 call 的用途
  *   - 1、改变 this 指向
