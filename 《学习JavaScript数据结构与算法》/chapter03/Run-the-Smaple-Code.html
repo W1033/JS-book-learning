@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        (function() {
+            // class Stack {
+            //     constructor() {
+            //         this.items = [];
+            //         // console.log(_items);
+            //     }
+            //     // - 向栈添加元素
+            //     push(element) {
+            //         this.items.push(element);
+            //         // console.log(this.items);
+            //     }
+            //     // - 从栈移除元素
+            //     pop() {
+            //         return this.items.pop();
+            //     }
+            //     // - 查看栈顶元素
+            //     peek() {
+            //         return this.items[this.items.length -1];
+            //     }
+            //     // - 检查栈是否为空
+            //     isEmpty() {
+            //         return this.items.length === 0;
+            //     }
+            //     // - 清空栈
+            //     clear() {
+            //         this.items = [];
+            //     }
+            //     // - 打印栈元素
+            //     print() {
+            //         console.log(this.items.toString());
+            //     }
+            // }
+            //
+            // let stack = new Stack();
+            // stack.push(5);
+            // stack.push(8);
+            // console.log('stack: ', stack);
+        })();
+
+        (function() {
+            const _items = new WeakMap();
+            const _count = new WeakMap();
+            class Stack {
+                constructor() {
+                    _count.set(this, 0);
+                    _items.set(this, []);
+
+                    // Output: _items: WeakMap
+                    console.log('_items: ', _items);
+                    console.log('_count: ', _count);
+                }
+                push(element) {
+                    const items = _items.get(this);
+                    const count = _count.get(this);
+                    items[count] = element;
+                    _count.set(this, count + 1);
+                }
+                pop() {
+                    if(this.isEmpty()) {
+                        return undefined;
+                    }
+                    const items = _items.get(this);
+                    let count = _count.get(this);
+                    count--;
+                    _count.set(this, count);
+                    const result = items[count];
+                    delete items[count];
+                    return result;
+                }
+                peek() {
+                    if (this.isEmpty()) {
+                        return undefine;
+                    }
+                    const items = _items.get(this);
+                    const count = _count.get(this);
+                    return items[count - 1];
+                }
+                isEmpty() {
+                    return _count.get(this) === 0;
+                }
+                size() {
+                    return _count.get(this);
+                }
+                clear() {
+                    _count.set(this, 0);
+                    _items.set(this, 0);
+                }
+                toString() {
+                    if (this.isEmpty()) {
+                        return '';
+                    }
+                    const items = _items.get(this);
+                    const count = _count.get(this);
+                    let objString = `${items[0]}`;
+                    for (let i = 1; i < count; i++) {
+                        objString = `${objString}, ${items[i]}`;
+                    }
+                    return objString;
+                }
+            }
+
+            let stack = new Stack();
+            stack.push(6);
+        })();
+    </script>
+</body>
+</html>
