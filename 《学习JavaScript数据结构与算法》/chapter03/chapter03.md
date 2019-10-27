@@ -27,23 +27,65 @@
         - 如果用 WeakMap 来存储 items 属性 (数组版本), Stack 类就是这样的: 
           ```javascript
             // - 默认 items = [];
-            const items = new WeakMap();    // - {1}
+            const _items = new WeakMap();
+            const _count = new WeakMap();
             class Stack {
                 constructor() {
-                    items.set(this, []);    // - {2}
-                    
-                    // Output: items: WeakMap
-                    console.log('items: ', items);
+                    _count.set(this, 0);
+                    _items.set(this, []);
+
+                    // Output: _items: WeakMap
+                    console.log('_items: ', _items);
+                    console.log('_count: ', _count);
                 }
                 push(element) {
-                    const s = items.get(this);  // - {3}
-                    s.push(element);
+                    const items = _items.get(this);
+                    const count = _count.get(this);
+                    items[count] = element;
+                    _count.set(this, count + 1);
                 }
                 pop() {
-                    const s = items.get(this); 
-                    return s.pop();
+                    if(this.isEmpty()) {
+                        return undefined;
+                    }
+                    const items = _items.get(this);
+                    let count = _count.get(this);
+                    count--;
+                    _count.set(this, count);
+                    const result = items[count];
+                    delete items[count];
+                    return result;
                 }
-                // - 其他方法
+                peek() {
+                    if (this.isEmpty()) {
+                        return undefined;
+                    }
+                    const items = _items.get(this);
+                    const count = _count.get(this);
+                    return items[count - 1];
+                }
+                isEmpty() {
+                    return _count.get(this) === 0;
+                }
+                size() {
+                    return _count.get(this);
+                }
+                clear() {
+                    _count.set(this, 0);
+                    _items.set(this, 0);
+                }
+                toString() {
+                    if (this.isEmpty()) {
+                        return '';
+                    }
+                    const items = _items.get(this);
+                    const count = _count.get(this);
+                    let objString = `${items[0]}`;
+                    for (let i = 1; i < count; i++) {
+                        objString = `${objString}, ${items[i]}`;
+                    }
+                    return objString;
+                }
             }
 
             let stack = new Stack();
