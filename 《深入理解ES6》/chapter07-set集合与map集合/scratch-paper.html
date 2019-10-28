@@ -46,7 +46,7 @@
     let Person = (function () {
         // 此示例用 IIFE 包裹了 Person 的定义，其中包含2个私有属性: privateData 与 privateId
         // privateData 对象存储了每个实例的私有信息，而 privateId 则被用于为每个实例产生一个唯一 ID。
-        // 当 P儿son构造函数被调用时，一个不可枚举、不可配置、不可写入的 _id 属性就被添加了。
+        // 当 Person 构造函数被调用时，一个不可枚举、不可配置、不可写入的 _id 属性就被添加了。
         let privateData = {},
             privateId = 0;
 

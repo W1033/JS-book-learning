@@ -54,7 +54,7 @@
                 that.executeCallback("rejected", value)
             };
 
-            // try{}catch(){} 会在当前方法发调用时立即执行
+            // - try{} catch(){} 会在当前方法发调用时立即执行
             try {
                 // 把上面定义的 onSuccess 函数和 onError 函数的"指针"传入到 resolver
                 // 执行器函数内，
