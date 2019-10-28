@@ -7,8 +7,10 @@
 - synchrony (Sync) ['sɪŋkrənɪ] --n.同步
 
 
-## 实现代码
-- ```javascript
+## 实现
+
+- Promise 类实现
+  ```javascript
     (function(scope) {
         const PENDING = 'pending';
         const FULFILLED = 'fulfilled';
@@ -21,7 +23,7 @@
             constructor(executor) {
                 // - 确定 executor 是一个函数
                 if (executor && typeof executor !== 'function') {
-                    throw new Error(`Promise resolve ${executor} is noe a function`);
+                    throw new Error(`Promise resolve ${executor} is not a function`);
                 }
                 this.state = PENDING;
                 this.data = undefined;
