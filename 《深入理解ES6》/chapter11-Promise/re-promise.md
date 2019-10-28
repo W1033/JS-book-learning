@@ -172,6 +172,7 @@
                     const callback = this.state === FULFILLED ? onResolved: onRejected;
                     // - Tip: this.data 在上面 executeCallback 中已经被赋值
                     // - 绑定 this 到 promise   (1)
+                     // - Tip2: this.data 在上面 executeCallback() 方法中被赋值. 
                     this.executeAsyncCallback.call(promise, callback, this.data);
                 }
                 // - 从第二次开始以后, 进入 then 状态是 PENDING
