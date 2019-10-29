@@ -125,6 +125,22 @@
     + 使用 `Promise.reject()`;
     + 非 Promise 的 Thenable 对象
 - **执行器错误**
+    + 如果执行器内部抛出一个错误，则 Promise 的拒绝处理程序就会被调用。
+      ```js
+        let promise = new Promise((resolve, reject) => {
+            throw new Error('Explosion!');
+
+            // - 上面的 trow new Error() 等价于
+            // try {
+            //     throw new Error('Explosion!');
+            // } catch(ex) {
+            //     reject(ex);
+            // }
+        })
+        promise.catch((error) => {
+            console.log(error.message); // 'Explosion!'
+        })
+      ```
 #### 3. 全局的 Promise 拒绝处理
 - **Node.js 环境的拒绝处理**
 - **浏览器环境的拒绝处理**

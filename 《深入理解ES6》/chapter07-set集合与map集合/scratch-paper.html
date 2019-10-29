@@ -7,6 +7,17 @@
 <body>
 
 <script type="text/javascript">
+
+    (function() {
+        let set = new Set();
+        let key1 = {};
+        let key2 = {};
+        set.add(key1);
+        set.add(key2);
+        console.log("set: ", set);
+    })();
+
+
     let set5 = new Set([1, 2, 3, 3, 3, 4, 5]),
         arr = [...set5];
     console.log(arr);

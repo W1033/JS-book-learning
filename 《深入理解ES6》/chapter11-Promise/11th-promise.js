@@ -1,89 +1,54 @@
 
+(function() {
+    function pms1() {
+        return new Promise((resolve, reject) => {
+            // console.log("executor function body");
 
-/** 1. 异步编程的背景知识 --> 事件模型 */
+            // resolve("执行任务 1 成功");
 
-/** 1. 异步编程的背景知识 --> 回调模式 */
-// 详细信息见: 同级目录 nodejs-example/promise-use-example.js
-
-const fs = require("fs");
-
-/*let path = "../nodejs-example/bb.txt";
-let data = Buffer.from([60, 230, 150, 135, 228, 187, 182, 229, 134, 133, 229, 174, 185, 62]);
-// w: 打开文件用于写入，覆盖之前的内容。 a: 打开文件追加内容
-let options = {encoding: "utf8", flag: "a",};
-let callback = (err) => {
-    if (err) throw err ;
-    // 这里需用同步的读取文件 (readFileSync) , 因为不确定异步写入 (writeFile)什么时候执行完毕
-    console.log(fs.readFileSync(path, "utf8"));
-};
-fs.writeFile(path, data, options, callback);*/
-
-
-/** 为什么要使用 Promise?
- *  : 通过上面的示例可以看到 如果我们需要在 fs.readFileSync 内在调用别的方法就要接着在内部写嵌套，
- *  这样就导致代码结构混乱也不易于维护。
- *  书上的说法是: 例如，并行执行2个异步操作，当2个操作都结束时通知你: 或者同时进行2个异步操作，只取
- *  优先完成的操作结果。 在这些情况下，你需要跟踪多个回调函数并清理这些操作，而 Promise 就能很好地
- *  改进这样的情况。
- * */
-
-
-/** 2. Promise 的基础知识 --> Promise 的生命周期 */
-
-/** 2. Promise 的基础知识 --> 创建未完成的 Promise  */
-function fnReadFile(filename) {
-    /* 此示例中， Node.js 原生的 fs.readFile() 异步调用被包装在一个 Promise 中。执行器要么传递
-     * 错误对象给 reject() 函数， 要么传递文件内容给 resolve() 函数。 */
-    // 要记住执行器会在 readFile() 被调用时立即运行。
-    return new Promise(function (resolve, reject) {
-        // 触发异步操作
-        fs.readFile(filename, {encoding: "utf8"}, function (err, contents) {
-            // 检查错误
-            if (err) {
-                reject(err);
-                return;
-            }
-            // 读取成功: 调用 resolve() 后触发一个异步调用，传入 then() 和 catch() 方法的
-            // 函数会被添加到任务队列中并异步执行。
-            resolve(contents);
-        })
-    })
-}
-
-let promise = fnReadFile("nodejs-example/bb.txt");
-// 同时监听完成和拒绝
-promise.then(
-    // 完成
-    function (contents) {
-        console.log(contents);
-        console.log("contents内容输出完毕");
-    },
-
-    // 拒绝
-    function (err) {
-        console.log(err.message)
+            // - 下面添加 setTimeout() 超时调用, 不管时间设置为多少, 都会等待时间
+            //   执行完后,按顺序输出结果, 因为 then() 也是添加到
+            setTimeout(() => {
+                resolve("执行任务 1 成功");
+            }, 2000)
+        });
     }
-);
 
-/** 2. Promise 的基础知识 --> 创建已处理的 Promise  */
-/* P245: - (1) 使用 Promise.resolve(): Promise.resolve() 方法只接受一个参数并返回
- * 一个完成的 Promise, 也就是说不会有任务编排的过程，而且需要向 Promise 添加一至多个完
- * 成处理程序来获取值。例如: */
-let oPro = Promise.resolve(42);
-// 由于该 Promise 永远不会存在拒绝状态，因而该 Promise 的拒绝处理程序永远不会被调用。
-oPro.then((value) => {
-    console.log(value);
-});
-
-/* - (2) 使用 Promise.reject()  */
-
-/* 非 Promise 的 Thenable 对象 */
-
-/** 2. Promise 的基础知识 --> 执行器错误 */
-/* P247: 如果执行器内部抛出一个错误，则 Promise 的拒绝处理程序就会被调用。 */
+    // 第 1 个回调: 执行任务 1 成功
+    // 第 2 个回调: 执行任务 2 成功
+    // 第 3 个回调: 执行任务 3 成功
+    pms1().then((data) => {
+        console.log(`第 1 个回调: ${data}`);
+        return '执行任务 2 成功';
+    }).then((data) => {
+        console.log(`第 2 个回调: ${data}`);
+        return '执行任务 3 成功';
+    }).then((data) => {
+        console.log(`第 3 个回调: ${data}`);
+        console.log("---------");
+    });
+})();
 
 
-/** 3. 全局的 Promise 拒绝处理 */
+(function() {
+    // 输出顺序为: 3, 4, 6, 8, 7, 5, 9 call resolve(): run resolve, 2, 1
+    setImmediate(() => { console.log(1) }, 0);
+    setTimeout(() => { console.log(2) }, 0);
+    new Promise((resolve) => {
+        console.log(3);
+        resolve("run resolve");
+        console.log(4);
+    }).then((data) => {
+        console.log(5);
+        console.log(`9 call resolve(): ${data}`);
+    });
+    console.log(6);
+    process.nextTick(() => { console.log(7); });
+    console.log(8);
+})();
+
+
+
 
 /** 3. 全局的 Promise 拒绝处理 --> Node.js 环境的拒绝处理 */
 // process /'prəʊses/ n.程序、进程、 vt.处理、加工
@@ -95,30 +60,28 @@ oPro.then((value) => {
  * */
 
 // P250: 下面是一个简单的未处理拒绝跟踪器:
-let possiblyUnhandledRejections = new Map();
-// 如果一个拒绝没被处理，则将它添加到 Map 集合中
-process.on("unhandleRejection", function (reason, promise) {
-    // set() 方法向 Map 集合中添加项: 每当 unhandledRejection 被触发，Promise
-    // 及其拒绝原因就会被添加到此 Map 中。
-    possiblyUnhandledRejections.set(promise, reason);
-});
-// 每当 rejectionHandled 被触发，已被处理的 Promise 就会从这个 Map 中被移除。
-process.on("rejectionHandled", function (promise) {
-    possiblyUnhandledRejections.delete(promise);
-});
+// let possiblyUnhandledRejections = new Map();
+// // 如果一个拒绝没被处理，则将它添加到 Map 集合中
+// process.on("unhandleRejection", function (reason, promise) {
+//     // set() 方法向 Map 集合中添加项: 每当 unhandledRejection 被触发，Promise
+//     // 及其拒绝原因就会被添加到此 Map 中。
+//     possiblyUnhandledRejections.set(promise, reason);
+// });
+// // 每当 rejectionHandled 被触发，已被处理的 Promise 就会从这个 Map 中被移除。
+// process.on("rejectionHandled", function (promise) {
+//     possiblyUnhandledRejections.delete(promise);
+// });
+//
+// setInterval(function () {
+//     possiblyUnhandledRejections.forEach(function (reason, promise) {
+//         console.log(reason.message ? reason.message : reason);
+//         // 做些什么来处理这拒绝
+//         handleRejection(promise, reason);
+//     });
+//     possiblyUnhandledRejections.clear();
+//
+// }, 60000);
 
-setInterval(function () {
-    possiblyUnhandledRejections.forEach(function (reason, promise) {
-        console.log(reason.message ? reason.message : reason);
-        // 做些什么来处理这拒绝
-        handleRejection(promise, reason);
-    });
-    possiblyUnhandledRejections.clear();
-
-}, 60000);
-
-
-/** 3. 全局的 Promise 拒绝处理 --> 浏览器环境的拒绝处理 */
 
 
 
