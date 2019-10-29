@@ -56,7 +56,7 @@
                 };
 
                 try {
-                    // - 运行 executor 执行器函数, 对应调用的形参 (onResolve / onReject)
+                    // - 运行 executor 执行器函数, 对应调用的形参 (resolve / reject)
                     executor(onSuccess, onError);
                 } catch (e) {
                     // - new Promise() 中抛错, 这里不用 this.executeCallback('reject', e)
