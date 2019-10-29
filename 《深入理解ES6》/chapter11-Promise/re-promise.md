@@ -40,7 +40,9 @@
                 const that = this;
                 let cb = false;
 
-                // - onSuccess / onError 只会执行一个, 在下面 try...catch 中被调用,
+                // - onSuccess / onError 只会执行一个, 判断依据是函数内部的 cb = true, 
+                //   因为 onSuccess/onError 一旦其中一个执行 cb 就会设置为 true, 这样
+                //   另外一个函数就不会在执行. 他们在下面 try...catch 中被调用.
                 // - 参数 value: 是在 new Promise(function() {}) 时, 在执行器参数(executor)
                 //   的执行体内部, 调用当前 onSuccess() / onError() 函数时出传入的参数
                 const onSuccess = function(value) {

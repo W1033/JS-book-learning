@@ -1,5 +1,15 @@
 
 (function() {
+    return new Promise((resolve, reject) => {
+        console.log("executor function body");
+        resolve("first new Promise");
+    });
+})();
+
+
+
+
+(function() {
     function pms1() {
         return new Promise((resolve, reject) => {
             // console.log("executor function body");
@@ -17,34 +27,34 @@
     // 第 1 个回调: 执行任务 1 成功
     // 第 2 个回调: 执行任务 2 成功
     // 第 3 个回调: 执行任务 3 成功
-    pms1().then((data) => {
-        console.log(`第 1 个回调: ${data}`);
-        return '执行任务 2 成功';
-    }).then((data) => {
-        console.log(`第 2 个回调: ${data}`);
-        return '执行任务 3 成功';
-    }).then((data) => {
-        console.log(`第 3 个回调: ${data}`);
-        console.log("---------");
-    });
+    // pms1().then((data) => {
+    //     console.log(`第 1 个回调: ${data}`);
+    //     return '执行任务 2 成功';
+    // }).then((data) => {
+    //     console.log(`第 2 个回调: ${data}`);
+    //     return '执行任务 3 成功';
+    // }).then((data) => {
+    //     console.log(`第 3 个回调: ${data}`);
+    //     console.log("---------");
+    // });
 })();
 
 
 (function() {
     // 输出顺序为: 3, 4, 6, 8, 7, 5, 9 call resolve(): run resolve, 2, 1
-    setImmediate(() => { console.log(1) }, 0);
-    setTimeout(() => { console.log(2) }, 0);
-    new Promise((resolve) => {
-        console.log(3);
-        resolve("run resolve");
-        console.log(4);
-    }).then((data) => {
-        console.log(5);
-        console.log(`9 call resolve(): ${data}`);
-    });
-    console.log(6);
-    process.nextTick(() => { console.log(7); });
-    console.log(8);
+    // setImmediate(() => { console.log(1) }, 0);
+    // setTimeout(() => { console.log(2) }, 0);
+    // new Promise((resolve) => {
+    //     console.log(3);
+    //     resolve("run resolve");
+    //     console.log(4);
+    // }).then((data) => {
+    //     console.log(5);
+    //     console.log(`9 call resolve(): ${data}`);
+    // });
+    // console.log(6);
+    // process.nextTick(() => { console.log(7); });
+    // console.log(8);
 })();
 
 

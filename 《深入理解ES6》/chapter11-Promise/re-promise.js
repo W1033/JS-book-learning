@@ -34,13 +34,18 @@
             const that = this;
             let cb = false;
 
-            // - onSuccess / onError 只会执行一个, 在下面 try...catch 中被调用,
+            // - onSuccess / onError 只会执行一个, 判断的依据是函数内部的 cb = true, 
+            //   因为 onSuccess/onError 一旦其中一个执行, cb 就会设置为 true, 这样
+            //   另外一个函数就不会在执行. 他们在下面 try...catch 中被调用.
             // - 参数 value: 是在 new Promise(function() {}) 时, 在执行器参数(executor)
             //   的执行体内部, 调用当前 onSuccess() / onError() 函数时出传入的参数
+            //   [参考调用示例: "test2.html" -> `resolve("执行任务 1 成功");`] 
             const onSuccess = function(value) {
                 // - 如果 cb = true 立马退出
                 if (cb) return;
                 cb = true;
+                // - Tip: 我们从这里可以看出, 虽然 value 是传入进来了, 但是又把当前 
+                //   value 传入到 executeCallback() 中, 更多执行参考此函数
                 that.executeCallback('fulfilled', value);
             };
             const onError = function(value) {
@@ -51,6 +56,9 @@
 
             try {
                 // - 运行 executor 执行器函数, 对应调用的形参 (resolve / reject)
+                // - Tips: 此时调用 executor 执行器函数, 此函数体内的默认代码(比如: 
+                //   console.log()/以及其他代码) 都会执行, 其他执行代码见上面 
+                //   onSuccess() / onError();
                 executor(onSuccess, onError);
             } catch (e) {
                 // - new Promise() 中抛错, 这里不用 this.executeCallback('reject', e)
@@ -65,6 +73,9 @@
         //       (executor) 的执行体内部, 调用当前 onResolve()/onReject() 时出传入的参数
         // - Tip: executeCallback 是执行同步回调函数，即 new Promise(
         //   (resolve, reject) => {resolve(0)}) 实例内不含有 setTimeout()的情况.
+        // - Tip2: 当我们第一次通过 new Promise((resolve, reject) => 
+        //   {resolve("执行任务 1 成功");) 这种方式调用 Promise 时, 经过前面几步走到
+        //   此处时, value (即: "执行任务 1 成功") 传入走最后的 else if 判断,
         executeCallback(status, value) {
             const isResolve = status = 'fulfilled';
             // - Tip: thenable 保存的是一个具有 .then 方法的对象.
