@@ -16,3 +16,15 @@
     }
     sum(6, 7);  // 6 7 13
 })();
+
+
+(function() {
+    let people = ((name) => {
+        return {
+            getName: function () {
+                return name;
+            }
+        }
+    })("Nicholas");
+    console.log(people.getName());  // Nicholas
+})();
