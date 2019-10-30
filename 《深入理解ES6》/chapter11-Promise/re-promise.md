@@ -10,12 +10,12 @@
 ## 实现
 
 - Promise 类实现
-  ```javascript
+  ```js
     (function(scope) {
         const PENDING = 'pending';
         const FULFILLED = 'fulfilled';
         const REJECTED = 'rejected';
-
+    
         // - 创建 Promise 类
         class Promise {
             // - 我们把创建构造函数的实例 [new Promise(function(resolve, reject) {})];
@@ -23,7 +23,7 @@
             constructor(executor) {
                 // - 确定 executor 是一个函数
                 if (executor && typeof executor !== 'function') {
-                    throw new Error(`Promise resolve ${executor} is not a function`);
+                    throw new Error(`Promise resolve ${executor} is noe a function`);
                 }
                 this.state = PENDING;
                 this.data = undefined;
@@ -34,21 +34,24 @@
                     this.callExecutor(executor);
                 }
             }
-
+    
             // - 定义 "执行器方法" (call Executor)
             callExecutor(executor) {
                 const that = this;
                 let cb = false;
-
-                // - onSuccess / onError 只会执行一个, 判断依据是函数内部的 cb = true, 
-                //   因为 onSuccess/onError 一旦其中一个执行 cb 就会设置为 true, 这样
+    
+                // - onSuccess / onError 只会执行一个, 判断的依据是函数内部的 cb = true, 
+                //   因为 onSuccess/onError 一旦其中一个执行, cb 就会设置为 true, 这样
                 //   另外一个函数就不会在执行. 他们在下面 try...catch 中被调用.
                 // - 参数 value: 是在 new Promise(function() {}) 时, 在执行器参数(executor)
                 //   的执行体内部, 调用当前 onSuccess() / onError() 函数时出传入的参数
+                //   [参考调用示例: "test2.html" -> `resolve("执行任务 1 成功");`] 
                 const onSuccess = function(value) {
                     // - 如果 cb = true 立马退出
                     if (cb) return;
                     cb = true;
+                    // - Tip: 我们从这里可以看出, 虽然 value 是传入进来了, 但是又把当前 
+                    //   value 传入到 executeCallback() 中, 更多执行参考此函数
                     that.executeCallback('fulfilled', value);
                 };
                 const onError = function(value) {
@@ -56,9 +59,12 @@
                     cb = true;
                     that.executeCallback('rejected', value);
                 };
-
+    
                 try {
                     // - 运行 executor 执行器函数, 对应调用的形参 (resolve / reject)
+                    // - Tips: 此时调用 executor 执行器函数, 此函数体内的默认代码(比如: 
+                    //   console.log()/以及其他代码) 都会执行, 其他执行代码见上面 
+                    //   onSuccess() / onError();
                     executor(onSuccess, onError);
                 } catch (e) {
                     // - new Promise() 中抛错, 这里不用 this.executeCallback('reject', e)
@@ -66,13 +72,16 @@
                     onError(e);
                 }
             }
-
+    
             // - 执行回调 execute callback:
             //     + status: fulfilled / rejected
             //     + value: value 参数是在 new Promise(function() {}) 时, 在函数参数
             //       (executor) 的执行体内部, 调用当前 onResolve()/onReject() 时出传入的参数
             // - Tip: executeCallback 是执行同步回调函数，即 new Promise(
             //   (resolve, reject) => {resolve(0)}) 实例内不含有 setTimeout()的情况.
+            // - Tip2: 当我们第一次通过 new Promise((resolve, reject) => 
+            //   {resolve("执行任务 1 成功");) 这种方式调用 Promise 时, 经过前面几步走到
+            //   此处时, value (即: "执行任务 1 成功") 传入走最后的 else if 判断,
             executeCallback(status, value) {
                 const isResolve = status = 'fulfilled';
                 // - Tip: thenable 保存的是一个具有 .then 方法的对象.
@@ -111,7 +120,7 @@
                 // - 返回 this, 直接调用 Promise.resolve() / Promise.reject() 时用得到
                 return this;
             }
-
+    
             // - 获取具有 then 方法的对象.
             getThen(value) {
                 // - 避免 then 内 get 方法多次的调用 (查看下面具有 then 方法的测试用例)
@@ -126,7 +135,7 @@
                     return false;
                 }
             }
-
+    
             // - 执行异步回调, 在 then() 方法中被调用: 如这种方式调用: new Promise(
             //   (resolve, reject) => {setTimeout(() => {resolve(0)}, 500)})
             executeAsyncCallback(callback, value) {
@@ -139,7 +148,7 @@
                         // - 目的: 使捕获到的错误进入 Promise.catch() 中
                         that.executeCallback('rejected', e);
                     }
-
+    
                     // - 如果放回的值与原 promise 相等, 则是无穷循环
                     if (res === that) {
                         that.executeCallback('rejected', new TypeError(
@@ -152,7 +161,7 @@
                     }
                 }, 4)
             }
-
+    
             // - then 方法:
             // - Tip: 提示一点 then() 方法可以同时接受 onResolved 和 onRejected 2 个函数,
             //   在 then 内部会根据 onResolved / onRejected 来确定执行哪一个函数, 但是一般
@@ -174,28 +183,26 @@
                     const callback = this.state === FULFILLED ? onResolved: onRejected;
                     // - Tip: this.data 在上面 executeCallback 中已经被赋值
                     // - 绑定 this 到 promise   (1)
-                     // - Tip2: this.data 在上面 executeCallback() 方法中被赋值. 
                     this.executeAsyncCallback.call(promise, callback, this.data);
                 }
                 // - 从第二次开始以后, 进入 then 状态是 PENDING
                 else {
                     // - 这里的 this 也是指向 "上一个" promise   (2)
-                    // - 这里的 this 也是指向 "上一个" promise   (2)
                     // - Tip: 比如: "示例 test2.html" 中 pms1().then().then() 第二个
-                    //   then 运行时, 内部的 this 指向是上一个 pms1 这个 Promise 实例, 
-                    //   往后一次是 n-1 (即: "上一个" promise 的意思)
+                    //   then 运行时, 内部的 this 指向是上面 const promise = 
+                    //   new this.constructor() 创建的 promise 
                     this.callbacks.push(
                         new CallbackItem(promise, onResolved, onRejected)
                     );
                 }
                 return promise;
             }
-
+    
             // - catch() 方法
             catch(onRejected) {
                 return this.then(null, onRejected);
             }
-
+    
             // - 非 ES6 标准
             done(onResolved, onRejected) {
                 this.then(onResolved, onRejected)
@@ -206,7 +213,7 @@
                     })
             }
         }
-
+    
         class CallbackItem {
             // - promise 实例来自上面 then 方法传入
             constructor(promise, onResolved, onRejected) {
@@ -223,7 +230,8 @@
                 this.promise.executeAsyncCallback(this.onRejected, value);
             }
         }
-
+    
+    
         // - Promise 类上添加的静态方法(类方法)
         Promise.resolve = function(value) {
             // - 在 Promise.all()/Promise.race() 中用到, 使 Promise 对象
@@ -273,7 +281,7 @@
                 })
             })
         };
-
+    
         // - 测试 Promise:
         //   https://github.com/promises-aplus/promises-tests/blob/master/README.md
         Promise.deferred = Promise.defer = function() {
@@ -284,7 +292,7 @@
             });
             return dfd;
         };
-
+    
         Promise.wrap = function(fn) {
             return function(...args) {
                 return new Promise((resolve, reject) => {
@@ -298,7 +306,7 @@
                 })
             }
         };
-
+    
         try {
             module.exports = Promise;
         } catch(e) {
@@ -306,6 +314,7 @@
         }
     })(this);
   ```
+  
 - 调用示例
   ```js
     // - test1.html
@@ -313,36 +322,46 @@
         function pms1() {
             return new Promise(function (resolve, reject) {
                 console.log('执行任务1');
-                resolve('执行 test1 成功')
+                resolve('执行任务1成功')
             })
         }
 
-        pms1().then(function (data) {
-            console.log(` test1 回调：${data}`)
-        });
+        // pms1().then(function (data) {
+        //     console.log(`第一个回调：${data}`)
+        //     console.log("---------");
+        // });
     })();
 
-    // - test2. html
+    // - test2.html
     (function() {
         function pms1() {
             return new Promise((resolve, reject) => {
                 // console.log("executor function body");
+
                 resolve("执行任务 1 成功");
+                
+                // - 下面添加 setTimeout() 超时调用, 不管时间设置为多少, 都会等待时间
+                //   执行完后,按顺序输出结果, 因为 then() 也是添加到 
+                // setTimeout(() => {
+                //     resolve("执行任务 1 成功");
+                // }, 2000)
             });
         }
 
         // 第 1 个回调: 执行任务 1 成功
         // 第 2 个回调: 执行任务 2 成功
         // 第 3 个回调: 执行任务 3 成功
-        pms1().then((data) => {
-            console.log(`第 1 个回调: ${data}`);
-            return '执行任务 2 成功';
-        }).then((data) => {
-            console.log(`第 2 个回调: ${data}`);
-            return '执行任务 3 成功';
-        }).then((data) => {
-            console.log(`第 3 个回调: ${data}`);
-        });
+
+        // pms1().then((data) => {
+        //     console.log(`第 1 个回调: ${data}`);
+        //     return '执行任务 2 成功';
+        // }).then((data) => {
+        //     console.log(`第 2 个回调: ${data}`);
+        //     return '执行任务 3 成功';
+        // }).then((data) => {
+        //     console.log(`第 3 个回调: ${data}`);
+        //     console.log("---------");
+        // });
     })();
 
     // - test3.html
@@ -353,9 +372,11 @@
                 resolve(Promise.resolve('test3 回调'));
             })
         }
-        pms1().then((data) => {
-            console.log(`test3 的 then 回调数据: ${data}`);
-        })
+        // pms1().then((data) => {
+        //     console.log(`test3 的 then 回调数据: ${data}`);
+        // })
+
+        console.log("---------");
     })();
 
     // - test4.html
@@ -377,14 +398,14 @@
         //  第一个回调: 执行任务 1 成功
         //  执行任务2
         //  第二个回调: 执行任务2成功
-        pms1()
-            .then((data) => {
-                console.log(`第一个回调: ${data}`);
-                return pms2();
-            })
-            .then((data) => {
-                console.log(`第二个回调: ${data}`);
-            })
+        // pms1()
+        //     .then((data) => {
+        //         console.log(`第一个回调: ${data}`);
+        //         return pms2();
+        //     })
+        //     .then((data) => {
+        //         console.log(`第二个回调: ${data}`);
+        //     })
     })();
 
     // - test5-测试-promise.all.html
@@ -396,23 +417,23 @@
             setTimeout(resolve, 2000, 'foo');
         });
         let p3 = 1336;
-        Promise.all([p1, p2, p3]).then(values => {
-            // [3, "foo", 1336]
-            console.log(values);
-        });
+        // Promise.all([p1, p2, p3]).then(values => {
+        //     // [3, "foo", 1336]
+        //     console.log(values);
+        // });
     })();
 
     // - test6-promise.race.html
     (function() {
-        let p1 = Promise.resolve(1)
+        let p1 = Promise.resolve(1);
         let p2 = new Promise((resolve, reject) => {
         setTimeout(resolve, 2000, 2)
-        })
+        });
         let p3 = 3
 
-        Promise.race([p1, p2, p3]).then((data) => {
-            console.log(data); // 1
-        });
+        // Promise.race([p1, p2, p3]).then((data) => {
+        //     console.log(data); // 1
+        // });
     })();
 
     // - 对象含有 then 属性的测试
@@ -428,9 +449,29 @@
                 }
             }
         });
-        console.log('obj:', obj);
-        Promise.resolve(obj).then(() => {
-            console.log(numberOfTimesThenWasRetrieved); // 1
+        // console.log('obj:', obj);
+        // Promise.resolve(obj).then(() => {
+        //     console.log(numberOfTimesThenWasRetrieved); // 1
+        // });
+    })();
+    
+    // - test07 -- Promise.all() 测试
+    (function() {
+        let p1 = new Promise(function(resolve, reject) {
+            resolve(62);
+        });
+        let p2 = new Promise(function(resolve, reject) {
+            resolve(63);
+        });
+        let p3 = new Promise(function(resolve, reject) {
+            resolve(64);
+        });
+        let p4 = Promise.all([p1, p2, p3]);
+        p4.then(function(value){
+            console.log(Array.isArray(value));  // true
+            console.log(value[0]);
+            console.log(value[1]);
+            console.log(value[2]);
         });
     })();
   ```  

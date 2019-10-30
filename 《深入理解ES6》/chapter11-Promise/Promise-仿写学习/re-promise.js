@@ -183,8 +183,8 @@
             else {
                 // - 这里的 this 也是指向 "上一个" promise   (2)
                 // - Tip: 比如: "示例 test2.html" 中 pms1().then().then() 第二个
-                //   then 运行时, 内部的 this 指向是上一个 pms1 这个 Promise 实例, 
-                //   往后一次是 n-1 (即: "上一个" promise 的意思)
+                //   then 运行时, 内部的 this 指向是上面 const promise = 
+                //   new this.constructor() 创建的 promise 
                 this.callbacks.push(
                     new CallbackItem(promise, onResolved, onRejected)
                 );

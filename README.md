@@ -169,8 +169,8 @@
       ```
 - 确定一个值是哪种基本类型使用 typeof 操作符，确定一个值是那种引用类型使用 instanceof 操作符。
     + ```javascript
-         typeof 123   // "number"
-         typeof false   // "boolean"
+         typeof 123;   // "number"
+         typeof false;   // "boolean"
 
          let o = {};
          let a = [];
