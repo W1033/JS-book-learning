@@ -5,8 +5,8 @@
 ### 2.1 this
 > 跟别的语言大相径庭的是, JavaScript 的 this 总指向一个对象, 而具体指向哪个对象是在运行时
   基于函数的执行环境动态绑定的, 而非函数被声明时的环境.
-  
-##### 2.1.1 this 的指向:  this 的指向大致可以分为以下 4 种:
+
+#### 2.1.1 this 的指向:  this 的指向大致可以分为以下 4 种:
 - **(1) 作为对象的方法调用**
     + 当函数作为对象的方法调用时，this 指向该对象:
       ```javascript
@@ -119,7 +119,7 @@
             console.log( obj1.getName() );  // output: sven
             console.log( obj1.getName.call(obj2) ); // output: Kell
         ```      
-##### 2.1.2 丢失的 this
+#### 2.1.2 丢失的 this
 - ```javascript
     // - 这是一个经常遇到的问题，我们先看下面的代码：
     var obj = {
@@ -156,7 +156,7 @@
   和 Function.prototype.apply. 在实际开发中，特别是在一些函数式风格的代码编写中，apply
   和 call 尤为有用。 在 JavaScript 版本的设计模式中，这 2 个方法的应用也非常广泛，能
   熟练运用这两个方法，是我们真正成为一名 JavaScript 程序员的重要一步。
-##### 2.2.1 `call` 和 `apply` 的区别  
+#### 2.2.1 `call` 和 `apply` 的区别  
 - `apply` 接收 2 个参数:
     + 第 1 个参数指定了函数体内 `this` 对象的指向;
     + 第 2 个参数为一个带下表的集合，这个集合可以为 "数组" 或 "类数组"， apply 方法把
@@ -182,7 +182,7 @@
     };
     callFunc.call(null, 4, 5, 6);
   ```  
-##### 2.2.2  apply 和 call 的用途
+#### 2.2.2  apply 和 call 的用途
 - (1) 改变 `this` 指向
     + ```javascript
         let obj1 = {
