@@ -42,13 +42,13 @@
 
 ---
 
-
-## 函数形参的默认值
+## 本章内容 (Content)
+### 函数形参的默认值
 - 在 ES5 中模拟默认参数
 ```javascript
 	function makeRequest(url, timeout, callback) {
-	// - 添加 typeof 判断是排除当我们传入为 timeout 传入 0 的值时, js 默认为
-	//   不是合法的值,把2000 赋值给 timeout 的情况,
+	// - 添加 typeof 判断是排除传入 timeout 值为 0 时 js 认为 0 不是
+    //   合法的值, 仍然把 2000 赋值给 timeout 的情况.
 	timeout = (typeof timeout !== "undefined") ? timeout: 2000;
 	callback = (typeof callback !== "undefined") ? callback: function() {};
 	
@@ -58,24 +58,24 @@
 - ES6 中的默认参数值
 	+ (0) ES6 默认参数值示例: 
 	  ```javascript
-	// - ES6 默认参数值示例: 只有第一个参数 url 是必须的, 其他 2 个参数都有默认值
-	// - Tip: 由于书上的示例无法运行, 所以从 internet 上找到示例.
-	function  num(x = 1, y = 2, z = 3) {
-		console.log(x, y, z);
-	}
-	num(6, 7);  // output: 6 7 3
+	    // - ES6 默认参数值示例: 只有第一个参数 url 是必须的, 其他 2 个参数都有默认值
+	    // - Tip: 由于书上的示例无法运行, 所以从 internet 上找到示例.
+        function  num(x = 1, y = 2, z = 3) {
+            console.log(x, y, z);
+        }
+        num(6, 7);  // output: 6 7 3
+      ```
+    + (1) 使用 undefined 传参: 如果想让某个参数使用默认值,我们可以使用 undefined 进行
+        赋值, 例如
+      ```javascript 
+        num(6, undefined, 7);   // 6 2 7
+      ```
+    + (2) 使用 null 代替默认值
+      ```javascript 
+        num(9, null, 12);   // 6 null 12
 	  ```
-	+ (1) 使用 undefined 传参: 如果想让某个参数使用默认值,我们可以使用 undefined 进行
-	  赋值, 例如
-	- ```javascript 
-		num(6, undefined, 7);   // 6 2 7
-	  ```
-	+ (2) 使用 null 代替默认值
-	- ```javascript 
-		num(9, null, 12);   // 6 null 12
-	  ```      
 	+ (3) 参数运算: 
-	- ```javascript
+	  ```javascript
         function sum(x = 1, y = 2, z = x + y) {
             console.log(x, y, z);
         }
@@ -92,8 +92,7 @@
 	function() {}
 ```
 
-
-## 处理无命名参数
+### 处理无命名参数
 - ES5 中的无命名参数
     + ```javascript
         let book = {
@@ -139,18 +138,24 @@
         };
         func(1, 2, 3, 4, 5, 6); // [3, 4, 5, 6]
       ```
-## 增强的 Function 构造函数
-## 展开运算符
-## name 属性
+
+### 增强的 Function 构造函数
+
+### 展开运算符
+
+### name 属性
 - 如何选择合适的名称
 - name 属性的特殊情况
-## 明确函数的多重用途
+
+### 明确函数的多重用途
 - 在 ES5 中判断函数被调用的方法
 - 元属性 (Metaproperty) new.target
-## 块级函数
+
+### 块级函数
 - 块级函数的使用场景
 - 非严格模式下的块级函数
-## 箭头函数
+
+### 箭头函数
 - 箭头函数语法
     + 箭头函数: 所谓箭头函数，目的其实就是为了实现函数式的 lambda 表达式的，它本身就是为了
       函数式而添加进去的新概念，所谓“方便写”只是附带的特性。然而，函数式和面向对象两种编程语言
@@ -223,7 +228,8 @@
         }
       ```
 - 箭头函数的辨识方法
-## 尾调用优化
+
+### 尾调用优化
 - ES6 中的尾调用优化
 - 如何利用尾调用优化
      + ```javascript
@@ -237,8 +243,9 @@
                 return factorial(n - 1, result)
             }
         }
-      ```
-## 小结
+        ```
+
+### 小结
 
 
 

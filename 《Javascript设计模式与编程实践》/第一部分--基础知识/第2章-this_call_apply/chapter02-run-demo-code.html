@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        * {margin: 0; padding: 0; border:0;}
+        #btn {
+            width:200px; 
+            line-height: 34px; 
+            border: 1px solid lightsalmon; 
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <input type="button" id="btn" value="测试按钮">
+    </div>
+    <script>
+        document.getElementById('btn').onclick = function() {
+            // console.log(this.id); // output: btn
+            let func = function() {
+                console.log(this);   
+            };
+            
+            // - 如果这样直接调用，输出结果为: Window
+            // func();  
+
+            // - 纠正 func 函数中 this 指向 window 的问题
+            // - Output: <input type="button" id="btn" value="测试按钮">
+            func.call(this);
+        }
+    </script>
+</body>
+</html>

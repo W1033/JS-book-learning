@@ -8,7 +8,7 @@
      来实现装饰着模式。但在 Javascript 这种动态解释型语言中，给对象动态添加职责是再简单不过的
      事情。这就造成了 javascript 语言的装饰者模式不在关注于给对象动态添加职责，而是关注于给函
      数动态添加职责。
-    
+
 #### 设计模式的适用性
 
 #### 对 js 设计模式的误解
@@ -18,20 +18,71 @@
    - 而在 js 这种类型模糊的语言中，对象多态性是天生的，一个变量既可以指向一个类，又可以随时指向
      另外一个类。 js 不存在类型耦合的问题，自然也没有必要刻意去把对象 "延迟" 到子类创建，也就
      是说， js 实际上不需要工厂方法模式的。
-    
+
 
 #### 第1章 面向对象的 Javascript
    - js 没有提供传统面向对象语言中的类式继承，而是通过原型委托的方式来实现对象与对象之间的继承。
-  
-#### 1.1 动态类型语言和鸭子类型
+
+### 1.1 动态类型语言和鸭子类型
    - 编程语言按照数据类型大体可以分为两类: 1.静态类型语言。 2.动态类型语言。
-  
+
+
+### 1.2 多态
+- js 多态--实际上也就是对象的多态 【P8.js 对象的多态性是与生俱来的】: 多态最根本的作用
+  就是通过把过程化的条件分支语句转化为对象的多态性，从而消除这些条件分支语句.
+  ```javascript
+    // - 类式多态
+    const makeSound = function (animal) {
+        // 此处调用对象下的 sound() 方法
+        animal.sound();
+    };
+    const Duck = function () {};
+    Duck.prototype.sound = function () {
+        console.log("嘎嘎嘎");
+    };
+    const Chicken = function () {};
+    Chicken.prototype.sound = function () {
+        console.log("咯咯咯");
+    };
+    makeSound(new Duck());
+    makeSound(new Chicken());
+    const Dog = function () {};
+    Dog.prototype.sound = function () {
+        console.log("汪汪汪");
+    };
+    makeSound(new Dog());
+
+    // js - 多态示例
+    const googleMap = {
+        show: function () {
+            console.log("开始渲染谷歌地图");
+        }
+    };
+    const baiduMap = {
+        show: function () {
+            console.log("开始渲染百度地图");
+        }
+    };
+    const renderMap = function (map) {
+        if (map.show instanceof Function) {
+            map.show();
+        }
+    };
+    renderMap(googleMap);
+    renderMap(baiduMap);
+    const sogouMap = {
+        show: function () {
+            console.log("开始渲染百度地图");
+        }
+    };
+    renderMap(sogouMap);
+  ```
 
 
 ### 1.4 原型模式和基于原型继承的 JavaScript 对象系统 
-> *原型模式不单是以至于红设计模式，也被称为一种编程泛型。*
+> *原型模式不单是一种设计模式，也被称为一种编程泛型。*
 
-> **1.4.1 使用克隆的原型模式** 
+##### 1.4.1 使用克隆的原型模式** 
 - 原型模式的关键实现，是语言本身是否提供了 clone 方法。 ECMAScript5 提供了 Object.create
    方法，可以用来克隆对象. 代码如下: 
     + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
@@ -57,15 +108,18 @@
         console.log(clonePlane.blood);      // 500
         console.log(clonePlane.attackLevel);// 10
         console.log("------------------");
+        ```
     ``` 
+   
+    ```
 
-> **1.4.2 克隆是创建对象的手段** 
+##### 1.4.2 克隆是创建对象的手段** 
 
-> **1.4.3 体验 Io 语言** 
+##### 1.4.3 体验 Io 语言** 
 
-> **1.4.4 原型编程规范的一些规则** 
+##### 1.4.4 原型编程规范的一些规则** 
 
-> **1.4.5 js 中的原型继承** 
+##### 1.4.5 js 中的原型继承** 
 - js 也遵循原型编程的基本原则:
      + 1).所有的数据(js只能说是绝大部分数据，比如 undefined 就不是對象)都是对象。
      + 2).要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它。(tip: 自定义的
@@ -97,25 +151,25 @@
  + 下面的笔记见: P19-js通过原型构建面向对象系统.js
 
 > **1.4.6 原型继承的未来** 
-    
-    
-    
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+​    
+​    
+​    
+​    
+
+
+​    
+​    
+​    
+​    
+​    
+​    
+​    
+​    
+​    
+​    
+​    
+​    
+​    
+​    
