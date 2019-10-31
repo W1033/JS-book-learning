@@ -336,3 +336,26 @@
         console.log("a.length: ", a.length);
         console.log("a[0]: ", a[0]);
       ```
+      前面我们之所以把“任意”两字加了双引号，是因为可以借用 Array.prototype.push 方法的
+      对象还要满足以下两个条件，从 ArrayPush 函数的 (1) 处和 (2) 处也可以猜到，这个对象
+      至少还要满足：
+        -  对象本身要可以存取属性；
+        -  对象的 length 属性可读写。 <br/>
+      对于第一个条件，对象本身存取属性并没有问题，但如果借用 Array.prototype.push 方法
+      的不是一个 object 类型的数据，而是一个 number 类型的数据呢? 我们无法在 number 
+      身上存取其他数据，那么从下面的测试代码可以发现，一个 number 类型的数据不可能借用到
+      Array.prototype.push 方法：
+      ```javascript
+        var a = 1;
+        Array.prototype.push.call( a, 'first' );
+        alert ( a.length ); // 输出： undefined
+        alert ( a[ 0 ] ); // 输出： undefined
+      ```
+      对于第二个条件，函数的 length 属性就是一个只读的属性，表示形参的个数，我们尝试把
+      一个函数当作 this 传入 Array.prototype.push：
+      ```javascript
+        var func = function(){};
+        Array.prototype.push.call( func, 'first' );
+        alert ( func.length );
+        // 报错： cannot assign to read only property ‘length’ of function(){}
+      ```
