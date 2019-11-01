@@ -1,5 +1,3 @@
-/** Created on 2017/3/7.*/
-
 ### 第五章: 引用类型 : 
 - 引用类型的值[对象]是[引用类型]的一个实例。在ECMAScript中[引用类型]是一种数据结构，
     用于将数据和功能组织在一起。它也常被称为["类"],但这种称呼并不妥当。尽管ECMAScript
@@ -29,7 +27,7 @@
        let person = new Object();       
        person.name = "Nicholas";         
        person.age = 29; 
-    ```   
+    ```
 
  - 2、使用 [对象字面量]表示法:  
     ```javascript
@@ -39,7 +37,7 @@
        }
     ```
 
--------------------------------------------------------------   
+-------------------------------------------------------------
 
 ## 二. 
 ### 6.1 : 理解对象
@@ -66,7 +64,7 @@
       alert(person.name); //"Nicholas"
       person.name = "Greg";
       alert(person.name); //"Nicholas"
-    ```   
+    ```
 
 - (2.) 访问器属性 : 
     + 访问器属性不包含数据值:他们包含以对gette和setter函数(不过这连个函数都不是必需的)。在读取访问器属性时，
@@ -95,7 +93,7 @@
     ```
     +  以上代码创建了一个book对象，并给他定义两个默认的属性: _year和edition. 
         [_year前面的下划线是一种常用的几号，用于表示只能通过对象方法访问的属性]。
-  
+
 
 ### js高级 5.5.5函数属性和方法 apply()和call(): 这两个方法的用途是在[特定的作用域中调用函数]，实际上等于设置函数体内this对象的值。
 - (1.)apply()方法接收两个参数：一个是在其中运行函数的作用域，另一个是参数数组。其中，
@@ -142,9 +140,9 @@
  ### 10.1.1-2 节点关系: 我们在本书前面介绍过，[对arguments对象使用 Array.prototype.slice() 方法可以将其转换为数组。] <br/>而采用同样的方法，也可以将 NodeList 对象转换为数组。来看下面的例子：
   //在 IE8 及之前版本中无效 <br/>
   var arrayOfNodes = Array.prototype.slice.call(someNode.childNodes,0); <br/>
-  
+
   将NodeList对象转换为数组
-  
+
     function convertToArray(nodes){                     
         var array = null;                               
         try {                                           
@@ -157,3 +155,4 @@
         }                                               
         return array;                                   
     }
+

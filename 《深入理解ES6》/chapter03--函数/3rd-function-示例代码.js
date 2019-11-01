@@ -28,3 +28,14 @@
     })("Nicholas");
     console.log(people.getName());  // Nicholas
 })();
+
+
+(function() {
+    function Person(name) {
+        this.name = name;
+    }
+    var person = new Person("Nicholas");
+    var notAPersion = Person("Nicholas");
+    console.log(person);
+    console.log(notAPersion)
+})();

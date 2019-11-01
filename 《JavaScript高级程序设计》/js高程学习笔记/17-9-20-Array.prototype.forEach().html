@@ -27,15 +27,35 @@
 <script type="text/javascript">
     function logArrayElements(element, index, array) {
         console.log("a[" + index + "] = " + element);
-        // console.log(array);     // 输出 4 次 [2,5,7,9]
     }
-
-    [2, 5, 7, 9].forEach(logArrayElements);
-
+    var arr = [2, 5, 7, 9];
+    console.log("arr: ", arr);
     // a[0] = 2
     // a[1] = 5
     // a[2] = 7
     // a[3] = 9
+
+
+    (function() {
+        //map例子
+        var arr = [1,2,3,4];
+        
+        var newarr =arr.map(function(val,index,arr){
+        console.log(arr[index]==val);  // ==> 结果为true
+        return val*val;           
+        })
+        console.log(newarr);        // ==> 结果为[1, 4，9, 16]
+        
+        // - forEach例子
+        // - 从网上看到说 forEach 是 for...in 循环的语法糖
+        var arr = [1,2,3,4];
+        var sum = 0;
+        arr.forEach(function(value,index,array){
+            array[index] == value;    //结果为true
+            sum+=value;  
+            });
+        console.log(sum);    //结果为 10
+    })();
 </script>
 
 </body>

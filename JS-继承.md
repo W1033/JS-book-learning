@@ -114,10 +114,11 @@
         Rectangle.call(this, length, length);
     }
 
-    // - Note: 《JS高程》--6.3.4-原型式继承-P170：ES5 通过新增 Object.create(): 方法规范
-    //   化了原型式继承。这个方法接收 2 个参数: (1)用作新对象原型的对象 和 (2)一个(可选的)
-    //   为新对象定义额外属性的对象。在传入一个参数的情况下 Object.create() 与 Object()
-    //   方法的行为相同。
+    // - Note: 《JS高程》--6.3.4-原型式继承-P170：ES5 通过新增 Object.create(): 
+    //   方法规范化了原型式继承。这个方法接收 2 个参数: 
+    //      + (1) 用作新对象原型的对象;
+    //      + (2) 一个(可选的)为新对象定义额外属性的对象。在传入一个参数的情况下 
+    //        Object.create() 与 Object() 方法的行为相同。
     Square.prototype = Object.create(Rectangle.prototype, {
         constructor: {
             // 这种写法等于: Square.prototype.constructor = Square
