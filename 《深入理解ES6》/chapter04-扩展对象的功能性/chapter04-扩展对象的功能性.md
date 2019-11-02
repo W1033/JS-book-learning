@@ -27,11 +27,75 @@
 
 
 ## 本章内容 (Content)
+- ES6 通过多种方式来加强对象的使用, 通过简单的语法扩展, 提供更多操作对象及与对象交互的方法.
 ### 1. 对象类别
+- ES6 规范清晰定义了每一个类别的对象. 总而言之, 理解这些属于对理解这门语言来说非常重要, 
+  对象的类别如下:
+    + **普通 (Ordinary) 对象**: 具有 js 对象所有的默认内部行为.
+    + **特异 (Exotic) 对象**: 具有某些与默认行为不符的内部行为.
+    + **标准 (Standard) 对象**: ES6 规范中定义的对象, 例如: Array, Date 等. 标准对象
+      可以是普通对象, 也可以是特异对.
+    + **内建对象**: 脚本开始执行时存在于 js 执行环境中的对象, 所有标准对象都是内建对象.
 ### 2. 对象字面量语法扩展
 - **属性初始值的简写**
+    + ES5 中对象字面量只是简单的键值对集合, 例如:
+      ```javascript
+        function createPerson(name, age) {
+            return {
+                name: name,
+                age: age
+            }
+        }
+      ```
+      ES6 中, 通过使用属性初始化的简写语法, 可以消除这种属性名称和局部变量之间的重复书写.
+      比如改写上面的 createPerson() 方法如下:
+      ```javascript
+        function createPerson(name, age) {
+            return {
+                name, 
+                age
+            }
+        }
+      ```
+      当对象字面量只有一个属性的名称时, js 引擎会在可访问作用域中查找其同名变量; 如果找到,
+      则该变量的值被赋给对象字面量里的同名属性. 在本例中, 对象字面量属性 name 被赋予了局部
+      变量 name 的值.
 - **对象方法的简写语法**
+    + ES6 改进了对象字面量定义方法的语法. 示例如下:
+      ```javascript
+        var person = {
+            name: "Nicholas",
+            sayName() {
+                console.log(this.name);
+            }
+        }
+      ```
 - **可计算属性名 (Computed Property Name)**
+    + ES5 及早期版本的对象中, 如果想要通过计算得到属性名, 就需要用方括号代替点记法. 示例:
+      ```javascript
+        var person = {};
+        var lastName = "last name";
+        person["first name"] = "Nicholas";
+        person[lastName] = "Zakas";
+        console.log(person["first name"]);  // "Nicholas"
+        console.log(person[lastName]);  // "Zakas"
+      ```
+      此外, 在对象字面量中, 可以直接使用字符串字面量作为属性名称, 就像这样:
+      ```javascript
+        let person = {
+            "first name": "Nicholas",
+        }
+        console.log(person["first name"]);  // "Nicholas"
+      ```
+    + 在 ES6 中, 可在对象字面量中使用**可计算属性名称**, 其语法与引用对象实例的可计算属性
+      名称相同, 也是使用方括号. 举个例子: 
+      ```javascript
+        let lastName = "last name";
+        ler person = {
+            "first name": "Nicholas",
+            [lastName]: "Zakas",
+        }
+      ```
 ### 3. 新增方法
 - **`Object.is()` 方法**
 - **`Object.assign()` 方法**
