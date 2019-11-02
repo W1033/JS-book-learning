@@ -1,5 +1,6 @@
 # 第 3 章 -- 函数
-> **目录 Table of Content**
+
+## 目录 Table of Content
 1. 函数形参的默认值
 	+ 在 ES5 中模拟默认参数
 	+ ES6 中的默认参数值
@@ -32,7 +33,7 @@
 	+ 如何利用尾调用优化
 1. 小结
 
-
+---
 
 ## 生词
 - parametric [ˌpærə'metrik]  adj.参数的

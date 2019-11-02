@@ -126,17 +126,75 @@ $\quad$ 原型是 JavaScript 继承的基础, 在早期版本中, JavaScript 严
     + Super 引用在多重继承的情况下非常有用, 因为在这种情况下, 使用 
       Object.getPrototypeOf() 方法将会出现问题. 举个例子:
       ```javascript
-        let person = {
+        // - 注释(1): 原型模式的关键实现，是语言本身是否提供了 clone 方法。ES5提供了
+        //   Object.create 方法，可以用来克隆对象. 代码如下: 
+        //   Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)").
+        // - 《js高程》P170 --> ECMAScript 5 通过新增 Object.create() 方法规范化了
+        //   原型式继承。这个方法接收两个参数：第 1 个参数用作新对象原型的对象. 第 2 个参数
+        //   是一个为新对象定义额外属性的对象(可选)
+        //   在传入一个参数的情况下，Object.create() 与 object() 方法的行为相同。
+
+        let person= {
             getGreeting() {
-                return "Hello"
+                return "Hello";
             }
         };
+        // - 以 person 对象为原型
         let friend = {
             getGreeting() {
-                return Object.getPrototypeOf(this).getGreeting.call(this) + ", hi!";
+                // return Object.getPrototypeOf(this).getGreeting.call(this) + ", hi!";
+
+                // - Super 引用不是动态变化的，它总是指向正确的对象。在这个示例中, 无论有
+                //   多少次其他方法继承了 getGreeting 方法, super.getGreeting() 始终
+                //   指向 person.getGreeting() 方法
+                return super.getGreeting() + ", hi!";
             }
         };
+        // - 把 friend 的原型设置为 person
+        Object.setPrototypeOf(friend, person);
+
+        // - 克隆一个 relative 对象，原型是 friend
+        let relative = Object.create(friend);   // (1)
+
+        console.log(person.getGreeting());
+        console.log(friend.getGreeting());
+        console.log(relative.getGreeting());
       ```
+    + this 是 relative, relative 的原型是 friend 对象，当执行 relative 的 
+      getGreeting 方法时，会调用 friend 的 getGreeting() 方法，而此时的 this 值为
+      relative, Object.getPrototypeOf(this) 又会返回 friend 对象。所以就会进入递归
+      调用直到触发栈溢出报错。       
 ### 7. 正式的方法定义
+- 在 ES6 以前从未正式定义 "方法" 的概念, 方法仅仅是一个具有功能而非数据的对象属性. 而在 ES6
+  中正式将方法定义为一个函数, 它会有一个内部的 `[[HomeObject]]` 属性来容纳这个方法从属的
+  对象. 请思考一下这段代码:
+  ```javascript
+    let person = {
+        // - 是方法
+        getGreeting() {
+            return "Hello";
+        };
+        // - 不是方法
+        function shareGreeting() {
+            return "Hi";
+        }
+    }
+  ``` 
+  这个示例中定义了 person 对象, 他有一个 getGreeting() 方法, 由于直接把函数赋值给了 
+  person 对象, 因而 getGreeting() 方法的 `[[HomeObject]]` 属性值为 person. 而创建
+  shareGreeting() 函数时, 由于未将其赋值给一个对象, 因而该方法并没有明确定义
+  [[HomeObject]] 属性. 在大多数情况下这点小差别无关紧要, 但是当使用 Super 引用时就变得
+  非常重要了.
+  Super 的所有引用都通过 [[HomeObject]] 属性来确定后续的运行过程. 第一步是在 
+  [[HomeObject]] 属性上调用 Object.getPrototypeOf() 方法来检索原型的引用; 然后搜寻
+  原型找到同名函数; 最后, 设置 this 绑定并且调用相应的方法. 看下面这个示例:
+  ```javascript
+    let person = {
+        getGreeting() {
+            return "Hello";
+        }
+    };
+  ```
+
 ### 8. 小结
 
