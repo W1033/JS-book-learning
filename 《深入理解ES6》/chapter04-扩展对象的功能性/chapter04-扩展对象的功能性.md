@@ -24,6 +24,7 @@
 - **prototype ['prəʊtətaɪp] --n.原型; 样机; 样板**
 - Object.getPrototypeOf(): 取得原型
 - Object.setPrototypeOf(): 设置原型
+- Object.getOwnPropertyDescriptor(): 取得自身属性描述符
 
 
 ## 本章内容 (Content)
@@ -97,8 +98,104 @@
         }
       ```
 ### 3. 新增方法
+*ECMAScript 其中一个设计目标是: 不在创建新的全局函数, 也不在 `Object.prototype` 上创
+ 建新的方法. 而在 ES6 中, 为了使某些任务更易完成, 在全局 Object 对象上引入了一些新方法.*
 - **`Object.is()` 方法**
+    + ECMAScript 6 引入了 `Object.is()` 方法来弥补全等运算符的不准确运算。这个方法
+      接受两个参数, 如果这两个参数类型相同且具有相同的值,则返回true。请看下面这些示例:
+      ```javascript
+        console.log(+0 == -0); // true
+        console.log(+0 === -0); // true
+        console.log(Object.is(+0, -0)); // false
+        console.log(NaN == NaN); // false
+        console.log(NaN === NaN); // false
+        console.log(Object.is(NaN, NaN)); // true
+        console.log(5 == 5); // true
+        console.log(5 == "5"); // true
+        console.log(5 === 5); // true
+        console.log(5 === "5"); // false
+        console.log(Object.is(5, 5)); // true
+        console.log(Object.is(5, "5")); // false
+      ```
+    + 在许多情况下， Object.is() 的结果与 `===` 运算符是相同的， 仅有的例外是：它会
+      认为 `+0` 与 `-0` 不相等，而且 `NaN` 等于 `NaN`。 不过仍然没必要停止使用
+      全等运算符， 选择 Object.is() 还是选择 `== (相等)` 或 `=== (全等)` ， 取决
+      于代码的实际情况。  
 - **`Object.assign()` 方法**
+    + 混入/混合 (Mixin) 是 js 中实现**对象组合**最流行的一种模式. 在一个 mixin 方法中,
+      一个对象接收来自另一个对象的属性和方法, 许多 js 库中都有类似的 mixin 方法:
+      ```javascript
+        function mixin(receiver, supplier) {
+            Object.keys(supplier),forEach(function(key) {
+                receiver[key] = supplier[key];
+            })
+            return receiver;
+        }
+      ```
+      mixin() 函数遍历 supplier 的自由属性并复制到 receiver 中 (此处的复制行为是浅
+      复制, 当属性值为对象时只复制对象的引用). 这样一来, receiver 不通过继承就可以获得
+      新属性, 请参考这段代码:
+      ```javascript
+        function EventTarget() { // ... };
+        EventTarget.prototype = {
+            constructor: EventTarget,
+            emit: function() { // ... },
+            on: function() { // ... }
+        };
+        var myObject = {};
+        mixin(myObject, EventTarget.prototype);
+        myObject.emit("somethingChanged");
+      ```
+      这段代码中, myObject 接受 EventTarget.prototype 对象的所有行为, 从而使 
+      myObject 可以分别通过 emit() 方法发布事件或通过 on() 方法订阅事件.
+    + 这种混合模式非常流行，因而 ECMAScript6 添加了 `Object.assign()` 方法来实现相同
+      的功能，这个方法接受一个接收对 象和任意数量的源对象，最终返回接收对象。mixin()方法
+      使用 赋值操作符(assignment operator) `=` 来复制相关属性，却不能复制访问器属性到
+      接收对象中，因此最终添加的方法弃用 mixin 而改用 assign 作为方法名。
+    + 任何使用 mixin() 方法的地方都可以直接使用 Object.assign() 方法来替换, 把上面的
+      示例改为 Object.assign() 方法:
+      ```javascript
+        function EventTarget() { // ... };
+        EventTarget.prototype = {
+            constructor: EventTarget,
+            emit: function() { // ... },
+            on: function() { // ... }
+        };
+        var myObject = {};
+        Object.assign(myObject, EventTarget.prototype);
+        myObject.emit("somethingChanged");
+      ```  
+      Object.assign() 方法可以接受任意数量的源对象, 并按指定的顺序将属性复制到接收对象
+      中. 所以如果多个源对象具有同名属性, 则排位靠后的源对象会覆盖排位靠前的, 就像这段代码
+      这样:
+      ```javascript
+        var receiver = {};
+        Object.assign(receiver, {
+            {type: "js", name: "file.js"},
+            {type: "css"}
+        });
+        console.log(receiver.type); // "css"
+        console.log(receiver.name); // "file.js"
+      ```
+    + **Note: 访问器属性**
+        - 请记住 Object.assign() 方法不能将提供者的访问器属性复制到接受对象中. 由于
+          Object.assign() 方法执行了赋值操作, 因此提供者的访问器属性会变成接受对象中
+          的一个数据属性. 举个例子:
+          ```javascript
+            var receiver = {};
+            var supplier = {
+                get name() {
+                    return "file.js"
+                }
+            };
+            Object.assign(receiver, supplier);
+            var descriptor = Object.getOwnPropertyDescriptor(receiver, "name");
+            console.log(descriptor.value);  // "file.js"
+            console.log(descriptor.get);    // undefined
+          ```
+          在这段代码中，supplier 有一个名为 name 的访问器属性。当调用 Object.assign()
+          方法时返回字符串 "file.js", 因此 receiver 接收这个字符串后将其存为数据属性
+          receiver.name。
 ### 4. 重复的对象字面量属性
 ### 5. 自有属性枚举顺序
 ### 6. 增强对象原型
@@ -187,7 +284,7 @@ $\quad$ 原型是 JavaScript 继承的基础, 在早期版本中, JavaScript 严
         }
       ```
       <br/>
-    + Super 引用在多重继承的情况下非常有用, 因为在这种情况下, 使用 
+    + **Super 引用在多重继承的情况下非常有用**, 因为在这种情况下, 使用 
       Object.getPrototypeOf() 方法将会出现问题. 举个例子:
       ```javascript
         // - 注释(1): 原型模式的关键实现，是语言本身是否提供了 clone 方法。ES5提供了
@@ -261,4 +358,18 @@ $\quad$ 原型是 JavaScript 继承的基础, 在早期版本中, JavaScript 严
   ```
 
 ### 8. 小结
+- 对象是JavaScript编程的核心，ECMAScript 6为对象提供了许多简单易用且更加灵活的新特性。
+- ECMAScript 6在对象字面量的基础上做出了以下几个变更: 简化属性定义语法，使将当前作用域中
+  的同名变量赋值给对象的语法变得更加简洁;添加可计算属性名特性，允许为对象指定非字面量属性
+  名称;添加对象方法的简写语法，在对象字面量中定义方法时可以省略冒号和 function 关键字; 
+  ECMAScript 6 弱化了严格模式下对象字面量重复属性名称的校验，即使在同一个对象字面量中定义
+  两个同名属性也不会抛出错误。
+- object.assign() 方法可以一次性更改对象中的多个属性，如果使用混入 (Mixin) 模式这将非常
+  有用; object.is() 方法对于所有值进行严格等价判断,当将其用于处理特殊 js 值问题时比 
+  `===` 操作符更加安全。
+- 在 ECMAScript6 中同样清晰定义了自有属性的枚举顺序:当枚举属性时，数值键在先，字符串键在后;
+  数值键总是按照升序排列，字符串键按照插入的顺序排列。
+- 通过 ECMAScript6 的 object.setPrototype0f() 方法，我们可以在对象被创建后修改它的原型。
+- 最后，可以使用 super 关键字调用对象原型上的方法，此时的 this 绑定会被自动设置为当前作用域
+  的 this 值。
 

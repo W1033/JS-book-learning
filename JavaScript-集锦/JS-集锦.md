@@ -9,3 +9,4 @@
         }
         setTimeout(a, 1000, 2, 3);
       ```
+- `svg-autocrop`一个 NPM 模块，用于自动裁剪和缩小 SVG。      

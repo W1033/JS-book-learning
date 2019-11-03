@@ -143,14 +143,102 @@
 ### 增强的 Function 构造函数
 
 ### 展开运算符
+- ```javascript
+    // ES5 中返回最大值
+    let values = [25, 50, 75, 100];
+    console.log(Math.max.apply(Math, values));  // 100
+
+    // ES6 利用展开运算符实现返回最大值
+    console.log(Math.max(...values));       // 100
+
+    // ES6 展开运算符示例2
+    let values2 = [-25, -70, -50, -100];
+    console.log(Math.max(...values2, 0));   // 0
+
+    // 展开运算符使用示例3
+    let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+    console.log("x", x);
+    console.log("y", x);
+    // console.log("...z", ...z);
+  ```
 
 ### name 属性
 - 如何选择合适的名称
-- name 属性的特殊情况
+    + ES6 程序中所有的函数的 name 属性都有一个合适的值.如下面函数声明和函数表达式定义的
+      函数, 都打印了各自的 name 属性:
+      ```javascript
+        function doSomething() {}
+        var doAnotherThing = function() {};
+        console.log(doSomething.name);  // "doSomething"
+        console.log(doAnotherThing.name); // "doAnotherThing"
+      ```
+ - name 属性的特殊情况
+    + ES6 中为所有的函数新增了 name 属性。 函数声明/函数表达式。 例如: 
+      ```javascript
+        let doSomething = function doSomethingElse() {};
+        const person = {
+            // - getter 函数，名称为"get firstName", setter 函数的名称有前缀 "set"
+            get firstName() {
+                return "Nicholas";
+            },
+            sayName: function () {
+                console.log(this.name);
+            }
+        };
+        console.log(doSomething.name);      // doSomething
+        console.log(person.sayName.name);   // sayName
+
+        // - 这里和书上有出入，这是发现的第二处修改了
+        // - getOwnPropertyDescriptor 取得自身属性描述符
+        const descriptor = Object.getOwnPropertyDescriptor(person, "firstName");
+        console.log(descriptor.get.name);   // get firstName
+
+        // P53: 通过 bind() 函数创建的函数，其名称将带有 "bound" 前缀; 通过 Function 
+        // 构造函数创建的函数，其名称
+        // 将是 "anonymous"(/ə'nɒnɪməs/ adj.匿名)。 示例如下:
+        const doSome = function () {
+            // 空函数
+        };
+        console.log(doSomething.bind().name);   // bound doSomethingElse
+        console.log((new Function()).name);     // anonymous
+    ```
 
 ### 明确函数的多重用途
 - 在 ES5 中判断函数被调用的方法
-- 元属性 (Metaproperty) new.target
+    + 在ES5中如果想确定一个函数是否通过 new 关键字被调用(或者说，判断该函数是否作为
+      构造函数被调用),最流行的方式是使用 `instanceof` (instance 实例), 例如:
+      ```javascript
+        function Person(name) {
+            if (this instanceof Person) {
+            this.name = name;
+            } else {
+            throw new Error("必须通过new关键字来调用Person.");
+            }
+        }
+
+        // (2.) 还有一种在库中常见的写法是:  add-20180428
+        function SendVerCode() {
+            if (typeof this === "undefined" || Object.getPrototypeOf(this) 
+            !== SendVerCode.prototype) {
+            return new SendVerCode();
+            }
+        }
+    ```
+- 元属性 (Metaproperty) `new.target`
+    + P55: 元属性 new.target: 检测一个函数是否通过 new 关键字来调用。
+      ```javascript
+        function Person2(name) {
+            if (typeof new.target !== "undefined") {
+            console.log(this.name = name);
+            } else {
+            console.log("必须通过 new 关键字来调用 Person.");
+            }
+        }
+
+        let person2 = new Person2("Nicholas"); // Nicholas
+        // - 必须通过 new 关键字来调用 Person.
+        let anotherPerson = Person2.call(person, "Michael"); 
+      ```
 
 ### 块级函数
 - 块级函数的使用场景
@@ -249,104 +337,3 @@
 ### 小结
 
 
-
-
-
-```javascript
-    /**  20180428-P50: 展开运算符 */
-    // ES5 中返回最大值
-    let values = [25, 50, 75, 100];
-    console.log(Math.max.apply(Math, values));  // 100
-
-    // ES6 利用展开运算符实现返回最大值
-    console.log(Math.max(...values));       // 100
-
-    // ES6 展开运算符示例2
-    let values2 = [-25, -70, -50, -100];
-    console.log(Math.max(...values2, 0));   // 0
-
-    // 20180913-add:  展开运算符使用示例3
-    let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
-    console.log("x", x);
-    console.log("y", x);
-    // console.log("...z", ...z);
-```
-
-
-```javascript
-    /** 20180428-P52: name 属性 */
-    // ES6 中为所有的函数新增了 name 属性。 函数声明/函数表达式。 For example:
-    let doSomething = function doSomethingElse() {
-    };
-    const person = {
-        // getter 函数， 它的名称为"get firstName", setter 函数的名称有前缀 "set"
-        get firstName() {
-        return "Nicholas";
-        },
-        sayName: function () {
-        console.log(this.name);
-        }
-    };
-    console.log(doSomething.name);      // doSomething
-    console.log(person.sayName.name);   // sayName
-
-    // 这里和书上有出入，这是发现的第二处修改了
-    const descriptor = Object.getOwnPropertyDescriptor(person, "firstName");
-    console.log(descriptor.get.name);   // get firstName
-
-    // P53: 通过 bind() 函数创建的函数，其名称将带有 "bound" 前缀; 通过 Function 
-    // 构造函数创建的函数，其名称
-    // 将是 "anonymous"(/ə'nɒnɪməs/ adj.匿名)。 示例如下:
-    const doSome = function () {
-        // 空函数
-    };
-    console.log(doSomething.bind().name);   // bound doSomethingElse
-    console.log((new Function()).name);     // anonymous
-```
-
-
-```javascript
-    // P54 Chapter3-函数 【 在 ECMAScript 5 中判断函数被调用的方法 】
-    // (1.) 在ES5中如果想确定一个函数是否通过 new 关键字被调用(或者说，判断该函数是否作为
-    //      构造函数被调用),最流行的方式是使用 instanceof, 例如:
-    function Person(name) {
-        if (this instanceof Person) {
-        this.name = name;
-        } else {
-        throw new Error("必须通过new关键字来调用Person.");
-        }
-    }
-
-    // (2.) 还有一种在库中常见的写法是:  add-20180428
-    function SendVerCode() {
-        if (typeof this === "undefined" || Object.getPrototypeOf(this) 
-        !== SendVerCode.prototype) {
-        return new SendVerCode();
-        }
-    }
-```
-
-
-```javascript 
-// 20180501 - P55 元属性(Metaproperty) new.target: 检测一个函数是否通过 new 关键字来调用。
-function Person2(name) {
-	if (typeof new.target !== "undefined") {
-	console.log(this.name = name);
-	} else {
-	console.log("必须通过 new 关键字来调用 Person.");
-	}
-}
-
-let person2 = new Person2("Nicholas");                  // Nicholas
-let anotherPerson = Person2.call(person, "Michael"); // 必须通过 new 关键字来调用 Person.
-```
-
-
-```javascript
-    
-```
-
-
-```javascript
-    
-```

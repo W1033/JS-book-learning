@@ -1,14 +1,30 @@
-// Created on 20180503
+# 第 6 章 -- Symbol 和 Symbol 属性
 
-/**
- * - ES5 中包含 5 种原始类型:
- *      + strings(字符串类型)
- *      + numbers(数字型)
- *      + booleans(布尔型)
- *      + null 和
- *      + undefined。
- *      + ES6 引入了第 6 种原始类型: Symbol.
- */
+## 本章目录 (Catalog)
+
+
+## 生词 (New Words)
+
+
+## 本章内容 (Content)
+- 最新的 ECMAScript 标准定义了 8 种数据类型: 
+    + 7 种原始类型: 
+        * `Undefined` (未定义): 
+            + Undefined 类型, 一个没有被赋值的变量会有一个默认值 undefined.
+        * `Null` (空值): 
+            + Null 类型只有一个值: null。
+        * `Boolean` (布尔值): 
+            + 布尔类型表示一个逻辑实体，有两个值: true 和 false
+        * `Number` (数字)
+        * `String` (字符串)
+        * `Symbol` (符号， ES6 中新增)
+        * `BigInt` 
+    + 和 `Object`
+        * 复杂数据类型.
+- 原始值 (primitive values): 除 Object 以外的所有类型都是不可变的 (值本身无法被改变)
+  . 例如, 与 C 语言不通, JavaScript 中字符串是不可变的. (译注: js 中对字符串的操作一定
+  返回了一个新字符串, 原始字符串并没有被改变). 我们成这些类型的值为 "原始值".  
+- [文档来源](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures)  
 
 // 20190621- add: https://github.com/lukehoban/es6features#symbols
 // let MyClass = (function() {
