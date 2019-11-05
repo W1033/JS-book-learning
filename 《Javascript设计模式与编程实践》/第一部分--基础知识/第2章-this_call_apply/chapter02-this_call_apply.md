@@ -75,14 +75,35 @@
         和普通函数一样，他们的区别在于被调用的方式。当用 new 运算符调用函数时，该函数总会
         返回一个对象，通常情况下，**构造函数里的 this 指向的是构造函数的实例**。代码如下:
         ```javascript
-            let MyClass = function() {
+            function MyClass() {
                 this.name = "seven";
                 // - 当前 this 指向为构造函数的实例，通过 this.__proto__ 也可以看出来。
+                // Output: MyClass {name: "seven", age: 30}
                 console.log("this: ", this);
+
+                // - Note: 根据(`JS的原型图.png`)来看, 构造函数的实例(new MyClass) 
+                //   的 __proto__ 属性应该指向 MyClass.prototype (构造函数的原型), 
+                //   但是构造函数的原型中的 constructor(构造器属性) 又指向构造函数本身,
+                //   所以此处输出为 MyClass 构造函数.
+                //   (20191105 added: 此处为自己理解, 不知道到底对错.)
+                
+                // Output: 
+                // {constructor: f}
+                //    constructor: f MyClass()
+                //    __proto__: Object
                 console.log("this.__proto__: ", this.__proto__);
-            };
-            var obj = new MyClass();
-            console.log(obj.name);  // output: seven
+            }
+            let obj = new MyClass();
+            console.log(obj.name);
+            obj.age = 30;
+
+            // MyClass {name: "seven", age: 30}
+            console.log("obj: ", obj);
+            
+            // - 同构造函数内 this.__proto__ 输出一致.
+            console.log("obj.__proto__:", obj.__proto__);
+
+            // ------
 
             // - 使用 new 调用构造函数时，还要注意一个问题，如果构造函数显式地返回了一个 
             //   object 类型的对象，那么此次运算. 结果最终会返回这个对象，而不是我们上面

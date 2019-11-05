@@ -120,6 +120,7 @@
      `input,button,select,textarea{outline:none}`
    + 取消chrome下textarea可拖动放大: `textarea{resize:none}`
 - css 的盒模型:
+    
     + content+padding+border即内容的(宽高)+内边距的再加上边框，而不加上margin。
 
 -----------------HTTP-----------------

@@ -77,7 +77,7 @@
 	  ```
 	+ (3) 参数运算: 
 	  ```javascript
-        function sum(x = 1, y = 2, z = x + y) {
+        function sum(x = 1, y =   2, z = x + y) {
             console.log(x, y, z);
         }
         sum(6, 7);
