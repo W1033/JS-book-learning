@@ -33,16 +33,18 @@
                 constructor() {
                     _count.set(this, 0);
                     _items.set(this, []);
-
-                    // Output: _items: WeakMap
-                    console.log('_items: ', _items);
-                    console.log('_count: ', _count);
                 }
                 push(element) {
                     const items = _items.get(this);
                     const count = _count.get(this);
                     items[count] = element;
                     _count.set(this, count + 1);
+
+                    // WeakMap {Stack => Array(1)}
+                    console.log(_items);
+                    console.log("------");
+                    // WeakMap {Stack => Array(1)}
+                    console.log(_count);
                 }
                 pop() {
                     if(this.isEmpty()) {

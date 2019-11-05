@@ -9,61 +9,24 @@
 <body>
     <script>
         (function() {
-            // class Stack {
-            //     constructor() {
-            //         this.items = [];
-            //         // console.log(_items);
-            //     }
-            //     // - 向栈添加元素
-            //     push(element) {
-            //         this.items.push(element);
-            //         // console.log(this.items);
-            //     }
-            //     // - 从栈移除元素
-            //     pop() {
-            //         return this.items.pop();
-            //     }
-            //     // - 查看栈顶元素
-            //     peek() {
-            //         return this.items[this.items.length -1];
-            //     }
-            //     // - 检查栈是否为空
-            //     isEmpty() {
-            //         return this.items.length === 0;
-            //     }
-            //     // - 清空栈
-            //     clear() {
-            //         this.items = [];
-            //     }
-            //     // - 打印栈元素
-            //     print() {
-            //         console.log(this.items.toString());
-            //     }
-            // }
-            //
-            // let stack = new Stack();
-            // stack.push(5);
-            // stack.push(8);
-            // console.log('stack: ', stack);
-        })();
-
-        (function() {
             const _items = new WeakMap();
             const _count = new WeakMap();
             class Stack {
                 constructor() {
-                    _count.set(this, 0);
                     _items.set(this, []);
-
-                    // Output: _items: WeakMap
-                    console.log('_items: ', _items);
-                    console.log('_count: ', _count);
+                    _count.set(this, 0);
                 }
                 push(element) {
                     const items = _items.get(this);
                     const count = _count.get(this);
                     items[count] = element;
                     _count.set(this, count + 1);
+
+                    // WeakMap {Stack => Array(1)}
+                    console.log(_items);
+                    console.log("------");
+                    // WeakMap {Stack => Array(1)}
+                    console.log(_count);
                 }
                 pop() {
                     if(this.isEmpty()) {
@@ -111,6 +74,8 @@
 
             let stack = new Stack();
             stack.push(6);
+
+            console.log(Math.floor(Math.random()*10));
         })();
     </script>
 </body>
