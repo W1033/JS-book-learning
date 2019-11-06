@@ -38,8 +38,4 @@ console.log("------");
 
     console.log("------");
 
-    const _items = new WeakMap();
-    const _count = new WeakMap();
-    
-
 })();

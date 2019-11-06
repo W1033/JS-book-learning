@@ -57,7 +57,7 @@
 #### 5.2.1 检测数组
 #### 5.2.2 转换方法
 - `join()` 方法：数组方法。只接收一个参数，即用作分隔符的字符串，然后返回包含所有
-  数组项的字符串
+  数组项的字符串.
    ```javascript
         let colors = ["red", "green", "blue"];
         console.log(colors.join(",")); //red,green,blue
