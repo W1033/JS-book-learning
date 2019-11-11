@@ -123,6 +123,7 @@
     
     + content+padding+border即内容的(宽高)+内边距的再加上边框，而不加上margin。
 
+
 -----------------HTTP-----------------
 
 # HTTP
@@ -132,7 +133,6 @@
     + `www.joes-hardware.com:80` -- 主机(host) 和 端(port)，此处端口省略
     + `inventory-check.cgi` -- 路径(path)
     + `item=12731&color=blue` -- 查询(query)
-
 
 
 -----------------JavaScript-----------------
@@ -145,6 +145,23 @@
 - js中的根对象是 Object.prototype 对象。Object.prototype 对象是一个空的对象，我们在 
   js 中遇到的每个对象，实际上都是从 Object.prototype 对象克隆而来的，
   Object.prototype 对象就是他们的原型。
+
+- ES5 - `Object.keys()` 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为
+  参数，返回一个包含所有可枚举属性的字符串数组。
+    + 示例: 《js高级程序设计》\js高程学习笔记\js高程---Object.keys().js
+- ES5 - `Object.getOwnPropertyNames()`: 【取得自身的属性名】。 js高程 - Chapter 6
+- ES5 - `Object.getPrototypeOf()` 方法返回任意指定对象的原型。对象原型的真实值被存储在
+  内部专用属性 `[[Prototype]]` 中，调用 getPrototypeOf() 方法返回存储在其中的值。
+- ES6 - `Object.is()`: [P76] 弥补全等运算符的不准确运算。比如之前 +0等于-0, 
+  NaN不等于NaN
+- ES6 - `Object.assign()`
+- ES6 - `Object.setPrototypeOf()` 方法可以改变任意指定对象的原型。接受2个参数: 
+    + (1).被改变原型的对象 
+    + (2).替代第一个参数原型的对象。
+    + 示例:《深入理解ES6》\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
+
+
+
 
 - 关于在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度"的jq和js方法总结:
   1. jq方法:
@@ -197,18 +214,6 @@
         - `《深入理解JavaScript系列》--汤姆大叔/12-1_理解JavaScript的Scope.md`
         - `《深入理解JavaScript系列》--汤姆大叔/12-变量对象(Variable Object).html`
         - `深入理解JavaScript系列》--汤姆大叔/13-this/13-this.html`
-- 箭头函数的特性:
-    + (1) 默认绑定外层 this
-        + 示例见: 
-    + (2) 不能用 call 方法修改里面的 this
-    + (3) 没有 this、super、arguments 和 new.target 绑定。
-    + (4) 不能通过 new 关键字调用
-    + (5) 没有原型
-    + (6) 不支持 arguments 对象
-    + (7) 不支持重复的命名参数
-
-
-
 
 
 
@@ -347,66 +352,6 @@
   ```
 
 
-> **Node.js 和 ES6 导入导出:**
-- Node.js 导入 `require()`, 导出 `exports || module.exports`
-    + ```javascript
-        // 1. 导出  exports || module.exports
-         let funName = function () {
-             return "The nam is ....";
-         };
-         exports.funName = funName;
-        
-         module.exports = { a: 2 };
-        
-        // 2. 导入: require 一個模块，赋值给变量
-         let foo = require("./foo.js");
-         console.log(foo.funName());
-        
-         console.log( foo.a );
-      ```
-
-- ES6 导入 import， 导出 export
-    + ```javascript
-        // ---------------export.js
-        
-        // 0.导出基本语法见:
-        // 13th chapter--用模块封装代码\1.export导出.js
-        
-        // 1. 导出默认值 :
-        // (1). 导出一个函数: 由于函数被模块所代表，因而它不需要一个名称。
-        export default function (num1, num2) {
-           return num1 + num2;
-        }
-        
-        // (2). 导出一个对象 ( Vue 框架中用的都此写法 )
-        export default {
-           // 实际上这个 name 属性不是必须的，原因同上。
-           name: "App",
-           components: {
-               BaseInputText, TodoListItem
-           },
-           data () {
-               return {
-                   newTodoText: "",
-                   odos: []
-               }
-           },
-           methods: {
-               addTodo () {},
-               removeTodo (idToRemove) {}
-           }
-        }
-        
-        // -----------import.js
-        // 0. 导入基本语法见:
-        // 13th chapter--用模块封装代码\2.import导入.js
-        
-        // 1.导入默认值:
-        import BaseInputText from "./BaseInputText.vue";
-        import TodoListItem from "./TodoListItem.vue";
-      ```
-      
-      
 > **40. 客户区坐标位置 ( clientX 和 clientY ):**
   + 鼠标事件都是在浏览器视口中特定位置上发生的。这个位置信息保存在事件对象的 clientX 和 
     clientY 属性中。

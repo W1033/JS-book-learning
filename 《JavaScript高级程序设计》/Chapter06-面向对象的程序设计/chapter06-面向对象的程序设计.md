@@ -16,40 +16,65 @@
  - **每个对象都是基于一个引用类型**创建的，这个引用类型可以是第 5 章讨论的原生类型，也可以
    是开发人员定义的类型。
 
+### 6.1 理解对象
+- 创建对象的基本方式: 1. new Object()的实例  2. 对象字面量
+  ```javascript
+    var person = new Object();
+    person.name = 'Nicholas';
+    person.age = 29;
+    person.sayName = function () {
+        console.log(this.name);
+    };
 
- ### 6.1 理解对象
- ### 6.2 创建对象
-  虽然 "Object构造函数" 或 "对象字面量" 都可以来创建单个对象，但是这些方式有一个明显的缺点: 使用同一个
-   接口创建了很多对象，会产生大量的重复代码。为解决这个问题，人们开始使用工厂模式的一种变体。工厂模式是软件
-   工程领域一种广为人知的设计模式，这种模式抽象了创建具体对象的过程。。。。下面是js中用到的设计模式:
-    + 6.2.1 工厂模式
-    + 6.2.2 构造函数模式
-    + 6.2.3 原型模式
-    + 6.2.4 组合使用构造函数模式和原型模式
-    + 6.2.5 动态原型模式
-    + 6.2.6 寄生构造函数模式
-    + 6.2.7 稳妥构造函数模式
+    var person2 = {
+        name: "Nicholas",
+        age: 29,
+        job: "Software Engineer",
 
-
-// 6.1 创建对象的基本方式: 1. new Object()的实例  2. 对象字面量
-var person = new Object();
-person.name = 'Nicholas';
-person.age = 29;
-person.sayName = function () {
-    console.log(this.name);
-};
-
-var person2 = {
-    name: "Nicholas",
-    age: 29,
-    job: "Software Engineer",
-
-    sayName: function () {
-        console.log(this.name)
+        sayName: function () {
+            console.log(this.name)
+        }
     }
-}
+  ```
 
-> **6.3.4 原型式继承**
+### 6.2 创建对象
+- 虽然 "Object 构造函数" 或 "对象字面量" 都可以来创建单个对象，但是这些方式有一个明显的
+  缺点: 使用同一个接口创建了很多对象，会产生大量的重复代码。为解决这个问题，人们开始使用
+  工厂模式的一种变体。工厂模式是软件工程领域一种广为人知的设计模式，这种模式抽象了创建
+  具体对象的过程。。。。下面是js中用到的设计模式:
+#### 6.2.1 工厂模式
+#### 6.2.2 构造函数模式
+#### 6.2.3 原型模式
+- 使用 hasOwnProperty() 方法可以检测一个属性是存在于实例中，还是存在于原型中。这个方法
+  (不要忘了它是从 Object 继承来的) 只在给定属性存在于对象实例中时，才会返回 true 。
+  ```javascript
+    function Person() {}
+    Person.prototype.name = "Nicholas";
+    Person.prototype.age = 29;
+    Person.prototype.job = "Software Engineer";
+    Person.prototype.sayName = function () {
+        console.log(this.name);
+    };
+
+    var person1 = new Person();
+    var person2 = new Person();
+    console.log(person1.hasOwnProperty("name"));    // false
+
+    person1.name = "Greg";
+    console.log(person1.name);      // "Greg" --- 来自实例
+    console.log(person1.hasOwnProperty("name")); // true    
+  ```
+#### 6.2.4 组合使用构造函数模式和原型模式
+#### 6.2.5 动态原型模式
+#### 6.2.6 寄生构造函数模式
+#### 6.2.7 稳妥构造函数模式
+
+
+### 6.3 继承
+#### 6.3.1
+#### 6.3.2
+#### 6.3.3
+#### 6.3.4 原型式继承
 > MDN -- Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象。
 - 语法: Object.create(proto, [propertiesObject]):
     + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要赋值给构造函数的
@@ -104,15 +129,4 @@ var person2 = {
             console.log(clonePlane.blood);      // 500
             console.log(clonePlane.attackLevel);// 10
           ```
-- ES5 - Object.keys() 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为参数，
-    返回一个包含所有可枚举属性的字符串数组。
-    + 示例: 《js高级程序设计》\js高程学习笔记\js高程---Object.keys().js
-- ES5 - Object.getOwnPropertyNames(): 【取得自身的属性名】。 js高程 - Chapter 6
-- ES5 - Object.getPrototypeOf() 方法返回任意指定对象的原型。对象原型的真实值被存储在
-内部专用属性 `[[Prototype]]` 中，调用 getPrototypeOf() 方法返回存储在其中的值。
-- ES6 - Object.is(): [P76] 弥补全等运算符的不准确运算。比如之前 +0等于-0, NaN不等于NaN
-- ES6 - Object.assign()
-- ES6 - Object.setPrototypeOf() 方法可以改变任意指定对象的原型。接受2个参数: 
-    + 1).被改变原型的对象 
-    + 2).替代第一个参数原型的对象。
-    + 示例:《深入理解ES6》\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
+

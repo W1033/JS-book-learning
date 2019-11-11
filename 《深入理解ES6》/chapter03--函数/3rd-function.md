@@ -82,6 +82,38 @@
         }
         sum(6, 7);
 	  ```
+    + Added: 20191111, 实际使用时中可能会遇到这种情形
+      ```javascript
+        // import { defaultToString } from '../util';
+        export function defaultToString(item) {
+            if (item === null) {
+                return 'NULL';
+            } if (item === undefined) {
+                return 'UNDEFINED';
+            } if (typeof item === 'string' || item instanceof String) {
+                return `${item}`;
+            }
+            return item.toString(); // {1}
+        }
+
+        class Dictionary {
+            constructor(toStrFn = defaultToString) {
+                this.toStrFn = toStrFn;
+                this.table = {};
+            }
+
+            set(key, value) {
+                if (key != null && value != null) {
+                    const tableKey = this.toStrFn(key);
+                    this.table[tableKey] = new ValuePair(key, value);
+                    return true;
+                }
+                return false;
+            }
+            
+            // - 其他方法省略......
+        }
+      ```  
 - 默认参数值对 arguments 对象的影响
 
 - 默认参数表达式
