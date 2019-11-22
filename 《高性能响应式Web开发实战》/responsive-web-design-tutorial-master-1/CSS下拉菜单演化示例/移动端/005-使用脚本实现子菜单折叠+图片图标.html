@@ -1,0 +1,95 @@
+<!--重置样式-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		a {
+			text-decoration: none;
+		}
+		li {
+			list-style-type: none;
+		}
+
+		nav {
+			background:#25383C;	
+			text-align: center;
+		}
+
+		.nav-list-item a {
+			color: white;
+			display: block;
+			padding: 20px 40px;			
+		}
+
+		.nav-list-item:hover > ul {
+			display: block;
+		}
+		.menu-btn {
+			border: none;
+			padding: 8px 0;
+		}
+		.clearfix {
+			content: '';
+			display: block;
+			clear: both;
+		}
+		.btn-icon-close {
+			/*background: url("./images/cross.png") no-repeat center center;			*/
+			background: url("./images/cross-8.png") no-repeat center center;			
+		}
+		.btn-icon-menu {
+			/*background: url("./images/icon.png") no-repeat center center;			*/
+			background: url("./images/icon-8.png") no-repeat center center;			
+		}
+		.menu-btn-icon {
+			border: none;
+			width: 30px;
+			height: 30px;
+			background-size: cover; /* 保证背景图片始终覆盖容器 */ 
+			float: left;
+			cursor: pointer;
+			margin-left: 10px;
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<div class="menu-btn">
+			<a href="javascript:void(0)" class="menu-btn-icon btn-icon-close"></a>
+			<div class="clearfix"></div>
+		</div>
+		<ul class="nav-container-list">
+			<li class="nav-list-item"><a href="">Item1</a></li>
+			<li class="nav-list-item">
+				<a href="">Item2</a>
+			</li>
+			<li class="nav-list-item"><a href="">Item3</a></li>
+			<li class="nav-list-item"><a href="">Item4</a></li>
+		</ul>
+	</nav>
+	<script type="text/javascript">
+		var btn = document.querySelector('.menu-btn-icon');
+		var menu = document.querySelector('.nav-container-list');
+		var menuIsCollapse = false;
+
+		btn.onclick = function () {
+			menuIsCollapse = !menuIsCollapse;			
+			if (menuIsCollapse) {
+				menu.style.display = 'none';
+				btn.classList.remove('btn-icon-close');
+				btn.classList.add('btn-icon-menu');
+			} else {
+				menu.style.display = 'block';
+				btn.classList.remove('btn-icon-menu');
+				btn.classList.add('btn-icon-close');
+			}
+		}
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!--
+		font-awesome.css有31.6KB
+		.woff字体有63KB
+	-->
+	<link rel="stylesheet" type="text/css" href="./font-icon/css/font-awesome.css">
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		a {
+			text-decoration: none;
+		}
+		li {
+			list-style-type: none;
+		}
+
+		nav {
+			background:#25383C;	
+			text-align: center;
+		}
+
+		.nav-container-list {
+			display: none;
+		}
+		
+		.nav-list-item a {
+			color: white;
+			display: block;
+			padding: 20px 40px;			
+		}
+
+		.menu-btn {
+			border: none;
+			padding: 8px 0;
+		}
+		.menu-btn:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+		.icon-menu {
+			background: url("./images/icon.png") no-repeat center center;
+		}
+		.icon-cross {
+			background: url("./images/cross.png") no-repeat center center;	
+		}
+		.menu-btn-icon {
+			display: block;
+			border: none;
+			width: 30px;
+			height: 30px;
+			background-size: cover;
+			cursor: pointer;
+			float: left;
+			margin-left: 10px;
+			color: white;
+		}
+
+		/*
+			选择器 X > Y
+			后代选择器，只选择直接子元素，不能选择**子孙**元素
+		*/
+		#nav:target > ul {
+			display: block;
+		}
+
+		#nav:not(:target) > div > a:last-of-type {
+			display: none;
+		}
+
+		#nav:target > div > a:first-of-type {
+			display: none;
+		}		
+	</style>
+</head>
+<body>
+	<nav id="nav">
+		<div class="menu-btn">
+			<a href="#nav" class="menu-btn-icon"  href="">
+				<i class="fa fa-bars fa-2x"></i>
+			</a>
+			<a href="#" class="menu-btn-icon"  href="">
+				<i class="fa fa-times fa-2x"></i>
+			</a>
+		</div>
+		<ul class="nav-container-list">
+			<li class="nav-list-item"><a href="">Item1</a></li>
+			<li class="nav-list-item"><a href="">Item2</a></li>
+			<li class="nav-list-item"><a href="">Item3</a></li>
+			<li class="nav-list-item"><a href="">Item4</a></li>
+		</ul>
+	</nav>
+</body>
+</html>

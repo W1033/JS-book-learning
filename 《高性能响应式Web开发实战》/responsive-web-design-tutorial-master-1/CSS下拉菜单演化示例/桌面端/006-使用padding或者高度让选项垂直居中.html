@@ -1,0 +1,73 @@
+<!--
+	给导航栏添加高度
+	使其垂直居中
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		a {
+			text-decoration: none;
+			color: white;
+		}
+		li {
+			list-style-type: none;
+		}
+
+		nav {
+			background:#25383C;			
+			text-align: center; 
+		}
+
+		.nav-container-list {
+			max-width: 1280px; 
+			margin: 0 auto;
+		}
+
+		.nav-list-item {
+			float: left;
+		}
+
+		.nav-list-item a {
+			display: block;
+					
+			/*方法一：*/
+			/*
+				方法一的坏处是：
+				没法精确控制导航栏高度
+			 */
+			padding: 20px 40px;
+			/*	
+				方法二的坏处是：
+				每次调整高度时，height和line-height同时需要调整
+			*/
+
+			/*方法二：*/
+			/*padding: 0 40px;*/
+			/*height: 50px;*/
+			/*line-height: 50px;*/
+		}
+
+		.clearfix {
+			display: block;
+			clear: both;
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<ul class="nav-container-list">
+			<li class="nav-list-item"><a href="">Item1</a></li>
+			<li class="nav-list-item"><a href="">Item2 is a extremely item, here is for test</a></li>
+			<li class="nav-list-item"><a href="">Item3</a></li>
+			<li class="nav-list-item"><a href="">Item4 is also a very long item</a></li>
+			<li class="clearfix"></li>
+		</ul>
+	</nav>
+</body>
+</html>

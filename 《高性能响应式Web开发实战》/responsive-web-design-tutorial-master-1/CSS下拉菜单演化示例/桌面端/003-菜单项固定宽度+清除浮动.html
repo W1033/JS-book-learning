@@ -1,0 +1,51 @@
+<!--
+	1. 添加基本样式，如导航栏底色
+	2. 给出固定宽度
+	3. 清楚浮动，撑开导航栏
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		a {
+			text-decoration: none;
+			color: white;
+		}
+		li {
+			list-style-type: none;
+		}
+
+		nav {
+			background:#25383C;			
+			text-align: center; /*新增，重要，为了让文字居中*/
+		}
+
+		.nav-list-item {
+			float: left;
+			width: 25%;
+		}
+
+		.clearfix {
+			display: block;
+			clear: both;
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<ul class="nav-container-list">
+			<li class="nav-list-item"><a href="">Item1</a></li>
+			<li class="nav-list-item"><a href="">Item2</a></li>
+			<li class="nav-list-item"><a href="">Item3</a></li>
+			<li class="nav-list-item"><a href="">Item4</a></li>
+			<!--新增，重要，为了能够让nav被撑开，看见背景-->
+			<li class="clearfix"></li>
+		</ul>
+	</nav>
+</body>
+</html>

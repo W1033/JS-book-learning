@@ -1,0 +1,67 @@
+<!--重置样式-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		a {
+			text-decoration: none;
+		}
+		li {
+			list-style-type: none;
+		}
+
+		nav {
+			background:#25383C;	
+			text-align: center;
+		}
+
+		.nav-list-item a {
+			color: white;
+			display: block;
+			padding: 20px 40px;			
+		}
+
+		.nav-list-item:hover > ul { /**/
+			visibility: visible;
+			opacity: 1;
+			height: auto; /*height:auto 无法使浏览器执行高度动画*/
+			transition: all .3s linear; 
+			/*
+				这个transition只能够放在这个后代选择器中
+				如果放在.nav-submenu-list中，会导致子菜单消失变慢
+				与下方内容重叠
+			*/
+		}
+
+		.nav-submenu-list { /**/
+			background: skyblue;
+			visibility: hidden;
+			opacity: 0;
+			height: 0;
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<ul class="nav-container-list">
+			<li class="nav-list-item"><a href="#item1">Item1</a></li>
+			<li class="nav-list-item">
+				<a href="#item2">Item2</a>
+				<ul class="nav-submenu-list">
+					<li><a href="#subitem1">Submenu Item1</a></li>
+					<li><a href="#subitem2">Submenu Item2</a></li>
+					<li><a href="#subitem3">Submenu Item3</a></li>
+					<li><a href="#subitem4">Submenu Item4</a></li>
+				</ul>
+			</li>
+			<li class="nav-list-item"><a href="#item3">Item3</a></li>
+			<li class="nav-list-item"><a href="#item4">Item4</a></li>
+		</ul>
+	</nav>
+</body>
+</html>

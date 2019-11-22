@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+	html {
+		height: 2000px;
+	}
+	</style>
+</head>
+<body>
+<div style="position:fixed">Hello World</div>
+<script type="text/javascript">
+var isScrolling = false;
+
+function jank () {
+    var start = +new Date;
+    var duration = 1000 * 3;
+    while ((+new Date) - start <= duration ) {}
+    isScrolling = false;
+}
+
+setInterval(function () {
+    if (isScrolling) {
+        jank();
+    }
+}, 1000);
+
+window.onscroll = function () {
+    isScrolling = true;
+}
+</script>
+</body>
+</html>

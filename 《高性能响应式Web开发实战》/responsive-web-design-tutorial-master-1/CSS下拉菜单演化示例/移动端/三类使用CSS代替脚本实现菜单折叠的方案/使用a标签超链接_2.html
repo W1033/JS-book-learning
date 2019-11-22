@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+	#nav ul {
+		display: none;
+	}
+
+	#nav:target > ul {
+		display: block;
+	}
+	</style>
+</head>
+<body>
+	<nav id="nav">
+		<a href="#nav">Show Nav</a>
+		<ul>
+			<!--
+				这个就不在这里详细叙述了
+				主要原理是，利用绝对定位
+				将展开后的Hide Nav覆盖Show Nav
+				原理与上一个一致
+			-->
+			<a href="#">Hide Nav</a>
+			<li>Item1</li>
+			<li>Item2</li>
+			<li>Item3</li>
+			<li>Item4</li>
+		</ul>
+	</nav>
+</body>
+</html>

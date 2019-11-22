@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+	/*
+		懂，
+		默认列表隐藏
+	*/
+	#nav ul {
+		display: none;
+	}
+
+	/*
+		懂，
+		利用:target伪类选择器选择元素;
+	*/
+	#nav:target > ul {
+		display: block;
+	}
+
+	/*
+		如果用户点击了“展开菜单”链接
+		现在的#nav处于:target元素
+		那么“展开菜单”链接隐藏（它处于第一个a类子元素），只显示“收起菜单”链接
+	*/
+	#nav:target > a:first-of-type {
+		display: none;
+	}
+
+	/*
+		如果用户还未点击“展开菜单”链接
+		现在的#nav并非:target伪类元素
+		“收起菜单”链接隐藏（它处于最后一个a类子元素）
+	*/
+	#nav:not(:target) > a:last-of-type {
+		display: none;
+	}
+	</style>
+</head>
+<body>
+	<nav id="nav">
+		<a href="#nav">Show Nav</a>
+		<a href="#">Hide Nav</a>
+		<ul>
+			<li>Item1</li>
+			<li>Item2</li>
+			<li>Item3</li>
+			<li>Item4</li>
+		</ul>
+	</nav>
+</body>
+</html>
