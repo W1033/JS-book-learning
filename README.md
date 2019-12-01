@@ -387,7 +387,7 @@
 
 > **构造函数的方法内可以动态给构造函数添加属性**
 - ```javascript
-    // Vue-study\Vue--文档+语法\Vue-双向数据绑定\Vue双向绑定-基础示例讲解
+    Vue-官网文档
     // \Vue双向数据绑定原理-2.html
     // 订阅者 Watcher
     function Watcher (vm, node, name, nodeType) {
