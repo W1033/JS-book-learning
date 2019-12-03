@@ -221,7 +221,47 @@
 #### 5.6.1 `Boolean` 类型
 #### 5.6.2 `Number` 类型
 #### 5.6.3 `String` 类型
-- `split()`: 方法是基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。
+- (1). 字符方法 
+- (2). 字符串操作方法
+- (3). 字符串位置方法
+- (4). `trim()` 方法
+- (5). 字符串大小写转换方法
+    + `toLowerCase()`, toLocalLowerCase()
+    + `toUpperCase()`, toLocalUpperCase()
+- (6). 字符串的模式匹配方法
+    + (1) `match()`: 只接受一个参数(正则表达式 / RegExp对象)
+    + (2）`search()`: 参数与 match 方法相同。 search() 方法返回字符串中第一个匹配项
+      的索引; 如果没有返回 -1.
+    + (3) `replace()`: 接受2个参数: 第一个为 "正则表示 / RegExp对象", 第二个参数为
+      "一个字符串 / 一个函数"。
+    + (4) `split()`: 基于指定的分隔符将一个字符串分割为多个子字符串，并将结果放在一个
+      数组中。
+      ```js
+        // (1.) match()
+        let word = "cot, bot, sot, fot";
+        let pattern = /.ot/;
+        let matches = word.match(pattern);
+        console.log(matches.index);   // 0
+        console.log(matches[0]);      // cot
+        console.log(pattern.lastIndex);   // 0
+
+        // (2.) search()
+        let font = "cat, bat, dat, eat";
+        let pos = font.search(/at/);
+        console.log(pos);     // 1
+        
+        // (3.) replace()
+        let text = "cat, bat, sat, fat";
+        let result = text.replace(/at/g, "ond");
+        console.log(result);  // replace 返回的是字符串:  cond, bond, sond, fond
+        
+        // (4.) split()
+        const colorText = "red, blue, green, yellow";
+        let colorArr = colorText.split(",");
+        console.log(colorArr);  // [ 'red', ' blue', ' green', ' yellow' ]
+      ```
+- (7). `localCompare()` 方法
+- (8). `fromCharCode()` 方法
 
 ### (5.7) 单体内置对象
 #### 5.7.1 `Global` 对象

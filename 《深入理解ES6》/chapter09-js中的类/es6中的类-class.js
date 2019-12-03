@@ -1,5 +1,3 @@
-/** Date 2017-12-7 21:56 */
-
 // - ECMAScript 5 中的近类结构为 -> 自定义类型: 首先创建一个构造函数，然后定义另外一个方法
 //   赋值给构造函数的原型。代码如下:
 //   + (1)、创建自定义类型的最常见方式，就是组合使用构造函数模式与原型模式
@@ -141,12 +139,13 @@ console.log(typeof PersonClass33);   // undefined
 
 
 /** 作為一等公民的類 */
-// 在程序中，一等公民是指一個可以傳入函數，可以從函數返回，並且可以賦值給變量的值。Javascript 函數
-// 是一等公民(也被稱作頭等函數)，這也正是 Javascript 中的一個獨特之處。 ECMAScript 6 延續了這個
-// 傳統，將類也設計為一等公民，允許通過多種方式使用類的特性。
+// - 在程序中，一等公民是指一個可以傳入函數，可以從函數返回，並且可以賦值給變量的值。
+// - Javascript 函數是一等公民(也被稱作頭等函數)，這也正是 Javascript 中的一個独特之处。
+//   ECMAScript 6 延續了這個傳統，將類也設計為一等公民，允許通過多種方式使用類的特性。
 function createObject(classDef) {
 
-    // 匿名類表達式 class { sayHi() { console.log("Hi!"); } } 當做參數傳入到 createObject() 中
+    // - 匿名类表达式 class { sayHi() { console.log("Hi!"); } } 当做参数传入
+    //   到 createObject() 中
     /*
     * 上面的類表達式就等於:
     *   function classDef() {}
@@ -156,8 +155,8 @@ function createObject(classDef) {
     * */
     console.log(classDef);  // class { sayHi() {console.log("Hi!"); } }
 
-    // 此時就直接創建 classDef() 構造函數的實例 (更準確的說法是: 通過關鍵字 new 實例化這個類并返回
-    // 實例)將其存儲在變量 obj 中。
+    // - 此時就直接創建 classDef() 構造函數的實例 (更準確的說法是: 通過關鍵字 new 實例化
+    //   這個類并返回實例)將其存儲在變量 obj 中。
     return new classDef();
 }
 
