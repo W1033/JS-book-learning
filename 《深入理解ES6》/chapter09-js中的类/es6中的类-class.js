@@ -350,7 +350,7 @@ console.log(square instanceof Rectangle);   // true
 //
 
 class Rectangle2 {
-    constrctor(length, width) {
+    constructor(length, width) {
         this.length = length;
         this.width = width;
     }
