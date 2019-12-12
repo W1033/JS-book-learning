@@ -85,14 +85,14 @@
       ```javascript
         let person = {
             "first name": "Nicholas",
-        }
+        };
         console.log(person["first name"]);  // "Nicholas"
       ```
     + 在 ES6 中, 可在对象字面量中使用**可计算属性名称**, 其语法与引用对象实例的可计算属性
       名称相同, 也是使用方括号. 举个例子: 
       ```javascript
         let lastName = "last name";
-        ler person = {
+        let person = {
             "first name": "Nicholas",
             [lastName]: "Zakas",
         }
@@ -126,9 +126,9 @@
       一个对象接收来自另一个对象的属性和方法, 许多 js 库中都有类似的 mixin 方法:
       ```javascript
         function mixin(receiver, supplier) {
-            Object.keys(supplier),forEach(function(key) {
+            Object.keys(supplier).forEach(function(key) {
                 receiver[key] = supplier[key];
-            })
+            });
             return receiver;
         }
       ```
@@ -139,10 +139,10 @@
         function EventTarget() { // ... };
         EventTarget.prototype = {
             constructor: EventTarget,
-            emit: function() { // ... },
-            on: function() { // ... }
+            emit() {},
+            on() {}
         };
-        var myObject = {};
+        let myObject = {};
         mixin(myObject, EventTarget.prototype);
         myObject.emit("somethingChanged");
       ```
@@ -160,7 +160,7 @@
             constructor: EventTarget,
             emit: function() { // ... },
             on: function() { // ... }
-        };
+        }
         var myObject = {};
         Object.assign(myObject, EventTarget.prototype);
         myObject.emit("somethingChanged");
@@ -170,10 +170,10 @@
       这样:
       ```javascript
         var receiver = {};
-        Object.assign(receiver, {
-            {type: "js", name: "file.js"},
-            {type: "css"}
-        });
+        Object.assign(receiver, {;
+            {"js", name;: "file.js"},
+            {"css"}
+        })
         console.log(receiver.type); // "css"
         console.log(receiver.name); // "file.js"
       ```
