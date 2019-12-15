@@ -28,9 +28,13 @@
 - **processor ['prəʊsesə] --n.处理器**
 
 
-## 提示: 
-- Python 中的集合是这样的: 
-  ```python
+## Added: 
+#### 1. Set/Map 的原生 JavaScript 实现见: 
+- 仓库 `DataStructure-Algorithm-Learning` 下 `《学习JavaScript数据结构与算法》` 
+  中的 `chapter07-集合Set` 和 `chapter08-字典(Map)和散列表(HashTable)`
+
+#### 2. Python 中的集合是这样的: 
+- ```python
     ''' 集合 (set) '''
     # {1, 2, 5, 6}
     print({1, 2, 3, 4, 5, 6} - {3, 4})
@@ -38,125 +42,121 @@
     print({1, 2, 3, 4, 5, 6} & {3, 4})
     # {1, 2, 3, 4, 5, 6, 7}
     print({1, 2, 3, 5, 6} | {4, 7})
-  ```
+    ```
 - JavaScript 在 ES6 添加的 set 集合类型, 和 python 中集合的格式是类似的, 但是也有很大
-  不同; ES6 中的集合是值的集合, 可以按照插入的顺序迭代它的元素. Set 中的元素只会出现一次,
-  即 Set 中的元素是唯一的. 
-    + 更多内容见下面的示例
+不同; ES6 中的集合是值的集合, 可以按照插入的顺序迭代它的元素. Set 中的元素只会出现一次,
+即 Set 中的元素是唯一的. 
+- 更多内容见下面的示例
 
+#### 3. 插入来自 《JavaScript编程思想从ES5到ES9》 中的笔记:
+- 3.6.2 Set 类型
+  ```javascript
+    let actions = new Set();
+    actions.add("read");
+    actions.add("write").add("update");
+    actions.add("delete");
 
-## 插入来自 《JavaScript编程思想从ES5到ES9》 中的笔记:
-#### 3.6.2
-- Map 类型
-    + Map(地图)是内含**键名**对应到(`=>`)**值/数据**的组合. Map 与 对象(Object) 极为
-      相似, 只是节省了对象的累赘和限制. 运用见以下示例:
-      ```javascript
-        let items = new Map();
-        items.set("slipper", 50);
-        items.set("shoes", 200);
-        items.set("pants", 100).set("shirt", 150);
+    // - VSCode 输出如下: 
+    // actions: Set { 'read', 'write', 'update', 'delete' }
+    console.log("actions:", actions);
 
-        // - VSCode 中输出为:
-        // items: Map { 'slipper' => 50, 'shoes' => 200, 'pants' => 100, 'shirt' => 150 }
+    // - VSCode 输出如下:
+    // actions.entries():  [Set Entries] {
+    //   [ 'read', 'read' ],
+    //   [ 'write', 'write' ],
+    //   [ 'update', 'update' ],
+    //   [ 'delete', 'delete' ]
+    // }
+    console.log("actions.entries(): ", actions.entries());
 
-        // - 浏览器中输出为:
-        // Map(4):
-        //   [[Entries]]
-        //      0: {"slipper" => 50}
-        //          key: "slipper"
-        //          value: 50
-        //      1: {"shoes" => 200}
-        //          key: "shoes"
-        //          value: 200
-        //      2: {"pants" => 100}
-        //          key: "pants"
-        //          value: 100
-        //      3: {"shirt" => 150}
-        //          key: "shirt"
-        //          value: 150
-        //      size: 4
-        //   __proto__: Map
-        //      clear: f clear()
-        //      constructor: f Map()
-        //      delete: f delete()
-        //      entries: f entries()
-        //      forEach: f forEach()
-        //      get: f ()
-        //      has: f has()
-        //      keys: f keys()
-        //      set: f ()
-        //      size: 4
-        //      values: f values()
-        //      Symbol(Symbol.iterator): f entries()
-        //      Symbol(Symbol.toStringTag): "Map"
-        //      get size: f size()
-        //      __proto__: Object
+    // - VSCode 输出如下:
+    // actions.keys():  [Set Iterator] { 'read', 'write', 'update', 'delete' }
+    console.log("actions.keys(): ", actions.keys());
 
-        // - Tip: 上面 clear()/delete()/entries()/forEach/... 这些方法在浏览器中
-        //   显示都具有公共的:
-        //     + arguments: (...)
-        //     + caller: (...)
-        //     + length: 0
-        //     + name: "clear/delete/entries/forEach/..."
-        //     + __proto__: f ()
-        //     + [[Scopes]]: Scopes[0]
-        console.log("items:", items);
+    // - VSCode 输出如下:
+    // actions.values():  [Set Iterator] { 'read', 'write', 'update', 'delete' }
+    console.log("actions.values(): ", actions.values());
 
-        console.log("items.size:", items.size); // 4
+    for (let element of actions) {
+        console.log(`element: ${element}`);
+    }
+  ```
+- 3.6.2 Map(地图/映射): 是内含 **键** 对应到(`=>`) **值** 的组合. Map 与 对象(Object) 
+  极为相似, 只是节省了对象的累赘和限制. 运用见以下示例:
+```javascript
+    let items = new Map();
+    items.set("slipper", 50);
+    items.set("shoes", 200);
+    items.set("pants", 100).set("shirt", 150);
 
-        // - VSCode 输出如下: 
-        // items.entries(): [Map Entries] {
-        //   [ 'slipper', 50 ],
-        //   [ 'shoes', 200 ],
-        //   [ 'pants', 100 ],
-        //   [ 'shirt', 150 ]
-        // }
-        console.log("items.entries():", items.entries());
+    // - VSCode 中输出为:
+    // items: Map { 'slipper' => 50, 'shoes' => 200, 'pants' => 100, 'shirt' => 150 }
 
-        // - VSCode 输出如下: 
-        // items.keys(): [Map Iterator] { 'slipper', 'shoes', 'pants', 'shirt' }
-        console.log("items.keys():", items.keys());
+    // - 浏览器中输出为:
+    // Map(4):
+    //   [[Entries]]
+    //      0: {"slipper" => 50}
+    //          key: "slipper"
+    //          value: 50
+    //      1: {"shoes" => 200}
+    //          key: "shoes"
+    //          value: 200
+    //      2: {"pants" => 100}
+    //          key: "pants"
+    //          value: 100
+    //      3: {"shirt" => 150}
+    //          key: "shirt"
+    //          value: 150
+    //      size: 4
+    //   __proto__: Map
+    //      clear: f clear()
+    //      constructor: f Map()
+    //      delete: f delete()
+    //      entries: f entries()
+    //      forEach: f forEach()
+    //      get: f ()
+    //      has: f has()
+    //      keys: f keys()
+    //      set: f ()
+    //      size: 4
+    //      values: f values()
+    //      Symbol(Symbol.iterator): f entries()
+    //      Symbol(Symbol.toStringTag): "Map"
+    //      get size: f size()
+    //      __proto__: Object
 
-        // - VSCode 输出如下:
-        // items.values(): [Map Iterator] { 50, 200, 100, 150 }
-        console.log("items.values():", items.values());
-        for (let [key, value] of items) {
-            console.log(`One ${key} costs ${value}.`);
-        }
-      ```
-- Set 类型
-    + ```javascript
-        let actions = new Set();
-        actions.add("read");
-        actions.add("write").add("update");
-        actions.add("delete");
+    // - Tip: 上面 clear()/delete()/entries()/forEach/... 这些方法在浏览器中
+    //   显示都具有公共的:
+    //     + arguments: (...)
+    //     + caller: (...)
+    //     + length: 0
+    //     + name: "clear/delete/entries/forEach/..."
+    //     + __proto__: f ()
+    //     + [[Scopes]]: Scopes[0]
+    console.log("items:", items);
 
-        // - VSCode 输出如下: 
-        // actions: Set { 'read', 'write', 'update', 'delete' }
-        console.log("actions:", actions);
+    console.log("items.size:", items.size); // 4
 
-        // - VSCode 输出如下:
-        // actions.entries():  [Set Entries] {
-        //   [ 'read', 'read' ],
-        //   [ 'write', 'write' ],
-        //   [ 'update', 'update' ],
-        //   [ 'delete', 'delete' ]
-        // }
-        console.log("actions.entries(): ", actions.entries());
+    // - VSCode 输出如下: 
+    // items.entries(): [Map Entries] {
+    //   [ 'slipper', 50 ],
+    //   [ 'shoes', 200 ],
+    //   [ 'pants', 100 ],
+    //   [ 'shirt', 150 ]
+    // }
+    console.log("items.entries():", items.entries());
 
-        // - VSCode 输出如下:
-        // actions.keys():  [Set Iterator] { 'read', 'write', 'update', 'delete' }
-        console.log("actions.keys(): ", actions.keys());
+    // - VSCode 输出如下: 
+    // items.keys(): [Map Iterator] { 'slipper', 'shoes', 'pants', 'shirt' }
+    console.log("items.keys():", items.keys());
 
-        // - VSCode 输出如下:
-        // actions.values():  [Set Iterator] { 'read', 'write', 'update', 'delete' }
-        console.log("actions.values(): ", actions.values());
-
-        for (let element of actions) {
-            console.log(`element: ${element}`);
-        }
-      ```
-
+    // - VSCode 输出如下:
+    // items.values(): [Map Iterator] { 50, 200, 100, 150 }
+    console.log("items.values():", items.values());
+    for (let [key, value] of items) {
+        console.log(`One ${key} costs ${value}.`);
+    }
+  ```
 
 ## 本章内容 (Contents)
 ### ES5 中的 Set 集合与 Map 集合
@@ -227,7 +227,7 @@ ES6 中新增的 Set 類型是一種有序列表，其中含有一些相互獨�
   ```
 - 将 Set 集合转换为数组
   ```javascript
-    let set5 = new Set([1, 2, 3, 3, 3, 4, 5])；
+    let set5 = new Set([1, 2, 3, 3, 3, 4, 5]);；
     // - `...`(扩展运算符 spread operator): 可以用来 '卸除' 特定数组的中括号或特定
     //   对象的大括号。
     let arr = [...set5];
