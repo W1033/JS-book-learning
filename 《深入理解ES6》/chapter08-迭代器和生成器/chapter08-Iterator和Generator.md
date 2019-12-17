@@ -1,13 +1,34 @@
 # 第 8 章 -- 迭代器(Iterator) 和生成器 (Generator)
 
 ## 本章目录 (Catalog)
-
+- 8.1 循环语句的问题
+- 8.2 什么是迭代器 
+- 8.3 什么是生成器
+    + 8.3.1 生成器函数表达式 
+    + 8.3.2 生成器对象的方法
+- 8.4 可迭代对象和 for-of 循环
+    + 8.4.1 访问默认迭代器
+    + 8.4.2 创建可迭代对象
+- 8.5 内建迭代器
+    + 8.5.1 集合对象迭代器
+    + 8.5.2 字符串迭代器
+    + 8.5.3 NodeList 迭代器
+- 8.6 展开运算符与非数组可迭代对象
+- 8.7 高级迭代功能
+    + 8.7.1 给迭代器传递参数 
+    + 8.7.2 在迭代器中抛出错误
+    + 8.7.3 生成器返回语句
+    + 8.7.4 委托生成器
+- 8.8 异步任务执行
+    + 8.8.1 简单任务执行器
+    + 8.8.2 向任务执行器传递数据
+    + 8.8.3 异步任务执行器
+- 小结
 
 ## 生词 (New Words)
 
 
 ## 本章内容 (Content)
-
 - 用循环语句迭代数据时，必须要初始化一个变量来记录每一次迭代在数据集合中的位置，而在许多
   编程语言中，已经开始通过程序化的方式用**迭代器对象**返回过程中集合的每一个元素。
 - 迭代器的使用可以极大地简化数据操作，于是 ES6 也向 JS 中添加了这个迭代器特性。新的数据
@@ -15,55 +36,82 @@
   其他特性中也都有迭代器的身影: 新的 for~of 循环，展开运算符(...)，甚至连异步编程都可以
   使用迭代器。
 
+### 8.1 循环语句的问题
 
-     * ## 什么是迭代器(iterator)?:
-     * - 迭代器是一种特殊对象，它具有一些专门为迭代过程设计的专有接口。所有的迭代对象都有一个
-     next() 方法，每次调用都返回一个结果对象。结果对象有2个属性:
-        + (1) 一个是 value, 表示下一个将要返回的值。
-        + (2) 另一个是 done, 它是一个布尔类型的值，当没有更多可返回数据时返回 true。
-     * - 迭代器还会保存一个内部指针，用来指向当前集合中值的位置，每调用一次 next() 方法，都会返
-     回下一个可用的值。
-     */
-```javascript
-    // ES5 - 创建迭代器:  createIterator-es5.html
-    (function() {
-        function es5CreateIterator(items) {
-            let i = 0;
-            return {
-                next: function () {
-                    let done = (i >= items.length);
-                    let value = !done ? items[i++] : undefined;
+### 8.2 什么是迭代器 
+- 迭代器是一种特殊对象，它具有一些专门为迭代过程设计的专有接口。所有的迭代对象都有一个
+  `next()` 方法，每次调用都返回一个结果对象。结果对象有2个属性: (1) 一个是 `value`, 
+  表示下一个将要返回的值. (2) 另一个是 `done`, 它是一个布尔类型的值，当没有更多
+  可返回数据时返回 true。迭代器还会保存一个内部指针，用来指向当前集合中值的位置，
+  每调用一次 next() 方法，都会返回下一个可用的值。
+- 如果在最后一个值返回后再调用 next（）方法，那么返回的对象中属性 done 的值为 true，
+  属性 value 则包含迭代器最终返回的值，这个返回值不是数据集的一部分，它与函数的返回值类似
+  ，是函数调用过程中最后一次给调用者传递信息的方法，如果没有相关数据则返回 undefined。
+- 了解了这些以后，我们用 ECMAScript5 的语法创建一个迭代器.
+    + ```js
+        (function() {
+            function es5CreateIterator(items) {
+                let i = 0;
+                return {
+                    next: function () {
+                        let done = (i >= items.length);
+                        let value = !done ? items[i++] : undefined;
 
-                    return {
-                        done: done,
-                        value: value
+                        return {
+                            done: done,
+                            value: value
+                        }
                     }
                 }
             }
-        }
+            let es5Iterator = es5CreateIterator([1, 2, 3]);
 
-        let es5Iterator = es5CreateIterator([1, 2, 3]);
+            console.log(es5Iterator.next());   // {done: false, value: 1}
+            console.log(es5Iterator.next());   // {done: false, value: 2}
+            console.log(es5Iterator.next());   // {done: false, value: 3}
+            // - 之后所有的调用都会返回相同内容.
+            console.log(es5Iterator.next());   // {done: true, value: undefined}
+        })();
+      ```
+    + 在上面这段代码中，createIterator() 方法返回的对象有一个 next() 方法，每次调用时,
+      items 数组的下一个值会作为 value 返回。当 i 为 3 时，done 变为 true，此时
+      三元表达式会将 value 的值设置为 undefined。最后两次调用的结果与 ECMAScript6 
+      迭代器的最终返回机制类似，当数据集被用尽后会返回最终的内容。
+    + 上面这个示例很复杂，而在 ES6 中，迭代器的编写规则也同样复杂，但 ES6 同时还引入了
+      一个生成器对象，它可以让创建迭代器对象的过程变得更简单。
 
-        console.log(es5Iterator.next());   // {done: false, value: 1}
-        console.log(es5Iterator.next());   // {done: false, value: 2}
-        console.log(es5Iterator.next());   // {done: false, value: 3}
-        console.log(es5Iterator.next());   // {done: true, value: undefined}
-    })();
+### 8.3 什么是生成器
+- 生成器是一种返回迭代器 (iterator) 的函数。生成器函数由放在 function 关键字之后的一个
+  星号 (`*`) 来表示，并能使用新的 `yield` 关键字。将星号紧跟在 function 关键字之后，
+  或是在中间留出空格，都是没问题的，如下例:
+  ```js
+    // - 示例 1 -- 生成器
+    function *createIte() {
+        yield 1;
+        yield 2;
+        yield 3;
+    }
+    // - 生成器的调用方式与普通函数相同, 只不过返回的是一个迭代器
+    let ite = createIte();
+    console.log(ite.next().value);  // 1
+    console.log(ite.next().value);  // 2
+    console.log(ite.next().value);  // 3
 
+    // - 在这个示例中，createIte（）前的星号表明它是一个生成器；yield 关键字也是 
+    //   ES6 的新特性，可以通过它来指定调用迭代器的 next（）方法时的返回值及返回顺序。
+    //   生成迭代器后，连续 3 次调用它的 next（）方法返回 3 个不同的值，分别是 1、2 
+    //   和 3。生成器的调用过程与其他函数一样，最终返回的是创建好的迭代器。
+    // - 生成器函数最有趣的部分大概是，每当执行完一条 yield 语句后函数就会自动停止执行。
+    //   举个例子，在上面这段代码中，执行完语句 yield 1 之后，函数便不再执行其他任何语句,
+    //   直到再次调用迭代器的 next（）方法才会继续执行 yield 2 语句。生成器函数的这种
+    //   中止函数执行的能力有很多有趣的应用，我们将在本章后面 “高级迭代器功能” 一节中继续
+    //   讲解它的应用.
+    // - 使用 yield 关键字可以返回任何值或表达式，所以可以通过生成器函数批量地给迭代器
+    //   添加元素。例如，可以在循环中使用 yield 关键字：
 
-    /**
-     * ## 什么是生成器(generator)?:
-     *  > 生成器是一种返回迭代器 (iterator) 的函数。生成器函数由放在 function 关键字之后的一个
-     *    星号 (*) 来表示，并能使用新的 yield 关键字。将星号紧跟在 function 关键字之后，或是在
-     *    中间留出空格，都是没问题的，如下例:
-     *  - (1)、生成器函数表达式
-     *  - (2)、生成器对象方法
-     */
-
-    // 生成器
+    // - 示例 2 -- 生成器
     function * createIterator (items) {
         for (let i = 0; i < items.length; i++) {
-            // yield 关键字也是 ES6 新增
             yield items[i]
         }
 
@@ -84,15 +132,35 @@
     console.log(iterator.next());   // {done: false, value: 3}
     console.log(iterator.next());   // {done: true, value: undefined}
 
-
-    /* - (1)、生成器函数表达式 **/
-    let createIterator2 = function* (items) {
-        // 代码同上
+    // - 之后所有的调用都会返回相内容
+    console.log(iterator.next());   // '{done: true, value: undefined}'
+    // - 此示例中, 给生成器函数 createIterator() 传入一个 items 数组, 而在函数内部,
+    //   for 循环不断从数组中生成新的元素放入迭代器, 每遇到一个 yield 语句循环都会
+    //   停止; 每次调用迭代器的 next() 方法, 循环会继续运行并执行下一条 yield 语句.
+  ```
+#### 8.3.1 生成器函数表达式 
+- 也可以通过函数表达式来创建生成器, 只需在 function 关键字和小括号中间添加一个星号(*)
+  即可: 
+  ```js
+    let createIterator = function *(items) {
+        for (let i = 0; i < items.length; i++) {
+            yield items[i];
+        }
     };
-    // 调用同上
+    let iterator = createIterator([1, 2, 3]);
 
+    console.log(iterator.next());   // {done: false, value: 1}
+    console.log(iterator.next());   // {done: false, value: 2}
+    console.log(iterator.next());   // {done: false, value: 3}
+    console.log(iterator.next());   // {done: true, value: undefined}
 
-    /* - (2)、生成器对象方法: **/
+    // - 之后所有的调用都会返回相内容
+    console.log(iterator.next());   // '{done: true, value: undefined}'
+  ```
+#### 8.3.2 生成器对象的方法
+- 由于生成器本身就是函数, 因而可以将它添加到对象中. 例如, 在 ES5 风格的对象字面量中,
+  可以通过函数表达式来创建生成器, 就像这样;
+  ```js
     let o = {
         createIterator: function* (items) {
             for (let i = 0; i < items.length; i++) {
@@ -102,66 +170,71 @@
     };
     let secondIterator = o.createIterator([1, 2, 3]);
     console.log("secondIterator.next(): ", secondIterator.next());
+  ```
+- 也可以使用 ES6 对象方法的简写语法, 只需在函数名前添加一个 * 号:
+  ```js
+    let o = {
+        *createIterator(items) {
+            for (let i = 0; i < items.length; i++) {
+                yield items[i]
+            }
+        }
+    };
+    let secondIterator = o.createIterator([1, 2, 3]);
+    console.log("secondIterator.next(): ", secondIterator.next());
+  ```
+  ```  
 
-
-
-    /**
-     * ## 可迭代对象 (Iterables) 与 for~of 循环:
-     *  > 与迭代器紧密相关的是，可迭代对象 (iterable) 是包含 Symbol.iterator 属性的对象。这个
-     *    Symbol.iterator 知名符号定义了为指定对象返回迭代器的函数。在 ES6 中，所有的集合对象
-     *    (数组，Set集合 与 Map集合) 以及字符串都是可迭代对象，因此他们都被指定了默认的迭代器。
-     *    可迭代对象别设计用于与 ES 新增的 for~of 循环配合使用。
-     *  - 1> 访问默认迭代器
-     *  - 2> 创建迭代对象
-     */
-
-    /*
-    * - for...of 循环每执行一次都会调用可迭代对象的 next() 方法，并将迭代器返回的结果对象的
-    *   value 属性存储在一个变量中，循环将持续执行这一过程直到返回对象的 done 属性的值为
-    *   true. 例如下面这个示例:  e.g_01
-    * - e.g_01 这段 for~0f 循环的代码通过用 values 数组的 Symbol.iterator 方法来获取
-    *   迭代器，这一过程是在 JavaScript 引擎背后完成的。随后迭代器的 next() 方法被多次调用，
-    *   从其返回对象的 value 属性读取值并存储在变量 num 中，依次为 1、2 和 3，当结果对象的
-    *   done 属性值为 true 时循环退出，所以 num 不会被赋值为 undefined.
-    */
-    // e.g_01
+### 8.4 可迭代对象和 for-of 循环
+- 可迭代对象具有 `Symbol.iterator` 属性，是一种与迭代器密切相关的对象。
+  Symbol.iterator 通过指定的函数可以返回一个作用于附属对象的迭代器。在 ES6 中，
+  所有的集合对象（`数组`、`Set 集合`及 `Map 集合`）和 `字符串` 都是**可迭代对象**，
+  这些对象中都有默认的迭代器。ECMAScript 中新加入的特性 `for-of` 循环需要用到
+  可迭代对象的这些功能
+- Note: 由于生成器默认会为 Symbol.iterator 属性赋值，因此所有通过生成器创建的迭代器
+  都是可迭代对象。
+- 在本章一开始，我们曾提到过循环内部索引跟踪的相关问题，要解决这个问题，需要两个工具：
+  一个是迭代器, 另一个是 for-of 循环。如此一来，便不需要再跟踪整个集合的索引，只需关注
+  集合中要处理的内容。
+- for-of 循环每执行一次都会调用可迭代对象的 next() 方法，并将迭代器返回的结果对象的
+  value 属性存储在一个变量中，循环将持续执行这一过程直到返回对象的 done 属性的值为
+  true. 例如下面这个示例: 
+  ```js
     let values = [1, 2, 3];
     for (let num of values) {
         console.log(num);
     }
-
-
-    /*
-    * - 1> 访问默认迭代器
-    *   + 可以使用 Symbol.iterator 来访问对象上的默认迭代器，就像这样, 此代码获取了
-    *     nums 数组的默认迭代器，并用它来迭代数组中的项。这个过程与使用 for~of 循环时
-    *     在后台发生的过程一致。
-    */
+  ```
+  这段 for-0f 循环的代码通过用 values 数组的 Symbol.iterator 方法来获取
+  迭代器，这一过程是在 JavaScript 引擎背后完成的.(Tip: 内部实现原理应该和上面 8.3.2
+  把方法变成生成器函数差不多); 随后迭代器的 next() 方法被多次调用,
+  对象的 value 属性读取值并存储在变量 num 中，依次为 1、2 和 3，当结果对象的性值为
+  true 时循环退出，所以 num 不会被赋值为 undefined.
+#### 8.4.1 访问默认迭代器
+- 可以使用 Symbol.iterator 来访问对象上的默认迭代器，就像这样, 此代码获取了 nums 数组
+  的默认迭代器，并用它来迭代数组中的项。这个过程与使用 for~of 循环时在后台发生的过程一致。
+  ```js
     let nums = [1, 2, 3];
     let thirdIte = nums[Symbol.iterator]();
     console.log(thirdIte.next());  // { value: 1, done: false }
     console.log(thirdIte.next());  // { value: 2, done: false }
 
-
-    // 由于具有 Symbol.iterator 属性的对象都有默认的迭代器，因此可以用它来检测对象是否为可迭代
-    // 对象. 代码如下:
+    // - 由于具有 Symbol.iterator 属性的对象都有默认的迭代器，因此可以用它来检测
+    //   对象是否为可迭代对象. 代码如下:
     function isIterable(object) {
         return typeof object[Symbol.iterator] === "function";
     }
-
     console.log(isIterable([1, 2, 3]));     // true
     console.log(isIterable("Hello"));       // true
     console.log(isIterable(new Map()));     // true
     console.log(isIterable(new Set()));     // true
     console.log(isIterable(new WeakMap())); // false
     console.log(isIterable(new WeakSet())); // false
-
-
-    /*
-    * - 2> 创建可迭代对象
-    *   + 默认情况下，开发者定义的对象都是不可迭代对象，但如果给 Symbol.iterator 属性添加
-    *     一个生成器，则可以将其变成可迭代对象。例如:
-    */
+  ```  
+#### 8.4.2 创建可迭代对象
+- 默认情况下，开发者定义的对象都是不可迭代对象，但如果给 Symbol.iterator 属性添加
+  一个生成器，则可以将其变成可迭代对象。例如:
+  ```js
     let collection = {
         items: [],
         * [Symbol.iterator]() {
@@ -178,8 +251,33 @@
     }
 
     console.log('*'.repeat(66));
+  ```
+
+### 8.5 内建迭代器
+#### 8.5.1 集合对象迭代器
+#### 8.5.2 字符串迭代器
+#### 8.5.3 NodeList 迭代器
+
+### 8.6 展开运算符与非数组可迭代对象
+
+### 8.7 高级迭代功能
+#### 8.7.1 给迭代器传递参数 
+#### 8.7.2 在迭代器中抛出错误
+#### 8.7.3 生成器返回语句
+#### 8.7.4 委托生成器
+
+### 8.8 异步任务执行
+#### 8.8.1 简单任务执行器
+#### 8.8.2 向任务执行器传递数据
+#### 8.8.3 异步任务执行器
+
+### 小结
 
 
+
+
+
+```javascript
 
     /**
      *  ## 内置迭代器
