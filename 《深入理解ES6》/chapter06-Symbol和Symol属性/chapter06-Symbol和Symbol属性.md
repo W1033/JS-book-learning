@@ -43,7 +43,7 @@
     + 和 `Object`
         * 复杂数据类型.
 - 原始值 (primitive values): 除 Object 以外的所有类型都是不可变的 (值本身无法被改变)
-  . 例如, 与 C 语言不通, JavaScript 中字符串是不可变的. (译注: js 中对字符串的操作一定
+  . 例如, 与 C 语言不同, JavaScript 中字符串是不可变的. (译注: js 中对字符串的操作一定
   返回了一个新字符串, 原始字符串并没有被改变). 我们成这些类型的值为 "原始值".  
 - [文档来源](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures)  
 - ```javascript
@@ -131,7 +131,7 @@
 - 如果想创建一个可共享的 Symbol, 要使用 `Symbol.for()` 方法。它只接受一个参数,
   即将创建的 Symbol 的字符串标识符, 这个参数同样也被用作 Symbol 的描述, 就像这样:
   ```js
-    // - Symbol. for() 方法首先在全局 Symbol 注册表中搜索键为 "uid" 的Symbol
+    // - Symbol.for() 方法首先在全局 Symbol 注册表中搜索键为 "uid" 的Symbol
     //   是否存在，如果存在，直接返回已有的 Symbol; 否则，创建一个新的 Symbol ,
     //   并使用这个键在 Symbol 全局注册表中注册，随即返回新创建的 Symbol。
     let uid = Symbol.for("uid");
@@ -208,8 +208,8 @@
 
 ### 6.6 通过 well-known Symbol 暴露内部操作
 - ES5 的一个中心主旨是将 js 中的一些 "神奇" 的部分暴露出来, 并详尽定义了这些开发者们
-  在当时模拟不了的功能. ES6 延续了这个传统, 新标准中主要通过在原型链上定义于 Symbol
-  向光的属性来暴露更多的语言内部逻辑.
+  在当时模拟不了的功能. ES6 延续了这个传统, 新标准中主要通过在原型链上定义与 Symbol
+  相关的属性来暴露更多的语言内部逻辑.
 - ES6 开放了以前 js 中常见的内部操作, 并通过预定义一些 well-known Symbol 来表示.
   每一个这类 Symbol 都是 Symbol 对象的一个属性, 例如 Symbol.match.
 - 这些 well-known Symbol 包括:
