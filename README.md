@@ -120,7 +120,7 @@
      `input,button,select,textarea{outline:none}`
    + 取消chrome下textarea可拖动放大: `textarea{resize:none}`
 - css 的盒模型:
-    
+  
     + content+padding+border即内容的(宽高)+内边距的再加上边框，而不加上margin。
 
 
@@ -377,44 +377,3 @@
 	}
 	scrollBarRoll();
    ```
-
-
-> **42 js 经典原型图**
- <div style="overflow: hidden; width: 600px; height: 700px;">
-    <img style="width: 100%; height: 100%; " src="./images/JS-原型图.png">
- </div>
-
-
-> **构造函数的方法内可以动态给构造函数添加属性**
-- ```javascript
-    Vue-官网文档
-    // \Vue双向数据绑定原理-2.html
-    // 订阅者 Watcher
-    function Watcher (vm, node, name, nodeType) {
-        Dependence.target = this;
-        this.name = name;
-        this.node = node;
-        this.vm = vm;
-        this.nodeType = nodeType;
-
-        // 函数内调用 update() 方法，给节点赋值
-        this.update();
-
-        Dependence.target = null;
-    }
-    Watcher.prototype = {
-        update: function () {
-            this.get();
-            if (this.nodeType === "text") {
-                this.node.nodeValue = this.value;
-            }
-            if (this.nodeType === "input") {
-                this.node.value = this.value;
-            }
-        },
-        get: function () {
-            // 在方法内给构造函数添加 value 属性
-            this.value = this.vm[this.name];
-        }
-    };
-  ```
