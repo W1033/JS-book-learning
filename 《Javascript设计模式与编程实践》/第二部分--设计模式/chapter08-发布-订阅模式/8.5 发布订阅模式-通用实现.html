@@ -1,0 +1,51 @@
+<script>
+    let event = {
+        clientList: [],
+        listen: function(key, fn) {
+            if (!this.clientList[key]) {
+                this.clientList[key] = [];
+            }
+            this.clientList[key].push(fn);
+        },
+        trigger: function() {
+            let key = Array.prototype.shift.call(arguments),
+                fns = this.clientList[key];
+            console.log("!fns: ", !fns);
+            if (!fns || fns.length === 0) {
+                return false;
+            }
+            for (let i = 0, fn; fn = fns[i++]; ) {
+                // (2) arguments 是 trigger 时带上的参数
+                fn.apply(this, arguments);
+            }
+        }
+    };
+    // - installEvent 函数可以给所有的对象动态添加 发布订阅 功能.
+    let installEvent = function(obj) {
+         // - for...in: 可以 迭代数组合 和 对象的属性
+        for (let key in event) {
+            console.log('key: ', key)
+            obj[key] = event[key];
+            console.log('obj[key]', obj[key]);
+        }
+    };
+
+    let salesOffices = {};
+    installEvent(salesOffices);
+    // 小明订阅消息
+    salesOffices.listen(
+        "squareMeter88",
+        function(price) {
+            console.log("价格= " + price);
+        }
+    );
+    // 小红订阅消息
+    salesOffices.listen(
+        "squareMeter100",
+        function(price) {
+            console.log("价格= " + price);
+        }
+    );
+    salesOffices.trigger("squareMeter88", 2000000);   // 价格= 2000000
+    salesOffices.trigger("squareMeter100", 3000000);  // 价格= 3000000
+</script>
