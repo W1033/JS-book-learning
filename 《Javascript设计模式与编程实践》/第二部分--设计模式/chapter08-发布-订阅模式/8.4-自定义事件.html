@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+           maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>8.4 自定义事件</title>
+</head>
+<body>
+    <script type="text/javascript">
+        // - (1).自定义事件完成发布订阅模式
+        (function() {
+            // - 定义售楼处 (salesOffices - dependence)
+            let dependence = {};
+            // - 缓存列表, 存放订阅者的回调函数
+            dependence.subs = [];
+            // - 添加订阅者
+            dependence.addSub = function(watcher) {
+                // + 订阅的消息添加进缓存列表(subs)
+                this.subs.push(watcher);
+            };
+            // - 发布消息
+            dependence.notify = function() {
+                for(let i = 0; i < this.subs.length; i++){
+                    // console.log('this: ', this);    // this 为 dependence 对象
+                    // + arguments 是发布消息时(即: 调动 notify() 时), 传入的参数.
+                    this.subs[i].apply(this, arguments);
+                }
+
+                // - 书本上的 for 循环写法
+                // for (let i = 0, watcher; watcher = this.subs[i++];) {
+                //     watcher.apply(this, arguments);
+                // }
+            };
+
+            // - 测试
+            // - 小明订阅消息
+            dependence.addSub(function(price, squareMeter) {
+                console.log('价格=' + price);
+                console.log('平米=' + squareMeter);
+            });
+
+            // - 小红订阅消息
+            dependence.addSub(function(price, squareMeter) {
+                console.log('价格=' + price);
+                console.log('平米=' + squareMeter);
+            });
+
+            // - Note: 输出结果为 -- 2 次 `价格=2000000 \n 平米=88`.
+            // - 因为上面调用 2 次 addSub() 方法, subs 数组中保存了 2 个回调函数.
+            // dependence.notify(2000000, 88);
+
+            // - 输出: 2 次 (价格= 3000000  110平方米 )
+            // - 道理同上
+            // dependence.notify(3000000, 110);
+
+            // - 至此，我们已经实现了一个最简单的发布-订阅模式，但这里还存在一些问题。
+            //   我们看到订阅者接收到了发布者发布的每个消息，虽然小明只想买 88 平方米
+            //   的房子，但是发布者把 110 平方米的信息页推送给了小明，这对小明来说
+            //   是不必要的困扰。
+            //   (Q: 这里说的发布者把小红想买 110 平方米的信息推送给了小明, 到底是什么
+            //   意思? A: 我们看上面第二个 dependence.add() 是小红订阅的消息, 虽然
+            //   此时两个回调函数的形式是一样的, 但是如果稍加改动, 就不难能看出, 第二个
+            //   订阅事件就是小红的订阅事件, 所以书上这样说也不错.)
+            //   所以我们有必要添加一个表示 key, 让订阅者之订阅自己感兴趣的消息。
+            //   改写后的代码: 见下面 (2)
+
+            console.log('\n ~~~~~~~~~ \n');
+        })();
+
+        // - (2).自定义事件完成发布订阅模式 (改进 (1))
+        (function() {
+            // - 定义售楼处 (salesOffices - dependence)
+            let dependence = {};
+            // - 缓存列表, 存放订阅者的回调函数
+            dependence.subs = [];
+            // - 添加订阅者 (hint: 注意这里添加了参数 key)
+            dependence.addSub = function(key, watcher) {
+                // + 如果还没有订阅过此类消息, 给该类消息创建一个缓存列表
+                if (!this.subs[key]) {
+                    this.subs[key] = [];
+                }
+                this.subs[key].push(watcher);
+            };
+            // - 发布消息
+            dependence.notify = function() {
+                // + 取出消息类型
+                // + arguments 是发布消息时(即: 调动 notify() 时), 传入的参数.
+                // + shift() 方法: 取得数组的第一个元素
+                let key = [].shift.call(arguments);
+                // + 取出消息对应的回调函数集合
+                let watchers = this.subs[key];
+
+                // - 如果没有订阅该消息, 则返回
+                if (!watchers || watchers.length === 0) {
+                    return false;
+                }
+
+                for(let i = 0; i < watchers.length; i++){
+                    watchers[i].apply(this, arguments);
+                }
+            };
+
+            // - 小明订阅消息
+            dependence.addSub('squareMeter88', function(price) {
+                console.log('squareMeter88 价格=' + price);
+            });
+            // - 小红订阅消息
+            dependence.addSub('squareMeter110', function(price) {
+                console.log('squareMeter110 价格=' + price);
+            });
+
+            // - 发布 88 平方米房子的价格
+            dependence.notify('squareMeter88', 2000000);
+            // - 发布 110 平方米房子的价格
+            dependence.notify('squareMeter110', 3000000);
+        })()
+    </script>
+</body>
+</html>

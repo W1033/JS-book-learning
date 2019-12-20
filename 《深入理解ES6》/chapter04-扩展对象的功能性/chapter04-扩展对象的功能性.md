@@ -122,7 +122,7 @@
       全等运算符， 选择 Object.is() 还是选择 `== (相等)` 或 `=== (全等)` ， 取决
       于代码的实际情况。  
 - **`Object.assign()` 方法**
-    + 混入/混合 (Mixin) 是 js 中实现**对象组合**最流行的一种模式. 在一个 mixin 方法中,
+    + 混合/混入 (Mixin) 是 js 中实现**对象组合**最流行的一种模式. 在一个 mixin 方法中,
       一个对象接收来自另一个对象的属性和方法, 许多 js 库中都有类似的 mixin 方法:
       ```javascript
         function mixin(receiver, supplier) {
@@ -149,7 +149,7 @@
       这段代码中, myObject 接受 EventTarget.prototype 对象的所有行为, 从而使 
       myObject 可以分别通过 emit() 方法发布事件或通过 on() 方法订阅事件.
     + 这种混合模式非常流行，因而 ECMAScript6 添加了 `Object.assign()` 方法来实现相同
-      的功能，这个方法接受一个接收对 象和任意数量的源对象，最终返回接收对象。mixin()方法
+      的功能，这个方法接受一个接收对象和任意数量的源对象，最终返回接收对象。mixin()方法
       使用 赋值操作符(assignment operator) `=` 来复制相关属性，却不能复制访问器属性到
       接收对象中，因此最终添加的方法弃用 mixin 而改用 assign 作为方法名。
     + 任何使用 mixin() 方法的地方都可以直接使用 Object.assign() 方法来替换, 把上面的
