@@ -18,7 +18,7 @@ console.log(person instanceof PersonType);  // true
 console.log(person instanceof Object);      // true
 
 // - Tips: js中所有对象的根对象是 Object.prototype [详细讲解见: 
-//   Javascript设计模式与编程实践/第一部分--基础知识/第1章--面向对象的javascript.md]
+//   Javascript设计模式与编程实践/第1部分--基础知识/第1章--面向对象的javascript.md]
 
 
 // ~~~~~~~~~~ ~~~~~~~~~~ ~~~~~~~~~~ ~~~~~~~~~~

@@ -111,7 +111,7 @@
             console.log(person.friends);    // "Shelby,Court,Van,Rob,Barbie"
           ```
         - ```javascript
-            // - 示例来源: 《Javascript设计模式与编程实践》/第一部分--基础知识
+            // - 示例来源: 《Javascript设计模式与编程实践》/第1部分--基础知识
             //   /第1章-面形对象的JavaScript/Chapter01-面向对象的javascript.md
             const Plane = function () {
                 this.blood = 100;

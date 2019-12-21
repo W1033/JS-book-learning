@@ -99,7 +99,7 @@
         year: 2016
     };
     function pick(obj) {
-        // Javascript设计模式与编程实践\第一部分--基础知识\第1章\P14-Object.create.js
+        // Javascript设计模式与编程实践\第1部分--基础知识\第1章\P14-Object.create.js
         let result = Object.create(null);   // 克隆一个空对象
 
         // start at the second parameter

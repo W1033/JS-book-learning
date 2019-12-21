@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>8.9 模块间的通信</title>
+    <style type="text/css">
+        * {margin: 0; padding: 0;}
+        #count {outline: none; margin: 20px; padding: 15px 50px;
+                border-radius: 2px; background: #00AA88;
+                text-align: center; line-height: 100%;}
+        #show {width: 300px; height: 260px; border: 1px solid #ccc;
+                margin-left: 20px;}
+    </style>
+</head>
+<body>
+    <button id="count">点我</button>
+    <p id="show"></p>
+
+    <script type="text/javascript">
+        let Event = (function() {
+            let subs = [];
+            const addSub = function(key, watcher) {
+                if (!subs[key]) {
+                    subs[key] = [];
+                }
+                subs[key].push(watcher);
+            };
+            const notify = function() {
+                let key = Array.prototype.shift.call(arguments);
+                let subWatcher = subs[key];
+                if (!subWatcher || subWatcher.length === 0) {
+                    return false;
+                }
+                for (let i = 0; i < subWatcher.length; i++) {
+                    subWatcher[i].apply(this, arguments);
+                }
+            };
+            const remove = function(key, watcher) {
+                let subWatcher = subs[key];
+                // - 如果 key 对应的消息没有被人订阅, 则直接返回
+                if (!subWatcher) {
+                    return false;
+                }
+                // - 如果没有传入具体的回调函数, 表示需要取消 key 对应消息的所有订阅
+                if (!watcher) {
+                    subWatcher && (subWatcher.length = 0);
+                }
+                else {
+                    // - 反向遍历订阅的回调函数列表
+                    for (let l = subWatcher.length - 1; l >= 0; l--) {
+                        let _fn = subWatcher[l];
+                        if (_fn === watcher) {
+                            // - 删除订阅的回到函数
+                            subWatcher.splice(l, 1);
+                        }
+                    }
+                }
+            };
+            return {
+                addSub: addSub,
+                notify: notify,
+                remove: remove,
+            }
+        })();
+
+        // - 比如现在有 2 个模块, a 模块里面有一个按钮, 每次点击按钮之后, b 模块里的 div
+        //   中会显示按钮的总点击次数, 我们使用全局发布订阅模式完成下面的代码, 使得 a 模块
+        //   和 b 模块可以在保持封装的前提下进行通信.
+        let a = (function() {
+            let count = 0;
+            let button = document.getElementById('count');
+            button.onclick = function() {
+                Event.notify('add', count++);
+            }
+        })();
+
+        let b = (function() {
+            const show = document.getElementById('show');
+            Event.addSub('add', function(count) {
+                show.innerHTML = count;
+            })
+        })();
+
+        // - 但在这里我们要留意另一个问题，模块之间如果用了太多的全局发布—订阅模式来通信,
+        //   那么模块与模块之间的联系就被隐藏到了背后。我们最终会搞不清楚消息来自哪个模块,
+        //   或者消息会流向哪些模块，这又会给我们的维护带来一些麻烦，也许某个模块的作用
+        //   就是暴露一些接口给其他模块调用.
+
+    </script>
+</body>
+</html>

@@ -78,9 +78,18 @@
                 subs: [],
                 addSub: function(key, watcher) {
                     if (!this.subs[key]) {
+                        // - Tip: 数组也是可以自建 `索引: 值` 结构形式的, 就和对象
+                        //   的 `键: 值` 对一样的原理, 数组在js中就归入 `特异对象`
+                        //   (Exotic Object: <深入理解ES6>--chapter04.md) 中;
+                        //   而且在 js 实现的 `计数排序(counting-sort)` 算法中也
+                        //   是使用数组自定义的 `索引: 值` 形式. 输出见下面的 {1}.
                         this.subs[key] = [];
                     }
                     this.subs[key].push(watcher);
+
+                    // - 经过下面 2 次 addSub() 调用后输出:
+                    // this.subs: [squareMeter88: Array(2)]
+                    // console.log('this.subs: ', this.subs);  // {1}
                 },
                 notify: function() {
                     let key = Array.prototype.shift.call(arguments);
@@ -105,9 +114,13 @@
                     else {
                         // - 反向遍历订阅的回调函数列表
                         for (let l = subWatcher.length - 1; l >= 0; l--) {
+                            // - Question: 移除订阅函数是怎么做的比较?
+                            //   A: 生生的函数硬比较
                             let _fn = subWatcher[l];
                             if (_fn === watcher) {
-                                // - 删除订阅的回到函数
+                                console.log('_fn: ', _fn);
+                                console.log('watcher: ', watcher);
+                                // - 删除订阅的回调函数
                                 subWatcher.splice(l, 1);
                             }
                         }
@@ -126,13 +139,16 @@
             mixin(depInstance, dependence);
 
             // - 小明订阅消息
-            depInstance.addSub('squareMeter88', fn1 = function(price) {
-                console.log('squareMeter88 价格=', price);
-            });
+            let fn1 = function(price01) {
+                console.log('squareMeter88 价格=', price01);
+            };
+            depInstance.addSub('squareMeter88', fn1) ;
+
             // - 小红订阅消息
-            depInstance.addSub('squareMeter88', fn2 = function(price) {
-                console.log('squareMeter88 价格=', price);
-            });
+            let fn2 = function(price02) {
+                console.log('squareMeter88 价格=', price02);
+            };
+            depInstance.addSub('squareMeter88', fn2);
 
             // - 删除小明订阅的消息
             depInstance.remove('squareMeter88', fn1);

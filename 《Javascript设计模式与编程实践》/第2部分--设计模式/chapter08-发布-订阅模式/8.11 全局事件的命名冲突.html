@@ -101,10 +101,13 @@
                                 return fn();
                             }
                         };
-                    return namespace ?
-                        (namespaceCache[namespace] ? namespaceCache[namespace] :
-                            namespaceCache[namespace] = ret)
-                        : ret;
+                    return 
+                        namespace 
+                        ? (
+                            namespaceCache[namespace] 
+                            ? namespaceCache[namespace] 
+                            : namespaceCache[namespace] = ret
+                        ) : ret;
                 };
                 return {
                     create: _create,
