@@ -48,7 +48,7 @@
 ### 3.1 函数形参的默认值
 #### 3.1.1 在 ES5 中模拟默认参数
 - ```javascript
-	function makeRequest(url, timeout, callback) {
+	function; makeRequest(url, timeout, callback); {
         // - 添加 typeof 判断是排除传入 timeout 值为 0 时 js 认为 0 不是
         //   合法的值, 仍然把 2000 赋值给 timeout 的情况.
         timeout = (typeof timeout !== "undefined") ? timeout: 2000;
@@ -230,9 +230,9 @@
       ```javascript
         function Person2(name) {
             if (typeof new.target !== "undefined") {
-            console.log(this.name = name);
+            	console.log(this.name = name);
             } else {
-            console.log("必须通过 new 关键字来调用 Person.");
+            	console.log("必须通过 new 关键字来调用 Person.");
             }
         }
 
@@ -256,7 +256,7 @@
           ```js
             const obj = {
                 a: function () {
-                    console.log(this)
+                    console.log(this);
                     window.setTimeout(() => {
                     console.log(this)
                     }, 1000)
@@ -306,28 +306,28 @@
     // - 上一行相当于:
     let reflect01 = function(value) {
         return value;
-    }
+    };
 
     // ### 示例 2 
     let sum = (num1, num2) => num1 + num2;
     // - 上一行相当于
     let sum01 = function(num1, num2) {
         return num1 + num2;
-    }
+    };
 
     // ### 示例 3 
     let plus = (num1, num2) => {
         return num1 + num2;
-    }
+    };
     // - 上面相当于
     let plus01 = function(num1, num2) {
         return num1 + num2;
-    }
+    };
 
     // #### 示例 4
     let doNothing = () => {};
     // - 上一行相当于 
-    let doNothing01 = function() {}
+    let doNothing01 = function() {};
 
     // #### 示例 5
     // - Tip: 将对象字面量包裹在小括号中是为了将其与函数体区分开来.
