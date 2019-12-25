@@ -55,54 +55,14 @@
 </div>
 
 <script type="text/javascript">
-
-    // 4.5 惰性单例
-    // let createLoginLayer = (function() {
-    //     let div;
-    //     return function() {
-    //         if (!div) {
-    //             div = document.createElement('div');
-    //             div.innerHTML = "我是登录弹框";
-    //             div.style.display = 'none';
-    //             div.className = 'layer';
-    //             document.body.appendChild(div);
-    //         }
-    //         // 返回创建的 div
-    //         return div;
-    //     }
-    // })();
-
-
-    /**
-     * 4.6 通用的惰性单例
-     *  - 4.5 中的代码是一个可用的惰性单例，但是这段代码仍然违反单一职责原则，创建对象和管理单例的逻辑
-     *    都放在 createLoginLayer 对象内部。
-     *  - 如果我们下次需要创建页面中唯一的 iframe, 或者 script 标签，用来跨域请求数据，就必须得如法炮
-     *    制，把 createLoginLayer 函数几乎照抄一遍。
-     */
-
-    // 我们需要把不变的部分分离出来，先不考虑创建一个 div 和 iframe 有多少差异，管理单例的逻辑其实完全
-    // 可以抽象出来，这个逻辑始终是一样的: **用一个变量来标志是否创建过对象，如果是，则在下次直接返回这个
-    // 已经创建好的对象。示例代码如下:**
-    // let obj;
-    // if (!obj) {
-    //     obj = xxx;
-    // }
-
-    // 现在我们就如何管理单例的逻辑从原来的代码总抽离出来，这些逻辑被封装在 getSingle 函数内部，创建对象的
-    // 方法 fn 被当成参数动态传入 getSingle 函数:
     let getSingle = function(fn) {
         let result;
         return function() {
-            // arguments 应该是当前 return 匿名函数的参数
+            console.log('this:', this); // window
             return result || (result = fn.apply(this, arguments));
         }
     };
 
-    // 接下来将用于创建登录浮窗的方法用参数fn的形式传入getSingle，我们不仅可以传入createLoginLayer，还能
-    // 传入createScript、createIframe、createXhr等。之后再让getSingle返回一个新的函数，并且用一个
-    // 变量result来保存fn的计算结果。result变量因为身在闭包中，它永远不会被销毁。在将来的请求中，如果
-    // result已经被赋值，那么它将返回这个值。代码如下：
     let createLoginLayer = function() {
         let div = document.createElement('div');
         div.innerHTML = "我是登录弹框";
@@ -112,10 +72,6 @@
         return div;
     };
     let createSingleLoginLayer = getSingle(createLoginLayer);
-
-
-
-    // 最后调用
     document.getElementById('login').addEventListener('click', function(){
         let layer = createSingleLoginLayer();
         layer.style.display = 'block';
