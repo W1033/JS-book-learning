@@ -1,0 +1,39 @@
+<script>
+    Function.prototype.before = function(beforefn) {
+        // - 保存原函数的引用
+        let _self = this;
+        // - 返回包含了原函数和新函数的 "代理" 函数
+        return function() {
+            // - 执行新函数, 修正 this
+            beforefn.apply(this, arguments);
+            // - 执行原函数
+            return _self.apply(this, arguments);
+        }
+    };
+    Function.prototype.after = function(afterfn) {
+        let _self = this;
+        return function() {
+            let ret = _self.apply(this, arguments);
+            afterfn.apply(this, arguments);
+            return ret;
+        }
+    };
+
+    // - (1) 把一个匿名函数赋值给 func 变量
+    let func = function() {
+        console.log(2);
+    };
+
+    // - Tip: 下面的链式调用等于此写法:
+    // func = func.before(function() {console.log(1)});
+    // func = func.after(function() {console.log(3)});
+    
+    // - (2). 把 func.before() 赋值给 func,
+    // - (3). 上面的 (2) 执行完毕之后, 又把 func.after() 赋值给 func 变量. 
+    func = func
+        .before(function() {console.log(1)})
+        .after(function() {console.log(3);});
+   
+    // - 
+    func();
+</script>
