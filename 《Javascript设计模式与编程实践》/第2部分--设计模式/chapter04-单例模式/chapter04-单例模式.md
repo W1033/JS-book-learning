@@ -35,12 +35,12 @@
     let CreateDiv = function(html) {
         this.html = html;
         this.init();
-    }
+    };
     CreateDiv.prototype.init = function() {
         let div = document.createElement('div');
         div.innerHTML = this.html;
         document.body.appendChild(div);
-    }
+    };
     // - 接下来引入代理类 proxySingletonCreateDiv: 现在我们把负责管理单例的逻辑
     //   移到了代理类 proxySingletonCreateDiv 中。这样一来， CreateDiv 就变成了
     //   一个普通的类，它跟 proxySingletonCreateDiv 组合起来可以达到单例模式的效果.
@@ -145,13 +145,13 @@
     let bindEvent = getSingle(function() {
         document.getElementById('div1').onclick = function() {
             console.log('click');
-        }
+        };
         return true;
     });
     let render = function() {
         console.log('开始渲染列表');
         bindEvent();
-    }
+    };
     render();
     render();
     render();
