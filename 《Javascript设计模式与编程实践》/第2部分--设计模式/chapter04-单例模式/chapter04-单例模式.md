@@ -119,7 +119,6 @@
         layer.style.display = 'block';
     }, false);
 
-
     // 我们在试试创建唯一的 iframe 用于动态加载第三方页面:
     let createSingleIframe = getSingle(function() {
         let iFrame = document.createElement('iframe');
@@ -134,6 +133,32 @@
         loginLayer.src = 'https://baidu.com';
     }, false)
   ```
+- 在这个例子中, 我们把**创建实例对象的职责** 和 **管理单例的职责** 分别放置在 2
+  个方法里, 这 2 个方法可以独立变化而互不影响, 当它们连接在一起的时候, 就完成了创建
+  唯一实例对象的功能, 看起来是一件挺奇妙的事情.
+- 这种单例模式的用途远不止创建对象, 比如我们通常渲染完页面中的一个列表之后, 接下来要给
+  这个列表绑定 click 事件, 如果是通过 ajax 动态往列表里追加数据, 在使用事件代理的
+  前提下, click 事件实际上只需要在第一次渲染列表的时候被绑定一次, 但是我们不想去判断
+  当前列表是否是第一次渲染, 如果借助于 jQuery, 我们通常选择节点绑定 one 事件, 但是
+  如果利用 getSingle 函数, 也能达到一样的效果, 代码如下: 
+  ```js
+    let bindEvent = getSingle(function() {
+        document.getElementById('div1').onclick = function() {
+            console.log('click');
+        }
+        return true;
+    });
+    let render = function() {
+        console.log('开始渲染列表');
+        bindEvent();
+    }
+    render();
+    render();
+    render();
+    // - 可以看到, render 函数和 bindEvent 函数分别执行了 3 次, 但 div 实际上
+    //   只被绑定了一次事件.
+  ```
+
 ### 4.7 小结
 - 单例模式是我们学习的第一个模式，我们先学习了传统的单例模式实现，也了解到因为语言
   的差异性，有更适合的方法在 JavaScript 中创建单例。这一章还提到了代理模式和
