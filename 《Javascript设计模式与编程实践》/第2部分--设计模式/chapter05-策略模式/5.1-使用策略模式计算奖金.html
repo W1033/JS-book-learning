@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+            maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>5.1 使用策略模式计算奖金</title>
+</head>
+<body>
+<script type="text/javascript">
+    // - 策略类: 每种绩效的计算规则
+    let performanceS = function () {
+    };
+    performanceS.prototype.calculate = function (salary) {
+        return salary * 4;
+    };
+    let performanceA = function () {
+    };
+    performanceA.prototype.calculate = function (salary) {
+        return salary * 3;
+    };
+    let performanceB = function () {
+    };
+    performanceB.prototype.calculate = function (salary) {
+        return salary * 2;
+    };
+
+    // - 接下来定义 奖金类 Bonus
+    let Bonus = function () {
+        this.salary = null;     // - 原始工资
+        this.strategy = null;   // - 绩效等级对应的策略对象
+    };
+    // - 设置员工实际薪资
+    Bonus.prototype.setSalary = function (salary) {
+        this.salary = salary;
+    };
+    // - 设置员工绩效等级对应的策略对象
+    Bonus.prototype.setStrategy = function (strategy) {
+        this.strategy = strategy;
+    };
+    // - 计算奖金数额
+    Bonus.prototype.getBonus = function () {
+        // - 把计算奖金的操作委托给对应的策略对象
+        return this.strategy.calculate(this.salary);
+    };
+
+    // - 调用
+    let bonus = new Bonus();
+
+    bonus.setSalary(10000);   // - 传入实际的薪资
+    bonus.setStrategy(new performanceS());  // - 传入绩效等级对应的策略对象
+    console.log(bonus.getBonus());   // 40000
+
+    bonus.setStrategy(new performanceA());
+    console.log(bonus.getBonus());  // 30000
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+            maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>5.2-JavaScript版本的策略模式</title>
+</head>
+<body>
+<script type="text/javascript">
+    // - 在 JS 语言中, 函数也是对象, 所以更简单和直接的做法是把 strategy 直接
+    //   定义为函数:
+    let strategies = {
+        "S": function (salary) {
+            return salary * 4;
+        },
+        "A": function (salary) {
+            return salary * 3;
+        },
+        "B": function (salary) {
+            return salary * 2;
+        },
+    };
+    // - 同样 Context 也没有必要必须用 Bonus 类来表示, 我们依然用 calculateBonus
+    //   函数充当 Context 来接受用户的请求, 经过改造, 代码的结构变得更简洁:
+    let calculateBonus = function (level, salary) {
+        return strategies[level](salary);
+    };
+    console.log(calculateBonus('S', 20000));    // 80000
+    console.log(calculateBonus('A', 10000));    // 30000
+
+    // - 在接下来的缓动动画和表单验证的例子中, 我们用到的都是这种函数形式的策略对象.
+</script>
+</body>
+</html>
