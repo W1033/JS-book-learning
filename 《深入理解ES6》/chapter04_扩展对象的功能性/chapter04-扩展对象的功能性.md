@@ -145,7 +145,7 @@
         let myObject = {};
         mixin(myObject, EventTarget.prototype);
         myObject.emit("somethingChanged");
-      ```
+      ````
       这段代码中, myObject 接受 EventTarget.prototype 对象的所有行为, 从而使 
       myObject 可以分别通过 emit() 方法发布事件或通过 on() 方法订阅事件.
     + 这种混合模式非常流行，因而 ECMAScript6 添加了 `Object.assign()` 方法来实现相同
@@ -209,8 +209,8 @@ $\quad$ 原型是 JavaScript 继承的基础, 在早期版本中, JavaScript 严
       后改变原型的标准方法.
     + 所以在 ES6 中添加了 `Object.setPrototypeOf()` 方法来改变这一现状, 通过这个方法
       可以改变任意指定对象的原型, 它接受 2 个参数:
-        - (1) 被改变原型的对象    
-        - (2) 替代第一个参数的对象.
+        - (1) 将要被改变原型的对象    
+        - (2) 替代第一个参数原型的对象.
       <br/>举个例子: 
       ```javascript
         let person = {

@@ -6,8 +6,6 @@
 </head>
 <body>
 <script>
-
-    
     // #### 4.使用 set 陷阱函数验证属性 
     (function() {
         let tar = {
@@ -20,7 +18,7 @@
                 // - 忽略已有属性，避免影响他们
                 if (!trapTarget.hasOwnProperty(key)) {
                     if (isNaN(value)) {
-                        throw new TypeError("属性必须是数字");
+                        // throw new TypeError("属性必须是数字");
                     }
                 }
                 // 添加属性
@@ -43,15 +41,13 @@
         proxy.anotherName = "proxy";
     })();
 
-
-
-
+    
     // #### 5.使用 get 陷阱函数验证对象结构 (Object Shape)
     (function() {
         let proxy = new Proxy({}, {
             get(trapTarget, key, receiver) {
                 if (!(key in receiver)) {
-                    throw new TypeError('属性 ' + key  + ' 不存在');
+                    // throw new TypeError('属性 ' + key  + ' 不存在');
                 }
                 return Reflect.get(trapTarget, key, receiver);
             }
@@ -63,6 +59,27 @@
         console.log(proxy.age);     // TypeError: 属性 age 不存在
     })();
 
+
+    // #### 6.使用 has 陷阱函数隐藏已有属性
+    (function() {
+        let target = {
+            name: "target",
+            value: 42,
+        }
+        let proxy = new Proxy(target, {
+            has(trapTarget, key) {
+                if (key === 'value') {
+                    return false;
+                }
+                else {
+                    return Reflect.has(trapTarget, key);
+                }
+            }
+        });
+        console.log('value' in proxy);  // false
+        console.log('name' in proxy);   // true
+        console.log('toString' in proxy);   // true
+    })();
 </script>
 </body>
 </html>

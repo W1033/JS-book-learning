@@ -88,7 +88,7 @@
   `__proto__` 可以直接设置对象字面量的原型. 以下代码展示了二者的区别:
   ```javascript
     let person = {
-        getGretting() {
+        getGreeting() {
             return "Hello";
         }
     };

@@ -11,6 +11,8 @@
 - **extension [ɪk'stenʃ(ə)n] --n.扩展，延伸**
 - **enumerate [ɪ'njuːməreɪt] --vt.列举，枚举**
 - **trap [træp] --vt.陷阱，圈套**
+- **revocable**
+- **revoke**
 
 
 ## 内容 (Content)
@@ -69,6 +71,10 @@
   |`ownKeys`                 | `Object.keys`, `Object.getOwnPropertyNames()`, `Object.getOwnPropertySymbols()` | `Reflect.ownKeys()` |
   |`apply`                   | 调用一个函数 | `Reflect.apply()` |
   |`construct`               | 用 `new` 调用一个函数 | `Reflect.construct()` |
+    + Object.getOwnPropertyNames(): 取得自身(own)属性名
+    + Object.getPrototypeOf(): 取得原型
+    + Object.setPrototypeOf(): 设置原型
+    + Object.getOwnPropertyDescriptor(): 取得自身属性描述符
 
 #### 3.创建一个简单的代理
 - 用 `Proxy` 构造函数创建代理需要传入 2 个参数: 
@@ -154,9 +160,9 @@
 - 对象结构是指对象中所有可用属性和方法的集合.
 - 因为只有当读取属性时才会检验属性, 所以无论对象中是否存在某个属性, 都可以通过 get 陷阱
   来检测, 它接受 3 个参数: 
-    + (1) trapTarget: 被读取属性的源对象 (代理的目标)
-    + (2) key: 要读取的属性键 (字符串或 Symbol)
-    + (3) receiver: 操作发生的对象 (通常是代理)
+    + (1) `trapTarget`: 被读取属性的源对象 (代理的目标)
+    + (2) `key`: 要读取的属性键 (字符串或 Symbol)
+    + (3) `receiver`: 操作发生的对象 (通常是代理)
 - 由于 get 陷阱不写入值, 所以它复刻了 set 陷阱中除 value 之前的其他 3 个参数, 
   Reflect.get() 也接受同样 3 个参数并返回属性的默认值.
 - 如果属性在目标上不存在, 则使用 get 陷阱和 Reflect.get() 时会抛出错误, 就像这样:
@@ -175,19 +181,90 @@
     // - 如果属性不存在, 则抛出错误
     console.log(proxy.age);     // TypeError: 属性 age 不存在
   ```
+- 此示例中的 get 陷阱可以拦截属性读取操作, 并通过 in 操作符来判断 receiver 上是否具有
+  被读取的属性, 这里之所以用 in 操作符检查 receiver 而不检查 trapTarget, 是为了
+  防止 receiver 代理含有 has 陷阱 (下一节讲解). 在这种情况下检查 trapTarget 可能
+  会忽略掉 has 陷阱, 从而得到错误结果. 属性如果不存在会抛出一个错误, 否则就是用默认行为.
+- 这段代码展示了如何在没有错误的情况下给 proxy 添加新属性 name, 并写入值和读取值. 最后
+  一行包含一个输入错误: 由于 age 是一个不存在的属性, 因而抛出错误.  
 
 #### 6.使用 has 陷阱函数隐藏已有属性
+- 可以使用 in 操作符来检测给定对象中是否含有某个属性, 如果自由属性或原型属性匹配这个名称
+  或 Symbol 就返回 true. 例如:
+  ```js
+    let target = {
+        value: 42,
+    };
+    console.log(value in target);   // true
+    console.log("toString" in target);  // true
+  ```
+- value 是一个自有属性, toString 是一个继承自 Object 的原型属性, 二者在对象上都存在,
+  所以用 in 操作符检测二者都返回 true, 在代理中使用 has 陷阱可以拦截这些 in 操作并
+  返回一个不同的值.
+- 每当使用 in 操作符是都会调用 has 陷阱, 并传入 2 个参数:
+    + (1) `trapTarget` 读取属性的对象 (代理的目标)
+    + (2) `key` 要检查的属性键 (字符串或 Symbol)
+- Reflect.has() 方法也接收这些参数并返回 in 操作符的默认响应, 同时使用 has 陷阱和 
+  Reflect.has() 可以改变一部分属性被 in 检测时的行为, 并恢复另外一些属性的默认行为.
+  例如, 可以像这样隐藏之前实例中的 value 属性: 
+  ```js
+    let target = {
+            name: "target",
+            value: 42,
+        }
+        let proxy = new Proxy(target, {
+            has(trapTarget, key) {
+                if (key === 'value') {
+                    return false;
+                }
+                else {
+                    return Reflect.has(trapTarget, key);
+                }
+            }
+        });
+        console.log('value' in proxy);  // false
+        console.log('name' in proxy);   // true
+        console.log('toString' in proxy);   // true
+  ``` 
+- 代理中的 has 陷阱会检查 key 是否为 'value', 如果是的话返回 false, 若不是则调用
+  Reflect.has() 方法返回默认行为. 结果是, 即使 target 上实际存在 value 属性, 但
+  用 in 操作符检查还是会返回 false, 而对于 name 和 toString 则正确返回 true.       
 
 #### 7.使用 deleteProperty 陷阱函数防止刪除屬性
-- ```javascript
+- delete 操作符可以从对象中移除属性, 如果成功则返回 true, 不成功则返回 false. 在
+  严格模式下, 如果你尝试删除一个不可配置 (nonconfigurable) 属性则会导致程序抛出错误,
+  而在非严格模式下只会返回 false. 这里有一个例子: 
+  ```js
+    let target = {
+        name: 'target',
+        value: 42,
+    };
+    Object.defineProperty(target, 'name', {configurable: false});
+    console.log('value' in target);     // true
+    let result1 = delete target.value;
+    console.log(result1);   // true;
+    console.log('value' in target); // false
+
+    // - 注意, 在严格模式下, 下面这行代码会抛出一个错误
+    let result2 = delete target.name;
+    console.log(result2);   // false
+    console.log('name' in target);  // true;
+  ```
+- 在代理中, 可以通过 deleteProperty 陷阱来改变这个行为.
+- 每当通过 delete 操作符删除对象属性时, deleteProperty 陷阱函数都会被调用, 它接受
+  2 个参数: 
+    + (1) `trapTarget` 要删除属性的对象 (代理的目标)
+    + (2) `key` 要删除的属性键 (字符串或 Symbol)
+- Reflect.deleteProperty() 方法为 deleteProperty 陷阱提供morning实现, 并且接受
+  同样的 2 个参数. 结合二者可以改变 delete 的具体表现行为, 例如可以像这样来确保 value
+  属性不被删除:    
+  ```js
     let target = {
         name: 'target',
         value: 32
     };
 
     let proxy = new Proxy(target, {
-        // trapTarget: 要删除属性的对象 (代理的目标)
-        // key: 要删除的属性键 (字符串或 Symbol)
         deleteProperty: function(trapTarget, key) {
             if (key === 'value') {
                 return false
@@ -198,7 +275,7 @@
     });
 
     // 尝试删除 proxy.value
-    console.log('value' in proxy);  // node
+    console.log('value' in proxy);  // true
 
     let result1 = delete proxy.value;
     console.log(result1);   // false
@@ -214,40 +291,40 @@
   ```
 
 #### 8.原型代理陷阱函数
-- 原型代理陷阱的運行機制
-- 為什麼有两组方法?
+- 8.1 原型代理陷阱的运行机制
+- 8.2 为什么有 2 组方法
 
-#### 9.对象可扩展性陷阱函数
-- 两个基础范例
-- 重复的可擴展性方法
+#### 9.对象可扩展性陷阱
+- 9.1 两个基础范例
+- 9.2 重复的可擴展性方法
 
-#### 10.属性描述符的陷阱函数
-- 給 Object.defineProperty() 添加限制
-- 描述符对象的限制
-- 重复的描述符方法
+#### 10.属性描述符陷阱
+- 10.1 給 Object.defineProperty() 添加限制
+- 10.2 描述符对象的限制
+- 10.3 重复的描述符方法
     + defineProperty() 方法
     + getOwnPropertyDescriptor() 方法
 
 #### 11.ownKeys 陷阱函数
 
 #### 12.函數代理中的 apply 和 construct 陷阱
-- 验证函数的参数
-- 不用 new 調用構造函數
-- 覆蓋抽象基类构造函数
-- 可调用的类构造函数
+- 12.1 验证函数的参数
+- 12.2 不用 new 调用构造函数
+- 12.3 覆写抽象基类构造函数
+- 12.4 可调用的类构造函数
 
 #### 13.可被撤销的代理
 
 #### 14.解决数组的问题
-- 检测数组的索引
-- 添加新元素时增加 length 的值
-- 减少 length 的值来删除元素
-- 实现 MyArray 类
+- 14.1 检测数组的索引
+- 14.2 添加新元素时增加 length 的值
+- 14.3 减少 length 的值来删除元素
+- 14.4 实现 MyArray 类
 
 #### 15.将代理用作原型
-- 在原型上使用 get 陷阱函数
-- 在原型上使用 set 陷阱函数
-- 在原型上使用 has 陷阱函数
-- 将代理用作类的原型
+- 15.1 在原型上使用 get 陷阱
+- 15.2 在原型上使用 set 陷阱
+- 15.3 在原型上使用 has 陷阱
+- 15.4 将代理用作类的原型
 
 #### 总结

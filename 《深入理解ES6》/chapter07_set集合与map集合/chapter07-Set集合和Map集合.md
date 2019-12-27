@@ -233,7 +233,7 @@
 #### 7.3.4 将 Set 集合转换为数组
 - ```javascript
     let set5 = new Set([1, 2, 3, 3, 3, 4, 5]);；
-    // - `...`(扩展运算符 spread operator): 可以用来 '卸除' 特定数组的中括号或特定
+    // - `...`(展开运算符 spread operator): 可以用来 '卸除' 特定数组的中括号或特定
     //   对象的大括号。
     let arr = [...set5];
     console.log("set5: ", set5);
