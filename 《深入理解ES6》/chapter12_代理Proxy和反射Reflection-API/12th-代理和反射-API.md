@@ -53,8 +53,8 @@
       代理陷阱对应一个命名和参数都跟 Reflect 对象相同的方法.
 - 每个陷阱覆写 js 对象的一些内建特性，可以用他们拦截并修改这些特性. 如果仍需使用内建特性,
   则可以使用相应的反射 API 方法. 创建代理会让代理和反射 API 的关系变得清楚.
-- Javascript 中的代理陷阱 <br/>
-  |代理陷阱(Proxy Trap)|覆写的特性(Overrides the Behavior Of)|默认特性 (Default Behavior)|
+- Javascript 中的代理陷阱 表格: 
+- |代理陷阱(Proxy Trap)|覆写的特性(Overrides the Behavior Of)|默认特性 (Default Behavior)|
   |--------------------------|---------------------------|------------------|
   |`get`                     | 读取一个属性                | `Reflect.get()` |
   |`set`                     | 写入一个属性                | `Reflect.set()` |
