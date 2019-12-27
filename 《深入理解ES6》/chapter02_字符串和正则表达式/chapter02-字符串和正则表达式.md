@@ -27,7 +27,7 @@
     + --> a multilingual dictionary. 多语词典.
 - **surrogate ['sʌrəɡɪt] --n.代理**
 - **normalize [ˈnɔ:məˌlaɪz]  --n.标准化，正常化  --vt&vi(使)正常化**
----
+
 
 ## 插入内容: 来自《Node.js 开发指南》
 - 6.4.4 Unicode 与国际化

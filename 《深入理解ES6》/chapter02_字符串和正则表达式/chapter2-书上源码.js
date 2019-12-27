@@ -1,9 +1,15 @@
 /** UTF-16 码位 **/
 
+// "𠮷"为日文字，不是中文"吉"
+let text = "𠮷";
+console.log(text.length);   // 2 
+console.log(/^.$/.test(text));  // false 
+console.log(text.charAt(0));        // ""
+console.log(text.charAt(1));        // "" 
+console.log(text.charCodeAt(0));    // 55362
 
 
-/** normalize()方法      /ˈnɔ:məˌlaɪz/  n.标准化，正常化  vt&vi (使)正常化 **/
-// 将 values 数组中的所有字符串都转化成同一种标准形式。
+// - normalize()方法: 将 values 数组中的所有字符串都转化成同一种标准形式。
 let values = ['English', 'fuck', '吉', '123', '𠮷']   // 注意第一个为"吉"字，第二个为日语
 
 let normalized = values.map(function (text) {
@@ -29,16 +35,16 @@ console.log(normalized)  // 这里生成了一个新数组
 
 
 
-/** 计算码位数量 **/
-// 此方法运行效率低，作者建议使用第8章的字符串迭代器。
+/** #### 计算码位数量 **/
+// - 此方法运行效率低，作者建议使用第8章的字符串迭代器。
 function codePointLength(text) {
     // \s : 匹配一个空白字符。 \S: 匹配一个非空白字符
     let result = text.match(/[\s\S]/gu);
     return result ? result.length : 0;
 }
-
 console.log(codePointLength("abc"));     // 3
-console.log(codePointLength("𠮷bc"));    // 3: 因为我们利用了u修饰符把含有2个字符编码的字符转化为1个，所以此处的长度还是3
+// - 因为我们利用了u修饰符把含有2个字符编码的字符转化为1个，所以此处的长度还是3
+console.log(codePointLength("𠮷bc"));    // 3
 console.log(codePointLength("𠮷abc"));   // 4
 
 /** 检测 u 修饰符是否支持 **/
@@ -61,14 +67,14 @@ function hasRegExpU() {
 }
 
 
-// 20180427 字符串中的子串识别 : includes(), startWith(), endWith(); -->
+// - 字符串中的子串识别 : includes(), startWith(), endWith(); -->
 // 都接受2个参数，第一个为要查找的字符； 第二个可选，指定一个索引值表示从哪里开始搜索。
 
-// 20180427 把字符串重复一定次数: repeat()
+// 把字符串重复一定次数: repeat()
 console.log("Hello ES6 ".repeat(2));     // Hello ES6 Hello ES6
 
 
-// 20180427: P26 正则表达式的复制  正则修饰符: i: 忽略大小写。 g: 全局匹配。 m: 多行查找
+// P26 正则表达式的复制  正则修饰符: i: 忽略大小写。 g: 全局匹配。 m: 多行查找
 let re1 = /ab/i,
 
     // ES6 修改了正则表达式不可以使用第二个参数的 bug, 修改后的参数为: 第一个参数为正则表达式， 第二个参数修改为其修饰符。
@@ -78,7 +84,7 @@ console.log(re1.toString());    // ab/i
 console.log(re2.toString());    // ab/g
 
 
-// 20180427: P27 ES6 新增 flags 属性:
+// P27 ES6 新增 flags 属性:
 // 1.正则的 resource 属性获取正则表达式的文本。
 // 2. flags 属性返回所有应用于当前正则表达式的修饰符字符串。 flags/resource 都是只读的原型属性访问器。
 let re = /ab/g;
@@ -86,7 +92,7 @@ console.log(re.source);     // ab
 console.log(re.flags);      // g
 
 
-// 20180427 模板自变量
+// 模板自变量
 // P28 基础语法
 let message = `\`Hello,\`world!`;
 console.log(message);           // `Hello, `world!
@@ -100,7 +106,7 @@ console.log(msg);       // Multiline
                         // string
 console.log(msg.length);// 17
 
-// 20180428-P31: 字符串占位符
+// P31: 字符串占位符
 let name = "Nicholas",
     str = `Hello,${name}`;
 console.log(str);
@@ -113,7 +119,7 @@ let name2 = "Nicholas",
 console.log(str2);
 
 
-// 20180428-P32: 标签模板: 每个标签模板都可以执行模板字面量上的转换并返回最终的字符串值。
+// P32: 标签模板: 每个标签模板都可以执行模板字面量上的转换并返回最终的字符串值。
 /*
  * 标签指的是在模板字面量第一个反撇号(`)前方标注的字符串，像这样:
  * let msg = tag`Hello word`; (意思是: 应用与模板字面量 `Hello world` 的模板标签是 tag.)
@@ -146,7 +152,7 @@ let count = 10,
 console.log(total);     // 10 items cost $2.5
 
 
-// P35 String.raw() 在模板字面量中使用原始值 (主要用于输出源代码之类)
+// P35: String.raw() 在模板字面量中使用原始值 (主要用于输出源代码之类)
 function raw(literals, ...substitutions) {
     let result = "";
     for (let i = 0; i < substitutions.length; i++) {
