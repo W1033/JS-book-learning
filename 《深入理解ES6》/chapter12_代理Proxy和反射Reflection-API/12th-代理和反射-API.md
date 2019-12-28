@@ -1,6 +1,7 @@
 ## Chapter 12 -- 代理(Proxy) 和 反射(Reflection) API
-- 代理 (Proxy) 是一种可以拦截并改变底层 JavaScript 引擎操作的包装器，在新语言中通过它
-  暴露内部运作的对象, 从而让开发者可以创建内建的对象.
+- ES6 添加了一些**内建对象**, 赋予开发者更多访问 JS 引擎的能力. 代理 (Proxy) 是一种
+  可以拦截并改变底层 JavaScript 引擎操作的包装器，在新语言中通过它暴露内部运作的对象,
+  从而让开发者可以创建内建的对象.
 
 ## 生词**
 - **exotic [ɪg'zɒtɪk] --ajd.奇异的，外来的**
@@ -94,7 +95,7 @@
         console.log(proxy.name);    // "target"
       ```
 
-#### 4.使用 set 陷阱函数验证属性 
+#### 4.使用 `set` 陷阱函数验证属性 
 - Tip: `set()/get()/has()...` 这些陷阱函数(代理陷阱) 是设置在 
   `new Proxy(target, handler)` 中的 `handler` 处理对象内的.
 - 假设你想创建一个属性值是数字的对象, 对象中每新增一个属性都要加以验证, 如果不是数字
@@ -150,7 +151,7 @@
   一个错误. 在这段代码中, count 被设置为 1, 所以代理调用 Reflect.set() 方法并传入
   陷阱接受的 4 个参数来添加新属性.  
 
-#### 5.使用 get 陷阱函数验证对象结构 (Object Shape)
+#### 5.使用 `get` 陷阱函数验证对象结构 (Object Shape)
 - JS 有一个时常令人感到困惑的特殊行为, 即读取不存在的属性时不会抛出错误, 而是用 
   undefined 代替被读取属性的值, 就像下面这个示例一样:
   ```js
@@ -174,7 +175,7 @@
             }
             return Reflect.get(trapTarget, key, receiver);
         }
-    })
+    });
     // - 添加一个属性, 程序仍正常运行
     proxy.name = 'proxy';
     console.log(proxy.name);    // "proxy"
@@ -188,7 +189,7 @@
 - 这段代码展示了如何在没有错误的情况下给 proxy 添加新属性 name, 并写入值和读取值. 最后
   一行包含一个输入错误: 由于 age 是一个不存在的属性, 因而抛出错误.  
 
-#### 6.使用 has 陷阱函数隐藏已有属性
+#### 6.使用 `has` 陷阱函数隐藏已有属性
 - 可以使用 in 操作符来检测给定对象中是否含有某个属性, 如果自由属性或原型属性匹配这个名称
   或 Symbol 就返回 true. 例如:
   ```js
@@ -211,7 +212,7 @@
     let target = {
             name: "target",
             value: 42,
-        }
+        };
         let proxy = new Proxy(target, {
             has(trapTarget, key) {
                 if (key === 'value') {
@@ -225,12 +226,12 @@
         console.log('value' in proxy);  // false
         console.log('name' in proxy);   // true
         console.log('toString' in proxy);   // true
-  ``` 
+  ```
 - 代理中的 has 陷阱会检查 key 是否为 'value', 如果是的话返回 false, 若不是则调用
   Reflect.has() 方法返回默认行为. 结果是, 即使 target 上实际存在 value 属性, 但
   用 in 操作符检查还是会返回 false, 而对于 name 和 toString 则正确返回 true.       
 
-#### 7.使用 deleteProperty 陷阱函数防止刪除屬性
+#### 7.使用 `deleteProperty` 陷阱函数防止刪除屬性
 - delete 操作符可以从对象中移除属性, 如果成功则返回 true, 不成功则返回 false. 在
   严格模式下, 如果你尝试删除一个不可配置 (nonconfigurable) 属性则会导致程序抛出错误,
   而在非严格模式下只会返回 false. 这里有一个例子: 
@@ -255,7 +256,7 @@
   2 个参数: 
     + (1) `trapTarget` 要删除属性的对象 (代理的目标)
     + (2) `key` 要删除的属性键 (字符串或 Symbol)
-- Reflect.deleteProperty() 方法为 deleteProperty 陷阱提供morning实现, 并且接受
+- Reflect.deleteProperty() 方法为 deleteProperty 陷阱提供默认实现, 并且接受
   同样的 2 个参数. 结合二者可以改变 delete 的具体表现行为, 例如可以像这样来确保 value
   属性不被删除:    
   ```js
@@ -289,9 +290,38 @@
 
     console.log('name' in proxy);   // false
   ```
+- 这段代码与 has 陷阱函数的例子相似，在 deleteProperty 陷阱函数中检查 key
+  的值是否为 "value". 如果是，返回 false; 否则通过调用 Reflect.deleteProperty() 
+  方法来进行默认的操作。 value 属性是不能被删除的，因为该操作被 proxy 对象拦截；
+  而 name 则能如期被删除。这么做允许你在严格模式下保护属性避免其被删除，并且不会抛出错误。
 
-#### 8.原型代理陷阱函数
-- 8.1 原型代理陷阱的运行机制
+#### 8.原型代理的陷阱函数
+- 第 4 章介绍了 ES6 新增的 Object.setPrototypeOf() 方法, 它被用于作为 ES5中的
+  Object.getPrototypeOf() 方法的补充. 通过代理(Proxy)中的 `setPrototypeOf`
+  陷阱和 `getPrototypeOf` 陷阱可以拦截这 2 个方法的执行过程, 在这 2 种情形下, 
+  Object 上的方法会调用代理中的同名陷阱来改变方法的行为.
+    + `Object.getPrototypeOf() 取得原型` 
+    + `Object.setPrototypeOf() 设置原型` 
+     - 这个方法可以改变任意指定对象的原型, 它接受 2 个参数:
+            + (1) 将要被改变原型的对象    
+            + (2) 替代第一个参数原型的对象.
+    + `Object.getOwnPropertyDescriptor() 取得自身属性描述符`
+- 由于存在着 2 个陷阱函数与原型代理相关联, 因此分别有一组方法对应着每个陷阱函数.
+  setPrototypeOf 陷阱函数接受 2 个参数: 
+    + (1) `trapTarget` 需要设置原型的对象 (即代理的目标对象)
+    + (2) `proto` 需要被用作原型的对象.
+- Object.setPrototypeOf() 方法与 Reflect.setPrototypeOf() 方法会被传入相同的参数
+  . 另一方面, getPrototypeOf 陷阱函数只接受 trapTarget 参数, 
+  Object.getPrototypeOf() 方法与 Reflect.getPrototypeOf() 方法也是如此。    
+- 8.1 原型代理的陷阱函数如何工作
+    + 这些陷阱函数受到一些限制。首先，getPrototypeOf 陷阱函数的返回值必须是一个对象
+      或者 null ，其他任何类型的返回值都会引发“运行时”错误。对于返回值的检测确保了
+      Object.getPrototypeOf() 会返回预期的结果。类似的，setPrototypeOf 必须在
+      操作没有成功的情况下返回 false ，这样会让 Object.setPrototypeOf() 抛出错误；
+      而若 setPrototypeOf 的返回值不是 false ，则 Object.setPrototypeOf() 就会
+      认为操作已成功。
+    + 下面这个例子通过返回 null 隐藏了代理对象的原型, 并且使得该原型不可被修改:
+      
 - 8.2 为什么有 2 组方法
 
 #### 9.对象可扩展性陷阱
