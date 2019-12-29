@@ -50,7 +50,7 @@
     + (1) "反射对象中方法的默认特性"--就是下表中的第 3 列; "底层操作"--就是下表中的
       第 2 列, 也即 Object 对象上默认使用的操作方法, 比如: `delete` 操作符:
       删除对象的属性; `Object.keys()` 返回对象中所有可枚举的属性名; 
-      `Object.getOwnPropertyNames()` 不考虑对象的可枚举性一律返回. 等等...
+      `Object.getOwnPropertyNames()` 不考虑对象中属性的可枚举性一律返回. 等等...
     + (2) 下表中的 第 3 列 Reflect 对象上的方法可以操作对应的内建特性, 而 Proxy 对象
       上的各种代理陷阱方法(即下表的第 1 列) 又可以直接覆写第 2 列列出的内建特性, 
       代理陷阱对应一个命名和参数都跟 Reflect 对象相同的方法.
@@ -320,22 +320,241 @@
       操作没有成功的情况下返回 false ，这样会让 Object.setPrototypeOf() 抛出错误；
       而若 setPrototypeOf 的返回值不是 false ，则 Object.setPrototypeOf() 就会
       认为操作已成功。
-    + 下面这个例子通过返回 null 隐藏了代理对象的原型, 并且使得该原型不可被修改:
-      
+    + 下面这个例子通过返回 null 隐藏了代理对象的原型, 并且使得该原型不可被修改: 
+      示例见: `08.1-原型代理的陷阱函数如何工作.js`
 - 8.2 为什么有 2 组方法
+    + **Tip: 本章的翻译, 个人感觉 `深入理解ES6.pdf` 电子书, 比纸质书翻译的更好**
+      **所以, 接下来的所有文字描述的笔记都直接见此电子书.**
+    + 关于 Reflect.getPrototypeOf() 与 Reflect.setPrototypeOf(), 它们看起来与
+      Object.getPrototypeOf() 和 Object.setPrototypeOf() 非常相似. 然而虽然
+      两组方法分别进行着相似的操作, 它们之间仍然存在显著差异.
+    + 首先, ......
+    + Reflect.getPrototypeOf() 方法在接收到的参数不是一个对象时会抛出错误， 而
+      Object.getPrototypeOf() 则会在操作之前先将参数值转换为一个对象。 如果你分别
+      传入一个数值给这两个方法， 会得到截然不同的结果：
+      ```js
+        let result1 = Object.getPrototypeOf(1);
+        console.log(result1 === Number.prototype);  // true
+
+        // - 抛出错误
+        // TypeError: Reflect.getPrototypeOf called on non-object
+        // Reflect.getPrototypeOf(1);
+      ```
+    + 在上一节 8.1 的第一个例子中, 当 setPrototypeOf 代理陷阱返回 false 时, 它导致
+      Object.setPrototypeOf() 方法抛出了错误. 此外, Object.setPrototypeOf() 方法
+      会将传入的第一个参数作为自身的返回值, 因此并不适合用来实现 setPrototypeOf 代理陷阱
+      的默认行为. 看下面的代码
+      ```js
+        (function() {
+            let target01 = {};
+            // - result01 保存的是 target01 对象
+            let result01 = Object.setPrototypeOf(target01, {});
+            console.log(result01 === target01);     // true
+
+            let target02 = {};
+            // - result02 保存利用 setPrototypeOf() 方法给 target02 设置一个
+            //   对象字面量({}) 为其原型的成功值 true
+            let result02 = Reflect.setPrototypeOf(target02, {});
+            console.log(result02);  // true;
+        })();
+      ```
+    + 虽然 Object 对象与 Reflect 对象貌似存在重复的方法, 但在代理陷阱内却必须使用 
+      Reflect对象上的方法.
+    + 在使用代理时, 这两组方法都会调用 getPrototypeOf 与 setPrototypeOf 陷阱函数   
 
 #### 9.对象可扩展性陷阱
+- ES5 通过 Object.preventExtensions() 与 Object.isExtensible() 方法给对象增加了
+  可扩展性。 而 ES6 则通过 preventExtensions 与 isExtensible 陷阱函数允许代理拦截
+  对于底层对象的方法调用。 这两个陷阱函数都接受名为 trapTarget 的单个参数， 此参数代表
+  方法在哪个对象上被调用。 isExtensible 陷阱函数必须返回一个布尔值用于表明目标对象
+  是否可被扩展， 而 preventExtensions 陷阱函数也需要返回一个布尔值， 用于表明操作
+  是否已成功。
+- 同时也存在 Reflect.preventExtensions() 与 Reflect.isExtensible() 方法， 用于
+  实现默认的行为。 这两个方法都返回布尔值， 因此它们可以在对应的陷阱函数内直接使用。
 - 9.1 两个基础范例
+  
+    + 
 - 9.2 重复的可擴展性方法
+    + Object.isExtensible() 方法和 Reflect.isExtensible() 方法非常相似, 只有当
+      传入非对象值是, Object.isExtensible() 返回 false 而 Reflect.isExtensible()
+      则抛出一个错误. 例如:
+      ```js
+        let result01 = Object.isExtensible(2);
+        console.log(result01);  // false
+
+        // - 给不存在的属性赋值会抛出错误
+        let result02 = Reflect.isExtensible(2);
+      ```
+    + Object.preventExtensions() 方法和 Reflect.preventExtensions() 方法
+      同上面 2 个方法非常相似: 
+      ```js
+        let result01 = Object.preventExtension(2);
+        console.log(result1); // 2
+
+        let target = {};
+        let result2 = Reflect.preventExtensions(target);
+        console.log(result2); // true
+
+        // 抛出错误
+        let result3 = Reflect.preventExtensions(2);
+      ```
 
 #### 10.属性描述符陷阱
-- 10.1 給 Object.defineProperty() 添加限制
-- 10.2 描述符对象的限制
-- 10.3 重复的描述符方法
-    + defineProperty() 方法
-    + getOwnPropertyDescriptor() 方法
+- ES5 最重要的特性之一是可以使用 Object.defineProperty() 方法定义
+  **属性特性(property attribute).** 在早期版本的 JS 中无法定义访问器属性, 无法将
+  属性设置为只读或不可配置. 知道 Object.defineProperty() 方法出现之后才支持这些功能,
+  并且可以通过 `Object.getOwnPropertyDescriptor() 取得自身属性描述符` 方法来获取
+  这些属性.
+- 在代理中可以分别用 defineProperty 陷阱和 getOwnPropertyDescriptor 陷阱拦截
+  Object.defineProperty() 方法和 Object.getOwnPropertyDescriptor() 方法的
+  调用. defineProperty 陷阱接受以下参数:
+    1. `trapTarget` 要定义属性的对象 (代理的目标对象).
+    2. `key` 属性的键 (字符串或 Symbol).
+    3. `descriptor` 属性的描述符对象.
+- defineProperty 陷阱需要在操作成功后返回 true，否则返回 false,
+  getOwnPropertyDescriptor 陷阱只接受 `trapTarget` 和 `key` 两个参数,
+  **最终返回描述符.** Reflect.defineProperty() 方法和 
+  Reflect.getOwnPropertyDescriptor() 方法与对应的陷阱接受相同参数。
+  这个示例实现的是每个陷阱的默认行为：
+  ```js
+    let proxy = new Proxy({}, {
+        defineProperty(trapTarget, key, descriptor) {
+            return Reflect.defineProperty(trapTarget, key, descriptor);
+        },
+        getOwnPropertyDescriptor(trapTarget, key) {
+            return Reflect.getOwnPropertyDescriptor(trapTarget, key);
+        }
+    });
+    Object.defineProperty(proxy, "name", {
+        value: "proxy"
+    });
+    console.log(proxy.name); // "proxy"
+    let descriptor = Object.getOwnPropertyDescriptor(proxy, "name");
+    console.log(descriptor.value); // "proxy"
+  ```
+##### 10.1 給 Object.defineProperty() 添加限制
++ defineProperty 陷阱函数要求你返回一个布尔值用于表示操作是否已成功。 当它返回
+    true 时， Object.defineProperty() 会正常执行； 而如果它返回了 false ， 则
+    Object.defineProperty() 会抛出错误。 你可以使用该功能来限制哪些属性可以被
+    Object.defineProperty() 方法定义。 例如， 如果想阻止定义符号类型的属性， 你
+    可以检查传入的键是否为字符串， 若不是则返回 false ， 就像这样:
+    ```js
+    let proxy = new Proxy({}, {
+        defineProperty(trapTarget, key, descriptor) {
+            if (typeof key === "symbol") {
+                return false;
+            } 
+            return Reflect.defineProperty(trapTarget, key, descriptor);
+        }
+    });
+    Object.defineProperty(proxy, "name", {
+        value: "proxy"
+    });
 
-#### 11.ownKeys 陷阱函数
+    console.log(proxy.name); // "proxy"
+
+    let nameSymbol = Symbol("name");
+    // 抛出错误
+    Object.defineProperty(proxy, nameSymbol, {
+        value: "proxy"
+    });
+    ```
++ Note: 你可以让陷阱函数返回 true ， 同时不去调用 Reflect.defineProperty() 
+    方法， 这样 Object.defineProperty() 就会静默失败， 如此便可在未实际去定义属性
+    的情况下抑制运行错误。  
+##### 10.2 描述符对象的限制
++ 为了确保 Object.defineProperty() 与 Object.getOwnPropertyDescriptor() 
+    方法的行为一致， 传递给 defineProperty 陷阱函数的描述符对象必须是正规的。 出于
+    同一原因，getOwnPropertyDescriptor 陷阱函数返回的对象也始终需要被验证。
++ 任意对象都能作为 Object.defineProperty() 方法的第三个参数; 然而传递给
+    defineProperty 陷阱函数的描述符对象参数， 则只有 `enumerable`、`configurable`
+    、 `value` 、 `writable` 、 `get` 与 `set` 这些属性是被许可的。 例如：
+    ```js
+    let proxy = new Proxy({}, {
+        defineProperty(trapTarget, key, descriptor) {
+            console.log(descriptor.value);  // "proxy"
+            console.log(descriptor.name);   // undefined
+            return Reflect.defineProperty(trapTarget, key, descriptor);
+        }
+    });
+    Object.defineProperty(proxy, "name", {
+        value: "proxy",
+        name: "custom"
+    });
+    ```
++ 此代码中调用 Object.defineProperty() 时， 在第三个参数上使用了一个非标准的 
+    name 属性。 当 defineProperty 陷阱函数被调用时， descriptor 对象不会拥有
+    name 属性， 却拥有一个 value 属性。 这是因为 descriptor 对象实际上并不是
+    原先传递给 Object.defineProperty() 方法的第三个参数， 而是一个新的对象， 其中
+    只包含了被许可的属性 (因此 name 属性被丢弃了). Reflect.defineProperty() 方法
+    同样也会忽略描述符上的非标准属性.
++ getOwnPropertyDescriptor 陷阱函数有一个微小差异， **要求返回值必须是**`null`
+    、`undefined` 或者是`一个对象`。 如果返回值是一个对象， 则对象的属性只能是
+    `enumerable`、`configurable`、`value`、`writable`、`get` 或 `set`, 在
+    返回的对象中使用不被允许的属性会抛出一个错误, 就像这样:
+    ```js
+    let proxy = new Proxy({}, {
+        getOwnPropertyDescriptor(trapTarget, key) {
+            return {
+                name: "proxy"
+            };
+        }
+    });
+    // 抛出错误
+    let descriptor = Object.getOwnPropertyDescriptor(proxy, "name");
+    ```
++ name 属性在属性描述符中是不被许可的, 因此当 Object.getOwnPropertyDescriptor()
+    被调用时， getOwnPropertyDescriptor 的返回值会触发一个错误。 这个限制保证了
+    Object.getOwnPropertyDescriptor() 的返回值总是拥有可信任的结构， 无论是否
+    使用了代理。
+### 10.3 重复的描述符方法
+- ES6 再次出现了令人困惑的相似方法， Object.defineProperty() 和
+  Object.getOwnPropertyDescriptor() 方法貌似分别与 Reflect.defineProperty()
+  和 Reflect.getOwnPropertyDescriptor() 方法相同。 正如本章之前讨论过的那些
+  配套方法一样，这些方法也存在一些微小但重要的差异.
+- *10.3.1 defineProperty() 方法 和 Reflect.defineProperty() 方法*
+    + Object.defineProperty() 方法与 Reflect.defineProperty() 方法几乎一模一样,
+      只是返回值有区别。 前者返回第一个参数， 而后者的返回值与操作有关, 成功时返回 true、
+      失败时返回false 。 例如：
+      ```js
+        let target = {};
+        let result1 = Object.defineProperty(target, "name", { value: "target "});
+        console.log(target === result1); // true
+        let result2 = Reflect.defineProperty(target, "name", { value: "reflect" });
+        console.log(result2); // true
+      ```
+    + 调用 Object.defineProperty() 时传入 target, 返回值也是 target. 调用
+      Reflect.defineProperty()时传入 target，返回值是 true, 表示操作成功. 由于
+      defineProperty 代理陷阱需要返回一个布尔值, 因此必要时最好使用
+      Reflect.defineProperty() 来实现默认的行为.
++ *10.3.2 getOwnPropertyDescriptor() 方法和 Reflect.getOwnPropertyDescriptor()*
+    + Object.getOwnPropertyDescriptor() 方法会在接收的第一个参数是一个基本类型值时,
+      将该参数转换为一个对象。 另一方面， Reflect.getOwnPropertyDescriptor() 方法
+      则会在第一个参数是基本类型值的时候抛出错误。 下面这个例子展示了二者的特性：
+      ```js
+        let descriptor1 = Object.getOwnPropertyDescriptor(2, "name");
+        console.log(descriptor1); // undefined
+        // 抛出错误
+        let descriptor2 = Reflect.getOwnPropertyDescriptor(2, "name");
+      ```
+    + 由于 Object.getOwnPropertyDescriptor() 方法将数值 2 强制转换为一个不含 name
+      属性的对象, 因此它返回 undefined, 这是当对象中没有指定的 name 属性时的标准行为.
+      然而当调用 Reflect.getOwnPropertyDescriptor() 时立即抛出一个错误， 因为该方法
+      不接受 基本类型值(原始值) 作为它的第一个参数。  
+
+#### 11.ownKeys(自身键) 陷阱函数 (Tip: 这节书本翻译不如电子文档)
+- ownKeys 代理陷阱可以拦截内部方法 `[[OwnPropertyKeys]]`(自身属性键), 并允许
+  **返回一个数组用于重写默认行为.** 返回的这个数组被用于 4 个方法: 
+  (1) `Object.key()`.
+  (2) `Object.getOwnPropertyNames()` (取得自身属性名).
+  (3) `Object.getOwnPropertySymbols()` (取得自身 Symbol 属性)
+  (4) `Object.assign()`
+  , 其中 Object.assign() 方法会使用该数组来决定哪些属性会被复制.
+- ownKeys 陷阱函数的默认行为由 `Reflect.ownKeys()` 方法实现, 
+  **它会返回一个由全部自由属性构成的数组, 无论键的类型是字符串还是 Symbol(符号).**
+  Object.getOwnPropertyNames() 方法与 Object.keys() 方法会将符号值从该数组中
+  过滤出去; 相反, Object.getOwnPropertySymbols() 会将字符串值过滤掉; 而 
+  Object.assign() 方法会使用数组中所有的字符串值域 Symbol 值.
 
 #### 12.函數代理中的 apply 和 construct 陷阱
 - 12.1 验证函数的参数

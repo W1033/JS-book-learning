@@ -8,7 +8,8 @@ let node = {
     type: "Identifier",
     name: "foo"
 };
-// - 注意: 如果使用 var, let 或 const 解构声明变量，则必须提供初始化程序(也就是等号右侧的值)。
+// - 注意: 如果使用 var, let 或 const 解构声明变量，则必须提供初始化程序
+//   (也就是等号右侧的值)。
 // - 如果不使用结构功能，var 和 let 不需要初始化值，但是 const (constant) 是无论如何
 //   都要提供初始化程序。
 let {type, name} = node;
