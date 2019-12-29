@@ -323,8 +323,9 @@
     + 下面这个例子通过返回 null 隐藏了代理对象的原型, 并且使得该原型不可被修改: 
       示例见: `08.1-原型代理的陷阱函数如何工作.js`
 - 8.2 为什么有 2 组方法
+    
     + **Tip: 本章的翻译, 个人感觉 `深入理解ES6.pdf` 电子书, 比纸质书翻译的更好**
-      **所以, 接下来的所有文字描述的笔记都直接见此电子书.**
+      **, 接下来的大部分笔记都来自电子书.**
     + 关于 Reflect.getPrototypeOf() 与 Reflect.setPrototypeOf(), 它们看起来与
       Object.getPrototypeOf() 和 Object.setPrototypeOf() 非常相似. 然而虽然
       两组方法分别进行着相似的操作, 它们之间仍然存在显著差异.
@@ -334,8 +335,8 @@
       传入一个数值给这两个方法， 会得到截然不同的结果：
       ```js
         let result1 = Object.getPrototypeOf(1);
-        console.log(result1 === Number.prototype);  // true
-
+    console.log(result1 === Number.prototype);  // true
+    
         // - 抛出错误
         // TypeError: Reflect.getPrototypeOf called on non-object
         // Reflect.getPrototypeOf(1);
@@ -349,8 +350,8 @@
             let target01 = {};
             // - result01 保存的是 target01 对象
             let result01 = Object.setPrototypeOf(target01, {});
-            console.log(result01 === target01);     // true
-
+        console.log(result01 === target01);     // true
+    
             let target02 = {};
             // - result02 保存利用 setPrototypeOf() 方法给 target02 设置一个
             //   对象字面量({}) 为其原型的成功值 true
