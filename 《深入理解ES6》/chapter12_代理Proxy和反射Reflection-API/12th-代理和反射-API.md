@@ -12,8 +12,9 @@
 - **extension [ɪk'stenʃ(ə)n] --n.扩展，延伸**
 - **enumerate [ɪ'njuːməreɪt] --vt.列举，枚举**
 - **trap [træp] --vt.陷阱，圈套**
-- **revocable**
-- **revoke**
+- **revocable [rɪ'vokəbl] --adj.可撤销的; 可废止的.**
+- **revoke [rɪ'vok] --vt.撤销, 取消, 废除**
+    + He had his driving license revoked. 他被吊销了驾驶执照.
 
 
 ## 内容 (Content)
@@ -40,13 +41,14 @@
       奇异对象(exotic object, 与普通对象相对。)
 
 #### 2.代理和反射
-- 调用 `new Proxy()` 可创建代替其他目标(target)对象的代理，它虚拟化了目标，
-  所以二者看起来功能一致。
-- 代理(Proxy)可以拦截 JS 引擎内部目标的底层对象操作，这些底层操作被拦截后会触发响应
-  特定操作的陷阱函数 (hint: 在陷阱函数内自己实现想要的功能)。
+- 通过调用 `new Proxy()` 你可创建一个代理用来替代另一个对象(被称为目标 target)，这个
+  代理对目标对象进行了虚拟, 所以二者看起来功能一致。
+- 代理(Proxy)可以拦截目标对象上的底层操作，而这原本是 JS 引擎的内部能力. 拦截行为使用了
+  一个能响应特定操作的函数 (被称为 陷阱函数{trap}).
 - 反射 API 以 Reflect 对象的形式出现, 反射对象中方法的默认特性与相同的底层操作一致
-  -- **(1)**; <br/> 而代理 (Proxy) 可以覆写这些操作, 每个代理陷阱对应一个命名和
-  参数都相同的 `Reflect` 方法 -- **(2)**. (Tip: (1) 和 (2) 为自己添加的注释)
+  -- **(1)**; <br/> 
+  而代理 (Proxy) 可以覆写这些操作, 每个代理陷阱对应一个命名和参数都相同的反射方法 
+  -- **(2)**. <br/>  (Tip: (1) 和 (2) 为自己添加的注释)
     + (1) "反射对象中方法的默认特性"--就是下表中的第 3 列; "底层操作"--就是下表中的
       第 2 列, 也即 Object 对象上默认使用的操作方法, 比如: `delete` 操作符:
       删除对象的属性; `Object.keys()` 返回对象中所有可枚举的属性名; 
@@ -54,8 +56,9 @@
     + (2) 下表中的 第 3 列 Reflect 对象上的方法可以操作对应的内建特性, 而 Proxy 对象
       上的各种代理陷阱方法(即下表的第 1 列) 又可以直接覆写第 2 列列出的内建特性, 
       代理陷阱对应一个命名和参数都跟 Reflect 对象相同的方法.
-- 每个陷阱覆写 js 对象的一些内建特性，可以用他们拦截并修改这些特性. 如果仍需使用内建特性,
-  则可以使用相应的反射 API 方法. 创建代理会让代理和反射 API 的关系变得清楚.
+- 每个陷阱函数都可以重写 JS 对象的(一些内建特性 / 一个特定内置行为)，可以用他们拦截并
+  修改这些特性. 如果仍需使用内建特性, 则可以使用相应的反射 API 方法. 创建代理会让代理和
+  反射 API 的关系变得清楚.
 - Javascript 中的代理陷阱 表格: 
 - |代理陷阱(Proxy Trap)|覆写的特性(Overrides the Behavior Of)|默认特性 (Default Behavior)|
   |--------------------------|---------------------------|------------------|
@@ -323,7 +326,7 @@
     + 下面这个例子通过返回 null 隐藏了代理对象的原型, 并且使得该原型不可被修改: 
       示例见: `08.1-原型代理的陷阱函数如何工作.js`
 - 8.2 为什么有 2 组方法
-    
+  
     + **Tip: 本章的翻译, 个人感觉 `深入理解ES6.pdf` 电子书, 比纸质书翻译的更好**
       **, 接下来的大部分笔记都来自电子书.**
     + 关于 Reflect.getPrototypeOf() 与 Reflect.setPrototypeOf(), 它们看起来与
@@ -545,23 +548,272 @@
 
 #### 11.ownKeys(自身键) 陷阱函数 (Tip: 这节书本翻译不如电子文档)
 - ownKeys 代理陷阱可以拦截内部方法 `[[OwnPropertyKeys]]`(自身属性键), 并允许
-  **返回一个数组用于重写默认行为.** 返回的这个数组被用于 4 个方法: 
-  (1) `Object.key()`.
-  (2) `Object.getOwnPropertyNames()` (取得自身属性名).
-  (3) `Object.getOwnPropertySymbols()` (取得自身 Symbol 属性)
-  (4) `Object.assign()`
+  **返回一个数组用于重写默认行为.** 返回的这个数组被用于 4 个方法:  
+  (1) `Object.key()`,  
+  (2) `Object.getOwnPropertyNames() 取得自身属性名`,  
+  (3) `Object.getOwnPropertySymbols() 取得自身 Symbol 属性`,  
+  (4) `Object.assign()`  
   , 其中 Object.assign() 方法会使用该数组来决定哪些属性会被复制.
 - ownKeys 陷阱函数的默认行为由 `Reflect.ownKeys()` 方法实现, 
   **它会返回一个由全部自由属性构成的数组, 无论键的类型是字符串还是 Symbol(符号).**
   Object.getOwnPropertyNames() 方法与 Object.keys() 方法会将符号值从该数组中
   过滤出去; 相反, Object.getOwnPropertySymbols() 会将字符串值过滤掉; 而 
   Object.assign() 方法会使用数组中所有的字符串值域 Symbol 值.
+- ownKeys 陷阱函数接受 **1 个参数, 即目标对象**, 同时必须返回一个数组或者一个
+  类数组对象, 不合要求的返回值会导致错误. 你可以使用 ownKeys 陷阱函数去过滤特定的属性,
+  以避免这些属性被 Object.keys(), Object.getOwnPropertyName(), 
+  Object.getOwnPropertySymbols(), Object.assign() 方法使用. 假设你不想在结果中
+  包含任何以下划线打头的属性 (在 JS 的编码惯例中, 这代表该字段是私有的), 那么可以使用
+  ownKeys 陷阱函数来将他们过滤掉, 就像下面这样:
+  ```js
+    let proxy = new Proxy({}, {
+        ownKeys(trapTarget) {
+            // - Reflect.ownKeys() 方法来获取目标对象的键列表; 接下来, filter() 方法
+            //   被用于将所有下划线打头的字符串类型的键过滤出去
+            return Reflect.ownKeys(trapTarget).filter(key => {
+                return typeof key !== 'string' || key[0] !== '_';
+            });
+        }
+    });
+    // - 向 proxy 对象添加了 3 个属性.
+    let nameSymbol = Symbol('name');
+    proxy.name = 'proxy';
+    proxy._name = 'private';
+    proxy[nameSymbol] = 'symbol';
+
+    let names = Object.getOwnPropertyNames(proxy);
+    let keys = Object.keys(proxy);
+    let symbols = Object.getOwnPropertySymbols(proxy);
+
+    console.log(names.length);  // 1
+    console.log(names[0]);      // "name"
+
+    console.log(keys.length);   // 1
+    console.log(keys[0]);       // "name"
+
+    console.log(symbols.length);    // 1
+    console.log(symbols[0]);    // "Symbol(name)"
+  ```
+- Note: ownKeys 陷阱函数也能影响 for-in 循环, 因为这种循环调用了陷阱函数来决定哪些值
+  能够被用在循环内.
 
 #### 12.函數代理中的 apply 和 construct 陷阱
-- 12.1 验证函数的参数
-- 12.2 不用 new 调用构造函数
-- 12.3 覆写抽象基类构造函数
-- 12.4 可调用的类构造函数
+- 在所有的代理陷阱中, 只有 `apply` 和 `construct` 要求代理目标对象必须是一个函数. 
+  回忆一下第三章的内容， 函数拥有两个内部方法： [[Call]] 与 [[Construct]] ， 前者
+  会在函数被直接调用时执行， 而后者会在函数被使用 new 运算符调用时执行。 apply 与
+  construct 陷阱函数对应着这两个内部方法， 并允许你对其进行重写。 
+- 当不使用 new 去调用一个函数时, `apply()` 陷阱函数会接收到下列三个参数 
+  (`Reflect.apply()` 也会接收这些参数):  
+  (1) `trapTarget`: 被执行的函数 (即代理的目标对象);  
+  (2) `thisArg`: 调用过程中函数内部的 this 值;  
+  (3) `argumentsList`: 被传递给函数的参数数组.  
+- 当使用 new 去执行函数时, `construct()` 陷阱函数会被调用并接受到下列 2 个参数:  
+  (1) `trapTarget`: 被执行的函数 (即代理的目标对象);  
+  (2) `argumentsList`: 被传递给函数的参数数组.
+- `Reflect.construct()` 方法同样会接收到这 2 个参数, 还会收到可选的第 3 参数
+  `newTarget`, 如果提供了此参数, 则它就指定了函数内部的 `new.target`值.
+- apply 与 construct 陷阱函数结合起来就完全控制了任意的代理目标对象函数的行为。 
+  为了模拟函数的默认行为， 你可以这么做：
+  ```js
+    let target = function() {return 42;};
+    let proxy = new Proxy(target, {
+        apply: function(trapTarget, thisArg, argumentsList) {
+            return Reflect.apply(trapTarget, thisArg, argumentsList);
+        },
+        construct: function(trapTarget, argumentsList) {
+            return Reflect.construct(trapTarget, argumentsList);
+        },
+    });
+    // - 使用函数的带来, 其目标对象会被视为函数
+    console.log(typeof proxy);  // "function"
+    console.log(proxy());   // 42
+    var instance = new proxy();
+    console.log(instance instanceOf proxy); // true
+    console.log(instance instanceOf target);    // true
+  ```
+- 本例中的函数会返回一个数值 42 。 该函数的代理使用了 apply 与 construct 陷阱函数
+  来将对应行为分别委托给 Reflect.apply() 与 Reflect.construct() 方法. 最终结果是
+  代理函数就像目标函数一样工作，包括使用 typeof 会将其检测为函数, 并且使用 new 运算符
+  调用会产生一个实例对象 instance. instance 对象会被同时判定为 proxy 与 target 
+  对象的实例, 是因为 instanceof 运算符使用了原型链来进行推断, 而原型链查找并没有受到
+  这个代理的影响， 因此 proxy 对象与 target 对象对于 JS 引擎来说就有同一个原型。  
+##### 12.1 验证函数的参数
+- apply 与 construct 陷阱函数在函数的执行方式上开启了很多的可能性。 例如, 假设
+  你想要保证所有参数都是某个特定类型的， 可使用 apply 陷阱函数来进行验证:
+  ```js
+    // - 将所有参数相加
+    function sum(...values) {
+        return values.reduce((previous, current) => previous + current);
+    }
+    let sumProxy = new Proxy(sum, {
+        apply: function(trapTarget, thisArg, argumentsList) {
+            argumentsList.forEach((arg) => {
+                if (typeof arg !== 'number') {
+                    throw new TypeError('All arguments must be numbers.');
+                }
+            });
+            return Reflect.apply(trapTarget, thisArg, argumentsList);
+        },
+        construct: function(trapTarget, argumentsList) {
+            throw new TypeError('This function can't be called with new.');
+        },
+    });
+    console.log(sumProxy(1, 2, 3, 4));  // 10
+    // - 抛出错误
+    console.log(sumProxy(1, '2', 3, 4));
+    // - 同样抛出错误
+    let result = new sumProxy();
+  ```
+- 此例使用了 apply 陷阱函数来确保所有的参数都是数值。 sum() 函数会将所有传递进来的
+  参数值相加，如果传入参数的值不是数值类型， 该函数仍然会尝试加法操作, 这样可能会导致
+  意外的结果。此代码通过将 sum() 函数封装在 sumProxy() 代理中, 在函数运行之前拦截了
+  函数调用，以保证每个参数都是数值。 出于安全的考虑， 这段代码使用 construct 陷阱
+  抛出错误，以确保该函数不会被使用 new 运算符调用。
+- 相反的， 你也可以限制函数必须使用 new 运算符调用， 同时确保它的参数都是数值：
+  ```js
+    function Numbers(...values) {
+        this.values = values;
+    }
+    let NumbersProxy = new Proxy(Numbers, {
+        apply: function(trapTarget, thisArg, argumentsList) {
+            throw new TypeError('This function must be called with new'.);
+        },
+        construct: function(trapTarget, argumentsList) {
+            argumentsList.forEach((arg) => {
+                if (typeof arg !== 'number') {
+                    throw new TypeError('All arguments must be numbers'.);
+                }
+            });
+            return Reflect.construct(trapTarget, argumentsList);
+        }
+    });
+    let instance = new NumbersProxy(1, 2, 3, 4);
+    console.log(instance.values);   // [1, 2, 3, 4]
+
+    // - 抛出错误
+    NumbersProxy(1, 2, 3, 4);
+  ```
+- 此代码中的 apply 陷阱函数会抛出错误， 而 construct 陷阱函数则使用了
+  Reflect.construct() 方法来验证输入并返回一个新的实例。 当然, 你也可以不必使用代理,
+  而是用 new.target 来完成相同的功能。  
+##### 12.2 不用 new 调用构造函数
+- 第三章曾介绍了 new.target 元属性， 在使用 new 运算符调用函数时， 这个属性就是对
+  该函数的一个引用。 这意味着你可以使用 new.target 来判断函数被调用时是否使用了new,
+  就像这样:
+  ```js
+    function Numbers(...values) {
+        if (typeof new.target === 'undefined') {
+            throw new TypeError('This function must be called with new.');
+        }
+        this.values = values;
+    }
+    let instance = new Numbers(1, 2, 3, 4);
+    console.log(instance.values);   // [1, 2, 3, 4]
+
+    // - 抛出错误
+    Numbers(1, 2, 3, 4);
+  ```
+- 这个例子在不使用 new 来调用 Numbers 函数的情况下抛出了错误， 与“验证函数的参数”
+  那个小节的例子效果一致， 但并没有使用代理。 相对于使用代理， 这种写法更简单， 并且
+  若只想阻止不使用 new 来调用函数的行为， 这种写法也更胜一筹。 然而有时你所要修改
+  其行为的函数是你所无法控制的， 此时使用代理就有意义了。
+- 假设 Numbers 函数是硬编码的， 无法被修改， 已知该代码依赖于 new.target, 而你
+  想要在调用函数时避免这个检查。 在“必须使用 new ”这一限制已经确定的情况下， 你可以
+  使用 apply 陷阱函数来规避它:
+  ```js
+    function Numbers(...values) {
+        if (typeof new.target === 'undefined') {
+            throw new TypeError('This function must be called with new.');
+        }
+        this.values = values;
+    }
+    let NumbersProxy = new Proxy(Numbers, {
+        apply: function(trapTarget, thisArg, argumentsList) {
+            return Reflect.construct(trapTarget, argumentsList);
+        }
+    });
+    let instance = NumbersProxy(1, 2, 3, 4);
+    console.log(instance.values);   // [1, 2, 3, 4]
+  ```
+- NumbersProxy 函数允许你调用 Numbers 而无须使用 new ， 并且让这种调用的效果与
+  使用了 new 的情况保持一致。 为此， apply 陷阱函数使用传给自身的参数去对 
+  Reflect.construct() 方法进行了调用， 于是 Numbers 内部的 new.target 就被
+  设置为 Numbers, 从而避免抛出错误。 尽管这只是修改 new.target 的一个简单例子,
+  但你还可以做得更加直接.
+##### 12.3 重写抽象基类构造函数
+- 你可以进一步指定 Reflect.construct() 的第三个参数， 用于给 new.target 赋值。
+  当函数把 new.target 与已知值进行比较的时候， 例如在创建一个抽象基础类的构造器的场合下
+  (参阅第九章), 这么做会很有帮助。 在抽象基础类的构造器中， new.target 被要求不能是
+  构造器自身, 正如这个例子：
+  ```js
+    class AbstractNumbers{
+        constructor(...values) {
+            if (new.target === AbstractNumbers) {
+                throw new TypeError('This function must be inherited from.');
+            }
+            this.values = values;
+        }
+    }
+    class Numbers extends AbstractNumbers{};
+    let instance = new Numbers(1, 2, 3, 4);
+    console.log(instance.values);   // [1, 2, 3, 4]
+
+    // - 抛出错误
+    new AbstractNumbers(1, 2, 3, 4);
+  ```
+- 当 new AbstractNumbers() 被调用时， new.target 等于 AbstractNumbers, 从而
+  抛出了错误; 而调用 new Numbers() 能正常工作， 因为此时 new.target 等于 Numbers,
+  你可以使用代理手动指定 new.target 从而绕过这个限制:
+  ```js
+    class AbstractNumbers{
+        constructor(...values) {
+            if (new.target === AbstractNumbers) {
+                throw new TypeError('This function must be inherited from.');
+            }
+        }
+        this.values = values;
+    }
+    let AbstractNumbersProxy = new Proxy(AbstractNumbers, {
+        construct: function(trapTarget, argumentsList) {
+            return Reflect.construct(trapTarget, argumentsList, function() {});
+        }
+    });
+    let instance = new AbstractNumbersProxy(1, 2, 3, 4);
+    console.log(instance.values);   // [1, 2, 3, 4]
+  ```
+- AbstractNumbersProxy 使用 construct 陷阱函数拦截了对于
+  new AbstractNumbersProxy() 方法的调用， 这样陷阱函数就将一个空函数作为第三个参数
+  传递给了 Reflect.construct() 方法， 让这个空函数成为构造器内部的 new.target. 
+  由于此时 new.target 的值并不等于 AbstractNumbers, 就不会抛出错误， 构造器可以
+  执行完成。  
+##### 12.4 可被调用的类构造函数
+- 第九章说明了构造器必须始终使用 new 来调用， 原因是类构造器的内部方法 [[Call]] 被
+  明确要求抛出错误。 然而代理可以拦截对于 [[Call]] 方法的调用， 意味着你可以借助代理
+  有效创建一个可被调用的类构造器。 例如， 如果想让类构造器在缺少 new 的情况下能够工作，
+  你可以使用 apply 陷阱函数来创建一个新实例。 这里有个例子:
+  ```js
+    class Person {
+        constructor(name) {
+            this.name = name;
+        }
+    }
+    let PersonProxy = new Proxy(Person, {
+        apply: function(trapTarget, thisArg, argumentsList) {
+            return new trapTarget(...argumentsList);
+        }
+    });
+    let me = PersonProxy('Nicholas');
+    console.log(me.name);   // "Nicholas"
+    console.log(me instanceof Person);  // true
+    console.log(me instanceof PersonProxy); // true
+  ```
+- PersonProxy 对象是 Person 类构造函数的一个代理. 类构造函数实际上也是函数, 因此在
+  使用代理时它的行为就像函数一样. apply 陷阱函数重写了默认的行为, 返回 trapTarget
+  (这里等于 Person) 的一个实例, 此代码使用 trapTarget 以保证通用性, 避免了手动指定
+  特定的类. 此处还使用了扩展运算符， 将 argumentList 展开并传递给 trapTarget 方法.
+  在没有使用 new 的情况下调用 PersonProxy(), 获得了 Person 的一个新实例; 而若
+  你试图不使用 new 去调用 Person(), 构造器仍然会抛出错误. 创建一个可被调用的类构造器,
+  是只有使用代理才能做到的。
 
 #### 13.可被撤销的代理
 
