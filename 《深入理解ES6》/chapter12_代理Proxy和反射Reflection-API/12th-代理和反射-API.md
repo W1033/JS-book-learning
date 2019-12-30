@@ -326,7 +326,6 @@
     + 下面这个例子通过返回 null 隐藏了代理对象的原型, 并且使得该原型不可被修改: 
       示例见: `08.1-原型代理的陷阱函数如何工作.js`
 - 8.2 为什么有 2 组方法
-  
     + **Tip: 本章的翻译, 个人感觉 `深入理解ES6.pdf` 电子书, 比纸质书翻译的更好**
       **, 接下来的大部分笔记都来自电子书.**
     + 关于 Reflect.getPrototypeOf() 与 Reflect.setPrototypeOf(), 它们看起来与
@@ -338,8 +337,7 @@
       传入一个数值给这两个方法， 会得到截然不同的结果：
       ```js
         let result1 = Object.getPrototypeOf(1);
-    console.log(result1 === Number.prototype);  // true
-    
+        console.log(result1 === Number.prototype);  // true
         // - 抛出错误
         // TypeError: Reflect.getPrototypeOf called on non-object
         // Reflect.getPrototypeOf(1);
@@ -353,8 +351,7 @@
             let target01 = {};
             // - result01 保存的是 target01 对象
             let result01 = Object.setPrototypeOf(target01, {});
-        console.log(result01 === target01);     // true
-    
+            console.log(result01 === target01);     // true
             let target02 = {};
             // - result02 保存利用 setPrototypeOf() 方法给 target02 设置一个
             //   对象字面量({}) 为其原型的成功值 true
@@ -376,7 +373,6 @@
 - 同时也存在 Reflect.preventExtensions() 与 Reflect.isExtensible() 方法， 用于
   实现默认的行为。 这两个方法都返回布尔值， 因此它们可以在对应的陷阱函数内直接使用。
 - 9.1 两个基础范例
-  
     + 
 - 9.2 重复的可擴展性方法
     + Object.isExtensible() 方法和 Reflect.isExtensible() 方法非常相似, 只有当
@@ -464,16 +460,16 @@
     });
     ```
 + Note: 你可以让陷阱函数返回 true ， 同时不去调用 Reflect.defineProperty() 
-    方法， 这样 Object.defineProperty() 就会静默失败， 如此便可在未实际去定义属性
-    的情况下抑制运行错误。  
+  方法， 这样 Object.defineProperty() 就会静默失败， 如此便可在未实际去定义属性
+  的情况下抑制运行错误。  
 ##### 10.2 描述符对象的限制
 + 为了确保 Object.defineProperty() 与 Object.getOwnPropertyDescriptor() 
-    方法的行为一致， 传递给 defineProperty 陷阱函数的描述符对象必须是正规的。 出于
-    同一原因，getOwnPropertyDescriptor 陷阱函数返回的对象也始终需要被验证。
+  方法的行为一致， 传递给 defineProperty 陷阱函数的描述符对象必须是正规的。 出于
+  同一原因，getOwnPropertyDescriptor 陷阱函数返回的对象也始终需要被验证。
 + 任意对象都能作为 Object.defineProperty() 方法的第三个参数; 然而传递给
-    defineProperty 陷阱函数的描述符对象参数， 则只有 `enumerable`、`configurable`
-    、 `value` 、 `writable` 、 `get` 与 `set` 这些属性是被许可的。 例如：
-    ```js
+  defineProperty 陷阱函数的描述符对象参数， 则只有 `enumerable`、`configurable`
+  、 `value` 、 `writable` 、 `get` 与 `set` 这些属性是被许可的。 例如：
+  ```js
     let proxy = new Proxy({}, {
         defineProperty(trapTarget, key, descriptor) {
             console.log(descriptor.value);  // "proxy"
@@ -485,18 +481,18 @@
         value: "proxy",
         name: "custom"
     });
-    ```
+  ```
 + 此代码中调用 Object.defineProperty() 时， 在第三个参数上使用了一个非标准的 
-    name 属性。 当 defineProperty 陷阱函数被调用时， descriptor 对象不会拥有
-    name 属性， 却拥有一个 value 属性。 这是因为 descriptor 对象实际上并不是
-    原先传递给 Object.defineProperty() 方法的第三个参数， 而是一个新的对象， 其中
-    只包含了被许可的属性 (因此 name 属性被丢弃了). Reflect.defineProperty() 方法
-    同样也会忽略描述符上的非标准属性.
+  name 属性。 当 defineProperty 陷阱函数被调用时， descriptor 对象不会拥有
+  name 属性， 却拥有一个 value 属性。 这是因为 descriptor 对象实际上并不是
+  原先传递给 Object.defineProperty() 方法的第三个参数， 而是一个新的对象， 其中
+  只包含了被许可的属性 (因此 name 属性被丢弃了). Reflect.defineProperty() 方法
+  同样也会忽略描述符上的非标准属性.
 + getOwnPropertyDescriptor 陷阱函数有一个微小差异， **要求返回值必须是**`null`
-    、`undefined` 或者是`一个对象`。 如果返回值是一个对象， 则对象的属性只能是
-    `enumerable`、`configurable`、`value`、`writable`、`get` 或 `set`, 在
-    返回的对象中使用不被允许的属性会抛出一个错误, 就像这样:
-    ```js
+  、`undefined` 或者是`一个对象`。 如果返回值是一个对象， 则对象的属性只能是
+  `enumerable`、`configurable`、`value`、`writable`、`get` 或 `set`, 在
+  返回的对象中使用不被允许的属性会抛出一个错误, 就像这样:
+  ```js
     let proxy = new Proxy({}, {
         getOwnPropertyDescriptor(trapTarget, key) {
             return {
@@ -506,11 +502,11 @@
     });
     // 抛出错误
     let descriptor = Object.getOwnPropertyDescriptor(proxy, "name");
-    ```
+  ```
 + name 属性在属性描述符中是不被许可的, 因此当 Object.getOwnPropertyDescriptor()
-    被调用时， getOwnPropertyDescriptor 的返回值会触发一个错误。 这个限制保证了
-    Object.getOwnPropertyDescriptor() 的返回值总是拥有可信任的结构， 无论是否
-    使用了代理。
+  被调用时， getOwnPropertyDescriptor 的返回值会触发一个错误。 这个限制保证了
+  Object.getOwnPropertyDescriptor() 的返回值总是拥有可信任的结构， 无论是否
+  使用了代理。
 ### 10.3 重复的描述符方法
 - ES6 再次出现了令人困惑的相似方法， Object.defineProperty() 和
   Object.getOwnPropertyDescriptor() 方法貌似分别与 Reflect.defineProperty()
@@ -627,9 +623,9 @@
     // - 使用函数的带来, 其目标对象会被视为函数
     console.log(typeof proxy);  // "function"
     console.log(proxy());   // 42
-    var instance = new proxy();
-    console.log(instance instanceOf proxy); // true
-    console.log(instance instanceOf target);    // true
+    let instance01 = new proxy();
+    console.log(instance01; instanceOf; proxy;)  // true
+    console.log(instance01; instanceOf; target;)    // true
   ```
 - 本例中的函数会返回一个数值 42 。 该函数的代理使用了 apply 与 construct 陷阱函数
   来将对应行为分别委托给 Reflect.apply() 与 Reflect.construct() 方法. 最终结果是
@@ -655,7 +651,7 @@
             return Reflect.apply(trapTarget, thisArg, argumentsList);
         },
         construct: function(trapTarget, argumentsList) {
-            throw new TypeError('This function can't be called with new.');
+            throw new TypeError('This function can\'t be called with new.');
         },
     });
     console.log(sumProxy(1, 2, 3, 4));  // 10
@@ -754,7 +750,7 @@
             this.values = values;
         }
     }
-    class Numbers extends AbstractNumbers{};
+    class Numbers extends AbstractNumbers{}
     let instance = new Numbers(1, 2, 3, 4);
     console.log(instance.values);   // [1, 2, 3, 4]
 
@@ -770,8 +766,8 @@
             if (new.target === AbstractNumbers) {
                 throw new TypeError('This function must be inherited from.');
             }
-        }
-        this.values = values;
+            this.values = values;
+        } 
     }
     let AbstractNumbersProxy = new Proxy(AbstractNumbers, {
         construct: function(trapTarget, argumentsList) {
