@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // - 15.4 -- 将代理用作类的原型
+        
+        function NoSuchProperty() {} 
+        // 对于将要用作原型的代理， 存储对其的一个引用
+        let proxy = new Proxy({}, {
+            get(trapTarget, key, receiver) {
+                throw new ReferenceError(`${key} doesn't exist`);
+            }
+        });
+        NoSuchProperty.prototype = proxy;
+        class Square extends NoSuchProperty {
+            constructor(length, width) {
+                super();
+                this.length = length;
+                this.width = width;
+            }
+        } 
+        let shape = new Square(2, 6);
+
+        let shapeProto = Object.getPrototypeOf(shape);
+        console.log('shapeProto: ', shapeProto);
+
+        console.log(shapeProto === proxy); // false
+
+        let secondLevelProto = Object.getPrototypeOf(shapeProto);
+
+        console.log(secondLevelProto === proxy); // true
+
+
+
+        // -------
+
+        function Father(name) {
+            this.name = name;
+            this.colors = ["red", "blue", "green"];
+        }
+
+        Father.prototype.sayName = function () {
+            console.log(this.name);
+        };
+
+        // - Father 构造函数的原型
+        console.log('Father.prototype:', Father.prototype);
+
+        function Son(name, age) {
+            // 继承 Father 的属性
+            Father.call(this, name);
+            this.age = age;
+        }
+
+        // Son 继承 Father 的方法
+        Son.prototype = new Father();
+        Son.prototype.constructor = Son;
+        Son.prototype.sayAge = function () {
+            console.log(this.age);
+        };
+
+        const instance1 = new Son("Nicholas", 29);
+        instance1.colors.push("black");
+        console.log(instance1.colors);
+        instance1.sayName();
+instance1.sayAge();
+    </script>
+</body>
+</html>

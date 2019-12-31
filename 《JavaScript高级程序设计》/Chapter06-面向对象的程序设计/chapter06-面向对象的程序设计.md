@@ -77,56 +77,55 @@
 #### 6.3.4 原型式继承
 > MDN -- Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象。
 - 语法: Object.create(proto, [propertiesObject]):
-    + (1) proto: 一个对象，应该是新创建的对象的原型。(具体来说就是要赋值给构造函数的
-        原型的对象)
-    + (2) propertiesObject: 可选。该参数对象是一组属性和值，该对象的属性名称将是新创建
-        的对象的属性名称，值是属性描述符(这些属性描述符的结构与 Object.defineProperties()
-        的第二个参数一样)。注意：该参数对象不能是 undefined,另外只有对象中自身拥有的
-        不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
+    + (1) `proto`: 一个对象，应该是新创建的对象的原型。(具体来说就是要赋值给构造函数的
+      原型的对象)
+    + (2) `propertiesObject`: 可选。该参数对象是一组属性和值，该对象的属性名称
+      将是新创建的对象的属性名称，值是属性描述符(这些属性描述符的结构与
+      Object.defineProperties() 的第二个参数一样)。注意：该参数对象不能是 undefined
+      ,另外只有对象中自身拥有的不可枚举的属性才有效,也就是说该对象的原型链上的属性无效的。
 - ES5 - 提供了 Object.create 方法，可以用来克隆对象。
-    + Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")
-    + js高程-P170: ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。
-      这个方法接收两个参数：
-        - (1): 用作新对象原型的对象。(在传入一个参数的情况下 Object.create() 与 
-          object() [tips: 6.3.4 自定义的 object() 方法] 方法的行为相同。)
-        - (2): 一个为新对象定义额外属性的对象(可选)。
-        - ```javascript
-            // 示例1 : javascript 高程 -- 6.3.4 原型式继承
-            let person = {
-                // 基本类型值属性
-                name: "Nicholas",
-                // 引用类型值属性。(tips-P171: 不过不要忘了，包含引用类型值的属性始终
-                // 都会共享相应的值，就像使用原型模式一样。)
-                friends: ["Shelby", "Court", "Van"],
-            };
-            let anotherPerson = Object.create(person);
-            anotherPerson.name = "Grey";
-            anotherPerson.friends.push("Rob");
+  **Object.create("要克隆的对象", "新对象定义额外属性的对象(可选,一般不写)")**
+  P170: ES5 通过新增 Object.create() 方法规范化了原型式继承. 这个方法接收 2 个参数: 
+    + (1): 用作新对象原型的对象。(在传入一个参数的情况下 Object.create() 与 
+        object() [6.3.4 自定义的 object() 方法] 方法的行为相同。)
+    + (2): 一个为新对象定义额外属性的对象(可选)。
+      ```javascript
+        // 示例1 : 6.3.4 原型式继承
+        let person = {
+            // 基本类型值属性
+            name: "Nicholas",
+            // 引用类型值属性。(tips-P171: 不过不要忘了，包含引用类型值的属性始终
+            // 都会共享相应的值，就像使用原型模式一样。)
+            friends: ["Shelby", "Court", "Van"],
+        };
+        let anotherPerson = Object.create(person);
+        anotherPerson.name = "Grey";
+        anotherPerson.friends.push("Rob");
 
-            let yetAnotherPerson = Object.create(person);
-            yetAnotherPerson.name = "Linda";
-            yetAnotherPerson.friends.push("Barbie");
-            // - person.friends 不仅属于 person 所有，而且会被 anotherPerson 以及 
-            //   yetAnotherPerson 共享。实际上这就相当于又创建了 person 对象的 2 个副本。
-            console.log(person.friends);    // "Shelby,Court,Van,Rob,Barbie"
-          ```
-        - ```javascript
-            // - 示例来源: 《Javascript设计模式与编程实践》/第1部分--基础知识
-            //   /第1章-面形对象的JavaScript/Chapter01-面向对象的javascript.md
-            const Plane = function () {
-                this.blood = 100;
-                this.attackLevel = 1;
-                this.defenseLevel = 1;
-            };
+        let yetAnotherPerson = Object.create(person);
+        yetAnotherPerson.name = "Linda";
+        yetAnotherPerson.friends.push("Barbie");
+        // - person.friends 不仅属于 person 所有，而且会被 anotherPerson 以及 
+        //   yetAnotherPerson 共享。实际上这就相当于又创建了 person 对象的 2 个副本。
+        console.log(person.friends);    // "Shelby,Court,Van,Rob,Barbie"
+      ```
+      ```javascript
+        // - 示例来源: 《Javascript设计模式与编程实践》/第1部分--基础知识
+        //   /第1章-面形对象的JavaScript/Chapter01-面向对象的javascript.md
+        const Plane = function () {
+            this.blood = 100;
+            this.attackLevel = 1;
+            this.defenseLevel = 1;
+        };
 
-            let plane = new Plane();
-            plane.blood = 500;
-            plane.attackLevel = 10;
-            plane.defenseLevel = 7;
+        let plane = new Plane();
+        plane.blood = 500;
+        plane.attackLevel = 10;
+        plane.defenseLevel = 7;
 
-            let clonePlane = Object.create(plane);
-            console.log(clonePlane);            // Plane {}
-            console.log(clonePlane.blood);      // 500
-            console.log(clonePlane.attackLevel);// 10
-          ```
+        let clonePlane = Object.create(plane);
+        console.log(clonePlane);            // Plane {}
+        console.log(clonePlane.blood);      // 500
+        console.log(clonePlane.attackLevel);// 10
+      ```
 
