@@ -281,7 +281,7 @@
           内联代码或包含在 src 指定的文件中的代码按照模块而非脚本的方式加载。
         - ```html
             <!-- 加载一个 Javascript 模块文件 -->
-            <script type="module" scr="module.js"></script>
+            <script type="module" src="module.js"></script>
             <!-- 内联引入一个模块 -->
             <script type="module">
                 import { sum } from "./example.js";

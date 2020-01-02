@@ -6,11 +6,70 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0,
             maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>5.6 表单校验</title>
+    <style type="text/css">
+        * {margin:0; padding:0; list-style:none; font-size: 14px;}
+        .container {
+            width: 80%; min-height: 660px; margin: 20px auto;
+            background: #eeeeee; border-radius: 4px;
+        }
+        p {
+            height: 40px;
+            margin: 10px auto;
+            /*background: #ffdeac;*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        label {
+            flex: 0 1 15%;
+            line-height: 36px;
+            margin-right: 20px;
+            text-align: right;
+            /*background: lightgreen;*/
+        }
+        input {
+            border:1px solid lightgreen;
+            border-radius: 4px;
+            flex: 0 1 20%;
+            line-height: 36px;
+            /*background: lightpink;*/
+            outline: none;
+            text-indent: 6px;
+        }
+        #submit {
+            flex: 0 0 22%;
+            line-height: 36px;
+            margin: 20px auto;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-<script type="text/javascript">
+    <div class="container">
+        <form action="http://xxx.com/register" id="registerForm" method="post">
+            <p>
+                <label for="userName">请输入用户名:</label>
+                <input type="text" id="userName" name="userName"/>
+            </p>
+            <p>
+                <label for="password">请输入密码:</label>
+                <input type="text" id="password" name="password"/>
+            </p>
+            <p>
+                <label for="phoneNumber">请输入手机号码:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber"/>
+            </p>
+            <p>
+                <button id="submit">提交</button>
+            </p>
+        </form>
+    </div>
 
-</script>
+
+    <script type="text/javascript">
+
+    </script>
 </body>
 </html>
