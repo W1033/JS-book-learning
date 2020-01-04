@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const Model = function(sex) {
+            this.sex = sex;
+        };
+        Model.prototype.takePhoto = function() {
+            // - this.underwear 在下面实例上添加.
+            // console.log(`Sex(性别)=${this.sex} Underwear(试穿)=${this.underwear}`);
+        };
+
+        // - 分别创建一个男模特对象和一个女模特对象:
+        let maleModel = new Model('男模');
+        let femaleModel = new Model('女模');
+
+        // - 给男模特一次穿上所有的男装, 并进行拍照:
+        for (let i = 1; i <= 50; i++) {
+            maleModel.underwear = `第 ${i} 款样式`;
+            maleModel.takePhoto();
+        }
+        console.log(maleModel);
+
+        // - 同样, 给女模特依次穿上所有的女装, 并进行拍照:
+        for (let j = 1; j <= 50; j++) {
+            femaleModel.underwear = `第 ${j} 款样式`;
+            femaleModel.takePhoto();
+        }
+    </script>
+</body>
+</html>
