@@ -1,6 +1,21 @@
 # JavaScript 继承的几种方式: 
 
 
+## (0) - Added: Node.js 中继承的写法
+- 4.3.3 继承 `EventEmitter` 
+    + 大多数时候我们不会直接使用 EventEmitter，而是在对象中继承它。包括 `fs`、`net`、
+      `http` 在内的，只要是支持事件响应的核心模块都是 EventEmitter 的子类。
+    + 为什么要这样做呢？  
+      原因有 2 点。 -- (1) 具有某个实体功能的对象实现事件符合语义，事件的监听和发射
+      应该是一个对象的方法。其次 JS 的对象机制是基于原型的，支持部分多重继承，继承
+      EventEmitter 不会打乱对象原有的继承关系。 
+- `《深入理解ES6》/chapter04_扩展对象的功能性/chapter04-扩展对象的功能性.md` 和 
+  `《深入理解ES6》/A_Other-Change.md` 中都有讲到 `Object.setPrototypeOf()` 方法,
+  但是, 这两处讲的都是对象的属性更该原型
+
+
+
+
 ## (1) 只继承属性
 - ```js
     const A = function (name) {
@@ -73,7 +88,7 @@
         // - 为创建的副本添加 constructor 属性，指向子构造函数，
         //   弥补因重写原型而失去的默认 constructor 属性。
         prototype.constructor = subType;
-        // 将创建的 superType 对象的实例赋值给子类型的原型
+        // - 将创建的 superType 对象的实例赋值给子类型的原型
         subType.prototype = prototype;
     }
 

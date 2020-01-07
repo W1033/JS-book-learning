@@ -111,30 +111,26 @@
         };
         Validator.prototype.add = function(dom, rules) {
             let self = this;
-            for (let i = 0, rule; rule = rules[i++]; ) {
+            for (let i = 0, length = rules.length; i < length; i++) {
                 (function(rule) {
                     // - split(): 把字符串转换成数组. 把 strategy 和参数分开
                     let strategyAry = rule.strategy.split(':');
-
                     let errorMsg = rule.errorMsg;
 
                     // - {1}: 把校验的步骤用空函数包装起来, 并且放入 cache
+                    // - {2}: 用户挑选的 strategy
+                    // - {3}: 把 input 的 value 添加近参数列表
+                    // - {4}: 把 errorMsg 添加进参数列表
                     self.cache.push(function() {    // {1}
-
-                        // - {2}: 用户挑选的 strategy
                         let strategy = strategyAry.shift(); // {2}
 
                         // - unshift() 在数组前端添加任意个项并返回新数组的长度。
-                        // - {3}: 把 input 的 value 添加近参数列表
                         strategyAry.unshift(dom.value);     // {3}
-
-                        // - {4}: 把 errorMsg 添加进参数列表
                         strategyAry.push(errorMsg);         // {4}
-
                         return strategies[strategy].apply(dom, strategyAry);
                     });
                     console.log('this.cache:', self.cache);
-                })(rule);
+                })(rules[i]);
             }
         };
 
@@ -153,13 +149,18 @@
         let registerForm = document.getElementById('registerForm');
         let validateFunc = function() {
             let validator = new Validator();
-            validator.add(registerForm.userName, [{
-                    strategy: 'isNonEmpty',
-                    errorMsg: '用户名不能为空'
-                }, {
-                    strategy: 'minLength:6',
-                    errorMsg: '用户名长度不能小于 6 位'
-                }]
+            validator.add(
+                registerForm.userName,
+                [
+                    {
+                        strategy: 'isNonEmpty',
+                        errorMsg: '用户名不能为空'
+                    },
+                    {
+                        strategy: 'minLength:6',
+                        errorMsg: '用户名长度不能小于 6 位'
+                    }
+                ]
             );
             validator.add(registerForm.password, [{
                 strategy: 'minLength:6',

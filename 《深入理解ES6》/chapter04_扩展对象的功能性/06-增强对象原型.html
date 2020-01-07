@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let person = {
+            getGreeting01() {
+                return "Hello";
+            }
+        };
+        let person02 = new Object();
+        Object.prototype.getGreeting02 = function() {
+            return 'Hello02';
+        };
+        Object.prototype.getAge = function() {
+            return 31;
+        };
+        console.log(Object.__proto__);
+
+        // - 上面的对象字面量 用 new Object() 创建就是:
+        // (function(){
+        //     let person = new Object();
+        //     Object.prototype.getGreeting = function() {
+        //         return 'Hello';
+        //     };
+        //     console.log(person.getGreeting());
+        // })();
+
+
+        // let dog =  {
+        //     getGreeting() {
+        //         return "Woof";
+        //     }
+        // };
+        // // - 以 person 对象为原型
+        // let friend = Object.create(person);
+        // console.log(friend.getGreeting());  // "Hello"
+        // console.log(Object.getPrototypeOf(friend) === person);  // true
+
+        // // - 将原型设置为 dog
+        // Object.setPrototypeOf(friend, dog);
+        // console.log(friend.getGreeting());  // "Woof"
+        // console.log(Object.getPrototypeOf(friend) === dog); // true
+    </script>
+</body>
+</html>

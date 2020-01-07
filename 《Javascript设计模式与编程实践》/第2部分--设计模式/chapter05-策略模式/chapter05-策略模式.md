@@ -185,4 +185,29 @@
 ### 5.8 一等函数对象与策略模式
 - 在以类为中心的传统面向对象语言中，不同的算法或者行为被封装在各个策略类中, Context 将
   请求委托给这些策略对象，这些策略对象会根据请求返回不同的执行结果，这样便能表现出对象的多态性。
+- Peter Norvig 在他的演讲中曾说过：“在函数作为一等对象的语言中，策略模式是隐形的。
+  strategy 就是值为函数的变量。”在 JavaScript 中，除了使用类来封装算法和行为之外，
+  使用函数当然也是一种选择。这些“算法”可以被封装到函数中并且四处传递，也就是我们常说的
+  “高阶函数”。实际上在 JavaScript 这种将函数作为一等对象的语言里，策略模式已经融入到了
+  语言本身当中，我们经常用高阶函数来封装不同的行为，并且把它传递到另一个函数中。当我们对
+  这些函数发出“调用”的消息时，不同的函数会返回不同的执行结果。在 JavaScript 中，
+  “函数对象的多态性" 来得更简单.
+- 在前面的学习中，为了清楚地表示这是一个策略模式，我们特意使用了 strategies 这个名字。
+  如果去掉 strategies，我们还能认出这是一个策略模式的实现吗？代码如下：
+  ```js
+    var S = function( salary ){
+        return salary * 4;
+    };
+    var A = function( salary ){
+        return salary * 3;
+    };
+    var B = function( salary ){
+        return salary * 2;
+    };
+    var calculateBonus = function( func, salary ){
+        return func( salary );
+    };
+    calculateBonus( S, 10000 ); // 输出： 40000
+  ```
+
 ### 5.9 小结

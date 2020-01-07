@@ -199,8 +199,8 @@
 ### 4. 重复的对象字面量属性
 ### 5. 自有属性枚举顺序
 ### 6. 增强对象原型
-$\quad$ 原型是 JavaScript 继承的基础, 在早期版本中, JavaScript 严重限制了原型的使用.
-于是 ECMAScript 6 针对原型进行了改进.
+- 原型是 JavaScript 继承的基础, 在早期版本中, JavaScript 严重限制了原型的使用.
+  于是 ECMAScript 6 针对原型进行了改进.
 - **改变对象的原型**
     + 正常情况下, 无论通过构造函数还是 `Object.create()` 方法创建对象, 其原型是在对象
       被创建时指定的. 对象原型在实例化之后保持不变, 直到 ES5 都是 JavaScript 编程最重
@@ -218,6 +218,7 @@ $\quad$ 原型是 JavaScript 继承的基础, 在早期版本中, JavaScript 严
                 return "Hello";
             }
         };
+
         let dog =  {
             getGreeting() {
                 return "Woof";
