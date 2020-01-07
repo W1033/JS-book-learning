@@ -228,6 +228,7 @@
         let friend = Object.create(person);
         console.log(friend.getGreeting());  // "Hello"
         console.log(Object.getPrototypeOf(friend) === person);  // true
+        console.log(Object.__proto__ === person);
 
         // - 将原型设置为 dog
         Object.setPrototypeOf(friend, dog);

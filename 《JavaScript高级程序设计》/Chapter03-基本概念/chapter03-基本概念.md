@@ -28,7 +28,7 @@
     + 和 `Object`
         * 复杂数据类型.
 - 原始值 (primitive values): 除 Object 以外的所有类型都是不可变的 (值本身无法被改变)
-  . 例如, 与 C 语言不通, JavaScript 中字符串是不可变的. (译注: js 中对字符串的操作一定
+  . 例如, 与 C 语言不同, JavaScript 中字符串是不可变的. (译注: js 中对字符串的操作一定
   返回了一个新字符串, 原始字符串并没有被改变). 我们成这些类型的值为 "原始值".    
 - [文档来源](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures)  
 

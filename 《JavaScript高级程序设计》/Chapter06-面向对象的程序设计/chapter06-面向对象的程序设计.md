@@ -1,9 +1,30 @@
 # 第 6 章 -- 面向对象的程序设计
  
 ## 本章目录 (Catalog)
-
+- 6.1 理解对象
+    + 6.1.1 属性类型
+    + 6.1.2 定义多个属性
+    + 6.1.3 读取属性的特性
+- 6.2 创建对象
+    + 6.2.1 工厂模式 
+    + 6.2.2 构造函数模式
+    + 6.2.3 原型模式
+    + 6.2.4 组合使用构造函数模式和原型模式
+    + 6.2.5 动态原型模式
+    + 6.2.6 寄生构造函数模式
+    + 6.2.7 稳妥构造函数模式
+- 6.3 继承
+    + 6.3.1 原型链
+    + 6.3.2 借用构造函数
+    + 6.3.3 组合继承
+    + 6.3.4 原型式继承
+    + 6.3.5 寄生式继承
+    + 6.3.6 寄生组合式继承
+- 6.4 小结    
 
 ## 生词 (New Words)
+
+
 
 ## 本章内容 (Content)   
 - `面向对象(Object-Oriented，OO)` 的语言有一个标志，就是他们都有`类`的概念，而通过类
@@ -17,25 +38,67 @@
    是开发人员定义的类型。
 
 ### 6.1 理解对象
-- 创建对象的基本方式: 1. new Object()的实例  2. 对象字面量
-  ```javascript
-    var person = new Object();
-    person.name = 'Nicholas';
-    person.age = 29;
-    person.sayName = function () {
-        console.log(this.name);
-    };
+- 创建对象的基本方式: 
+    + (1) 通过 new Object() 创建 Object 构造函数的实例  
+      ```js
+        var person = new Object();
+        person.name = 'Nicholas';
+        person.age = 29;
+        person.sayName = function () {
+            console.log(this.name);
+        };
+      ```
+    + (2) 对象字面量
+      ```javascript
+        // - Added:《JavaScript 模式》--我们可以将 JavaScript 中的对象简单地理解为
+        //   名值对组成的散列表 (hash table，也叫哈希表). 在其他编程语言中被称作
+        //   "关联数组"。其中的值可以是原始值也可以是对象。不管是什么类型，它们都是
+        //   "属性"(property),属性值同样可以是函数，这时属性就被称为“方法”（method）。
+        var person2 = {
+            name: "Nicholas",
+            age: 29,
+            job: "Software Engineer",
 
-    var person2 = {
-        name: "Nicholas",
-        age: 29,
-        job: "Software Engineer",
-
-        sayName: function () {
-            console.log(this.name)
+            sayName: function () {
+                console.log(this.name)
+            }
         }
-    }
-  ```
+
+        // ---------
+
+        // - Added:《JavaScript 模式》--“创建对象的最佳模式是使用字面量”还有一个原因
+        //   , 它强调对象就是一个简单的可变的散列表(Hash Table)，而不必一定派生自某个类.
+        let person = {
+            getGreeting() {
+                return "Hello";
+            }
+        };
+        // - `{}.__proto__` 并不包含 getGreeting 属性, 但却包含下面匿名函数中添加
+        //   的 `getHello` 和 `getAge` 方法, 所以可以看出, 对象字面量创建对象, 
+        //   内部添加的方法并没有在实例的原型上添加着,
+        console.log('{}.__proto__', {}.__proto__);
+
+        // - Object
+        console.log('person.__proto__.constructor:', person.__proto__.constructor);
+        // - Object
+        console.log('{}.__proto__.constructor:', {}.__proto__.constructor);
+
+        // - 通过 new Object() 来创建 Object 构造函数的实例来创建对象, 与上面使用
+        //   对象字面量创建对象是不同的,但是具体的不同要看 JS 语言的内部实现, 无法考究!!
+        (function() {
+            // - WebStorm 会提示:
+            //   Object instantiation can be simplified. 对象实例化可以简化.
+            let person02 = new Object();
+            Object.prototype.getHello = function() {
+                return 'Hello';
+            };
+            Object.prototype.getAge = function() {
+                return 31;
+            };
+            // console.log(Object.prototype);
+            console.log('person02.__proto__:', person.__proto__);
+        })();
+      ```
 
 ### 6.2 创建对象
 - 虽然 "Object 构造函数" 或 "对象字面量" 都可以来创建单个对象，但是这些方式有一个明显的
@@ -73,7 +136,39 @@
 ### 6.3 继承
 #### 6.3.1
 #### 6.3.2
-#### 6.3.3
+#### 6.3.3 组合继承(combination inheritance): 
+- 组合继承 也叫 "伪经典继承", 指的是将原型链和借用构造函数技术组合到一起，从而发挥二者之长
+  的一种继承模式。背后的思路是:
+    + (1.) 使用原型链实现对原型属性和方法的继承
+    + (2.) 通过借用构造函数来实现对实例属性的继承。这样，即通过在原型上定义方法来实现了
+      函数复用，又能够保证每个实例都有他自己的属性。
+- 使用示例:
+  ```js
+    function SuperType(name) {
+        this.name = name;
+        this.colors = ["red", "blue", "green"];
+    }
+
+    SuperType.prototype.sayName = function () {
+        console.log(this.name);
+    };
+
+    function SubType(name, age) {
+        SuperType.call(this, name);
+        this.age = age;
+    }
+
+    SubType.prototype = new SuperType();
+    SubType.prototype.sayAge = function () {
+        console.log(this.age);
+    };
+    var subInstance = new SubType("Nicholas", 30);
+    subInstance.colors.push("orange");
+    subInstance.sayName();              // Nicholas
+    subInstance.sayAge();               // 30
+    console.log(subInstance.colors);    // ["red", "blue", "green", "orange"]
+  ```
+
 #### 6.3.4 原型式继承
 > MDN -- Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象。
 - 语法: Object.create(proto, [propertiesObject]):

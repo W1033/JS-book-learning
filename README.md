@@ -3,11 +3,10 @@
 《深入理解ES6》
 《js设计模式与编程实践》
 
-[js函数式编程](https://llh911001.gitbooks.io/mostly-adequate-guide-chinese/content/)
+
 
 
 -----------------HTML-----------------
-
 # HTML
 - 路徑:
     + `./`  当前目录;
@@ -140,12 +139,16 @@
 
 # Javascript
 
-- childNodes 和 children 区别: childNodes包括元素节点和文本节点，而children只包括元素节点。
+> `childNodes` 和 `children` 的区别: 
+- childNodes 包括元素节点和文本节点，而 children 只包括元素节点。
 
-- js中的根对象是 Object.prototype 对象。Object.prototype 对象是一个空的对象，我们在 
-  js 中遇到的每个对象，实际上都是从 Object.prototype 对象克隆而来的，
-  Object.prototype 对象就是他们的原型。
 
+> js中的根对象是 `Object.prototype` 对象:
+- Object.prototype 对象是一个空的对象，我们在 JS 中遇到的每个对象，实际上都是从
+  Object.prototype 对象克隆而来的，Object.prototype 对象就是他们的原型。
+
+
+> ES5 和 ES6 中关于 Object 上的一些方法: 
 - ES5 - `Object.keys()` 方法取得对象上所有可枚举的实例属性。 这个方法接受一个对象作为
   参数，返回一个包含所有可枚举属性的字符串数组。
     + 示例: 《js高级程序设计》\js高程学习笔记\js高程---Object.keys().js
@@ -154,38 +157,39 @@
   内部专用属性 `[[Prototype]]` 中，调用 getPrototypeOf() 方法返回存储在其中的值。
 - ES6 - `Object.is()`: [P76] 弥补全等运算符的不准确运算。比如之前 +0等于-0, 
   NaN不等于NaN
-- ES6 - `Object.assign()`
+- ES6 - `Object.assign()` 分配
 - ES6 - `Object.setPrototypeOf()` 方法可以改变任意指定对象的原型。接受2个参数: 
     + (1).被改变原型的对象 
     + (2).替代第一个参数原型的对象。
-    + 示例:《深入理解ES6》\4th chapter--扩展对象的功能性\4th-扩展对象的功能性.js
+    + 示例:《深入理解ES6》\chapter04_扩展对象的功能性\chapter04-扩展对象的功能性.md
 
 
+> 在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度" 的方法总结:
+1. jq方法:
+   ```javascript
+    // jq获取当前可视窗口的高度和宽度:
+    $(window).height();  
+    $(window).width();
+
+    // jq获取文档高度和宽度
+    $(document).height();  
+    $(document).height();
+   ```
+2. js方法:
+   ```javascript
+    // js获取当前页面可视窗口的高度和宽度(前提 `<!DOCTYPE html>` 是这种写法，以前古老
+    // 的写法除外) IE,FF,Chrome 统一是:
+    document.body.clientHeight;
+    // IE9+, FF, Chrome 确定浏览器窗口大小(可视窗口大小)有两个新属性:
+    window.innerHeight;  window.innerWidth;
+    // 获取文档的高度和宽度兼容IE8的写法是:
+    Math.max(document.documentElement.clientHeight, document.body.scrollHeight, 
+                document.documentElement.scrollHeight);
+   ```
 
 
-- 关于在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度"的jq和js方法总结:
-  1. jq方法:
-    + ```javascript
-        // jq获取当前可视窗口的高度和宽度:
-        $(window).height();  
-        $(window).width();
-  
-        // jq获取文档高度和宽度
-        $(document).height();  
-        $(document).height();
-      ```
-  2. js方法:
-    + ```javascript
-       // js获取当前页面可视窗口的高度和宽度(前提 `<!DOCTYPE html>` 是这种写法，以前古老
-       // 的写法除外) IE,FF,Chrome 统一是:
-       document.body.clientHeight;
-       // IE9+, FF, Chrome 确定浏览器窗口大小(可视窗口大小)有两个新属性:
-       window.innerHeight;  window.innerWidth;
-       // 获取文档的高度和宽度兼容IE8的写法是:
-       Math.max(document.documentElement.clientHeight, document.body.scrollHeight, 
-                  document.documentElement.scrollHeight);
-      ```
-- 确定一个值是哪种基本类型使用 typeof 操作符，确定一个值是那种引用类型使用 instanceof 操作符。
+> `typeof` 和 `instanceof` 操作符的区别: 
+- 确定一个值是哪种基本类型使用 typeof 操作符，是哪种引用类型使用 instanceof 操作符。
     + ```javascript
          typeof 123;   // "number"
          typeof false;   // "boolean"
@@ -195,6 +199,9 @@
          if (o instanceof Object) {}
          if (a instanceof Array) {}
       ```
+
+
+> `Object.prototype.toString.call()` 检测数据类型:       
 - Object.prototype.toString.call(ele): 通过获取 Object 原型上的 toString 方法，让方法
   中的 this 变为需要检测的数据类型，并且让方法执行。
   ```javascript
@@ -207,69 +214,31 @@
         console.log(Object.prototype.toString.call(bool));    // [object Boolean]
         console.log(Object.prototype.toString.call(arr));     // [object Array]
   ```
-- 关于 js 中 this 指向的讲解: 
-   + `《Javascript设计模式与编程实践》/第一部分--基础知识/第2章-this_call_apply/第2章--this.md`
-   + 要分清楚 this 和 作用域 Scope 之间的区别， this 是当前对象的指向问题，Scope 是作用域
-    （全局作用域 和 本地作用域）的问题，Scope 讲解见:
-        - `《深入理解JavaScript系列》--汤姆大叔/12-1_理解JavaScript的Scope.md`
-        - `《深入理解JavaScript系列》--汤姆大叔/12-变量对象(Variable Object).html`
-        - `深入理解JavaScript系列》--汤姆大叔/13-this/13-this.html`
 
 
-
-## 第 7 章 -- 函数表达式
-> **7.1 递归:**
-  ```javascript
-      // 递归: 用命名函数表达式实现递归。可以在严格模式和非严格模式下都行得通。
-      let factorial = (function f(num) {
-          if (num <= 1) {
-              return 1;
-          } else {
-              return num * f(num - 1);
-          }
-      });
-      console.log(factorial(4));      // 24
-  ```
-
-## 第 10 章 -- DOM
-- DOM (Document Object Model 文档对象模型) 是针对 HTML 和 XML 文档的一个 API (应用
-  程序编程接口)。DOM 描绘了一个层次化的节点树，允许开发人员添加、移除 和 修改页面的某一部分。
-> 10.1.1 Node 类型
-- DOM1 级定义了一个 Node 接口，该接口将由 DOM 中的所有节点类型实现。这个 Node 接口在 js
-  中是作为 Node 类型实现的；js 中的所有节点类型都继承自 Node 类型，因此所有节点类型都共享
-  着相同的基本属性和方法。
-- 每个节点都有一个 nodeType 属性，用于表明节点的类型。节点类型由在 Node 类型中定义的下列
-  12 个数值常量来表示，任何接地啊你类型都必居其一:
-    + Node.element_node(1);
-    + Node.attribute_node(2);
-    + Node.text_node(3);
-    + Node.cdata_section_node(4);
-    + Node.entity_reference_node(5);
-    + Node.entity_node(6);
-    + Node.processing_instruction_node(7);
-    + Node.comment_node(8);
-    + Node.document_node(9);
-    + Node.document_type_node(10);
-    + Node.document_fragment_node(11);
-    + Node.notation_node(12); 
+> 关于 js 中 this 指向的讲解: 
+- `《Javascript设计模式与编程实践》/第一部分--基础知识/第2章-this_call_apply/第2章--this.md`
+- 要分清楚 this 和 作用域 Scope 之间的区别， this 是当前对象的指向问题，Scope 是作用域
+  (全局作用域 和 本地作用域) 的问题，Scope 讲解见:
+    + `《深入理解JavaScript系列》--汤姆大叔/12-1_理解JavaScript的Scope.md`
+    + `《深入理解JavaScript系列》--汤姆大叔/12-变量对象(Variable Object).html`
+    + `深入理解JavaScript系列》--汤姆大叔/13-this/13-this.html`
 
 
+> cloneNode() 方法
+- cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。
+  这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。
 
-> **16.cloneNode() 方法**
--  cloneNode() 方法不会复制添加到 DOM 节点中的 JavaScript 属性，例如事件处理程序等。
-    这个方法只复制特性、（在明确指定的情况下也复制）子节点，其他一切都不会复制。
 
-
-> **21.mouseover和mouseenter的区别：(js高级 13.4.3节)**
+> mouseover和mouseenter的区别：(js高级 13.4.3节) <br/>
 - mouseenter ：在鼠标光标从元素外部首次移动到元素范围之内时触发。这个事件不冒泡，而且在
    光标移动到后代元素上不会触发。
 - mousemove ：当鼠标指针在元素内部移动时重复地触发。
 
 
-
-> **24.JSON 对象有两个方法:**
- - JSON.stringify(): 把JavaScript对象序列化为 JSON 字符串
- ```javascript
+> JSON 对象有两个方法: `stringify()` 和 `parse()` <br/>
+- JSON.stringify(): 把JavaScript对象序列化为 JSON 字符串
+  ```javascript
     let book = {
         title: 'Professional JavaScript',
         authors: ['Nicholas C. Zakas'],
@@ -279,34 +248,17 @@
     // {"title":"Professional JavaScript","authors":["Nicholas C. Zakas"],
     //  "edition":3,"year":2011}
     let jsonText = JSON.stringify(book);
- ```
- - JSON.parse(): 把 JSON 字符串解析为原生 JavaScript 值。
-
-
-> **28."标准的"对象,和函数  (17-5-21)**
-  - (1.) 一个 Javascript 对象就是键和值之间的映射。键是一个字符串（或者 Symbol） ，
-       值可以是任意类型的值。 这使得对象非常符合 哈希表。
-  - (2.) 函数是一个附带可被调用功能的常规对象。(觉得这个解说很好)
-
-
-> **合并2个数组到对象中，再把对象推入到数组中**
-- ```javascript
-    // 合并2个数组到对象中，再把对象推入到数组中
-    var types3 =  [];
-    var arr1 = [ '公司类合作', '个人类合作', '混合类合作' ];
-    var arr2 = [ 20, 21, 22 ];
-    var obj = {};
-    for(var i=0; i<arr1.length; i++){
-        obj.label = arr1[i];
-        obj.value = arr2[i];
-        types3.push(obj);
-    }
-    console.log(types3);
   ```
+- JSON.parse(): 把 JSON 字符串解析为原生 JavaScript 值。
 
 
-> **33.日期格式化**
- - ```javascript
+> "标准的"对象和函数 <br/>
+- (1.) 一个 Javascript 对象就是键和值之间的映射。键是一个字符串(或者 Symbol),
+    值可以是任意类型的值。 这使得对象非常符合 哈希表。
+- (2.) 函数是一个附带可被调用功能的常规对象。(觉得这个解说很好)
+
+> 日期格式化
+- ```javascript
     function getTime(time) {
         if (time !== "" || time !== undefined) {
             var data, year, month, day, hour, minute, second;
@@ -321,24 +273,20 @@
             return  year + "-" + month + "-" + day;
         }
     }
-   ```
+  ```
 
 
-> **35、银行卡添加和删除空格**
- - 见示例: js-sundry-goods\JS--方法总结\2019\20190218--表单数字添加空格.html
-
-
-> **Array.prototype.**
- - 1、将 arguments (类数组对象)转换为数组, 或者把 NodeList 对象转换为数组(比如一组li):
+> `Array.prototype`
+- 1、将 arguments (类数组对象)转换为数组, 或者把 NodeList 对象转换为数组(比如一组li):
     + `Array.prototype.slice.call(arguments);`
- - 2、取得 arguments 类数组的第一项:
+- 2、取得 arguments 类数组的第一项:
     + `Array.prototype.shift.call(arguments);`
- - 3、取得 arguments 类数组除去第一项剩余的项:
+- 3、取得 arguments 类数组除去第一项剩余的项:
     + `Array.prototype.slice.call(arguments, 1);`
     + (传入参数 1 表示被返回的数组包含从第二个参数开始的所有参数)
 
 
-> **localStorage 对象**
+> `localStorage` 对象
 - ```javascript
      // 使用方法存储数据
      localStorage.setItem("name", "Nicholas");
@@ -352,28 +300,8 @@
   ```
 
 
-> **40. 客户区坐标位置 ( clientX 和 clientY ):**
-  + 鼠标事件都是在浏览器视口中特定位置上发生的。这个位置信息保存在事件对象的 clientX 和 
-    clientY 属性中。
-    所有浏览器都支持这两个属性，他们的值标识事件发生时鼠标指针在视口中的水平和垂直坐标。
-     event.clientX , event.clientY
-  + ![clientX and clientY](./images/clientX%20and%20clientY.png)
-
-
-> **41 上滑显示错误弹框**
- - ```javascript
-	let errBoxPosTop = getPosition(errBoxEleConfig.errorBoxWall).top;
-	let scrollTop = document.documentElement.scrollTop 
-	    || document.body.scrollTop;
-	function scrollBarRoll() {
-	  scrollTop = scrollTop - 12;
-	  window.scrollTo(0, scrollTop);
-	  if (parseInt(scrollTop) > parseInt(errBoxPosTop)) {
-		  requestAnimationFrame( scrollBarRoll );
-	  }
-	  if (parseInt(scrollTop) < parseInt(errBoxPosTop) ) {
-		  window.scrollTo(0, 0);
-	  }
-	}
-	scrollBarRoll();
-   ```
+>  客户区坐标位置 (`clientX` 和 `clientY`)
+- 鼠标事件都是在浏览器视口中特定位置上发生的。这个位置信息保存在事件对象的 clientX 和 
+    clientY 属性中。所有浏览器都支持这两个属性，他们的值标是事件发生时鼠标指针在视口中的
+    水平和垂直坐标. `event.clientX` , `event.clientY`
+- ![clientX and clientY](./images/clientX%20and%20clientY.png)
