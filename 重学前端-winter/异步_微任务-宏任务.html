@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        console.log('sync1');
+        setTimeout(function() {
+            console.log('setTimeout1');
+        }, 0);
+
+        let promise = new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                console.log('setTimeoutPromise');
+            }, 0);
+            console.log('promise');
+            resolve();
+        });
+        promise.then(() => {
+            console.log('pro_then');
+            setTimeout(() => {
+                console.log('pro_timeout');
+            }, 0);
+        });
+
+        setTimeout(function() {
+            console.log('last_setTimeout');
+        }, 0);
+
+        // - setInterval 后添加
+        let num = 0;
+        let id = setInterval(function() {
+            console.log('setImmediate');
+            if (num <= 0) {
+                clearInterval(id);
+            }
+        }, 0);
+
+        console.log('sync2');
+
+
+        // - 在没运行之前, 自己认为的输出结果:
+        // - Error Tips:
+        //     + 2 和 3 自己写颠倒了, 都是同步代码, promise 在前先执行
+        //     + 7 和 8 也是类似的错误, new Promise() 是同步代码, 那么其内的
+        //       setTimeout() 首先推入到宏任务队列, 第 8 行输出所在的 setTimeout()
+        //       按照代码的执行依次推入到宏任务队列中.
+        // 1. "sync1"
+        // 2. "syn
+        // c2"
+        // 3. "promise"
+        // 4. "pro_then"
+        // 5. "setTimeout1"
+        // 6. "last_setTimeout"
+        // 7. "setTimeoutPromise"
+        // 8. "pro_timeout"
+
+        // - 正确输出答案是:
+        // 1. "sync1"
+        // 2. "promise"
+        // 3. "sync2"
+        // 4. "pro_then"
+        // 5. "setTimeout1"
+        // 6. "setTimeoutPromise"
+        // 7. "last_setTimeout"
+        // 8. "pro_timeout"
+    </script>
+</body>
+</html>
