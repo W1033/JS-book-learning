@@ -17,7 +17,7 @@
         - 创建变量对象 Variable(Activation) Object
         - 创建作用域 Scope chain
         - 设置上下文指针 this
-- 词法作用域（Lexical Scope）
+- 词法作用域（Lexical Scope）[块级作用域(亦被称为 词法作用域)]
 - 闭包（Closure）
 - 模块模式（Module Pattern）
 - 立即调用函数表达式（IIFE）     
