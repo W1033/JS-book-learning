@@ -1,4 +1,4 @@
-# 概述:执行栈-WebAPI-任务队列-事件循环
+# 详解:执行栈-WebAPI-任务队列-事件循环
 - Hint: 本文内不包含  `变量对象`, `this`, 
   `引用类型 (Reference Type)`, `作用域链 (Scope Chain)`... 这些概念的讲解, 
   如果不理解可以 Google 查找 `汤姆大叔--《深入理解JavaScript系列》`
