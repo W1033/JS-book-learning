@@ -20,6 +20,7 @@
             return function () {                         // {8} - 标记为 r3
                 let ret = _self.apply(this, arguments); // {9}
                 afterfn.apply(this, arguments);         // {10}
+                console.log(ret);
                 return ret;                             // {11} - 标记为 r4
             }
         };
