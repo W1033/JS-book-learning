@@ -6,8 +6,7 @@
 > 参考文章
 - 浏览器事件循环机制(event loop)](https://juejin.im/post/5afbc62151882542af04112d#comment)
 - [DOM，javascript，Web API之间的关系——onclick 引起的思考与调研](https://www.cnblogs.com/surfer/p/9724933.html)
-- 重学前端 - JavaScript执行（一）：Promise里的代码为什么比 setTimeout 先执行？
-- 
+
 
 ## 文章目录 (Catalog)
 - JavaScript 单线程的由来
