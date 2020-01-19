@@ -427,7 +427,7 @@ function mixin(...mixins) {
     // base.prototype 是一个对象
     console.log("base.prototype: ", base.prototype);
 
-    /// 4th: Object.assign() 实现对象组合的新方法:
+    // - 4th: Object.assign() 实现对象组合的新方法:
 
     Object.assign(base.prototype, ...mixins);
 
@@ -441,7 +441,6 @@ class Circle extends mixin(SerializableMixin, AreaMixin) {
         // this.width = width;
     }
 }
-
 /* 此示例使用 mixin 函数代替传统的继承方法，它可以接受任意数量的 mixin 对象作为参数，首先
  * 创建一个函数 base, 再将每一个 mixin 对象的属性赋值给 base 的原型，最后 mixin 函数返回
  * 这个 base 函数，所以 Square 类就可以基于这个返回的函数用 extends 进行扩展。 △ 请记住，

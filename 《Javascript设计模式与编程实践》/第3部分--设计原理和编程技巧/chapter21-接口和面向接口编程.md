@@ -112,7 +112,7 @@
   也就是说我们不可能让 Duck 和 Chicken 再继承自另一个家禽类。如果使用 interface ，
   可以仅仅针对发出叫声这个行为来编写程序，同时一个类也可以实现多个 interface 。
 - 下面用 interface 来改写基于抽象类的代码. 我们先定义 Animal 接口,
-  所有实现了 Animal 接口的动物类豆将拥有 Animal 接口中约定的行为:
+  所有实现了 Animal 接口的动物类都将拥有 Animal 接口中约定的行为:
   ```java
     // - interface 接口只声明成员方法, 不做实现.
     public interface Animal {
@@ -144,7 +144,7 @@
             animalSound.makeSound(chicken); // 输出: 咯咯咯
         }
     }
-  ```  
+  ```
 
 ### 21.3 JavaScript 语言是否需要抽象类和 interface
 
