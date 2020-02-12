@@ -41,7 +41,7 @@
 Web API 是什么? : Web 应用编程接口 (Web API) 用于执行各种任务, 例如操作 DOM, 
 播放音频或视频以及生成 3D 图形.
 - [Web API 接口参考](https://developer.mozilla.org/zh-CN/docs/Web/API) 列出了
-  Web 开发是你能使用的所有对象类型(构造函数的实例).
+  Web 开发时你能使用的所有对象类型(构造函数的实例).
     + 在使用 JavaScript 编写 Web 代码时, 有许多 Web API 可供调用. 以下是所有接口 
       (即对象类型) 的列表, 你可以在开发网站或 Web 应用程序时使用他们. (Web API 主要用于
       JavaScript, 但也可能有例外.)
