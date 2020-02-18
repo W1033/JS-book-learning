@@ -165,7 +165,11 @@
 #### 5.3.2 日期格式化方法
 #### 5.3.3 日期/时间组件方法
 
-### 5.4 `RegExp` 类型
+### 5.4 `RegExp` 类型 [正则表达式 (Regular Expression)]
+- 此章节详细笔记见: 
+  `DataStructure-Algorithm-Learning/正则表达式/README.MD`
+- 更多 `RegExp` 的讲解见:
+  `DataStructure-Algorithm-Learning/正则表达式/正则表达式-特殊字符.md`
 #### 5.4.1 RegExp 实例属性 
 #### 5.4.2 RegExp 实例方法
 #### 5.4.3 RegExp 构造函数属性
@@ -251,6 +255,8 @@
       的索引; 如果没有返回 -1.
     + (3) `replace()`: 接受2个参数: 第一个为 "正则表示 / RegExp对象", 第二个参数为
       "一个字符串 / 一个函数"。
+        - 更多 `replace()` 的使用示例见:
+        `DataStructure-Algorithm-Learning/正则表达式/replace方法和正则表达式.md`
     + (4) `split()`: 基于指定的分隔符将一个字符串分割为多个子字符串，并将结果放在一个
       数组中。
       ```js
