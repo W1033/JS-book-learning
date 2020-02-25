@@ -553,16 +553,16 @@
 ### 11.ownKeys(自身键) 陷阱函数 (Tip: 这节书本翻译不如电子文档)
 - ownKeys 代理陷阱可以拦截内部方法 `[[OwnPropertyKeys]]`(自身属性键), 并允许
   **返回一个数组用于重写默认行为.** 返回的这个数组被用于 4 个方法:  
-  (1) `Object.key()`,  
+  (1) `Object.keys()`,  
   (2) `Object.getOwnPropertyNames() 取得自身属性名`,  
   (3) `Object.getOwnPropertySymbols() 取得自身 Symbol 属性`,  
   (4) `Object.assign()`  
   , 其中 Object.assign() 方法会使用该数组来决定哪些属性会被复制.
 - ownKeys 陷阱函数的默认行为由 `Reflect.ownKeys()` 方法实现, 
-  **它会返回一个由全部自由属性构成的数组, 无论键的类型是字符串还是 Symbol(符号).**
+  **它会返回一个由全部自有属性构成的数组, 无论键的类型是字符串还是 Symbol(符号).**
   Object.getOwnPropertyNames() 方法与 Object.keys() 方法会将符号值从该数组中
   过滤出去; 相反, Object.getOwnPropertySymbols() 会将字符串值过滤掉; 而 
-  Object.assign() 方法会使用数组中所有的字符串值域 Symbol 值.
+  Object.assign() 方法会使用数组中所有的字符串值与 Symbol 值.
 - ownKeys 陷阱函数接受 **1 个参数, 即目标对象**, 同时必须返回一个数组或者一个
   类数组对象, 不合要求的返回值会导致错误. 你可以使用 ownKeys 陷阱函数去过滤特定的属性,
   以避免这些属性被 Object.keys(), Object.getOwnPropertyName(), 

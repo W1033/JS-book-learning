@@ -171,12 +171,42 @@
 - 更多 `RegExp` 的讲解见:
   `DataStructure-Algorithm-Learning/正则表达式/正则表达式-特殊字符.md`
 #### 5.4.1 RegExp 实例属性 
+- `RegExp` 的每个`实例`都具有下列属性, 通过这些属性可以取得有关模式的各种信息.
+    1. **`global`**: `布尔值`, 表示是否设置了 g 标志.
+    1. **`ignoreCase`**: `布尔值`, 表示是否设置了 i 标志.
+    1. **`lastIndex`**: `整数`, 表示开始搜索下一个匹配项的字符位置, 从 0 算起.
+    1. **`multiline`**: `布尔值`, 表示是否设置了 m 标志.
+    1. **`source`**: 正则表达式的字符串表示, 
+       按照字面量形式而非传入构造函数中的字符串模式返回.
+
+  通过这些属性可以获知一个正则表达式的各方面信息, 但却没有多大用处, 
+  因为这些信息全都包含在模式声明中. 例如:
+  ```js
+    var pattern1 = /\[bc\]at/i;
+    console.log(pattern1.global);       // false
+    console.log(pattern1.ignoreCase);   // true
+    console.log(pattern1.multiline);    // false
+    console.log(pattern1.lastIndex);    // 0
+    console.log(pattern1.source);       // "\[bc\]at"
+
+    var pattern2 = new RegExp("\\[bc\\]at", "i");
+
+    console.log(pattern2.global);       // false
+    console.log(pattern2.ignoreCase);   // true
+    console.log(pattern2.multiline);    // false
+    console.log(pattern2.lastIndex);    // 0
+    console.log(pattern2.source);       // "\[bc\]at
+  ```
+  我们注意到, 尽管第一个模式使用的是字面量, 第二个模式使用了 RegExp 构造函数, 
+  但它们的 `source` 属性是相同的。可见, `source` 属性保存的是规范形式的字符串,
+  即`字面量`形式所用的字符串.
 #### 5.4.2 RegExp 实例方法
 #### 5.4.3 RegExp 构造函数属性
 #### 5.4.4 模式的局限性
 
+
 ### 5.5 `Function` 类型
-- - 在 ECMAScript 中函数实际上是对象。每个函数都是 Function 类型的实例，而且都与其他
+- - 在 ECMAScript 中函数实际上是对象。每个函数都是 Function 类型的实例, 而且都与其他
   引用类型一样具有属性和方法。由于函数是对象，因此函数名实际上也是一个指向函数对象的指针，
   不会与某个函数绑定。
     + (1)、函数通常使用 **"函数声明"** 语法定义，如下
@@ -203,22 +233,22 @@
     + **Tip:通过 函数声明/函数表达式 定义的普通函数应看作是 Function 构造函数的直接实例**
 - 立即 调用/(执行) 函数表达式 (Immediately-Invoked Function Expression. IIFE) 
  ```javascript
-   // 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明
-   // 后面不能跟圆括号。
+   // - 这段代码会导致语法错误，因为 js 将 function 关键字当作一个函数声明的开始，而函数声明
+   //   后面不能跟圆括号。
    // function(){
-      //这里是块级作用域
+      // - 这里是块级作用域
    // }();
 
-   // 然而，函数表达式的后面可以跟圆括号。要将函数声明转换成函数表达式，只要像下面这样给它加上
-   // 一对圆括号即可。
+   // - 然而，函数表达式的后面可以跟圆括号。要将函数声明转换成函数表达式，只要像下面这样给它加上
+   //   一对圆括号即可。
    (function(){
-        //这里是块级作用域
+        // - 这里是块级作用域
    })();
 
-   // 立即执行的匿名函数声明方式还有
+   // - 立即执行的匿名函数声明方式还有
    (function(){
    }());
- ```    
+ ```
 #### 5.5.1 没有重载 (深入理解)
 #### 5.5.2 函数声明与函数表达式
 #### 5.5.3 作为值的函数
@@ -256,7 +286,7 @@
     + (3) `replace()`: 接受2个参数: 第一个为 "正则表示 / RegExp对象", 第二个参数为
       "一个字符串 / 一个函数"。
         - 更多 `replace()` 的使用示例见:
-        `DataStructure-Algorithm-Learning/正则表达式/replace方法和正则表达式.md`
+          `DataStructure-Algorithm-Learning/正则表达式/replace方法和正则表达式.md`
     + (4) `split()`: 基于指定的分隔符将一个字符串分割为多个子字符串，并将结果放在一个
       数组中。
       ```js
