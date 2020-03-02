@@ -189,8 +189,10 @@
 
 ### 6.5 Symbol 属性检索
 - `Object.keys()` 和 `Object.getOwnPropertyNames()` 方法可以检索对象中所有的属性:
-  前一个返回所有可枚举的属性名; 后一个方法不考虑属性的可枚举性一律返回。然而为了保持 ES5
-  函数的原有功能, 这两个方法都不支持 Symbol 属性, 而是在 ES6 添加了一个
+    + `Object.keys()`返回对象中所有可枚举的属性名; 
+    + `Object.getOwnPropertyNames()` 不考虑对象属性的可枚举性一律返回。
+    
+  然而为了保持 ES5函数的原有功能, 这两个方法都不支持 Symbol 属性, 而是在 ES6 添加了一个
   `Object.getOwnPropertySymbols()` 来检索对象中的 Symbol 属性。  
   此方法的返回值是一个包含所有 Symbol 自有属性的数组。 就像这样:
   ```js
