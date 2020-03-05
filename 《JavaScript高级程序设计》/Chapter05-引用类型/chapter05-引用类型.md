@@ -124,7 +124,11 @@
           removed = colors.splice(1, 1, "red", "purple");
       ```
 #### 5.2.7 位置方法
-- 位置方法 ES5 为数组实例添加了两个位置方法：`indexOf()` 和 `lastIndexOf()` 。
+- 位置方法 ES5 为数组实例添加了两个位置方法：`indexOf()` 和 `lastIndexOf()`. 
+  这两个方法都接受 2 个参数: (1):是要查找的项 和 (2):(可选的)表示查找起点位置的索引.
+  其中, `indexOf()` 方法从数组的开头(位置`0`)开始向后查找, `lastIndexOf()`
+  方法则从数组的末尾开始向前查找.
+- 这两个方法都`返回要查找的项在数组中的位置`, 或者在没有的情况下返回 -1.
   ```javascript
         const aa = "Hello World!";
         if (aa.indexOf('lo') !== -1) {
