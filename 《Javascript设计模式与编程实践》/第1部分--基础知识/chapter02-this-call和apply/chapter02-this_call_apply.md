@@ -78,7 +78,7 @@
             function MyClass() {
                 this.name = "seven";
                 // - 当前 this 指向为构造函数的实例，通过 this.__proto__ 也可以看出来。
-                // Output: MyClass {name: "seven", age: 30}
+                // Output: MyClass {name: "seven", age: 30}
                 console.log("this: ", this);
 
                 // - Note: 根据(`JS的原型图.png`)来看, 构造函数的实例(new MyClass) 
@@ -97,7 +97,7 @@
             console.log(obj.name);
             obj.age = 30;
 
-            // MyClass {name: "seven", age: 30}
+            // MyClass {name: "seven", age: 30}
             console.log("obj: ", obj);
             
             // - 同构造函数内 this.__proto__ 输出一致.
@@ -139,7 +139,7 @@
             var obj2 = { name: "Kell" };
             console.log( obj1.getName() );  // output: sven
             console.log( obj1.getName.call(obj2) ); // output: Kell
-        ```      
+        ```
 #### 2.1.2 丢失的 this
 - ```javascript
     // - 这是一个经常遇到的问题，我们先看下面的代码：
@@ -202,7 +202,7 @@
         console.log([a, b, c]);
     };
     callFunc.call(null, 4, 5, 6);
-  ```  
+  ```
 #### 2.2.2  apply 和 call 的用途
 - (1) 改变 `this` 指向
     + ```javascript
@@ -219,7 +219,7 @@
         getName();  // window
         getName.call(obj1); // seven
         getName.call(obj2); // anne
-      ``` 
+      ```
       纠正 div 节点上 onclick 事件中的 this 指向被改变的问题。
       ```html
         <div class="box">
@@ -274,17 +274,17 @@
       点，使得可以往 func 函数中预先填入一些参数: <br/>
       ```javascript
         Function.prototype.bind = function() {
-        // - 保存原函数
-        let self = this;
-        // - 需要绑定的 this 上下文
-        let context = [].shift.call(arguments);
-        // - 剩余的参数转成数组
-        let args = [].slice.call(arguments);
-        return function() {
-            // - 执行新的函数的时候，会把之前传入的 context 当作新参数体内的 this
-            //   并且组合两次分别传入的参数，作为新函数的参数
-            return self.apply(context, [].concat.call(args, [].slice.call(arguments)))
-        }
+            // - 保存原函数
+            let self = this;
+            // - 需要绑定的 this 上下文
+            let context = [].shift.call(arguments);
+            // - 剩余的参数转成数组
+            let args = [].slice.call(arguments);
+            return function() {
+                // - 执行新的函数的时候，会把之前传入的 context 当作新参数体内的 this
+                //   并且组合两次分别传入的参数，作为新函数的参数
+                return self.apply(context, [].concat.call(args, [].slice.call(arguments)))
+            }
         };
         let obj = {name: "sven"};
         let func = function(a, b, c, d){

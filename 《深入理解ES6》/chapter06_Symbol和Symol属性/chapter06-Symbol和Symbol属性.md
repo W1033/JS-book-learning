@@ -295,8 +295,8 @@
   在这段代码中, 额外的 concat() 方法传入一个字符串参数 "brown" 作为数组 colors2
   的第 5 个元素. 为什么数组参数就要区别对待呢? js 规范声明, 凡是传入了数组参数, 就
   会自动将它们分解为独立元素. 在 ES6 标准以前, 我们根本无法调整这个特性.
-- Symbol.isConcatSpreadable 属性是一个布尔值，如果该属性值為 true, 則表示對象有
-  length 屬性和數字鍵，故他的數值型属性值应该独立添加到 concat() 調用的結果中。它与
+- `Symbol.isConcatSpreadable` 属性是一个布尔值，如果该属性值為 `true`, 則表示對象有
+  `length 屬性` 和 `數字鍵`，故他的數值型属性值应该独立添加到 concat() 調用的結果中。它与
   其他 well-known Symbol 不同的是， 这个 Symbol 属性默认情况下不会出现在标准对象中,
   它只是一个可选属性，用于增强作用于特定对象类型的 concat() 方法的功能，有效简化其默认
   特性。可以通过以下方法, 定义一个在 concat() 调用中与数组行为相近的新类型。
@@ -310,11 +310,22 @@
     let message = ["Hi"].concat(collection);
     console.log(message);     // [ 'Hi', 'Hello', 'world' ]
   ```
-  在这个示例中，定义了一个类数组对象 collection: 它有一个 length 属性，还有两个
-  数字键，Symbol.isConcatSpreadable 属性值为 true 表明属性值应当作为独立元素
+  在这个示例中，定义了一个类数组对象 `collection`: 它有一个 `length` 属性，还有两个
+  数字键，`Symbol.isConcatSpreadable` 属性值为 `true` 表明属性值应当作为独立元素
   添加到数组中。将 collection 传入 concat() 方法后，最后生成的数组中的元素分别是
   "hi"、"Hello"及"world"。
-- Note: 也可以在派生数组子类中将 Symbol.isConcatSpreadable 设置为 false, 从而
+- Note: Q: `类数组对象`是什么: A: 拥有一个 `length` 属性和若干索引属性的对象. 
+  例如: 
+  ```js
+    let arr = ['name', 'age', 'gender'];
+    let arrayLike = {
+        0: 'name',
+        1: 'age',
+        2: 'sex',
+        length: 3
+    }
+  ```
+- Note: 也可以在派生数组子类中将 `Symbol.isConcatSpreadable` 设置为 `false`, 从而
   防止元素在调用 concat() 方法时被分解. 具体细节请查看第 9 章相关内容.
 
 #### 6.6.3 Symbol.match, Symbol.replace, Symbol.search 和 Symbol.split 属性
