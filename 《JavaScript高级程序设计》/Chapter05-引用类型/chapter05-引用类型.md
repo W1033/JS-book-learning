@@ -37,6 +37,11 @@
 
 
 ## 生词 (New Words)
+- **character ['kærəktɚ] --n.字符; 人物; 性格; 性质.**
+    + Chinese character. 汉字.
+    + moral character. 品德
+    + main character. 主要人物; 主要角色
+    + His character is set. 他的性格已定型.
 
 
 ## 本章内容 (Content)
@@ -276,23 +281,73 @@
 #### 5.6.1 `Boolean` 类型
 #### 5.6.2 `Number` 类型
 #### 5.6.3 `String` 类型
-- (1). 字符方法 
+- `String` 类型是字符串的对象包装类型, 可以像下面这样使用 `String` 构造函数来创建.
+  ```js
+    var stringObject = new String('Hello world');
+  ```
+  `String` 对象的方法也可以在所有基本的字符串值中访问到. 其中, 继承的 `valueOf()`,
+  `toLocaleString()` 和 `toString()` 方法, 都返回对象所表示的基本字符串值.
+
+  `String` 类型的每个实例都有一个 `length` 属性, 表示字符串中包含多个字符.
+   来看下面的例子.
+   ```js
+    var stringValue = "hello world";
+    console.log(stringValue.length);    // "11"
+   ```
+  这个例子输出了字符串 "hello world" 中的字符数量, 即 "11". 应该注意的是,
+  即使字符串中包含双字节字符 (不是占一个字节的 `ASCII` 字符), 每个字符也仍然算一个字符.
+
+  `String` 类型提供了很多方法，用于辅助完成对 ECMAScript 中字符串的解析和操作。
+- (1). 字符方法
+    + 2 个用于访问字符串中特定字符的方法: 这两个方法都接收一个参数, 即`基于 0 的字符位置`.
+        + `charAt(num)`: 以单字符字符串的形式返回给定位置的那个字符.(ES 中没有字符类型.)
+          例如: 
+          ```js
+            var stringValue = 'Hello world';
+            console.log(stringValue.charAt(1));     // "e"
+          ```
+        + `charCodeAt(num)`: 返回给定位置的字符编码.
+           ```js
+            var stringValue = 'Hello world';
+            console.log(stringValue.charCodeAt(1));     // "101"
+          ```
 - (2). 字符串操作方法
+    + (a.) `concat()`: 用于拼接一或多个字符串, 返回拼接后的新字符串.
+      ```js
+        var stringValue = "hello ";
+        var result = stringValue.concat("world");
+        console.log(result);        // "hello world"
+        console.log(stringValue);   // "hello"
+      ```
+    + (b.) ES 还提供了 3 个基于子字符串创建新字符串的方法: 这 3
+      个方法都会返回被操作字符串的一个子字符串, 而且都接受 1 或 2 个参数.
+      第 1 个参数 `指定子字符串的开始位置`, 第 2 个参数
+      `指定的是子字符串最后一个字符后面的位置.`
+        - `slice()`
+        - `substr()`
+        - `subString()`
 - (3). 字符串位置方法
+    + 有 2 个可以从字符串中查找子字符串的方法: 这 2
+      个方法都是从一个字符串中 `搜索给定的子字符串`, 然后返回子字符串的位置
+      (如果没有找到该子字符串, 则返回 `-1`). 这 2 个方法也可以接受第二个参数,
+      表示`从字符串中的那个位置开始搜索`.
+        - `indexOf()`
+        - `lastIndexOf()`
 - (4). `trim()` 方法
 - (5). 字符串大小写转换方法
     + `toLowerCase()`, toLocalLowerCase()
     + `toUpperCase()`, toLocalUpperCase()
 - (6). 字符串的模式匹配方法
     + (1) `match()`: 只接受一个参数(正则表达式 / RegExp对象)
-    + (2）`search()`: 参数与 match 方法相同。 search() 方法返回字符串中第一个匹配项
+    + (2) `search()`: 参数与 match 方法相同。 search() 方法返回字符串中第一个匹配项
       的索引; 如果没有返回 -1.
     + (3) `replace()`: 接受2个参数: 第一个为 "正则表示 / RegExp对象", 第二个参数为
       "一个字符串 / 一个函数"。
+      
         - 更多 `replace()` 的使用示例见:
           `DataStructure-Algorithm-Learning/正则表达式/replace方法和正则表达式.md`
     + (4) `split()`: 基于指定的分隔符将一个字符串分割为多个子字符串，并将结果放在一个
-      数组中。
+      数组中。(Tip: 简短说法: `split()` 方法: 把字符串转换为数组.)
       ```js
         // (1.) match()
         let word = "cot, bot, sot, fot";
@@ -319,6 +374,11 @@
       ```
 - (7). `localCompare()` 方法
 - (8). `fromCharCode()` 方法
+    + `fromCharCode()`: 接收一或多个字符编码, 然后将它们转换成一个字符串. 
+      从本质上来看, 这个方法与实例方法 `charCodeAt()` 执行的是相反的操作。
+      ```js
+        console.log(String.fromCharCode(104, 101, 108, 108, 111));  // "hello"
+      ```
 
 ### 5.7 单体内置对象
 #### 5.7.1 `Global` 对象
