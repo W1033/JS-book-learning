@@ -9,14 +9,14 @@
 
 
 ## 文章目录 (Catalog)
-- JavaScript 单线程的由来
-- JS 引擎的主要组成
-- 执行栈 (Call Stack)
-- 浏览器中的 事件循环(event loop) 是什么?
-- Web API 是什么?
-- 任务队列/回调队列(Callback Queue/ Event Queue/ Message Queue)
-- 宏任务(macro-task)和微任务(micro-task)
-- event loop 中的 Update the rendering (更新渲染)
+1. JavaScript 单线程的由来
+2. JS 引擎的主要组成
+3. 执行栈 (Call Stack)
+4. 浏览器中的 事件循环(event loop) 是什么?
+5. Web API 是什么?
+6. 任务队列/回调队列(Callback Queue/ Event Queue/ Message Queue)
+7. 宏任务(macro-task)和微任务(micro-task)
+8. event loop 中的 Update the rendering (更新渲染)
 
 
 
@@ -29,15 +29,15 @@
 
 ## 文章内容(Content)
 
-### JavaScript 单线程的由来
+### 1. JavaScript 单线程的由来
 
-### JS 引擎的主要组成
+### 2. JS 引擎的主要组成
 
-### 执行栈 (Call Stack)
+### 3. 执行栈 (Call Stack)
 
-### 浏览器中的 事件循环(event loop) 是什么?
+### 4. 浏览器中的 事件循环(event loop) 是什么?
 
-### Web API(Web Application Programming Interface) Web 应用编程接口
+### 5. Web API(Web Application Programming Interface) Web 应用编程接口
 Web API 是什么? : Web 应用编程接口 (Web API) 用于执行各种任务, 例如操作 DOM, 
 播放音频或视频以及生成 3D 图形.
 - [Web API 接口参考](https://developer.mozilla.org/zh-CN/docs/Web/API) 列出了
@@ -83,9 +83,9 @@ Web API 是什么? : Web 应用编程接口 (Web API) 用于执行各种任务, 
 - [Web API 事件参考](https://developer.mozilla.org/zh-CN/docs/Web/Events) 列出了
   你可以用于追踪和响应你的网页或应用的事件.
 
-### 任务队列/回调队列(Callback Queue/ Event Queue/ Message Queue)
+### 6. 任务队列/回调队列(Callback Queue/ Event Queue/ Message Queue)
 
-### 宏任务(macro-task)和微任务(micro-task)
+### 7. 宏任务(macro-task)和微任务(micro-task)
 
-### event loop 中的 Update the rendering (更新渲染)
+### 8. event loop 中的 Update the rendering (更新渲染)
 
