@@ -7,7 +7,7 @@ understandinges6/tree/master/manuscript)
     + 刘振涛 (译)
     + 贺诗俊/张克军/李松峰 (审校)
 
-- Tip: 此笔记来 95% 来自中译本《深入理解 ES6》, 只有小部分参考了 github 上
+- Tip: 此笔记来大部分都来自中译本《深入理解 ES6》, 但是也有小部分参考了 github 上
   OshotOkill 的 [《understandinges6-simplified-chinese》](https://github.com/OshotOkill/understandinges6-simplified-chinese) .
 
 ------

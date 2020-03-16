@@ -1,5 +1,5 @@
 # Chapter05 解构: 是数据访问更便捷
-
+# Chapter05 Destructuring for Easier Data Access
 
 ## 目录(Catalog)
 - 5.1 为何使用解构功能 - 89
@@ -12,20 +12,23 @@
     + 5.3.1 数组解构赋值
     + 5.3.2 默认值
     + 5.3.3 嵌套数组解构
-    + 5.3.4 不定元素
+    + 5.3.4 剩余项(`rest items`) / 不定元素
 - 5.4 混合解构 - 101
-- 5.5 解构参数 - 102
-    + 5.5.1 必须传值的结构参数
-    + 5.5.2 解构参数的默认值 
+- 5.5 参数结构(Destructured Parameters) - 102
+    + 5.5.1 解构的参数是必需的
+    + 5.5.2 参数结构的默认值
 - 5.6 小结
 
 
+
+
 ## 生词(New Words)
-- **identifier [ai'dentifaiə] --n.标识符，识别码**
+- **identifier [ai'dentifaiə] --n.标识符, 识别码**
     + unique identifier. 唯一标识符
     + If we were to add another row to this table, it would have an 
-      identifier of 4. 如果我们向这个表中添加另外一行，那么该行的标识符将会是 4.
-
+      identifier of 4. 如果我们向这个表中添加另外一行, 那么该行的标识符将会是 4.
+- **expire [ɪk'spaɪə] vi.到期, 期满, 断气**
+    + expire date 过期日期
 
 ## 内容(Content)
 ### 5.1 为何使用解构功能 - 89
@@ -82,7 +85,7 @@
   **一定要用一对小括号包裹解构赋值语句**, 
   JS 引擎将`一对开放的花括号视为一个代码块`, 而语法规定, 
   `代码块语句不允许出现在赋值语句左侧`, 添加 **`小括号`** 后`可以将块语句转化为一个表达式`, 
-  从而实现整个解构赋值的过程。
+  从而实现整个解构赋值的过程. 
   
   `解构赋值表达式`的值与表达式右侧(即`=`右侧)的值相等, 如此一来,
   在任何可以使用值的地方你都可以使用解构赋值表达式. 想象一下给函数传递参数值的过程:
@@ -104,13 +107,13 @@
   ```
   调用 `outputInfo()` 函数时传入了一个解构表达式, 由于 JS 表达式的值为右侧的值,
   因而此处传入的参数等同于 `node`, 且变量 `type` 和 `name` 被重新赋值,
-  同时 `node` 也被传入 `outputInfo()` 函数。
+  同时 `node` 也被传入 `outputInfo()` 函数. 
 
   当解构赋值表达式的右侧(即: `=` 后面的表达式) 的计算结果为 `null` 或 `undefined` 时,
   会抛出错误. 因为任何尝试读取 `null` 或 `undefined` 的属性的行为都会导致
   "运行时" 错误 (`runtime error`).
 
-#### + 5.2.2 默认值
+#### + 5.2.2 (设置)默认值
 - 使用解构赋值表达式时, 如果指定的局部变量名称在对象中不存在, 那么这个局部变量会被赋值为
   `undefined`, 就像这样:
   ```js
@@ -253,19 +256,38 @@
       但现在只需留意自己不要写类似的代码.
 
 ### 5.3 数组解构 - 96
-- 示例:
+- 数组解构的语法看起来与对象解构非常相似, 只是将对象字面量替换成了数组字面量. 
+  **数组解构时, 解构作用在数组内部的位置上, 而不是作用在对象的具名属性上**, 例如:
   ```js
-    let colorArr = ["red", "green", "black"];
-    let [fir, sec] = colorArr;
-    console.log(fir);
-    console.log(sec);
-
-    // 解构模式中, 省略元素
-    let [, , thi] = colorArr;
-    console.log(thi);
+    let colors = ["red", "green", "black"];
+    let [first, second] = colors;
+    console.log(first);
+    console.log(second);
   ```
+- 你也可以在解构模式中忽略一些项, 并且只给感兴趣的项提供变量名. 例如,
+  下面值获取数组的第三个元素:
+  ```js
+     // - 解构模式中, 省略元素
+    let [, , third] = colors;
+    console.log(third);
+  ```
+  模式中 `third` 之前的逗号, 是为数组前面的项提供的占位符. 
+
+  与对象解构类似, 在使用 `var`, `let`, `const` 进行数组解构时, 你必须提供初始化.
+
 #### + 5.3.1 数组解构赋值
-- 数据解构赋值 示例:
+- 你可以在赋值表达式中使用数据解构, 但是与对象解构不同, 不必将表达式包含在圆括号内, 例如:
+  ```js
+    let colors = ['red', 'green', 'blue'];
+    let first = 'black';
+    let second = 'purple';
+    [first, second] = colors;
+    console.log(first);     // "red"
+    console.log(second);    // "green"
+  ```
+  数组解构赋值有一个非常独特的用例: 能轻易地互换两个变量的值.
+  互换变量值(即: 值交换)在排序算法中十分常用, 而在 ES5 中需要使用第三个变量作为临时变量,
+  如下例:
   ```js
     // - ES5 交换变量
     let a = 1,
@@ -276,42 +298,92 @@
     b = tmp;
     console.log(a);     // 2
     console.log(b);     // 1
-
-    // - ES6 解构赋值-交换变量
-    let c = 1,
-        d = 2;
-    [c, d] = [d, c];
-    console.log(c);     // 2
-    console.log(d);     // 1
   ```
+  这种变量交换的方式中, 中间变量 `tmp` 是不可或缺的. 如果使用数组解构赋值语法,
+  就不再需要额外的变量了. 在 ES6 中可以这么做:
+  ```js
+    // - ES6 解构赋值-交换变量
+    let a = 1,
+        b = 2;
+    [a, b] = [b, a];
+    console.log(a);     // 2
+    console.log(b);     // 1
+  ```
+  在这个示例中, 数组解构赋值看起来像是一个镜像: 赋值语句左侧(即等号左側)
+  与其他数组解构示例一样, 是一个解构模式; 右侧是一个为交换过程创建的临时数组字面量.
+  代码执行过程中, 先解构临时数组, 将 `b` 和 `a` 的值复制到左侧数组的前两个位置,
+  结果是两个变量就互换了它们的值.
+
+  Notice: 与对象解构赋值相同, 若等号右侧的计算结果为 `null` 或 `undefined`,
+  那么数组结构赋值表达式也会抛出错误.
+
 #### + 5.3.2 默认值
+- 数组解构赋值同样允许在数组任意位置指定默认值. 当指定位置的项不存在,
+  或其值为 `undefined`, 那么该默认值就会被使用. 例如:
+  ```js
+    let colors = ['red'];
+    let [first, second = 'gree'] = colors;
+    console.log(first);     // "red"
+    console.log(second);    // "green"
+  ```
+
 #### + 5.3.3 嵌套数组解构
-- 示例: 
+- 与解构嵌套的对象相似, 可以用类似的方式来解构嵌套的数组. 在整个解构模式中插入另一个数组模式,
+  解构操作就会下行到嵌套的数组中, 就像这样: 
   ```js
     let colors = ["red", ["green", "lightgreen"], "blue"];
     let [firstColor, [, thirdColor]] = colors;
     console.log(firstColor);    // red
     console.log(thirdColor);    // lightgreen
   ```
-#### + 5.3.4 不定元素
-- 示例: 
+  与对象解构相似, 你也能使用任意深度的数组嵌套.
+
+#### + 5.3.4 剩余项(`rest items`) / 不定元素
+- Note: 这里书本上的翻译叫`不定元素`, 但是电子书翻译的叫 `剩余项(rest items)`,
+  我个人觉得明显 `剩余项` 更合适, 而且对应的英文直译就是 `剩余项`,
+  不能理解这个 `不定元素`...
+- 第 3 章介绍过函数的`剩余参数(rest parameter)`(tip: 纸质书翻译叫 `不定参数`),
+  而数组结构有个类似的名为 `剩余项` 的概念, 它使用 `...`
+  语法来将剩余的项目赋值给一个指定的变量, 此处有个范例:
   ```js
-    // 不定元素
+    // - 剩余项(rest items) / 不定元素
     let animals = ["monkey", "tiger", "lion", "cat", "dog"];
     let [firstAnimal, ...restAnimals] = animals;
-    console.log(firstAnimal);
-    console.log(restAnimals.length);
-    console.log(restAnimals[0]);
+    console.log(firstAnimal);           // "monkey"
+    console.log(restAnimals.length);    // 4 
+    console.log(restAnimals[0]);        // "tiger"
   ```
+  `animals` 数的第一项被赋值给了 `firstAnimal` 变量, 而剩余的则赋值给了一个新的
+  `restAnimals` 数组; `restAnimals`数组包含 4 项; 
+  `剩余项(rest items)` 语法有助于从数组中提取特定元素并保证其余元素可用,
+  它还有另外一个有用的功能.
+
+  在设计 JS 时, 很明显遗漏掉了数组复制的功能, 而在 ES5 中, 开发者们经常使用 
+  `concat()` 方法来克隆数组, 如下:
+  ```js
+    // - concat()方法的设计初衷是连接2个数组, 如果调用时不传递参数便返回当前数组的副本.
+    let arr1 = ["purple", "yellow", "white"];
+    let arr2 = arr1.concat();
+    console.log(arr2);          // [ 'purple', 'yellow', 'white' ]
+  ```
+  ES6 通过 `剩余项` 的语法来实现克隆数组:
+  ```js
+    let [...cloneArr1] = arr1;
+    console.log(cloneArr1);     // [ 'purple', 'yellow', 'white' ]
+  ```
+  使用这种技术复制数组未必比使用 `concat()` 方法更明显, 但这依然是个值得关注的技巧.
+
+  剩余项必须是数组解构模式中最后的部分, 之后不能再有逗号, 否则就是语法错误.
 
 ### 5.4 混合解构 - 101
-- 混合解构示例:
+- 对象与数组解构能被用在一起, 以创建更复杂的解构表达式, 在对象与数组混合而成的结构中,
+  这么做便能准确提取其中你想要的信息片段. 例如:
   ```js
-    let nodeObj = {
+    let node = {
         type: "identifier",
         name: "foo",
         loc: {
-            begin: {
+            start: {
                 line: 1,
                 column: 1
             },
@@ -322,43 +394,96 @@
         },
         range: [0, 3]
     };
-
-    // - P101: 解构模式中的 loc: 和 range: 代表他们在 nodeObj 对象中所处的位置
-    //   (也就是该对象的属性)。当使用混合解构的语法时，则可以从 nodeObj 提取任意想要的信息。
-    let {loc: {begin}, range: [startIndex]} = nodeObj;
-    console.log(begin.line);        // 1
-    console.log(begin.column);      // 1
+    let {loc: {start}, range: [startIndex]} = node;
+    console.log(start.line);        // 1
+    console.log(start.column);      // 1
     console.log(startIndex);        // 0
   ```
-### 5.5 解构参数 - 102
-#### + 5.5.1 必须传值的结构参数
-#### + 5.5.2 解构参数的默认值 
+  此代码将 `node.loc.start` 与 `node.range[0]` 提取出来, 并将它们的值分别存储到
+  `start` 与 `startIndex` 中, 要记住**解构模式中的 `loc:` 与 `range:` 只是对应与
+  `node` 对象中属性的位置**. 混合使用对象与数组解构, `node` 的任何部分都能提取出来.
+  对于 `JSON` 配置结构中提取数据来说, 这种方法尤其有用, 因为它不再需要遍历整个结构了.
+
+### 5.5 参数解构(Destructured Parameters) / 解构参数  - 102
+- 解构还有一个特别有用的场景, 即在传递函数参数时. 当 JS 的函数接收大量可选参数时,
+  一个常用模式是创建一个 `options` 对象, 其中包含了附加的参数, 就像这样:
+  ```js
+    // - options 上的属性表示附加参数
+    function setCookie(name, value, options) {
+        options = options || {};
+
+        let secure = options.secure;
+        let path = options.path;
+        // - domain 和 expires 为 undefined
+        let domain = options.domain;
+        let expires = options.expires;
+
+        // - 设置 cookie 的代码 
+    }
+    // - 第 3 个参数映射到 options
+    setCookie('type', 'js', {
+        secure: true,
+        expires: 60000
+    });
+  ```
+  很多 JS 的库都包含了类似于此例的 `setCookie()` 函数. 在此函数内,
+  `name` 与 `value` 参数是必需的, 而 `secure`, `path`, `domain` 与
+  `expires` 则不是. 并且因为此处对于其余数据并没有顺序要求, 将它们作为
+  `options` 对象的具名属性会更有效率, 而无须列出一堆额外的具名参数. 
+  这种方法很有用, 但无法仅通过查看函数定义就判断出函数所期望的输入,
+  你必须阅读函数体的代码.
+- `参数解构` 提供了更清楚地标明函数期望输入的替代方案.
+  它使用对象或数组解构的模式替代了具名参数. 要看到其实际效果,
+  请看下面重写版本的 `setCookie()` 函数:
+  ```js
+    function setCookie(name, value, {secure, path, domain, expires}) {
+        
+        // - 设置 cookie 的代码
+    }
+    setCookie('type', 'js', {
+        secure: true,
+        expires: 60000
+    })
+  ```
+  此函数的行为与上例可选的 `options` 类似, 但此时只是使用解构语法代替了第 3
+  个参数来提取必要的信息, 其他参数保持不变, 但是对于调用 `setCookie()`
+  函数的使用者而言, 参数结构让函数的使用变得更清晰了.
+
+  解构参数在没有传递值的情况下类似于常规参数,它们会被设为 `undefined`.
+- Note: 参数解构支持本章中已讲解的所有解构特性. 可以在其中使用 默认参数,
+  混合解构, 或使用与属性不同的变量名.
+
+#### + 5.5.1 解构的参数是必需的
+- 解构参数有一个奇怪的地方, 默认情况下, 如果调用函数时不提供被解构的参数会导致程序抛出错误.
+  举个例子, 调用上一个示例中的 `setCookie()` 函数, 如果不传递第 3 个参数, 会报错:
+  ```js
+    // - 报错
+    setCookie("type", "js");
+  ```
+  缺失的第 3 个参数, 其值就会默认等于 `undefined`. 这导致了一个错误,
+  因为参数解构实际上只是解构声明的简写. 当 `setCookie()` 函数被调用时,
+  JS 引擎实际上是这么做的:
+  ```js
+    function setCookie(name, value, options) {
+        let {secure, path, domain, expires} = options;
+
+        // - 设置 cookie 的代码
+    }
+  ```
+  本章的上面有提到, 如果解构赋值表达式(即: `=`)的右侧为 `null` 或 `undefined`, 
+  解构会抛出报错, 同理, 若调用 `setCookie()` 函数是不传入第 3 个参数,
+  也会导致程序抛出错误.
+
+  如果结构参数是必需的, 那么大可忽略掉这些问题; 但如果希望将解构参数定义为可选的,
+  那么就必须为其提供默认值来解决这个问题:
+  ```js
+    function setCookie(name, value, {secure, path, domain, expires} = {}) {
+        // ...
+    }
+  ```
+  这个示例中为解构参数添加了一个新对象作为默认值, `secure`、`path`、`domain` 及
+  `expires` 这些变量的值全部为 `undefined`, 这样即使在调用 `setCookie()`
+  时未传递第 3 个参数, 程序也不会报错.
+#### + 5.5.2 参数解构的默认值
 
 ### 5.6 小结
-
-
-
-
-// - ES5 通过 concat()方法克隆数组: concat()方法设计初衷是连接2个数组，如果调用时
-//   不传递参数就会返回当前数组的副本。
-let arr1 = ["purple", "yellow", "white"];
-let arr2 = arr1.concat();
-console.log(arr2);          // [ 'purple', 'yellow', 'white' ]
-// ES6 通过不定元素的语法来实现克隆数组
-let [...cloneArr1] = arr1;
-console.log(cloneArr1);     // [ 'purple', 'yellow', 'white' ]
-console.log("------------------");
-
-
-
-/** - P102: 解构参数 */
-// - 解构参数支持本章中已讲解的所有解构特性. 可以使用默认值，混合对象和数组的解构模式及
-//   非同名变量存储提取出来的信息。
-function setCookie(name, value, {secure, path, domain, expires}) {
-    // 设置 cookie 的代码
-}
-
-setCookie("type", "js", {
-    secure: true,
-    expires: 60000
-});
