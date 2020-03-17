@@ -1,4 +1,22 @@
 (function() {
+    function mixArgs(first, second = 'b') {
+        console.log(arguments.length);          // 1
+        console.log(first === arguments[0]);    // true
+        console.log(second === arguments[1]);   // false
+
+        first = 'c';
+        second = 'd';
+
+        console.log('first:', first);           // first: c
+        console.log(first === arguments[0]);    // false
+        console.log(second === arguments[1]);   // false
+    }
+
+    mixArgs('a');
+})();
+
+
+(function() {
     function  num(x = 1, y = 2, z = 3) {
         console.log(x, y, z);
     }

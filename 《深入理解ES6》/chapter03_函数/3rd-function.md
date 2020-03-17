@@ -3,30 +3,30 @@
 ## 目录 Table of Content
 - 3.1 函数形参的默认值
 	+ 3.1.1 在 ES5 中模拟默认参数
-	+ 3.1.2 ES6 中的默认参数值
-	+ 3.1.3 默认参数值对 arguments 对象的影响
+	+ 3.1.2 ES6 中的参数默认值
+	+ 3.1.3 参数默认值对 arguments 对象的影响
 	+ 3.1.4 默认参数表达式
 	+ 3.1.5 默认参数的临时死区
-- 3.2 处理无命名参数
-	+ 3.2.1 ES5 中的无命名参数
-	+ 3.2.2 不定参数 (剩余参数 rest parameter )
-- 3.3 增强的 Function 构造函数
-- 3.4 展开运算符
-- 3.5 name 属性
+- 3.2 使用不具名参数 (无命名参数)
+	+ 3.2.1 ES5 中的 不具名参数
+	+ 3.2.2 `剩余参数(rest parameter)` / `不定参数` 
+- 3.3 增强的 `Function` 构造函数
+- 3.4 展开运算符 / 扩展运算符
+- 3.5 ES6 的 `name`(名称) 属性
     + 3.5.1 如何选择合适的名称
-	+ 3.5.2 name 属性的特殊情况
+	+ 3.5.2 `name` 属性的特殊情况
 - 3.6 明确函数的多重用途
 	+ 3.6.1 在 ES5 中判断函数被调用的方法
-	+ 3.6.2 元属性 (Metaproperty) new.target
+	+ 3.6.2 `new.target` 元属性 (Metaproperty)
 - 3.7 块级函数
 	+ 3.7.1 块级函数的使用场景
 	+ 3.7.2 非严格模式下的块级函数
 - 3.8 箭头函数
 	+ 3.8.1 箭头函数语法
 	+ 3.8.2 创建立即执行函数表达式
-	+ 3.8.3 箭头函数没有 this 绑定
+	+ 3.8.3 箭头函数没有 `this` 绑定
 	+ 3.8.4 箭头函数和数组
-	+ 3.8.5 箭头函数没有 arguments 绑定
+	+ 3.8.5 箭头函数没有 `arguments` 绑定
 	+ 3.8.6 箭头函数的辨识方法
 - 3.9 尾调用优化 (tail call optimization)
 	+ 3.9.1 ES6 中的尾调用优化
@@ -57,41 +57,72 @@
         // 函数的其他代码
 	}
   ```
-#### 3.1.2 ES6 中的默认参数值
-- (0) ES6 默认参数值示例: 
+#### 3.1.2 ES6 中的参数默认值
+- (0) ES6 参数默认值示例: 
   ```javascript
-    // - ES6 默认参数值示例: 只有第一个参数 url 是必须的, 其他 2 个参数都有默认值
+    // - ES6 参数默认值示例: 只有第一个参数 url 是必须的, 其他 2 个参数都有默认值
     // - Tip: 由于书上的示例无法运行, 所以从 internet 上找到示例.
     function  num(x = 1, y = 2, z = 3) {
         console.log(x, y, z);
     }
     num(6, 7);  // output: 6 7 3
   ```
-- (1) 使用 undefined 传参: 如果想让某个参数使用默认值,我们可以使用 undefined 进行
-  赋值, 例如
+- (1) 使用 `undefined` 传参: 如果想让某个参数使用默认值, 我们可以使用 `undefined`
+  进行赋值, 例如
   ```javascript 
     num(6, undefined, 7);   // 6 2 7
   ```
-- (2) 使用 null 代替默认值
+- (2) 使用 `null` 代替默认值
   ```javascript 
     num(9, null, 12);   // 6 null 12
   ```
 - (3) 参数运算: 
   ```javascript
-    function sum(x = 1, y =   2, z = x + y) {
+    function sum(x = 1, y = 2, z = x + y) {
         console.log(x, y, z);
     }
     sum(6, 7);
   ```
-#### 3.1.3 默认参数值对 arguments 对象的影响
-- 略
+#### 3.1.3 参数默认值对 `arguments` 对象的影响
+- 在使用 `ES6` 参数默认值的函数中, `arguments` 对象的表现总是会与 ES5 的严格模式一致,
+  无论此时函数是否明确运行在严格模式下. 参数默认值的存在触发了 `arguments`
+  对象与`具名参数`的分离. 这是个细微但重要的细节, 因为 `arguments`
+  对象的使用方式发生了变化. 研究如下代码: 
+  ```js
+    // - 非严格模式
+    function mixArgs(first, second = 'b') {
+        console.log(arguments.length);          // 1
+        console.log(first === arguments[0]);    // true
+        console.log(second === arguments[1]);   // false
+
+        first = 'c';
+        second = 'd';
+
+        console.log('first:', first);           // first: c
+        console.log(first === arguments[0]);    // false
+        console.log(second === arguments[1]);   // false
+    }
+
+    mixArgs('a');
+  ```
 #### 3.1.4 默认参数表达式
-- 略
+- 参数默认值最有意思的特性或许就是默认值并不要求一定是基本类型的值. 例如,
+  你可以执行一个函数来产生参数的默认值, 就像这样:
+  ```js
+    function getValue() {
+        return 5;
+    }
+    function add(first, second = getValue()) {
+        return first + second;
+    }
+    console.log(add(1, 1)); // 2
+    console.log(add(1));    // 6
+  ```
 #### 3.1.5 默认参数的临时死区
 - 略
 
-### 3.2 处理无命名参数( 剩余参数 rest parameter )
-#### 3.2.1 ES5 中的无命名参数
+### 3.2 使用不具名参数 (无命名参数)
+#### 3.2.1 ES5 中的 不具名参数
 + ```javascript
     let book = {
         title: "Understanding ECMAScript 6",
@@ -113,9 +144,10 @@
     console.log(bookData.author);
     console.log(bookData.year);
   ```
-#### 3.2.2 ES6 不定参数 (Rest parameters)
-- 在函数的命名参数前添加三个点 (...) 就表明这是一个不定参数，该参数为一个数组，包含着
-  自它之后传入的所有参数，通过这个数组名即可逐一访问里面的参数。e.g. 重写上面的 pick()
+#### 3.2.2 ES6 剩余参数(Rest parameters) / 不定参数
+- 在函数的命名参数前添加三个点 (`...`) 就表明这是一个剩余参数, 该参数为一个数组, 
+  包含着自它之后传入的所有参数, 通过这个数组名即可逐一访问里面的参数.
+  e.g. 重写上面的 `pick()`
   函数:
   ```javascript
     function pick2(obj, ...keys) {
@@ -140,27 +172,29 @@
 
 ### 3.3 增强的 Function 构造函数
 
-### 3.4 展开运算符
-- ```javascript
-    // ES5 中返回最大值
+### 3.4 扩展运算符 / 展开运算符
+- 与神域参数关系最密切的就是扩展运算符. 剩余参数允许你把多个独立的参数河滨到一个数组总;
+  而扩展运算符则允许将一个数组分割, 并将各个项作为分离的参数传给函数. 
+  ```js
+    // - ES5 中返回最大值
     let values = [25, 50, 75, 100];
     console.log(Math.max.apply(Math, values));  // 100
 
-    // ES6 利用展开运算符实现返回最大值
+    // - ES6 利用展开运算符实现返回最大值
     console.log(Math.max(...values));       // 100
 
-    // ES6 展开运算符示例2
+    // - ES6 展开运算符示例2
     let values2 = [-25, -70, -50, -100];
     console.log(Math.max(...values2, 0));   // 0
 
-    // 展开运算符使用示例3
+    // - 展开运算符使用示例3
     let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
     console.log("x", x);
     console.log("y", x);
     // console.log("...z", ...z);
   ```
 
-### 3.5 name 属性
+### 3.5 ES6 的 name(名称) 属性
 #### 3.5.1 如何选择合适的名称
 - ES6 程序中所有的函数的 name 属性都有一个合适的值.如下面函数声明和函数表达式定义的
   函数, 都打印了各自的 name 属性:
@@ -171,7 +205,7 @@
     console.log(doAnotherThing.name); // "doAnotherThing"
   ```
 #### 3.5.2 name 属性的特殊情况
-- ES6 中为所有的函数新增了 name 属性。 函数声明/函数表达式。 例如: 
+- ES6 中为所有的函数新增了 name 属性. 函数声明/函数表达式. 例如: 
   ```javascript
     let doSomething = function doSomethingElse() {};
     const person = {
