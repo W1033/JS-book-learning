@@ -1,4 +1,4 @@
-# Chapter05 解构: 是数据访问更便捷
+# Chapter05 解构: 使数据访问更便捷
 # Chapter05 Destructuring for Easier Data Access
 
 ## 目录(Catalog)
