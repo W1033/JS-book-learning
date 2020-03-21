@@ -49,7 +49,7 @@
     <!-- 特性和属性 -->
     <div id="myDiv" class="bd" title="my div element"
         lang="en" dir="ltr" title1="divTitle1"
-        style="width: 200px;" onclick="clickEvent">100</div>
+        style="width: 200px;" onclick="clickEvent()">100</div>
     
     <script>
         const div = document.getElementById('myDiv');
@@ -126,10 +126,11 @@
           由于存在这些差别, 在通过 JavaScript 以编程方式操作 DOM 时, 
           开发人员经常不使用 `getAttribute()`, 而是只使用对象的属性. 
           只有在取得自定义特性值的情况下, 才会使用 `getAttribute()` 方法.
+          
           ```js
             // - `div.onclick` 输出上面定义的 clickEvent 函数. 
-            console.log('div.onclick: ', div.onclick);
-
+  console.log('div.onclick: ', div.onclick);
+          
             console.log(div.getAttribute('onclick'));   // "clickEvent()"
           ```
 - (3) 我们也可以使用 `attributes` 属性来取得元素上的所有特性:
