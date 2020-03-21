@@ -1,6 +1,5 @@
 # Understanding-ECMAScript-6---study
-- Github 英文仓库地址: [understandinges6](https://github.com/nzakas/
-understandinges6/tree/master/manuscript)
+- Github 英文仓库地址: [understandinges6](https://github.com/nzakas/understandinges6/tree/master/manuscript)
 
 - 中译本《深入理解 ES6》 
     + [美] Nicholas C. Zakas (著).

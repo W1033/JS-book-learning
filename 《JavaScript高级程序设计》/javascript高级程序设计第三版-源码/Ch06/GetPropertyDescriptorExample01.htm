@@ -17,7 +17,7 @@
 
             year: {
                 get: function () {
-                    return this._year;
+                    return this._year.value;
                 },
 
                 set: function (newValue) {
@@ -30,14 +30,14 @@
         });
 
         var descriptor = Object.getOwnPropertyDescriptor(book, "_year");
-        alert(descriptor.value);          //2004
-        alert(descriptor.configurable);   //false
-        alert(typeof descriptor.get);     //"undefined"
+        console.log(descriptor.value);          //2004
+        console.log(descriptor.configurable);   //false
+        console.log(typeof descriptor.get);     //"undefined"
 
         var descriptor = Object.getOwnPropertyDescriptor(book, "year");
-        alert(descriptor.value);          //undefined
-        alert(descriptor.enumerable);     //false
-        alert(typeof descriptor.get);     //"function"
+        console.log(descriptor.value);          //undefined
+        console.log(descriptor.enumerable);     //false
+        console.log(typeof descriptor.get);     //"function"
 
 
     </script>

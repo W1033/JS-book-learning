@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="myDiv" class="bd" title="my div element"
+        lang="en" dir="ltr" title1="divTitle1"
+        style="width: 200px;" onclick="clickEvent()">
+        100
+    </div>
+    
+    <script>
+        const div = document.getElementById('myDiv');
+
+        function clickEvent() {
+            console.log('你触发了点击事件')
+        }
+        
+        // - 注意使用获取元素属性的方法, 不能取到我们自定义的`特性`(title1)值
+        console.log(div.title1);                    // undefined
+
+        console.log(div.getAttribute('title1'));    // "divTitle1"
+        
+  
+        console.log('div.style: ', div.style);
+        console.log(div.getAttribute('style'));  // "width: 200px;"
+
+
+        // - `div.onclick` 输出上面定义的 clickEvent 函数. 
+        console.log('div.onclick: ', div.onclick);
+
+        console.log(div.getAttribute('onclick'));   // "clickEvent()"
+
+        
+        // - (2) 接着我们使用获取元素特性的方式来取得元素上的所有特性
+        // {0: id, 1: class, 2: lang, 4: dir, 5: title1, 6: style,
+        //  7: onclick, id: id, class: class, title: title, lang: lang,
+        //  dir: dir, title1: title1}
+        console.log(div.attributes);
+    
+    </script>
+
+    <script>
+        var book = {
+            _year: 2004,
+            edition: 1
+        };
+        Object.defineProperty(book, "year", {
+            get: function(){
+                return this._year;
+            },
+            set: function(newValue){
+                if (newValue > 2004) {
+                    this._year = newValue;
+                    this.edition += newValue - 2004;
+                }
+            }
+        });
+
+        // console.log(book.year);     // 2004
+
+        book.year = 2005;
+        // console.log(book.edition);  // 2
+    </script>
+</body>
+</html>

@@ -98,9 +98,9 @@
       最准确也是你最应首选的检测方式。  
 
 ### 6.2 Symbol 的使用方法
-- 所有使用可计算属性名的地方, 都可以使用 Symbol. 前面我们看到的都是在括号中使用 
-  Symbol, 事实上, Symbol 也可以用于计算对象字面量属性名, Object.defineProperty()
-  方法和 Object.defineProperties() 方法的调用过程中.
+- 所有使用可计算属性名的地方, 都可以使用 `Symbol`. 前面我们看到的都是在括号中使用 
+  `Symbol`, 事实上, `Symbol` 也可以用于计算对象字面量属性名,
+  `Object.defineProperty()` 方法和 `Object.defineProperties()` 方法的调用过程中.
   ```js
     let firstName = Symbol('first name');
     // - 使用一个可计算对象字面量属性
