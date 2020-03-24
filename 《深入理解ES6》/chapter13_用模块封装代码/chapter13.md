@@ -179,7 +179,7 @@
             name: "app",
             welcome() {
                 return {
-                    msg: "Welcome to Your Vue.js App"
+                    msg: "Welcome to Your 01-Vue.js App"
                 }
             }
         }
