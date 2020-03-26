@@ -313,7 +313,7 @@
   方法, 可以取得给定属性的描述符. 这个方法接收两个参数:
     + 属性所在的对象;
     + 和要读取其描述符的属性名称.
-    
+  
   返回值是一个对象, 如果是访问器属性, 这个对象的属性有 `configurable`, `enumerable`,
   `get` 和 `set`; 如果是数据属性, 这个对象的属性有 `configurable`, `enumerable`,
   `writable` 和 `value`. 例如:
@@ -353,9 +353,102 @@
 #### 6.2.1 工厂模式
 #### 6.2.2 构造函数模式
 #### 6.2.3 原型模式
-- 使用 hasOwnProperty() 方法可以检测一个属性是存在于实例中, 还是存在于原型中. 这个方法
-  (不要忘了它是从 Object 继承来的) 只在给定属性存在于对象实例中时, 才会返回 true . 
-  ```javascript
+- 我们创建的每个函数都有一个 `prototype`(原型)属性, 这个属性是一个指针, 指向一个对象, 
+  而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法. 如果按照字面意思来理解,
+  那么 `prototype` 就是通过调用构造函数而创建的那个对象实例的原型对象.
+  使用原型对象的好处是可以让所有对象实例共享它所包含的属性和方法. 换句话说,
+  不必在构造函数中定义对象实例的信息, 而是可以将这些信息直接添加到原型对象中,
+  如下面的例子所示. 
+- (1) **理解原型对象**
+    + <img src="../../images/prototype-image.png" 
+        style="width: 90%; margin-left:0; border: 1px solid #ccc;">
+- (2) **原型与 `in` 操作符**
+    + 有 2 种方式使用 `in` 操作符: (1)单独使用, (2) 在 `for-in` 循环中使用.
+      在单独使用时, `in` 操作符会在通过对象能够访问给定属性时返回 `true`,
+      无论该属性存在于实例中还是原型中. 看一看下面的例子:
+      ```js
+        function Person() {}
+        Person.prototype.name = "Nicholas";
+        Person.prototype.age = 29;
+        Person.prototype.job = "Software Engineer";
+        Person.prototype.sayName = function(){
+            console.log(this.name);
+        };
+        var person1 = new Person();
+        var person2 = new Person();
+
+        console.log(person1.hasOwnProperty("name"));    // false
+        console.log("name" in person1);                 // true
+        person1.name = "Greg";
+        console.log(person1.name);          // "Greg" —— 来自实例
+        console.log(person1.hasOwnProperty("name"));    // true
+        console.log("name" in person1);                 // true
+        console.log(person2.name);          // "Nicholas" —— 来自原型
+        console.log(person2.hasOwnProperty("name"));    // false
+        console.log("name" in person2);                 // true
+        delete person1.name;
+        console.log(person1.name);          // "Nicholas" —— 来自原型
+        console.log(person1.hasOwnProperty("name"));    // false
+        console.log("name" in person1);                 // true
+      ```
+- (3) **更简单的原型语法**
+    + ```js
+        function Person(){}
+        Person.prototype = {
+            name : "Nicholas",
+            age : 29,
+            job: "Software Engineer",
+            sayName : function () {
+                console.log(this.name);
+            }
+        };
+      ```
+- (4) **原型的动态性**
+    + <img src="../../images/6.3.1-原型链图.png" 
+        style="width: 90%; margin-left:0; border: 1px solid #ccc;">
+- (5) **原生对象的原型**
+    + 原型模式的重要性不仅体现在创建自定义类型方面, 就连所有原生的引用类型,
+      都是采用这种模式创建的. 所有原生引用类型(`Object`, `Array`, `String`等等)
+      都在其构造函数的原型上定义了方法. 例如, 在 `Array.prototype`
+      中可以找到 `sort()` 方法, 而在 `String.prototype` 中可以找到
+      `substring()` 方法, 如下所示: 
+      ```js
+        console.log(typeof Array.prototype.sort);       // "function"
+        console.log(typeof String.prototype.substring); // "function"
+      ```
+- (6) **原型对象的问题**
+    + 原型模式也不是没有缺点. 首先, 它省略了为构造函数传递初始化参数这一环节,
+      结果所有实例在默认情况下都将取得相同的属性值. 虽然这会在某种程度上带来一些不方便,
+      但还不是原型的最大问题. **原型模式的最大问题是由其共享的本性所导致的**. 
+      
+      **原型中所有属性是被很多实例共享的**, 这种共享对于函数非常合适.
+      对于那些包含基本值的属性倒也说得过去, 毕竟(如前面的例子所示),
+      通过在实例上添加一个同名属性, 可以隐藏原型中的对应属性. 然而,
+      对于包含引用类型值的属性来说, 问题就比较突出了. 来看下面的例子:
+      ```js
+        function Person(){}
+        Person.prototype = {
+            constructor: Person,
+            name : "Nicholas",
+            age : 29,
+            job : "Software Engineer",
+            friends : ["Shelby", "Court"],
+            sayName : function () {
+                console.log(this.name);
+            }
+        };
+        var person1 = new Person();
+        var person2 = new Person();
+        person1.friends.push("Van");
+        console.log(person1.friends);           // "Shelby,Court,Van"
+        console.log(person2.friends);           // "Shelby,Court,Van"
+        console.log(person1.friends === person2.friends); // true
+      ```
+
+- 使用 `hasOwnProperty()`(是否含有此属性) 方法可以检测一个属性是存在于实例中,
+  还是存在于原型中.这个方法(不要忘了它是从 `Object` 继承来的)
+  只在给定属性存在于对象实例中时, 才会返回 true. 
+  ```js
     function Person() {}
     Person.prototype.name = "Nicholas";
     Person.prototype.age = 29;
@@ -374,6 +467,31 @@
     console.log(person1.hasOwnProperty("name")); // true    
   ```
 #### 6.2.4 组合使用构造函数模式和原型模式
+- 创建自定义类型的最常见方式, 就是组合使用构造函数模式与原型模式.
+  **构造函数模式用于定义实例属性, 而原型模式用于定义方法和共享的属性. 结果,
+  每个实例都会有自己的一份实例属性的副本, 但同时又共享着对方法的引用,
+  最大限度地节省了内存.** 另外, 这种混合模式还支持向构造函数传递参数;
+  可谓是集两种模式之长. 下面的代码重写了前面的例子. 
+  ```js
+    // - 构造函数模式用于定义实例属性
+    function Person(name, age, job) {
+        this.name = name;
+        this.age = age;
+        this.job = job;
+        this.friends = ['Shelby', 'Court'];
+    }
+    // - 原型模式用于定义方法和共享的属性
+    Person.prototype.sayName = function(){
+        console.log(this.name);
+    };
+    var person1 = new Person("Nicholas", 29, "Software Engineer");
+    var person2 = new Person("Greg", 27, "Doctor");
+    person1.friends.push("Van");
+    console.log(person1.friends);       // "Shelby,Count,Van"
+    console.log(person2.friends);       // "Shelby,Count"
+    console.log(person1.friends === person2.friends); // false
+    console.log(person1.sayName === person2.sayName); // true
+  ```
 #### 6.2.5 动态原型模式
 #### 6.2.6 寄生构造函数模式
 #### 6.2.7 稳妥构造函数模式

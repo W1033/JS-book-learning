@@ -1,9 +1,9 @@
 ## JS 原型图输出
 - 参考图片为: <br/>
-  <img src="./images/JS-原型图.png" 
-        style="width: 70%; margin-left:0; border: 1px solid #ccc;">
+  <img src="./images/prototype-image.png" 
+        style="width: 90%; margin-left:0; border: 1px solid #ccc;">
   <img src="./images/6.3.1-原型链图.png" 
-        style="width: 76%; margin-left:0; border: 1px solid #ccc;">
+        style="width: 90%; margin-left:0; border: 1px solid #ccc;">
 
 - ```javascript
     console.log(Object.prototype.__proto__);    // null

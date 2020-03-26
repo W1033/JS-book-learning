@@ -41,8 +41,8 @@
 ### 2. 对比 `通过对象属性访问特性` 和 使用 `getAttribute` 获取元素 `特性` 的异同.
 - 在 《JavaScript高级程序设计》第 10 章的 `P264` 页, 这样写到:
     + 每个元素都有一或多个特性, 这些特性的用途是给出相应元素或其内容的附加信息.
-      操作特性的 DOM 方法主要有 3 个: `getAttribute()`, `setAttribute`,
-      和 `removeAttribute`. 这些方法可以针对任何特性使用, 包括那些以 HTMLElment
+      操作特性的 DOM 方法主要有 3 个: `getAttribute()`, `setAttribute()`,
+      和 `removeAttribute()`. 这些方法可以针对任何特性使用, 包括那些以 HTMLElment
       类型属性的形式定义的特性.
 - 我们通过下面的示例, 来讲解特性和属性的异同:
   ```html
@@ -132,7 +132,7 @@
   console.log('div.onclick: ', div.onclick);
           
             console.log(div.getAttribute('onclick'));   // "clickEvent()"
-          ```
+        ```
 - (3) 我们也可以使用 `attributes` 属性来取得元素上的所有特性:
   ```js
     // {0: id, 1: class, 2: lang, 4: dir, 5: title1, 6: style,

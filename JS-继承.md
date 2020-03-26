@@ -13,7 +13,7 @@
 - Node.js 中实现继承是通过 ES6 中添加的 `Object.setPrototypeOf()` 方法来实现的,此
   方法在: `《深入理解ES6》/chapter04_扩展对象的功能性/chapter04-扩展对象的功能性.md`
   和 `《深入理解ES6》/A_Other-Change.md` 中都有讲到方法,但这两处讲的都是给通过给
-  `Object.create(obj)` 方法创建的对象更该原型, 示例代码见各自文档.
+  `Object.create(obj)` 方法创建的对象更改原型, 示例代码见各自文档.
 - Node.js 代码如下: 
   ```js
     // - events 模块
