@@ -45,7 +45,7 @@
     console.log(type);
     console.log(name);
   ```
-  在这段代码中, `node.type` 的值被存储在名为 `type` 的变量中; `node.mname`
+  在这段代码中, `node.type` 的值被存储在名为 `type` 的变量中; `node.name`
   的值被存储在名为 `name` 的变量中. 此处的语法与第 4 
   章中对象字面量属性初始化的简写语法相同, `type` 和 `name` 都是局部声明的变量,
   也是用来从 `options` 对象读取相应值的属性名称.
@@ -61,7 +61,7 @@
         // - 语法错误
         const {type, name};
       ```
-    + 如果不使用结构功能, `var` 和 `let` 不需要初始化值, 但是 `const` (constant)
+    + 如果不使用解构功能, `var` 和 `let` 不需要初始化值, 但是 `const` (constant)
       是无论如何都要提供初始化程序.
 #### 5.2.1 对象解构赋值
 - 上面我们经将对象解构应用到了变量的声明中. 我们同样可以在给变量赋值时使用解构语法.
