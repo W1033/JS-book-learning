@@ -1,7 +1,10 @@
-## JS 原型图输出
+## JS 原型图
+> [待看文章](https://ulivz.com/2016/12/20/javascript-prototype/)
+
 - 参考图片为: <br/>
   <img src="./images/prototype-image.png" 
         style="width: 90%; margin-left:0; border: 1px solid #ccc;">
+
   <img src="./images/6.3.1-原型链图.png" 
         style="width: 90%; margin-left:0; border: 1px solid #ccc;">
 
