@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="box"></div>
+
+    <script>
+        console.log(Object.prototype.__proto__);    // null
+
+        if (Object.__proto__ === Function.prototype) {
+            // Object.__proto__  = Function.prototype: true
+            console.log('Object.__proto__  = Function.prototype:', true);
+        }
+
+        // - Note: Function.prototype.__proto__ 指向 Object.prototype.
+        if (Function.prototype.__proto__ === Object.prototype) {
+            console.log(true);  // true
+        }
+    </script>
+</body>
+</html>
