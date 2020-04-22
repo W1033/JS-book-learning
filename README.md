@@ -133,7 +133,7 @@
 
 
 #### 1.10 JSON 对象有两个方法: `JSON.stringify()` 和 `JSON.parse()`
-- `JSON.stringify()`: 把JavaScript对象序列化为 JSON 字符串
+- `JSON.stringify()`: 把 JS 对象序列化为 JSON 字符串
   ```js
     let book = {
         title: 'Professional JavaScript',
@@ -145,7 +145,7 @@
     //  "edition":3,"year":2011}
     let jsonText = JSON.stringify(book);
   ```
-- `JSON.parse()`: 把 JSON 字符串解析为原生 JavaScript 值. 
+- `JSON.parse()`: 把 JSON 字符串解析为原生 JS 值. 
 
 
 #### 1.11 "标准的"对象和函数 
