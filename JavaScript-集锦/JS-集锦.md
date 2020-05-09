@@ -6,6 +6,7 @@
 2. `svg-autocrop`
 3. "引用类型" 和 "类" 的区别?
 4. 字符串(String) 和 数组(Array) 的 `indexOf()` 和 `includes()` 方法
+5. `requestAnimationFrame` 介绍
 
 
 ## 生词(New Words)
@@ -13,7 +14,7 @@
 
 
 ## 内容(Content)
-### `setTimeout()` 第三个参数:
+### 1.`setTimeout()` 第三个参数:
 - `setTimeout(function, delay, parameter1, parameter2)` 第 3 个参数及以后的参数
   都可以作为 function 函数的参数. 举个例子:
   ```javascript
@@ -23,10 +24,10 @@
     setTimeout(a, 1000, 2, 3);
   ```
 
-### `svg-autocrop`一个 NPM 模块，用于自动裁剪和缩小 SVG。 
+### 2. `svg-autocrop`一个 NPM 模块, 用于自动裁剪和缩小 SVG.  
 
 
-### "引用类型" 和 "类" 的区别?
+### 3. "引用类型" 和 "类" 的区别?
 - 引用类型(Reference type): 引用类型是由 类型的实际值引用 (类似于指针)
   表示的数据类型. 如果为某个变量分配一个引用类型, 则该变量将引用(或 "指向") 原始值. 
   不创建任何副本. 引用类型包括: `类`, `接口`, `委托` 和 `装箱值类型`.
@@ -80,4 +81,41 @@
         console.log(ary1.indexOf(NaN)); // -1
         console.log(ary1.includes(NaN)) // true
       ```
-                
+
+### 5. `requestAnimationFrame` 介绍
+- 与 `setTimeout` 相比, `requestAnimationFrame`
+  最大的优势是由系统来决定回调函数的执行时机. 具体一点讲,
+  如果屏幕刷新率是 60Hz, 那么回调函数就每 16.7ms 被执行一次, 如果刷新率是 75Hz,
+  那么这个时间间隔就变成了 1000 / 75 = 13.3ms, 换句话说就是,
+  `requestAnimationFrame` 的步伐跟着系统的刷新步伐走.
+  它能保证回调函数在屏幕每一次的刷新间隔中只被执行一次, 这样就不会引起丢帧现象,
+  也不会导致动画出现卡顿的问题. 
+  
+  这个API的调用很简单, 如下所示: 递归调用
+  ```js
+    var progress = 0;
+    // - 回调函数
+    function render() {
+        // - 更新元素的样式属性
+        // ...
+        progress += 1; 
+        if (progress < 100) {
+            // - 在动画没有结束前, 递归渲染
+            window.requestAnimationFrame(render);
+        }
+    }
+    //第一帧渲染
+    window.requestAnimationFrame(render);
+  ```
+- 除此之外, requestAnimationFrame还有以下两个优势: 
+    + (1) CPU 节能: 使用 setTimeout 实现的动画, 当页面被隐藏或最小化时,
+      setTimeout 仍然在后台执行动画任务, 由于此时页面处于不可见或不可用状态,
+      刷新动画是没有意义的, 完全是浪费 CPU 资源. 而 requestAnimationFrame
+      则完全不同, 当页面处理未激活的状态下, 该页面的屏幕刷新任务也会被系统暂停,
+      因此跟着系统步伐走的 requestAnimationFrame 也会停止渲染,
+      当页面被激活时, 动画就从上次停留的地方继续执行, 有效节省了 CPU 开销. 
+    + (2) 函数节流: 在高频率事件(resize, scroll等)中,
+      为了防止在一个刷新间隔内发生多次函数执行, 使用 requestAnimationFrame
+      可保证每个刷新间隔内, 函数只被执行一次, 这样既能保证流畅性,
+      也能更好的节省函数执行的开销. 一个刷新间隔内函数执行多次时没有意义的,
+      因为显示器每 16.7ms 刷新一次, 多次绘制并不会在屏幕上体现出来. 

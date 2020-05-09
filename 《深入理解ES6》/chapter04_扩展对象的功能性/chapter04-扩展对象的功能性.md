@@ -132,9 +132,9 @@
             return receiver;
         }
       ```
-      mixin() 函数遍历 supplier 的自由属性并复制到 receiver 中 (此处的复制行为是浅
-      复制, 当属性值为对象时只复制对象的引用). 这样一来, receiver 不通过继承就可以获得
-      新属性, 请参考这段代码:
+      mixin() 函数遍历 supplier 的自有属性并复制到 receiver 中
+      (此处的复制行为是浅复制, 当属性值为对象时只复制对象的引用). 这样一来,
+      receiver 不通过继承就可以获得新属性, 请参考这段代码:
       ```javascript
         function EventTarget() { // ... };
         EventTarget.prototype = {

@@ -185,7 +185,9 @@
                         //   并且重绘或回流的事件间隔紧紧跟随浏览器的刷新频率, 一般来说,
                         //   这个频率为每秒 60 帧(1s = 1000ms. 1fps =  60fps / 1000
                         //   = 60ms). 但在大多数遵循 W3C 建议的浏览器中,
-                        //   回调函数执行次数通常与浏览器屏幕刷新次数相匹配. 
+                        //   回调函数执行次数通常与浏览器屏幕刷新次数相匹配.
+                        // - 更多 `requestAnimationFrame` 的介绍见:
+                        //   `../JavaScript-集锦/JS-集锦.md`    
                         raf(function() {
                             box.classList.remove('v-leave');
                             box.classList.add('v-leave-to');
