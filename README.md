@@ -133,8 +133,8 @@
 
 
 #### 1.10 JSON 对象有两个方法: `JSON.stringify()` 和 `JSON.parse()`
-- `JSON.stringify()`: 把 JS 对象序列化为 JSON 字符串
-  ```js
+##### `JSON.stringify()`: 把 JS 对象序列化为 JSON 字符串
+- ```js
     let book = {
         title: 'Professional JavaScript',
         authors: ['Nicholas C. Zakas'],
@@ -145,7 +145,18 @@
     //  "edition":3,"year":2011}
     let jsonText = JSON.stringify(book);
   ```
-- `JSON.parse()`: 把 JSON 字符串解析为原生 JS 值. 
+- 如果在使用 `JSON.parse()` 转换一个字符串时在浏览器中报这个错误: 
+
+  <i style="color: red">
+    Uncaught SyntaxError(未捕获的语法错误): Unexpected token o in JSON at
+    position 1 (JSON 位置 1 处的令牌 o)
+  </i>
+
+  表明,当前数据已经是对象了, 不需要再次转换. 这个错误实际上是 `[object Object]` 内的 `o`
+
+  > ? 待做笔记: [深入理解JSON.stringify()](https://juejin.im/post/5e8c9153f265da48094d90f2)
+
+###### `JSON.parse()`: 把 JSON 字符串解析为原生 JS 值. 
 
 
 #### 1.11 "标准的"对象和函数 
