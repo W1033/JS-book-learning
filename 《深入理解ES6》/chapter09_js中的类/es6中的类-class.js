@@ -126,7 +126,7 @@ console.log(factorial(4));      // 24
 //   命名类表达式通过 const 定义名称，从而 PersonClass33 只能在类的内部使用
 let PersonCla3 = class PersonClass33 {
     // 等價于 PersonType 構造函數
-    consturctor(name) {
+    constructor(name) {
         this.name = name;
     }
     // 等價于 PersonType.prototype.sayName
