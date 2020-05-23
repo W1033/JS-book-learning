@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数节流</title>
+    <style>
+        * {
+            margin: 0; padding: 0; list-style:none;
+        }
+        #wrapper{
+            width: 80%; height: 200px; line-height: 200px;
+            text-align: center;color: #fff;
+            margin: 20px auto; border-radius: 10px;
+            background-color: #444;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper"></div>
+
+    <script type="text/javascript">
+    // 代码来自: 《JavaScript 设计模式与开发实践》
+    // fn: 需要被延迟执行的函数引用。 wait: 延迟调用的时间
+    function throttle(fn, wait) {
+        // 定时器 (超时调用id)
+        let timer;
+        // 是否是第一次调用
+        let firstTime = true;
+        return function() {
+            let args = arguments;
+            console.log("arguments: ", args);
+            let context = this;
+            // 如果是第一次调用不需要延迟执行
+            if (firstTime) {
+                fn.apply(context, args);
+                return firstTime = false;
+            }
+            // 如果定时器还在，说明前一次延迟执行还没有完成
+            if (timer) return;
+
+            // 延迟一段时间执行
+            timer = setTimeout(function() {
+                // 首先清楚超时调用内 id
+                clearTimeout(timer);
+                timer = null;
+                fn.apply(context, args);
+            }, wait || 500);
+            console.log("timer: ", timer);
+        };
+    }
+
+    let i = 0;
+    window.addEventListener("resize", throttle(function() {
+        console.log("i++: ", i++);
+    }, 500), false)
+</script>
+</body>
+</html>
