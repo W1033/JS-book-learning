@@ -1,11 +1,37 @@
 # JS-book-learning
 
-- 《JS高级程序设计》
-  《深入理解ES6》
-  《JS设计模式与编程实践》
 
-- 学编程有没有必要做笔记? A: 十分肯定, 一定要做!
-  (tip: 编程书看第一遍时可以拿笔在书上划重点, 但一定不要做笔记.)
+## Repository Directory(当前仓库目录)
+
+- 《深入理解ES6》
+- 《深入理解JavaScript系列》--汤姆大叔
+- 《JavaScript高级程序设计》
+- 《JavaScript设计模式与编程实践》
+- 《Web性能权威指南》
+- 浏览器组成和执行原理
+- JavaScript知识集合
+    + 01-函数节流和防抖
+    + 02-深拷贝-浅拷贝
+    + 重学前端-winter 
+    + JavaScript-集锦
+    + Github_fe-interview_仓库笔记
+    + JavaScript-集锦
+    + Javascript掘金小册
+    + 详解执行栈-WebAPI-任务队列-事件循环.md
+    + JS-继承.md
+    + JS-原型图讲解.md
+
+
+> 学编程有没有必要做笔记?
+    + A: 十分肯定, 一定要做!
+      (tip: 编程书第一遍看时, 可以拿笔在书上划重点, 但一定不要做笔记.)
+
+
+
+
+------
+------
+
 
 
 ## Table Of Contents

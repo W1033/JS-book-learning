@@ -147,7 +147,7 @@
   
   ```js
     var person = {};
-    Object.defineProerty(person, 'name', {
+    Object.defineProperty(person, 'name', {
         writable: false,
         value: 'Nicholas'
     });

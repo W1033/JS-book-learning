@@ -172,6 +172,41 @@
 
 ### 3.3 增强的 Function 构造函数
 
+### 3.0 添加的知识来自`《JavaScript编程思想从ES5到ES9》`
+#### ES6 扩展运算符 (spread operator)
+- `...`(扩展运算符 spread operator): 可以用来 '卸除' 特定数组的中括号或特定对象的大括号。
+  ```javascript
+    let obj01 = {name01: 'orange', amount01: 10};
+    let obj02 = {name02: 'blueberry', amount02: 5, origin: 'Thai'};
+    // 使用 扩展运算符 把 obj01 和 obj02 对象合并
+    let obj03 = {...obj01, ...obj02};
+    //obj03:  {
+    //   name01: 'orange',
+    //   amount01: 10,
+    //   name02: 'blueberry',
+    //   amount02: 5,
+    //   origin: 'Thai'
+    // }
+    // Notice: 这里 name01 和 name02 不重名，如果两个对象中存在名称相同的属性只会保留第二个。
+    console.log('obj03: ', obj03);
+
+    let greeting = ['Hi', 'Howdy', 'Hey, man', 'G\'day mate'];
+    let extended_greeting = ['Long time no see', 'Nice to meet you', 'Hiya', 
+        ...greeting];
+    // [
+    //   'Long time no see',
+    //   'Nice to meet you',
+    //   'Hiya',
+    //   'Hi',
+    //   'Howdy',
+    //   'Hey, man',
+    //   "G'day mate"
+    // ]
+    console.log(extended_greeting);
+    console.log('');
+  ```
+
+
 ### 3.4 扩展运算符 / 展开运算符
 - 与神域参数关系最密切的就是扩展运算符. 剩余参数允许你把多个独立的参数河滨到一个数组总;
   而扩展运算符则允许将一个数组分割, 并将各个项作为分离的参数传给函数. 
