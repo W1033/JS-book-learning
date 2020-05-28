@@ -5,17 +5,12 @@ incrementally and reviewing all of its major design decisions.  This is
 intended to leave the reader at liberty to experiment with variations
 of this implementation that suit their own requirements, without missing
 any important details.
-该文档试图解释 promises 是如何工作的, 以及为什么这个工程实现其特定的方式是通过增量的构建一个
-promise 库, 并且可以回顾所有的主要设计版本. 这旨在让读者自由尝试适合自己需求的此实现的变体,
-并且不会漏掉任何重要的细节.
 
 ---
 
 Suppose that you're writing a function that can't return a value immediately.
 The most obvious API is to forward the eventual value to a callback as an
 argument instead of returning the value.
-最明显的 API 是将最终值作为参数转发给回调，而不是返回该值。
-
 
 ```javascript
 var oneOneSecondLater = function (callback) {
@@ -25,11 +20,10 @@ var oneOneSecondLater = function (callback) {
 };
 ```
 
-This is a very simple solution to a trivial problem, but there is a lot of room
+This is a very simple solution to a trival problem, but there is a lot of room
 for improvement.
-这是一个琐碎问题的非常简单的解决方案, 但是仍然有很大的改进空间.
 
-A more general solution would provide analogous(类似的) tools for both return values
+A more general solution would provide analogous tools for both return values
 and thrown exceptions.  There are several obvious ways to extend the callback
 pattern to handle exceptions.  One is to provide both a callback and an
 errback.
@@ -53,17 +47,13 @@ purpose of exceptions and try/catch blocks is to postpone the explicit
 handling of exceptions until the program has returned to a point where it
 makes sense to attempt to recover.  There needs to be some mechanism for
 implicitly propagating exceptions if they are not handled.
-还有其他方法，可以根据位置或明显的哨兵值将错误作为回调的参数提供。
-但是，这些方法都没有实际模拟抛出的异常。
-异常和try / catch块的目的是推迟对异常的显式处理，直到程序返回到可以尝试恢复的地步为止。
-如果没有处理异常，则需要某种机制来隐式传播异常。
 
 Promises
 ========
 
 Consider a more general approach, where instead of returning values or
 throwing exceptions, functions return an object that represents the eventual
-result of the function, either successful or failed.  This object is a promise,
+result of the function, either sucessful or failed.  This object is a promise,
 both figuratively and by name, to eventually resolve.  We can call a function
 on the promise to observe either its fulfillment or rejection.  If the promise
 is rejected and the rejection is not explicitly observed, any derrived

@@ -119,3 +119,33 @@
       可保证每个刷新间隔内, 函数只被执行一次, 这样既能保证流畅性,
       也能更好的节省函数执行的开销. 一个刷新间隔内函数执行多次时没有意义的,
       因为显示器每 16.7ms 刷新一次, 多次绘制并不会在屏幕上体现出来. 
+
+### 6. 不用原生的 `Number()` 和 `parseInt()`，用 JS 实现 String 到 Number
+- tip: 这个问题来自 `winter` 老师的提问, 下面是他自己给出的答案
+  ```js
+    function atoi(a) {
+        let chars = a.split('').map(
+            // - `charCodeAt(num)`: 返回给定位置的字符编码.
+            e => e.charCodeAt(0) - '0'.charCodeAt(0);
+        );
+        let n = 0;
+        for (var char of chars) {
+            n *= 10;
+            n += char;
+        }
+        return n;
+    }
+    atoi('1001')
+  ```
+
+### 7. `MutationObserver` 是什么?
+- 它是 HTML5 中的新特性, 作用是监听一个 DOM 变动, 当 DOM 对象树发生任何变动时,
+  `Mutation Observer` 会得到通知. `MutationObserver` 是旧的 DOM3
+  事件规范 Mutation Events 特性的一个替换.
+  
+  **在 DOM 事件触发的时候, 会触发 Mutation Observer 中传入的 callback.**
+
+  DOM 监听是不会立刻开始的, 必须调用 `observer()` 方法才能监听.
+
+  MutationObserver 可以用来实现 micro-task (它属于 micro-task,
+  优先级小于Promise, 一般是 Promise 不支持时才会这样做.

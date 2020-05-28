@@ -47,7 +47,9 @@
     variable = boolean_expression ? true_value : false_value;
   ```
   本质上，这行代码的含义就是基于对 `boolean_expression` 求值的结果，
-  决定给变量 `variable` 赋什么值。如果求值结果为 `true`，则给变量 `variable` 赋 `true_value` 值；如果求值结果为 `false`，则给变量 `variable` 赋 `false_value`
+  决定给变量 `variable` 赋什么值。如果求值结果为 `true`，则给变量
+  `variable` 赋 `true_value` 值；如果求值结果为 `false`，则给变量
+  `variable` 赋 `false_value`
   值。再看一个例子:
   ```js
     var max = (num1 > num2) ? num1 : num2;
@@ -89,6 +91,6 @@ break 和 continue 语句用于在循环中精确地控制代码的执行。
 
 ### 3.7 函数 
 #### 3.7.1 理解参数
-- 其实，arguments 对象只是与数组类似 (它并不是 Array 的实例)，因为可以使用方括号语法访问
-  它的每一个元素 (arguments[0]、arguments[1]), 使用 length 属性来确定传递进来多少个
-  参数。
+- 其实，arguments 对象只是与数组类似 (它并不是 Array 的实例),
+  因为可以使用方括号语法访问它的每一个元素 (arguments[0]、arguments[1]), 
+  使用 length 属性来确定传递进来多少个参数。

@@ -100,7 +100,7 @@ this.content = '第三次测试'
 
 Vue 每次想要更新一个状态的时候，会先把它这个更新操作给包装成一个异步操作派发出去。这件事情，在源码中是由一个叫做 nextTick 的函数来完成的：
 
-```
+```js
 export function nextTick (cb?: Function, ctx?: Object) {
   let _resolve
   callbacks.push(() => {
@@ -142,7 +142,7 @@ export function nextTick (cb?: Function, ctx?: Object) {
 
 macroTimeFunc() 是这么实现的：
 
-```
+```js
 // macro首选setImmediate 这个兼容性最差
 if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
   macroTimerFunc = () => {
@@ -170,7 +170,7 @@ if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
 
 microTimeFunc() 是这么实现的：
 
-```
+```js
 // 简单粗暴 不是ios全都给我去Promise 如果不兼容promise 那么你只能将就一下变成macro了
 if (typeof Promise !== 'undefined' && isNative(Promise)) {
   const p = Promise.resolve()
@@ -194,7 +194,7 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
 
 flushCallbacks 源码如下：
 
-```
+```js
 function flushCallbacks () {
   pending = false
   // callbacks在nextick中出现过 它是任务数组（队列）
