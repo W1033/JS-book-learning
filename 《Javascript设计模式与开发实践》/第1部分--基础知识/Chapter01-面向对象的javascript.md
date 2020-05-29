@@ -664,7 +664,7 @@
     + `Tip02`: JavaScript 是通过克隆 `Object.prototype` 来得到新的对象, 
       但实际上并不是每次都真正地克隆了一个新的对象.  从内存方面的考虑出发, 
       JavaScript 还做了一些额外的处理, 具体细节可以参阅周爱民老师编著的
-      《JavaScript 语言精髓与编程实践》. 这里不做深入讨论, 
+      《JavaScript 语言精髓与开发实践》. 这里不做深入讨论, 
       我们暂且把创建对象的过程看成完完全全的克隆. 
 
   在 Chrome 和 Firefox 等向外暴露了 `__proto__` 属性的浏览器下,
@@ -685,7 +685,10 @@
         // - (2) 取得外部传入的构造器, 此例是 Person.
         var Constructor = [].shift.call(arguments);
 
-        // - (3) 把传入的构造器的原型指向正确的原型
+        // - (3) 执行正确的原型.
+        // - tip: 我们根据 "JavaScript 原型图"(见下 "图(1)") 可以看出,
+        //   obj.__proto__ 会指向它的构造函数的原型(Object.prototype),
+        //   此处把 Constructor.prototype 赋值给 obj.__proto__ 是修正原型指向.
         obj.__proto__ = Constructor.prototype;
 
         // - (4) 借用外部传入的构造器给 obj 设置属性
@@ -706,6 +709,13 @@
     var b = objectFactory(Person, 'sven');
     var bb = new Person('sven');
   ```
+
+  <img src="../../JavaScript知识集合/images-js-knowledge-set/prototype-image.png"
+    style="margin-left: 0; border-radius: 4px; width:90%;
+        box-shadow: 1px 1px 3px 2px #e5e5e5">
+
+  图(-)
+
     + `(A)`: 在 《JavaScript 高级程序设计》内的 6.2.2 构造函数模式中, 
       对于使用 `new` 操作符, 调用创建构造函数的实例时, 是这样解说的:
       要创建 Person 的新实例, 必须使用 `new` 操作符. 

@@ -6,7 +6,7 @@
 - 《深入理解ES6》
 - 《深入理解JavaScript系列》--汤姆大叔
 - 《JavaScript高级程序设计》
-- 《JavaScript设计模式与编程实践》
+- 《JavaScript设计模式与开发实践》
 - 《Web性能权威指南》
 - 浏览器组成和执行原理
 - JavaScript知识集合
@@ -140,7 +140,7 @@
   ```
 
 #### 1.7 关于 js 中 `this` 指向的讲解: 
-- `《Javascript设计模式与编程实践》/第一部分--基础知识/第2章-this_call_apply/第2章--this.md`
+- `《Javascript设计模式与开发实践》/第一部分--基础知识/第2章-this_call_apply/第2章--this.md`
 - 要分清楚 this 和 作用域 Scope 之间的区别, this 是当前对象的指向问题, Scope 是作用域
   (全局作用域 和 本地作用域) 的问题, Scope 讲解见:
     + `《深入理解JavaScript系列》--汤姆大叔/12-1_理解JavaScript的Scope.md`
