@@ -12,14 +12,15 @@
 - JavaScript知识集合
     + 01-函数节流和防抖
     + 02-深拷贝-浅拷贝
-    + 重学前端-winter 
-    + JavaScript-集锦
     + Github_fe-interview_仓库笔记
     + JavaScript-集锦
     + Javascript掘金小册
-    + 详解执行栈-WebAPI-任务队列-事件循环.md
-    + JS-继承.md
+    + 重学前端-winter 
     + JS-原型图讲解.md
+    + JS-继承.md
+    + 浏览器的进程和线程
+    + 详解_执行栈-任务队列-事件循环.md
+    
 
 
 ------
