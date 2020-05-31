@@ -1,4 +1,4 @@
-# JavaScript 集锦
+# JavaScript 知识集合 -- ReadMe
 
 
 ## 目录(Catalog)
@@ -7,6 +7,9 @@
 3. "引用类型" 和 "类" 的区别?
 4. 字符串(String) 和 数组(Array) 的 `indexOf()` 和 `includes()` 方法
 5. `requestAnimationFrame` 介绍
+6. 不用原生的 `Number()` 和 `parseInt()`，用 JS 实现 String 到 Number
+7. `MutationObserver` 是什么?
+8. `Array.prototype.find()` 方法
 
 
 ## 生词(New Words)
@@ -149,3 +152,13 @@
 
   MutationObserver 可以用来实现 micro-task (它属于 micro-task,
   优先级小于Promise, 一般是 Promise 不支持时才会这样做.
+
+
+### 8. `Array.prototype.find()`  方法
+- `Array.prototype.find()` 方法返回数组中满足提供的测试函数的第一个元素的值.
+  否则返回 `undefined`.
+  ```js
+    const ary = [5, 12, 8, 130, 44];
+    const found = ary.find(ele => ele > 10);
+    console.log(found);     // 12
+  ```
