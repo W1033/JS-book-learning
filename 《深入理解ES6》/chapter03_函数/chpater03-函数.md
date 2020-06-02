@@ -90,6 +90,7 @@
   对象的使用方式发生了变化. 研究如下代码: 
   ```js
     // - 非严格模式
+    // - 默认参数值不在 arguments 内
     function mixArgs(first, second = 'b') {
         console.log(arguments.length);          // 1
         console.log(first === arguments[0]);    // true

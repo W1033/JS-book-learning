@@ -1,0 +1,248 @@
+# 第 8 章 -- BOM
+
+
+## Catalog
+- 8.1 window 对象
+    + 8.1.1 全局作用域
+    + 8.1.2 窗口关系及框架
+    + 8.1.3 窗口位置
+    + 8.1.4 窗口大小
+    + 8.1.5 导航和打开窗口
+    + 8.1.6 间歇调用和超时调用
+    + 8.1.7 系统对话框
+- 8.2 location 对象
+    + 8.2.1 查询字符串参数
+    + 8.2.2 位置操作
+- 8.3 navigator 对象
+    + 8.3.1 检测插件
+    + 8.3.2 注册处理程序
+- 8.4 screen 对象
+- 8.5 history 对象
+- 8.6 小结
+
+
+
+
+## New Words
+
+
+
+
+
+## Content
+### 8.1 window 对象
+#### 8.1.1 全局作用域
+#### 8.1.2 窗口关系及框架
+#### 8.1.3 窗口位置
+#### 8.1.4 窗口大小
+#### 8.1.5 导航和打开窗口
+#### 8.1.6 间歇调用和超时调用
+#### 8.1.7 系统对话框
+
+
+### 8.2 location 对象
+- location 对象是最有用的 BOM 对象之一, 它提供了与当前窗口中加载的文档有关的信息,
+  还提供了一些导航功能. 事实上, location 对象是很特别的一个对象, 因为它既是
+  window 对象的属性, 也是 document 对象的属性; 换句话说, `window.location`
+  和 `document.location` 引用的是同一个对象. 
+  
+  location 对象的用处不只表现在它保存着当前文档的信息, 还表现在它将 URL
+  解析为独立的片段, 让开发人员可以通过不同的属性访问这些片段. 下表列出了 location
+  对象的所有属性 (注: 省略了每个属性前面的 location 前缀).
+  
+  | 属性名 | 例子 | 说明 |
+  |:---|:---|:---|
+  | `hash` | "#contents" | 返回 URL 中的 `hash`(`#` 号后跟零或多个字符), 如果 URL 不包含散列, 则返回空字符串.|
+  | `host` | "www.wrox.com:80" | 返回服务器名称和端口号(如果有) |
+  | `hostname(域名)` | "www.wrox.com" | 返回不带端口号的服务器名称 |
+  | `href` | "http:/www.wrox.com" | 返回当前加载页面的完整 URL. 而 location 对象的 `toString()` 方法也返回这个值. |
+  | `pathname` | "/WileyCDA/" | 返回 URL 中的目录和 (或) 文件名 |
+  | `port` | "8080" | 返回 URL 中指定的端口号. 如果 URL 中不包含端口号, 则这个属性返回空字符串 |
+  | `protocol` | "http:" | 返回页面使用的协议. 通常是 http: 或 https: |
+  | `search` |  "?q=javascript&num=10" | 返回 URL 的查询字符串. 这个字符串以问好开头 |
+
+#### 8.2.1 查询字符串参数
+- 虽然通过上面的属性可以访问到 location 对象的大多数信息, 但其中访问 URL
+  包含的查询字符串的属性并不方便. 尽管 `location.search` 返回从问号到 URL
+  末尾的所有内容, 但却没有办法逐个访问其中的每个查询字符串参数. 为此, 
+  可以像下面这样创建一个函数, 用以解析查询字符串, 然后返回包含所有参数的一个对象:
+  ```js
+    function getQueryStrArgs() {
+        // - query string 取得查询字符串并去掉开头的问号 
+        let qs = (location.search.length > 0
+            ? location.search.substring(1) : "");
+        // - 保存数据的对象
+        let args = {};
+
+        // - 保存每一项
+        // - 字符串对象的 split() 方法, 根据指定的分隔符, 把字符串分割为数组.
+        let items = qs.length ? qs.split("&") : [];
+        let item = null;
+        let name = null;
+        let value = null;
+
+        // - 在 for 循环中使用
+        let i = 0,
+            len = items.length;
+        for (; i < len; i++) {
+            item = items[i].splice("=");
+            name = decodeURIComponent(item[0]);
+            value = decodeURIComponent(item[1]);
+            // - 然后把 name 当做 key, value 当做值, 推入到 args 中
+            if (name.length) {
+                args[name] = value;
+            }
+        }
+        // - 最后返回 args
+        return args
+    }
+  ```
+  这个函数的第一步是先去掉查询字符串开头的问号. 当然, 前提是 `location.search`
+  中必须要包含一或多个字符. 然后, 所有参数将被保存在 args 对象中, 
+  该对象以字面量形式创建. 接下来, 根据和号（ &）来分割查询字符串, 并返回
+  name=value 格式的字符串数组. 下面的 for 循环会迭代这个数组, 
+  然后再根据等于号分割每一项, 从而返回第一项为参数名, 第二项为参数值的数组.
+  再使用 `decodeURIComponent()` 分别解码 name 和 value
+  (因为查询字符串应该是被编码过的). 最后, 将 name 作为 args 对象的属性, 
+  将 value 作为相应属性的值. 下面给出了使用这个函数的示例. 
+  ```js
+    // - 假设查询字符串是 ?q=javascript&num=10
+    let args = getQueryStrArgs();
+    console.log(args['q'])      // "javascript"
+    console.log(args["num"])    // "10"
+  ```
+#### 8.2.2 位置操作
+- 使用 location 对象可以通过很多方式来改变浏览器当前的显示信息. 首先,
+  也是最常用的方式, 就是使用 `assign()` 方法并为其传递一个 URL, 如下所示. 
+  ```js
+    location.assign("http://www.wrox.com");
+  ```
+  这样, 就可以立即打开新 URL 并在浏览器的历史记录中生成一条记录. 如果是将 
+  `location.href` 或 `window.location` 设置为一个 URL 值, 也会以该值调用
+  `assign()` 方法. 例如, 下列两行代码与显式调用 `assign()` 方法的效果完全一样. 
+  ```js
+    window.location = "http://www.wrox.com";
+    location.href = "http://www.wrox.com";
+  ```
+  在这些改变浏览器位置的方法中, 最常用的是设置 `location.href` 属性. 
+  
+  另外, 修改 location 对象的其他属性也可以改变当前加载的页面.
+  下面的例子展示了通过将 `hash`、`search`、`hostname`、 `pathname` 和 `port`
+  属性设置为新值来改变 URL. 
+  ```js
+    // - 假设初始 URL 为 http://www.worx.com/WileyCDA/
+
+    // - 将 URL 修改为 "http://www.wrox.com/WileyCDA/#section1"
+    location.hash = "#section1";
+
+    // - 将 URL 修改为 "http://www.wrox.com/WileyCDA/?q=javascript"
+    location.search = "?q=javascript";
+
+    // - 将 URL 修改为 "http://www.yahoo.com/WileyCDA/"
+    location.hostname = "www.yahoo.com";
+
+    // - 将 URL 修改为 "http://www.yahoo.com/mydir/"
+    location.pathname = "mydir";
+
+    // - 将 URL 修改为 "http://www.yahoo.com:8080/WileyCDA"
+    location.port = 8080;
+  ```
+  每次修改 location 的属性(`hash` 除外), 页面都会以新 URL 重新加载.
+
+- 当通过上述任何一种方式修改 URL 之后, 浏览器的历史记录中就会生成一条新记录,
+  因此用户通过单击 "后退" 按钮都会导航到前一个页面. 要禁用这种行为, 可以使用
+  `replace()` 方法. 这个方法只接受一个参数, 即要导航到的 URL;
+  结果虽然会导致浏览器位置改变, 但不会在历史记录中生成新记录. 在调用 `replace()`
+  方法之后, 用户不能回到前一个页面.
+- 与位置有关的最后一个方法是 `reload()`, 作用是重新加载当前显示的页面.
+  如果调用 `reload()` 时不传递任何参数, 页面就会以最有效的方式重新加载.
+  也就是说, 如果页面自上次请求以来并没有改变过, 页面就会从浏览器缓存中重新加载.
+  如果要强制从服务器重新加载, 则需要像下面这样为该方法传递参数 `true`. 
+  ```js
+    // - 重新加载 (有可能从缓存中加载)
+    location.reload(); 
+    // - 重新加载 (从服务器重新加载)
+    location.reload(true);
+  ```
+  位于 `reload()` 调用之后的代码可能会也可能不会执行,
+  这要取决于网络延迟或系统资源等因素. 为此, 最好将 `reload()` 放在代码的最后一行.
+
+
+### 8.3 navigator 对象
+#### 8.3.1 检测插件
+#### 8.3.2 注册处理程序
+
+
+### 8.4 screen 对象
+
+
+### 8.5 history 对象
+- `history` 对象保存着用户上网的历史记录, 从窗口被打开的那一刻算起. 因为 `history`
+  是 window 对象的属性, 因此每个浏览器窗口、每个标签页乃至每个框架, 都有自己的 
+  `history` 对象与特定的 window 对象关联. 出于安全方面的考虑,
+  开发人员无法得知用户浏览过的 URL. 不过, 借由用户访问过的页面列表,
+  同样可以在不知道实际 URL 的情况下实现后退和前进. 
+  
+  使用 `go()` 方法可以在用户的历史记录中任意跳转, 可以向后也可以向前.
+  这个方法接受一个参数, 表示向后或向前跳转的页面数的一个整数值.
+  负数表示向后跳转(类似于单击浏览器的 "后退" 按钮), 
+  正数表示向前跳转(类似于单击浏览器的 "前进" 按钮). 来看下面的例子. 
+  ```js
+    // - 后退一页
+    history.go(-1);
+    // - 前进一页
+    history.go(1);
+    // - 前进两页
+    history.go(2);
+  ```
+  也可以给 `go()` 方法传递一个字符串参数,
+  此时浏览器会跳转到历史记录中包含该字符串的第一个位置 -- 可能后退, 也可能前进,
+  具体要看**哪个位置最近**. 如果历史记录中不包含该字符串, 那么这个方法什么也不做,
+  例如: 
+  ```js
+    // - 跳转到最近的 wrox.com 页面
+    history.go("wrox.com");
+    
+    // - 跳转到最近的 nczonline.net 页面
+    history.go("nczonline.net");
+  ```
+  另外, 还可以使用两个简写方法 `back()` 和 `forward()` 来代替 `go()`. 顾名思义,
+  这两个方法可以模仿浏览器的 "后退" 和 "前进" 按钮. 
+  ```js
+    // - 后退一页
+    history.back();
+    
+    // - 前进一页
+    history.forward();
+  ```
+  除了上述几个方法外, `history` 对象还有一个 `length` 属性, 保存着历史记录的数量.
+  这个数量包括所有历史记录, 即所有向后和向前的记录. 对于加载到窗口、
+  标签页或框架中的第一个页面而言, `history.length` 等于 0.
+  通过像下面这样测试该属性的值, 可以确定用户是否一开始就打开了你的页面.
+  ```js
+    if (history.length == 0){
+        // - 这应该是用户打开窗口后的第一个页面
+    }
+  ```
+  虽然 `history` 并不常用, 但在创建自定义的 "后退" 和 "前进" 按钮,
+  以及检测当前页面是不是用户历史记录中的第一个页面时, 还是必须使用它. 
+
+  当页面的 URL 改变时, 就会生成一条历史记录. 在浏览器中, 这里所说的改变包括 URL
+  中 `hash` 的变化(因此, 设置 `location.hash`
+  会在这些浏览器中生成一条新的历史记录). 
+
+  **Added:** History 对象还有一个常用的属性: `history.state`, 它返回 History
+  堆栈最上层的状态值, (tip: 这个状态值就是第 16 章 - `16.4 历史状态管理` 中
+  `pushState()` 方法的第一个参数(即: 一个状态对象)). 例如:
+  ```js
+    var stateObj = {foo: 'bar'};
+    history.pushState(stateObj, 'page 2', '2.html');
+    history.state;  // {foo: "bar"}
+  ```
+
+- **Additional Info:** 关于 HTML5 新添加的语法, 比如 `pushState()` /
+  `replaceState()` / `popState` 事件, 请见 **第 16 章 HTML5 教程编程**
+  内的 `16.4 历史状态管理`.
+
+### 8.6 小结 
+

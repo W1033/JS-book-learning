@@ -155,7 +155,7 @@
 
 
 ### 8. `Array.prototype.find()`  方法
-- `Array.prototype.find()` 方法返回数组中满足提供的测试函数的第一个元素的值.
+- `Array.prototype.find()` 方法返回数组中满足方法内部函数的第一个元素的值.
   否则返回 `undefined`.
   ```js
     const ary = [5, 12, 8, 130, 44];

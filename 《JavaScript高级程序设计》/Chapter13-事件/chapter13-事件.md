@@ -23,7 +23,7 @@
     - 13.4.4 键盘与文本事件
     - 13.4.5 复合事件
     - 13.4.6 变动事件
-    - 13.4.7 HTML5 事件
+    - 13.4.7 <a href="#html5-events">HTML5 事件</a>
     - 13.4.8 设备事件
     - 13.4.9 触摸与手势事件
 + 13.5 内存和性能
@@ -161,7 +161,27 @@
 ##### 13.4.4 键盘与文本事件
 ##### 13.4.5 复合事件
 ##### 13.4.6 变动事件
-##### 13.4.7 HTML5 事件
+##### 13.4.7 <span id="html5-events">HTML5 事件</span>
+- (1) `contextmenu`(上下文菜单) 事件
+- (2) `beforeunload` 事件
+- (3) `DOMContentLoaded` 事件
+- (4) `readystatechange` 事件
+- (5) `pageshow` 和 `pagehide` 事件
+- (6) `hashchange`(哈希改变) 事件
+    + HTML5 新增了 `hashchange` 事件, 以便在 URL 的参数列表(即 URL 中 `#`
+      号后面的所有字符串) 发生变化时通知开发人员. 之所以新增这个事件, 是因为在 Ajax
+      应用中, 开发人员经常要利用 URL 参数列表来保存状态或导航信息.
+
+      必须要把 `hashchange` 事件处理程序添加给 `window` 对象, 然后 URL
+      参数列表只要变化就会调用它. 此时的 `event` 对象应该额外包含 2 个属性:
+      `oldURL` 和 `newURL`. 这 2 个属性分别保存着参数列表变化前后的完成 URL.
+      例如:
+      ```js
+        window.addEventListener('hashchange', function(event) {
+            console.log('old URL: ' + event.oldURL + '\nNew URL: ' +
+            event.newURL);
+        }, false)
+      ```
 ##### 13.4.8 设备事件
 ##### 13.4.9 触摸与手势事件
 
