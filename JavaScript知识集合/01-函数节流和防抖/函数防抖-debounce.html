@@ -39,7 +39,7 @@
             console.log("i++: ", i++);
             wrapper.innerHTML = count++;
 
-            this.setAttribute("title", count++)
+            this.setAttribute("title", count)
         }
 
 
@@ -55,7 +55,7 @@
                 console.log("this: ", this);
                 let context = this;
                 let args = arguments;
-                console.log("arguments: ", args);
+                console.log(args);
                 // 如果是第一次调用不需要延迟执行
                 if (firstTime) {
                     fn.apply(context, args);

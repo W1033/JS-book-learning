@@ -29,7 +29,6 @@
         let firstTime = true;
         return function() {
             let args = arguments;
-            console.log("arguments: ", args);
             let context = this;
             // 如果是第一次调用不需要延迟执行
             if (firstTime) {
@@ -53,7 +52,7 @@
     let i = 0;
     window.addEventListener("resize", throttle(function() {
         console.log("i++: ", i++);
-    }, 500), false)
+    }, 1000), false)
 </script>
 </body>
 </html>
