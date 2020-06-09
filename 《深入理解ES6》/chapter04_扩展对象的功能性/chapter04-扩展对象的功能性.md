@@ -34,168 +34,173 @@
   对象的类别如下:
     + **普通 (Ordinary) 对象**: 具有 js 对象所有的默认内部行为.
     + **特异 (Exotic) 对象**: 具有某些与默认行为不符的内部行为.
-    + **标准 (Standard) 对象**: ES6 规范中定义的对象, 例如: Array, Date 等. 标准对象
-      可以是普通对象, 也可以是特异对.
+    + **标准 (Standard) 对象**: ES6 规范中定义的对象, 例如: Array, Date 等.
+      标准对象可以是普通对象, 也可以是特异对.
     + **内建对象**: 脚本开始执行时存在于 js 执行环境中的对象, 所有标准对象都是内建对象.
 ### 2. 对象字面量语法扩展
-- **属性初始值的简写**
-    + ES5 中对象字面量只是简单的键值对集合, 例如:
-      ```javascript
-        function createPerson(name, age) {
-            return {
-                name: name,
-                age: age
-            }
+#### 2.1 属性初始值的简写
+- ES5 中对象字面量只是简单的键值对集合, 例如:
+  ```javascript
+    function createPerson(name, age) {
+        return {
+            name: name,
+            age: age
         }
-      ```
-      ES6 中, 通过使用属性初始化的简写语法, 可以消除这种属性名称和局部变量之间的重复书写.
-      比如改写上面的 createPerson() 方法如下:
-      ```javascript
-        function createPerson(name, age) {
-            return {
-                name, 
-                age
-            }
+    }
+  ```
+  ES6 中, 通过使用属性初始化的简写语法, 可以消除这种属性名称和局部变量之间的重复书写.
+  比如改写上面的 createPerson() 方法如下:
+  ```javascript
+    function createPerson(name, age) {
+        return {
+            name, 
+            age
         }
-      ```
-      当对象字面量只有一个属性的名称时, js 引擎会在可访问作用域中查找其同名变量; 如果找到,
-      则该变量的值被赋给对象字面量里的同名属性. 在本例中, 对象字面量属性 name 被赋予了局部
-      变量 name 的值.
-- **对象方法的简写语法**
-    + ES6 改进了对象字面量定义方法的语法. 示例如下:
-      ```javascript
-        var person = {
-            name: "Nicholas",
-            sayName() {
-                console.log(this.name);
-            }
+    }
+  ```
+  当对象字面量只有一个属性的名称时, js 引擎会在可访问作用域中查找其同名变量;
+  如果找到, 则该变量的值被赋给对象字面量里的同名属性. 在本例中, 对象字面量属性
+  name 被赋予了局部变量 name 的值.
+#### 2.2 对象方法的简写语法
+- ES6 改进了对象字面量定义方法的语法. 示例如下:
+  ```javascript
+    var person = {
+        name: "Nicholas",
+        sayName() {
+            console.log(this.name);
         }
-      ```
-- **可计算属性名 (Computed Property Name)**
-    + ES5 及早期版本的对象中, 如果想要通过计算得到属性名, 就需要用方括号代替点记法. 示例:
-      ```javascript
-        var person = {};
-        var lastName = "last name";
-        person["first name"] = "Nicholas";
-        person[lastName] = "Zakas";
-        console.log(person["first name"]);  // "Nicholas"
-        console.log(person[lastName]);  // "Zakas"
-      ```
-      此外, 在对象字面量中, 可以直接使用字符串字面量作为属性名称, 就像这样:
-      ```javascript
-        let person = {
-            "first name": "Nicholas",
-        };
-        console.log(person["first name"]);  // "Nicholas"
-      ```
-    + 在 ES6 中, 可在对象字面量中使用**可计算属性名称**, 其语法与引用对象实例的可计算属性
-      名称相同, 也是使用方括号. 举个例子: 
-      ```javascript
-        let lastName = "last name";
-        let person = {
-            "first name": "Nicholas",
-            [lastName]: "Zakas",
-        }
-      ```
+    }
+  ```
+#### 2.3 可计算属性名 (Computed Property Name)
+- ES5 及早期版本的对象中, 如果想要通过计算得到属性名, 就需要用方括号代替点记法. 示例:
+  ```javascript
+    var person = {};
+    var lastName = "last name";
+    person["first name"] = "Nicholas";
+    person[lastName] = "Zakas";
+    console.log(person["first name"]);  // "Nicholas"
+    console.log(person[lastName]);  // "Zakas"
+  ```
+  此外, 在对象字面量中, 可以直接使用字符串字面量作为属性名称, 就像这样:
+  ```javascript
+    let person = {
+        "first name": "Nicholas",
+    };
+    console.log(person["first name"]);  // "Nicholas"
+  ```
+- 在 ES6 中, 可在对象字面量中使用**可计算属性名称**, 其语法与引用对象实例的可计算属性
+    名称相同, 也是使用方括号. 举个例子: 
+    ```javascript
+    let lastName = "last name";
+    let person = {
+        "first name": "Nicholas",
+        [lastName]: "Zakas",
+    }
+    ```
 ### 3. 新增方法
-*ECMAScript 其中一个设计目标是: 不在创建新的全局函数, 也不在 `Object.prototype` 上创
- 建新的方法. 而在 ES6 中, 为了使某些任务更易完成, 在全局 Object 对象上引入了一些新方法.*
-- **`Object.is()` 方法**
-    + ECMAScript 6 引入了 `Object.is()` 方法来弥补全等运算符的不准确运算。这个方法
-      接受两个参数, 如果这两个参数类型相同且具有相同的值,则返回true。请看下面这些示例:
-      ```javascript
-        console.log(+0 == -0); // true
-        console.log(+0 === -0); // true
-        console.log(Object.is(+0, -0)); // false
-        console.log(NaN == NaN); // false
-        console.log(NaN === NaN); // false
-        console.log(Object.is(NaN, NaN)); // true
-        console.log(5 == 5); // true
-        console.log(5 == "5"); // true
-        console.log(5 === 5); // true
-        console.log(5 === "5"); // false
-        console.log(Object.is(5, 5)); // true
-        console.log(Object.is(5, "5")); // false
-      ```
-    + 在许多情况下， Object.is() 的结果与 `===` 运算符是相同的， 仅有的例外是：它会
-      认为 `+0` 与 `-0` 不相等，而且 `NaN` 等于 `NaN`。 不过仍然没必要停止使用
-      全等运算符， 选择 Object.is() 还是选择 `== (相等)` 或 `=== (全等)` ， 取决
-      于代码的实际情况。  
-- **`Object.assign()` 方法**
-    + 混合/混入 (Mixin) 是 js 中实现**对象组合**最流行的一种模式. 在一个 mixin 方法中,
-      一个对象接收来自另一个对象的属性和方法, 许多 js 库中都有类似的 mixin 方法:
-      ```javascript
-        function mixin(receiver, supplier) {
-            Object.keys(supplier).forEach(function(key) {
-                receiver[key] = supplier[key];
-            });
-            return receiver;
+- ECMAScript 其中一个设计目标是: 不在创建新的全局函数, 也不在 `Object.prototype`
+  上创建新的方法. 而在 ES6 中, 为了使某些任务更易完成, 在全局 Object
+  对象上引入了一些新方法.
+#### 3.1 `Object.is()` 方法
+- ECMAScript 6 引入了 `Object.is()` 方法来弥补全等运算符的不准确运算。
+  这个方法接受两个参数, 如果这两个参数类型相同且具有相同的值, 则返回true.
+  请看下面这些示例:
+  ```javascript
+    console.log(+0 == -0); // true
+    console.log(+0 === -0); // true
+    console.log(Object.is(+0, -0)); // false
+    console.log(NaN == NaN); // false
+    console.log(NaN === NaN); // false
+    console.log(Object.is(NaN, NaN)); // true
+    console.log(5 == 5); // true
+    console.log(5 == "5"); // true
+    console.log(5 === 5); // true
+    console.log(5 === "5"); // false
+    console.log(Object.is(5, 5)); // true
+    console.log(Object.is(5, "5")); // false
+  ```
+  在许多情况下， Object.is() 的结果与 `===` 运算符是相同的， 仅有的例外是:
+  它会认为 `+0` 与 `-0` 不相等，而且 `NaN` 等于 `NaN`.
+  不过仍然没必要停止使用全等运算符， 选择 Object.is() 还是选择
+  `== (相等)` 或 `=== (全等)` ， 取决于代码的实际情况。  
+#### 3.2 `Object.assign()` 方法
+- 混合/混入 (`Mixin`) 是 js 中实现**对象组合**最流行的一种模式.
+  在一个 mixin 方法中,一个对象接收来自另一个对象的属性和方法, 许多 js
+  库中都有类似的 `mixin` 方法:
+  ```js
+    function mixin(receiver, supplier) {
+        Object.keys(supplier).forEach(function(key) {
+            receiver[key] = supplier[key];
+        });
+        return receiver;
+    }
+  ```
+  `mixin()` 函数遍历 supplier 的自有属性并复制到 receiver 中
+  (此处的复制行为是浅复制, 当属性值为对象时只复制对象的引用). 这样一来,
+  receiver 不通过继承就可以获得新属性, 请参考这段代码:
+  ```js
+    function EventTarget() { // ... };
+    EventTarget.prototype = {
+        constructor: EventTarget,
+        emit() {},
+        on() {}
+    };
+    let myObject = {};
+    mixin(myObject, EventTarget.prototype);
+    myObject.emit("somethingChanged");
+  ```
+  这段代码中, myObject 接受 EventTarget.prototype 对象的所有行为, 从而使
+  myObject 可以分别通过 emit() 方法发布事件或通过 on() 方法订阅事件.
+- 这种混合模式非常流行，因而 ECMAScript6 添加了 `Object.assign()`
+  方法来实现相同的功能，这个方法接受一个接收对象和任意数量的源对象，
+  最终返回接收对象。mixin()方法使用 赋值操作符(assignment operator)
+  `=` 来复制相关属性，却不能复制访问器属性到接收对象中，因此最终添加的方法弃用
+  mixin 而改用 assign 作为方法名。
+  
+  任何使用 mixin() 方法的地方都可以直接使用 `Object.assign()` 方法来替换,
+  把上面的示例改为 `Object.assign()` 方法:
+  ```javascript
+    function EventTarget() { // ... };
+    EventTarget.prototype = {
+        constructor: EventTarget,
+        emit: function() { // ... },
+        on: function() { // ... }
+    }
+    var myObject = {};
+    Object.assign(myObject, EventTarget.prototype);
+    myObject.emit("somethingChanged");
+  ```
+  `Object.assign()` 方法可以接受任意数量的源对象,
+  并按指定的顺序将属性复制到接收对象中. 所以如果多个源对象具有同名属性,
+  则排位靠后的源对象会覆盖排位靠前的, 就像这段代码这样:
+  ```javascript
+    var receiver = {};
+    Object.assign(receiver, {;
+        {"js", name;: "file.js"},
+        {"css"}
+    })
+    console.log(receiver.type); // "css"
+    console.log(receiver.name); // "file.js"
+  ```
+- **Note: 访问器属性**
+  请记住 `Object.assign(`) 方法不能将提供者的访问器属性复制到接受对象中.
+  由于 `Object.assign()` 方法执行了赋值操作,
+  因此提供者的访问器属性会变成接受对象中的一个数据属性. 举个例子:
+  ```javascript
+    var receiver = {};
+    var supplier = {
+        get name() {
+            return "file.js"
         }
-      ```
-      mixin() 函数遍历 supplier 的自有属性并复制到 receiver 中
-      (此处的复制行为是浅复制, 当属性值为对象时只复制对象的引用). 这样一来,
-      receiver 不通过继承就可以获得新属性, 请参考这段代码:
-      ```javascript
-        function EventTarget() { // ... };
-        EventTarget.prototype = {
-            constructor: EventTarget,
-            emit() {},
-            on() {}
-        };
-        let myObject = {};
-        mixin(myObject, EventTarget.prototype);
-        myObject.emit("somethingChanged");
-      ````
-      这段代码中, myObject 接受 EventTarget.prototype 对象的所有行为, 从而使 
-      myObject 可以分别通过 emit() 方法发布事件或通过 on() 方法订阅事件.
-    + 这种混合模式非常流行，因而 ECMAScript6 添加了 `Object.assign()` 方法来实现相同
-      的功能，这个方法接受一个接收对象和任意数量的源对象，最终返回接收对象。mixin()方法
-      使用 赋值操作符(assignment operator) `=` 来复制相关属性，却不能复制访问器属性到
-      接收对象中，因此最终添加的方法弃用 mixin 而改用 assign 作为方法名。
-    + 任何使用 mixin() 方法的地方都可以直接使用 Object.assign() 方法来替换, 把上面的
-      示例改为 Object.assign() 方法:
-      ```javascript
-        function EventTarget() { // ... };
-        EventTarget.prototype = {
-            constructor: EventTarget,
-            emit: function() { // ... },
-            on: function() { // ... }
-        }
-        var myObject = {};
-        Object.assign(myObject, EventTarget.prototype);
-        myObject.emit("somethingChanged");
-      ```  
-      Object.assign() 方法可以接受任意数量的源对象, 并按指定的顺序将属性复制到接收对象
-      中. 所以如果多个源对象具有同名属性, 则排位靠后的源对象会覆盖排位靠前的, 就像这段代码
-      这样:
-      ```javascript
-        var receiver = {};
-        Object.assign(receiver, {;
-            {"js", name;: "file.js"},
-            {"css"}
-        })
-        console.log(receiver.type); // "css"
-        console.log(receiver.name); // "file.js"
-      ```
-    + **Note: 访问器属性**
-        - 请记住 Object.assign() 方法不能将提供者的访问器属性复制到接受对象中. 由于
-          Object.assign() 方法执行了赋值操作, 因此提供者的访问器属性会变成接受对象中
-          的一个数据属性. 举个例子:
-          ```javascript
-            var receiver = {};
-            var supplier = {
-                get name() {
-                    return "file.js"
-                }
-            };
-            Object.assign(receiver, supplier);
-            var descriptor = Object.getOwnPropertyDescriptor(receiver, "name");
-            console.log(descriptor.value);  // "file.js"
-            console.log(descriptor.get);    // undefined
-          ```
-          在这段代码中，supplier 有一个名为 name 的访问器属性。当调用 Object.assign()
-          方法时返回字符串 "file.js", 因此 receiver 接收这个字符串后将其存为数据属性
-          receiver.name。
+    };
+    Object.assign(receiver, supplier);
+    var descriptor = Object.getOwnPropertyDescriptor(receiver, "name");
+    console.log(descriptor.value);  // "file.js"
+    console.log(descriptor.get);    // undefined
+  ```
+  在这段代码中，supplier 有一个名为 name 的访问器属性。当调用 Object.assign()
+  方法时返回字符串 "file.js", 因此 receiver 接收这个字符串后将其存为数据属性
+  receiver.name.
 ### 4. 重复的对象字面量属性
 ### 5. 自有属性枚举顺序
 ### 6. 增强对象原型
@@ -342,7 +347,7 @@
             return "Hi";
         }
     }
-  ``` 
+  ```
   这个示例中定义了 person 对象, 他有一个 getGreeting() 方法, 由于直接把函数赋值给了 
   person 对象, 因而 getGreeting() 方法的 `[[HomeObject]]` 属性值为 person. 而创建
   shareGreeting() 函数时, 由于未将其赋值给一个对象, 因而该方法并没有明确定义

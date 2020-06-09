@@ -103,17 +103,22 @@
 
 #### 1.4 在浏览器中获取 "当前页面的可视高度" 和 "文档的总高度" 的方法总结:
 - ```js
-    // - js获取当前页面可视窗口的高度和宽度 (前提 `<!DOCTYPE html>` 是这种写法,
-    //   以前古老的写法除外) IE, Firefox, Chrome 统一是:
-    document.body.clientHeight;
-
-    // - IE9+, FF, Chrome 确定浏览器窗口大小(可视窗口大小)有两个新属性:
-    window.innerHeight;  window.innerWidth;
-
-    // - 获取文档的高度和宽度兼容 IE8 的写法是: (tip: 2020年了, 可以忽略了.)
-    Math.max(document.documentElement.clientHeight, document.body.scrollHeight, 
-                document.documentElement.scrollHeight);
-  ```
+    // - 确定浏览器中页面视口(viewport)大小
+    // - HTML5 新增的.
+    var pageViewportWidth = window.innerWidth;
+    var pageViewportHeight = window.innerHeight;
+    // - 下面为兼容写法:(`<!DOCTYPE html>` 是这种写法,以前古老的写法除外)
+    if (typeof pageWidth != "number") {
+        pageViewportWidth = document.documentElement.clientWidth;
+        pageViewportHeight = document.documentElement.clientHeight;
+    }
+    
+    // - 获取文档的高度和宽度
+    let docScrollHeight = Math.max(
+        document.documentElement.clientHeight, document.documentElement.offsetHeight, 
+            document.documentElement.scrollHeight
+    );
+    ```
 
 #### 1.5 `typeof` 和 `instanceof` 操作符的区别: 
 - 确定一个值是哪种基本类型使用 typeof 操作符, 是哪种引用类型使用 instanceof 操作符. 

@@ -32,9 +32,38 @@
 ## Content
 ### 8.1 window 对象
 #### 8.1.1 全局作用域
+- 由于 window 对象同时扮演着 ECMAScript 中 Global 对象的角色,
+  因此所有在全局作用域中声明的变量、函数都会变成 window 对象的属性和方法.
 #### 8.1.2 窗口关系及框架
 #### 8.1.3 窗口位置
 #### 8.1.4 窗口大小
+- 跨浏览器确定一个窗口的大小不是一件简单的事. IE9+、Firefox、Safari 和 Chrome
+  均为此提供了 4 个属性: `innerWidth`, `innerHeight`, `outerWidth`,
+  `outerHeight`. 在 IE9+、 Safari 和 Firefox 中, `outerWidth` 和
+  `outerHeight` 返回浏览器窗口本身的尺寸(无论是从最外层的 window
+  对象还是从某个框架访问). 在 Chrome 中 `outerWidth`、 `outerHeight`
+  与 `innerWidth`、`innerHeight` 返回相同的值, 即 `视口(viewport)`
+  大小而非浏览器窗口大小.
+    + **Note:** `视口(viewport)` 即当前页面的可视区域. 不包含滚动条的部分.
+      例如: 在 Mac pro (15.6 寸) 的 Chrome 中打开页面后用 js 获取
+      `window.innerWidth` 和 `window.innerHeight` 就是 1146 * 766.
+      即使页面宽度设置为 `width: 2000px`, 可视宽度也是 `1146px`.
+    
+  在 IE、 Firefox、 Safari、 Opera 和 Chrome 中,  
+  `document.documentElement.clientWidth` 和
+  `document.documentElement.clientHeight` 中保存了页面视口的信息.
+  在 IE6 中......(忽略).
+  
+  虽然最终无法确定浏览器窗口本身的大小, 但却可以取得页面视口的大小, 如下所示:
+  ```js
+    var pageViewportWidth = window.innerWidth;
+    var pageViewportHeight = window.innerHeight;
+    // - 现在的浏览器已经不需要再写兼容了
+    if (typeof pageWidth != "number") {
+        pageViewportWidth = document.documentElement.clientWidth;
+        pageViewportHeight = document.documentElement.clientHeight;
+    }
+  ```
 #### 8.1.5 导航和打开窗口
 #### 8.1.6 间歇调用和超时调用
 #### 8.1.7 系统对话框

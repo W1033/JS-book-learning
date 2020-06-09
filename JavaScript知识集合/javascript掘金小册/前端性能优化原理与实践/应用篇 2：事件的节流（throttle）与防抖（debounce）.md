@@ -24,7 +24,7 @@ throttle 的中心思想在于：在某段时间内，不管你触发了多少�
 
 理解了大致的思路，我们现在一起实现一个 throttle：
 
-```
+```js
 // fn是我们需要包装的事件回调, interval是时间间隔的阈值
 function throttle(fn, interval) {
   // last为上一次触发回调的时间
@@ -65,7 +65,7 @@ document.addEventListener('scroll', better_scroll)
 
 我们基于上面的理解，一起来写一个 debounce：
 
-```
+```js
 // fn是我们需要包装的事件回调, delay是每次推迟执行的等待时间
 function debounce(fn, delay) {
   // 定时器
@@ -102,7 +102,7 @@ debounce 的问题在于它“太有耐心了”。试想，如果用户的操�
 
 为了避免弄巧成拙，我们需要借力 throttle 的思想，打造一个“有底线”的 debounce——等你可以，但我有我的原则：delay 时间内，我可以为你重新生成定时器；但只要delay的时间到了，我必须要给用户一个响应。这个 throttle 与 debounce “合体”思路，已经被很多成熟的前端库应用到了它们的加强版 throttle 函数的实现中：
 
-```
+```js
 // fn是我们需要包装的事件回调, delay是时间间隔的阈值
 function throttle(fn, delay) {
   // last为上一次触发回调的时间, timer是定时器

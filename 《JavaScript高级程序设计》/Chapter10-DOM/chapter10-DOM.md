@@ -115,26 +115,63 @@
   有呼吸的对象, 而不是在我们第一次访问它们的某个瞬间拍摄下来的一张快照. 
 
 #### 10.1.2 `Document` 类型
-- JavaScript 通过 Document 类型表示文档. 在浏览器中, document
-  对象是 HTMLDocument(继承自 Document 类型)的一个实例, 表示整个 HTML 页面.
-  而且, document 对象是 window 对象的一个属性, 因此可以将其作为全局对象来访问.
+- JavaScript 通过 Document 类型表示文档. 在浏览器中, `document`
+  对象是 `HTMLDocument`(继承自 Document 类型)的一个实例, 表示整个 `HTML` 页面.
+  而且, `document` 对象是 `window` 对象的一个属性, 因此可以将其作为全局对象来访问.
   Document 节点具有下列特征: 
-    + nodeType 的值为 9; 
-    + nodeName 的值为 "#document"; 
-    + nodeValue 的值为 null; 
-    + parentNode 的值为 null; 
-    + ownerDocument 的值为 null; 
+    + `nodeType` 的值为 9; 
+    + `nodeName` 的值为 "#document"; 
+    + `nodeValue` 的值为 null; 
+    + `parentNode` 的值为 null; 
+    + `ownerDocument` 的值为 null; 
     + 其子节点可能是一个 DocumentType(最多一个), Element(最多一个),
       ProcessingInstruction 或 Comment. 
   
   Document 类型可以表示 HTML 页面或者其他基于 XML 的文档. 不过,
   最常见的应用还是作为 HTMLDocument 实例的 document 对象. 通过这个文档对象,
   不仅可以取得与页面有关的信息, 而且还能操作页面的外观及其底层结构.
-- (1) **文档的子节点**
-- (2) **文档信息**
-- (3) **查找元素**
-- (4) **特殊集合**
-- (5) **文档写入**
+##### 10.1.1 文档的子节点
+- 虽然 DOM 标准规定 Document 节点的子节点可以是 DocumentType、 Element、
+  ProcessingInstruction 或 Comment, 但还有两个内置的访问其子节点的快捷方式.
+    + 第一个就是 `documentElement` 属性, 该属性始终指向 HTML 页面中的 `<html>`
+      元素. 
+    + 另一个就是通过 `childNodes` 列表访问文档元素, 但通过 `documentElement`
+      属性则能更快捷、更直接地访问该元素.  以下面这个简单的页面为例.
+
+  ```html
+    <html>
+        <body></body>
+    </html>
+  ```
+  这个页面在经过浏览器解析后,其文档中只包含一个子节点, 即 `<html>`元 素.
+  可以通过 `documentElement` 或 `childNodes` 列表来访问这个元素, 如下所示:
+  ```js
+    var html = document.documentElement;            // 取得对<html>的引用
+    console.log(html === document.childNodes[0]);   // true
+    console.log(html === document.firstChild);      // true
+  ```
+  这个例子说明, `documentElement`, `firstChild` 和 `childNodes[0]` 的值相同,
+  都指向 `<html>` 元素.  
+  
+  作为 HTMLDocument 的实例,  document 对象还有一个 `body` 属性, 直接指向
+  `<body>` 元素. 其用法如下.  
+  ```js
+    var body = document.body;               // 取得对 <body> 的引用
+  ```
+  所有浏览器都支持 `document.documentElement` 和 `document.body` 属性.
+
+  Document 另一个可能的子节点是 DocumentType. 通常将 `<!DOCTYPE>`
+  标签看成一个与文档其他部分不同的实体, 可以通过 `doctype` 属性(在浏览器中是
+  `document.doctype`) 来访问它的信息.  
+  ```js
+    var doctype = document.doctype;         // 取得对<!DOCTYPE>的引用
+  ```
+##### 10.1.2 文档信息
+##### 10.1.3 查找元素
+##### 10.1.4 特殊集合
+##### 10.1.5 文档写入
+
+
 #### 10.1.3 `Element` 类型
 - 除了 Document 类型之外, Element 类型就要算是 Web 编程中最常用的类型了.
   Element 类型用于表现 XML 或 HTML 元素, 提供了对元素标签名, 子节点及特性的访问.

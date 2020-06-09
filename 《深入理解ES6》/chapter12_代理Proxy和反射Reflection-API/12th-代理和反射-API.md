@@ -546,7 +546,7 @@
   失败时返回false 。 例如：
   ```js
     let target = {};
-    let result1 = Object.defineProperty(target, "name", { value: "target "});
+    let result1 = Object.defineProperty(target, "name", { value: "target"});
     console.log(target === result1); // true
     let result2 = Reflect.defineProperty(target, "name", { value: "reflect" });
     console.log(result2); // true

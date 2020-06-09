@@ -211,7 +211,7 @@
     //   只需这样写即可: {middle: {subMiddle}}}
     let {loc: {start}} = node;
     console.log(start.line);    // 1
-    console.log(start.colunm);  // 1
+    console.log(start.column);  // 1
   ```
   本例中的解构模式使用了花括号, 表示应当深入到 `node` 对象中的 `loc` 属性内部去寻找
   `start` 属性. 记住上一节介绍过, **每当有一个冒号在解构模式中出现, 

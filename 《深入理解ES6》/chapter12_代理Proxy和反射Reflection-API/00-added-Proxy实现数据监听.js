@@ -33,7 +33,7 @@ const obj = {
     name: 'Wang',
     love: {
         book: ['Node.js', 'JavaScript', 'CSS', 'HTML'],
-        favourite: 'read'
+        favorite: 'read'
     },
     arrs: [1, 2, 3]
 };
@@ -62,7 +62,7 @@ console.log(prox.name);
 
 // - 会输出: render 函数被调用了
 // - 但是在上一行的输出之前, getter 中的 if 会执行一次, 因为 love 是对象
-prox.love.favourite = 'listen to music';
+prox.love.favorite = 'listen to music';
 
 // render 函数被调用了
 prox.arrs[0] = 4;

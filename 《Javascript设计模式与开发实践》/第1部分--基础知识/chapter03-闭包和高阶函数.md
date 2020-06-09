@@ -292,7 +292,39 @@
           之前传入的所有参数都会被一次性用于求值. 
     + (2) `uncurrying`
     + (3) `函数节流`
-        - 详细讲解见: ``js-sundry-goods/20190224-函数节流和防抖`
+      ```js
+        // fn: 需要被延迟执行的函数引用. wait: 延迟调用的时间
+        function throttle(fn, wait) {
+            // 定时器 (超时调用id)
+            let timer;
+            // 是否是第一次调用
+            let firstTime = true;
+            return function() {
+                let args = arguments;
+                let context = this;
+                // 如果是第一次调用不需要延迟执行
+                if (firstTime) {
+                    fn.apply(context, args);
+                    return firstTime = false;
+                }
+
+                // 如果定时器还在, 说明前一次延迟执行还没有完成
+                if (timer) return;
+
+                // 延迟一段时间执行
+                timer = setTimeout(function() {
+                    // 首先清楚超时调用内 id
+                    clearTimeout(timer);
+                    timer = null;
+                    fn.apply(context, args);
+                }, wait || 500)
+            };
+        }
+        let i = 0;
+        window.addEventListener("resize", throttle(function() {
+            console.log("i++: ", i++);
+        }, 500), false)
+      ```
     + (4) `分时函数`
     + (5) `惰性加载函数`
 

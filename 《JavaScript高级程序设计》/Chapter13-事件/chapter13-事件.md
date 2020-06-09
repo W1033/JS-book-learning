@@ -158,6 +158,15 @@
 ##### 13.4.1 UI 事件
 ##### 13.4.2 焦点事件
 ##### 13.4.3 鼠标与滚轮事件
+- 在 JavaScript 中我们获取鼠标的 `客户区坐标位置 (clientX, clientY)`,
+  `页面坐标位置(pageX, pageY)` 都是根据直角坐标系来表述相对应的概念; 但在浏览器中,
+  **坐标轴的原点 `(0, 0)` 是在浏览器视口的左上角**,
+  而且 **Y 轴的正/负朝向和数学的直角坐标系统是相反的**, 如下图:
+
+  <img src="./chapter13-images/web-coordinate.png"
+      style="margin-left: 0; border-radius: 4px;
+          box-shadow: 1px 1px 3px 2px #e5e5e5">
+
 ##### 13.4.4 键盘与文本事件
 ##### 13.4.5 复合事件
 ##### 13.4.6 变动事件
