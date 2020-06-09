@@ -355,10 +355,10 @@
 #### 12.2.3 元素大小
 ##### 12.2.3.1 <span style="color: red">偏移量(offset dimension)</span>
 - 首先要介绍的是属性是元素的**偏移量(offset dimension)**,
-  它包括**元素在屏幕上占用的所有可见的空间**. 元素的可见大小由其: 高度(height),
-  宽度(width) 决定, 包括所有内边距(padding), 滚动条(scroll bar) 和
-  边框(border)大小 [注意: 不包括外边距(margin)]. 通过下面 4
-  个属性可以取得元素的偏移量:
+  它包括**元素在屏幕上占用的所有可见的空间**.
+  元素的可见大小由其: 高度(height), 宽度(width) 决定, 包括所有内边距(padding),
+  滚动条(scroll bar) 和 边框(border)大小 [注意: 不包括外边距(margin)].
+  通过下面 4 个属性可以取得元素的偏移量:
     + `offsetHeight`: 元素在垂直方向上占用的空间大小, 以像素计. 包括元素的高度,
       (可见的)水平滚动条的高度, 元素上下边框的高度.
     + `offsetWidth`: 元素在水平方向上占用的空间大小, 以像素计. 包括元素的宽度,
@@ -377,6 +377,10 @@
   <img src="./chapter12-images/12.1.png"
         style="margin-left: 0; border-radius: 4px; width: 90%;
                 box-shadow: 1px 1px 3px 2px #e5e5e5">
+
+  <img src="./chapter12-images/size.png"
+        style="margin-left: 0; border-radius: 4px; width: 90%;
+            box-shadow: 1px 1px 3px 2px #e5e5e5">
   
   要想知道某个元素在页面上的偏移量, 将这个元素的 `offsetLeft` 和 `offsetTop`
   与其 `offsetParent` 的相同属性相加, 如此循环直至**根元素**(标准模式下为 `html`;
@@ -407,7 +411,7 @@
             current = current.offsetParent;
         }
         return actualLeft;
-  }
+    }
   
     function getEleTop(ele) {
         var actualTop = ele.offsetTop;
@@ -445,8 +449,9 @@
             var scrollBarHeight = ele.offsetHeight - ele.clientHeight;
           ```
           下图可以清晰看出:
-           
-          Tip: `clientLeft`:元素的左边框的宽度; `clientTop`:元素的上边框的宽度.
+          
+          Tip: `element.clientLeft`:元素的左边框的宽度;
+          `element.clientTop`:元素的上边框的宽度.
 
           <img src="./chapter12-images/size.png"
                 style="margin-left: 0; border-radius: 4px; width: 100%;
@@ -517,7 +522,7 @@
   它接收一个文档坐标并作为滚动条的偏移量去设置他们,
   也就是说窗口滚动到指定的点出现的视口的左上角. 
 
-  一下代码可以让浏览器滚动到文档最底部:
+  以下代码可以让浏览器滚动到文档最底部:
   ```js
     // - document.documentElement 取得对 `<html>` 的引用
     var docHeight = document.documentElement.offsetHeight;
@@ -546,7 +551,18 @@
         style="margin-left: 0; border-radius: 4px; width: 66%;
                 box-shadow: 1px 1px 3px 2px #e5e5e5">
 
-  为了将其转化为文档坐标, 需要加上浏览器滚动条的大小(见上面 `12.2.3.2`)
+  为了将其转化为文档坐标, 需要加上浏览器滚动条的大小(见上面 `12.2.3.2`).
+  ```js
+    function getBoundingClientRect(ele) {
+        var rect = ele.getBoundingClientRect();
+        return {
+            left: rect.left,
+            right: rect.right,
+            top: rect.top,
+            bottom: rect.bottom
+        }
+    }
+  ```
 
 ### 12.3 遍历
 #### 12.3.1 NodeIterator

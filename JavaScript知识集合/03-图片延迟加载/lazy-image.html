@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; Charset=utf-8">
+    <title>图片延时加载</title>
+    <style type="text/css">
+        *{margin:0; padding:0; list-style:none; font:normal 14px Arial;}
+        .head{
+            width:90%; height:220px;
+            margin:10px auto 200px; overflow:hidden;
+            background: lightcoral;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .head .headFont{
+            font:32px "Microsoft YaHei";
+            line-height:32px;
+            margin-top:85px;
+        }
+        .main{
+            width:90%;
+            margin:20px auto;
+            overflow:hidden;
+        }
+        .main span {
+            width: 30%;
+            height: 400px;
+            margin-top: 10px;
+            margin-left: 1.5%;
+            text-align: center;
+            float: left;
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: #ededed;
+        }
+        .lazy-element {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="head">
+        <p class="headFont">图片延时加载</p>
+    </div>
+
+    <div class="main">
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span>
+            <img class="lazy-element"
+                data-src="./images/img1.png"
+                src="./images/loading.gif"
+            ></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+        <span><img class="lazy-element" data-src="./images/img1.png"></span>
+    </div>
+
+    <script>
+        // - 获取所有的图片标签.
+        const images = document.querySelectorAll('.lazy-element');
+        
+        // - 获取可视窗口的高度
+        const viewportHeight = window.innerHeight
+                || document.documentElement.clientHeight;
+        
+        // - num 用于统计当前显示了哪一张图片, 避免每次都从第一章图片开始检查是否露出
+        let num = 0;
+        function lazyLoading() {
+            for (let i = num; i < images.length; i++) {
+                // - 用可视窗口的高度 - 元素距离可视区域顶部的距离(top)
+                let distance = viewportHeight
+                        - images[i].getBoundingClientRect().top;
+                // - 如果 distance >= 0, 说明元素已经出现在可视窗口中
+                if (distance >= 0) {
+                    // - 给元素添加 src 属性以展示图片
+                    images[i].src = images[i].dataset.src;
+                    // - 前 i 张图片已经加载完毕, 下次从第 i + 1
+                    //   章开始检查图片是否在当前可视窗口中
+                    num = i + 1;
+                }
+            }
+        }
+
+        function throttle(fn, delay) {
+            let last = 0, timeoutId = null;
+            return function() {
+                let context = this;
+                let args = arguments;
+                let now = new Date();   // - 记录本次触发回调的时间
+
+                // - 本次触发回调的时间 - 上次回调时间 < 间隔时间
+                if (now - last < delay) {
+                    // - 则清除上次的超时调用, 把本次的的触发重新设置为一个新的超时调用
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(function() {
+                        last = now;
+                        fn.apply(context, args);
+                    }, delay);
+                } else {
+                    // - 本次触发回调的时间 - 上次回调时间 > 大于了间隔时间,
+                    //   那就不等了, 无论如何要返回给用户一次响应.
+                    last = now;
+                    fn.apply(context, args);
+                }
+            }
+        }
+
+        // - 用新的 throttle 包装 scroll 的回调
+        const better_scroll = throttle(lazyLoading, 500);
+
+
+        // - 监听 scroll 事件
+        window.addEventListener('scroll', better_scroll, false)
+    </script>
+</body>
+</html>

@@ -75,6 +75,7 @@
 - "DOM2 级事件" 定义了两个方法,用于处理指定和删除事件处理程序的操作:
   `addEventListener()`(添加事件监听器) 和 `removeEventListener()`.
   所有 DOM 节点中都包含这两个方法,并且它们都接受 3 个参数:
+  
     + (1) 要处理的事件名,
     + (2) 作为事件处理程序的函数和一个布尔值.
     + (3) 最后这个布尔值参数如果是 `true`,
@@ -91,6 +92,7 @@
 - **Added:** 此处的添加来自
   [MDN-addEventListener](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener)
   原因是 `addEventListener` 方法的第 3 个参数有更新:
+  
     + (1) `EventTarget.addEventListener()` 方法将指定的监听器注册到
       `EventTarget`(事件对象) 上, 当该对象触发指定的事件时,
       指定的回调函数就会被执行. 事件目标可以是一个文档上的元素 `Element`,
@@ -100,6 +102,9 @@
       的函数或对象添加到调用它的 `EventTarget` 上的指定事件类型的事件侦听器列表中.
     + (2) 语法:
       ```js
+        // - tip: listener 在没有参数的情况下, 直接写函数名即可, 我想
+        //   addEventListener 函数内部也大致使用: fn.apply(context, arguments)
+        //   这种方式调用的 listener.
         target.addEventListener(type, listener, options);
         target.addEventListener(type, listener, useCapture);
         // Gecko/Mozilla only
@@ -109,7 +114,7 @@
         + <1> `type`: 表示监听 **事件类型的字符串**. (tip: 明显上面
           JS高程上说的更通俗易懂: **要处理的事件名**).
         + <2> `listener`: 作为事件处理程序的函数(from: JS高程).
-          (MDN 文档: 当所监听的事件类型触发时, 会接收到一个事件通
+          (MDN 文档: 当所监听的事件类型触发时, 会接收到一个事件
           (实现了 `Event` 接口的对象) 对象. `listener` 必须是一个实现了
           `EventListener` 接口的对象或者是一个函数. 有关回调本身的详细信息,
           请参阅 [The event listener callback]()) 
