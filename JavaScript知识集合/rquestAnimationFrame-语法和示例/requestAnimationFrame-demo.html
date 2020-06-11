@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>requestAnimationFrame使用示例</title>
+    <link rel="stylesheet" href="reset.css">
+    <script type="text/javascript" src="functions.js"></script>
+    <style type="text/css">
+        input[type=button] {
+            padding: 1em 5em;
+            margin-top:20px; border-radius:4px;
+        }
+        #run { background:lightskyblue; }
+        #stop {
+            background:lightcoral; margin-left:20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contain" style="width:80%; margin:20px auto; height:10em; background:#f0f0f0;">
+        <div id="test" style="width:1px;height:17px;background:lightseagreen;">0%</div>
+        <input type="button" value="RUN" id="run"/>
+        <input type="button" value="STOP" id="stop"/>
+    </div>
+
+    <script type="text/javascript">
+    //模拟一个进度条动画，初始div宽度为1px,在step函数中将进度加1然后再更新到div宽度上，在进度达到100之前，一直重复这一过程。
+
+    // 自执行的匿名函数给requestAnimationFrame()方法添加PolyFill
+    (function() {
+
+        // lastTime: 准备执行超时调用之前取得的最后时间(即: 当前时间 + setTimeout中设置的回调时间)
+        var lastTime = 0;
+
+        // 兼容 android/ios/PC, 给 requestAnimationFrame()设置不同的前缀
+        var vendors = ['ms', 'moz', 'webkit', 'o'];
+        var x   = 0,
+            len = vendors.length;
+        for (; x < len && !window.requestAnimationFrame; x++) {
+            window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+            window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+        }
+
+        // IE <= 9 调用 setTimeout() 方法
+        if (!window.requestAnimationFrame){
+            window.requestAnimationFrame = function(callback) {
+
+                // 取得当前时间
+                var currTime = new Date().getTime();
+
+                // 设置setTimeout()中需要的回调时间:
+                console.log("currTime: ", currTime);
+                console.log("lastTime: ", lastTime);
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+
+                // 超时调用 id， 用来取消超时调用
+                var id = window.setTimeout(function() {
+                    // callback
+                    callback(currTime + timeToCall);
+                }, timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+        }
+        if (!window.cancelAnimationFrame) {
+            window.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+        }
+
+    }());
+
+
+    var ele       = document.getElementById("test"),
+        run       = document.getElementById("run"),
+        stop      = document.getElementById("stop"),
+        progress  = 0;
+
+
+
+    var timeoutId  = null;
+
+    function step(){
+        if(progress < 100){
+            progress        += 1;
+            ele.style.width =  progress + "%";
+            ele.innerHTML   =  progress + "%";
+            timeoutId       = requestAnimationFrame(step);
+        }
+    }
+    //start = requestAnimationFrame(step);
+
+
+    EventUtil.addHandler(run, "click", function (){
+        step();
+    });
+
+    EventUtil.addHandler(stop, "click", function (){
+        cancelAnimationFrame(timeoutId);
+    });
+
+
+    /**自定义帧率的方法:
+     var fps = 15;
+     function animate() {
+        setTimeout(function() {
+            requestAnimationFrame(animate);
+        }, 1000 / fps);
+     }
+     ************************
+
+     当然还有更复杂的办法
+
+     var time;
+     function animate() {
+        requestAnimationFrame(animate);
+        var now = new Date().getTime(),
+            dt = now - (time || now);
+
+        time = now;
+
+        // 比如更新x的位置:
+        this.x += 10 * dt;
+
+        // 每毫秒增加10个单位
+     }
+
+     **/
+
+</script>
+</body>
+</html>
