@@ -414,3 +414,8 @@
     CookieUtil.unset("name");
     CookieUtil.unset("book");
   ```
+
+
+
+- 从代码层面禁用谷歌自动填充功能: 写一个高度为0的额外的输入框，并设置autocomplete='new-password'属性，就可以解决问题了.
+
