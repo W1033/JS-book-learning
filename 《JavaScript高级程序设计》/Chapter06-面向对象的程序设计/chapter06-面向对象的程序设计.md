@@ -360,7 +360,7 @@
   不必在构造函数中定义对象实例的信息, 而是可以将这些信息直接添加到原型对象中,
   如下面的例子所示. 
 - (1) **理解原型对象**
-    + <img src="../../images/prototype-image.png" 
+    + <img src="../../JavaScript知识集合/images-js-knowledge-set/prototype-image.png" 
         style="width: 90%; margin-left:0; border: 1px solid #ccc;">
 - (2) **原型与 `in` 操作符**
     + 有 2 种方式使用 `in` 操作符: (1)单独使用, (2) 在 `for-in` 循环中使用.
@@ -404,7 +404,7 @@
         };
       ```
 - (4) **原型的动态性**
-    + <img src="../../images/6.3.1-原型链图.png" 
+    + <img src="../../JavaScript知识集合/images-js-knowledge-set/6.3.1-prototype.png" 
         style="width: 90%; margin-left:0; border: 1px solid #ccc;">
 - (5) **原生对象的原型**
     + 原型模式的重要性不仅体现在创建自定义类型方面, 就连所有原生的引用类型,
@@ -534,7 +534,7 @@
   ```
 
 #### 6.3.4 原型式继承
-> MDN -- Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象. 
+- > MDN -- Object.create() 方法会使用指定的原型对象及其属性去创建一个新的对象. 
 - 语法: Object.create(proto, [propertiesObject]):
     + (1) `proto`: 一个对象, 应该是新创建的对象的原型. (具体来说就是要赋值给构造函数的
       原型的对象)

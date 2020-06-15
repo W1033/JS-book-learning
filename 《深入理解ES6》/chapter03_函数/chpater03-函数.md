@@ -39,7 +39,7 @@
 - parametric [ˌpærə'metrik]  adj.参数的
 - parameter  [pə'ræmɪtə]     n. 参数
 - statement  ['steɪtm(ə)nt]  n. 声明, 陈述
-- expression [ɪk'spreʃ(ə)n]  n. 表达， 表现
+- expression [ɪk'spreʃ(ə)n]  n. 表达,  表现
 
 ---
 
@@ -84,9 +84,9 @@
     sum(6, 7);
   ```
 #### 3.1.3 参数默认值对 `arguments` 对象的影响
-- 在使用 `ES6` 参数默认值的函数中, `arguments` 对象的表现总是会与 ES5 的严格模式一致,
-  无论此时函数是否明确运行在严格模式下. 参数默认值的存在触发了 `arguments`
-  对象与`具名参数`的分离. 这是个细微但重要的细节, 因为 `arguments`
+- 在使用 `ES6` 参数默认值的函数中, `arguments` 对象的表现总是会与 ES5
+  的严格模式一致, 无论此时函数是否明确运行在严格模式下. 参数默认值的存在触发了
+  `arguments` 对象与`具名参数`的分离. 这是个细微但重要的细节, 因为 `arguments`
   对象的使用方式发生了变化. 研究如下代码: 
   ```js
     // - 非严格模式
@@ -124,7 +124,9 @@
 
 ### 3.2 使用不具名参数 (无命名参数)
 #### 3.2.1 ES5 中的 不具名参数
-+ ```javascript
+- JS 早就提供了 `arguments` 对象用于查看传递给函数的所有参数,
+  这样就不必分别指定每个参数.
+  ```javascript
     let book = {
         title: "Understanding ECMAScript 6",
         author: "Nicholas C. Zakas",
@@ -145,11 +147,23 @@
     console.log(bookData.author);
     console.log(bookData.year);
   ```
+  此函数模拟了 `Underscore.js` 代码库的 `pick()` 方法,
+  能够返回包含原有对象特定属性的子集副本. 本例中只为函数定义了一个参数,
+  期望该参数就是需要从中拷贝属性的来源对象,
+  除此之外传递的所有参数则都是需要拷贝的属性的名称。
+  
+  这个 `pick()` 函数有两点需要注意. 首先, 完全看不出该函数能够处理多个参数,
+  你能为其再多定义几个参数, 但依然不足以标明该函数能处理任意数量的参数. 其次,
+  由于第一个参数被命名并被直接使用, 当你寻找需要复制的属性时, 就必须从 arguments
+  对象索引位置 1 开始处理而不是从位置 0 . 要记住使用 arguments
+  的适当索引值并不一定困难, 但毕竟多了一件需要留意的事.
+
+  ES6 引入了剩余参数以便解决这个问题.
+
 #### 3.2.2 ES6 剩余参数(Rest parameters) / 不定参数
-- 在函数的命名参数前添加三个点 (`...`) 就表明这是一个剩余参数, 该参数为一个数组, 
-  包含着自它之后传入的所有参数, 通过这个数组名即可逐一访问里面的参数.
-  e.g. 重写上面的 `pick()`
-  函数:
+- 在函数的 具名(命名)参数 前添加三个点 (`...`) 就表明这是一个剩余参数,
+  该参数为一个数组, 包含着自它之后传入的所有参数, 通过这个数组名即可逐一访问里面的参数.
+  e.g. 重写上面的 `pick()` 函数:
   ```javascript
     function pick2(obj, ...keys) {
         let result = Object.create(null);
@@ -165,10 +179,12 @@
     
     // 不定参数的使用示例
     let func = function(a, b, ...args) {
-        console.log(args);
+        console.log('argument.length:', arguments.length);  // argument.length: 6
+        console.log(args);  // [3, 4, 5, 6]
     };
-    func(1, 2, 3, 4, 5, 6); // [3, 4, 5, 6]
+    func(1, 2, 3, 4, 5, 6); 
   ```
+  注意: 函数的 `length` 属性用于指示具名参数的数量, 而剩余参数对其毫无影响.
 
 
 ### 3.3 增强的 Function 构造函数
@@ -188,7 +204,7 @@
     //   amount02: 5,
     //   origin: 'Thai'
     // }
-    // Notice: 这里 name01 和 name02 不重名，如果两个对象中存在名称相同的属性只会保留第二个。
+    // Notice: 这里 name01 和 name02 不重名, 如果两个对象中存在名称相同的属性只会保留第二个。
     console.log('obj03: ', obj03);
 
     let greeting = ['Hi', 'Howdy', 'Hey, man', 'G\'day mate'];
@@ -245,7 +261,7 @@
   ```javascript
     let doSomething = function doSomethingElse() {};
     const person = {
-        // - getter 函数，名称为"get firstName", setter 函数的名称有前缀 "set"
+        // - getter 函数, 名称为"get firstName", setter 函数的名称有前缀 "set"
         get firstName() {
             return "Nicholas";
         },
@@ -256,14 +272,14 @@
     console.log(doSomething.name);      // doSomething
     console.log(person.sayName.name);   // sayName
 
-    // - 这里和书上有出入，这是发现的第二处修改了
+    // - 这里和书上有出入, 这是发现的第二处修改了
     // - getOwnPropertyDescriptor 取得自身属性描述符
     const descriptor = Object.getOwnPropertyDescriptor(person, "firstName");
     console.log(descriptor.get.name);   // get firstName
 
-    // P53: 通过 bind() 函数创建的函数，其名称将带有 "bound" 前缀; 通过 Function 
-    // 构造函数创建的函数，其名称
-    // 将是 "anonymous"(/ə'nɒnɪməs/ adj.匿名)。 示例如下:
+    // P53: 通过 bind() 函数创建的函数, 其名称将带有 "bound" 前缀; 通过 Function 
+    // 构造函数创建的函数, 其名称
+    // 将是 "anonymous"(匿名). 示例如下:
     const doSome = function () {
         // 空函数
     };
@@ -273,7 +289,7 @@
 
 ### 3.6 明确函数的多重用途
 #### 3.6.1 在 ES5 中判断函数被调用的方法
-- 在ES5中如果想确定一个函数是否通过 new 关键字被调用(或者说，判断该函数是否作为
+- 在ES5中如果想确定一个函数是否通过 new 关键字被调用(或者说, 判断该函数是否作为
   构造函数被调用),最流行的方式是使用 `instanceof` (instance 实例), 例如:
   ```javascript
     function Person(name) {
@@ -317,8 +333,8 @@
 #### 3.7.2 非严格模式下的块级函数
 
 ### 3.8 箭头函数
-- 在 ECMAScript6 中，箭头函数是其中最有趣的新增特性。顾名思义，箭头函数是一种使用箭头
-  `=>` 定义函数的新语法，但是它与传统的 Javascript 函数有些许不同，主要集中在以下方面:
+- 在 ECMAScript6 中, 箭头函数是其中最有趣的新增特性。顾名思义, 箭头函数是一种使用箭头
+  `=>` 定义函数的新语法, 但是它与传统的 Javascript 函数有些许不同, 主要集中在以下方面:
     + (1) **没有 `this`、`super`、`arguments` 和 `new.target` 绑定**, 箭头函数
       中的 this、super、arguments 及 new.target 这些值 
       **由外围最近一层非箭头函数决定**.(super 将在第 4 章进行讲解。)
@@ -332,7 +348,7 @@
                     }, 1000)
                 }
             };
-            // - 第一个 this 是 obj 对象，第二个 this 还是 obj 对象
+            // - 第一个 this 是 obj 对象, 第二个 this 还是 obj 对象
             obj.a.call(obj); 
           ```
         - 示例 2
@@ -350,22 +366,22 @@
             obj.a();  // 打出的是obj对象, 相当于obj.a.call(obj)
             obj.b.c(); //打出的是obj.b对象, 相当于obj.b.c.call(obj.b)
           ```
-    + (2) **不能通过 `new 关键字调用** 箭头函数没有`[Construct]` 方法，所以
-      不能被用作构造函数，如果通过 new 关键字调用箭头函数，程序会抛出错误.
+    + (2) **不能通过 `new 关键字调用** 箭头函数没有`[Construct]` 方法, 所以
+      不能被用作构造函数, 如果通过 new 关键字调用箭头函数, 程序会抛出错误.
     + (3) **没有原型** 由于不可以通过 new 关键字调用箭头函数, 因而没有构造原型的需求,
       所以箭头函数不存在 prototype 这个属性.
-    + (4) **不可以改变 `this` 的绑定** 函数内部的 this 值不可被改变，
+    + (4) **不可以改变 `this` 的绑定** 函数内部的 this 值不可被改变, 
       在函数的生命周期内始终保持一致。
-    + (5) **不支持 `arguments` 对象** 箭头函数没有 arguments 绑定，所以你必须通过
+    + (5) **不支持 `arguments` 对象** 箭头函数没有 arguments 绑定, 所以你必须通过
       命名参数和不定参数(Rest parameters) 这 2 种形式访问函数的参数.
-    + (6) **不支持重复的命名参数** 无论在严格还是非严格模式下，箭头函数都不支持
-      重复的命名参数；而在传统函数的规定中，只有在严格模式下才不能有重复的命名参数。
-      没有原型由于不可以通过 new 关键字调用箭头函数，因而没有构建原
+    + (6) **不支持重复的命名参数** 无论在严格还是非严格模式下, 箭头函数都不支持
+      重复的命名参数；而在传统函数的规定中, 只有在严格模式下才不能有重复的命名参数。
+      没有原型由于不可以通过 new 关键字调用箭头函数, 因而没有构建原
 - Note: 箭头函数同样也有一个 name 属性, 这与其他函数的规则相同. 
-- Added: 箭头函数: 所谓箭头函数，目的其实就是为了实现函数式的 lambda 表达式的，它本身
-  就是为了函数式而添加进去的新概念，所谓“方便写”只是附带的特性。然而，函数式和面向对象
-  两种编程语言范式是冲突的，冲突的点在于数据组织的方式不一致。面向对象是利用 “对象” 来
-  集合一组数据和方法，而函数式是通过函数来集合一组数据，并且他的方法是和数据分开的。所以
+- Added: 箭头函数: 所谓箭头函数, 目的其实就是为了实现函数式的 lambda 表达式的, 它本身
+  就是为了函数式而添加进去的新概念, 所谓“方便写”只是附带的特性。然而, 函数式和面向对象
+  两种编程语言范式是冲突的, 冲突的点在于数据组织的方式不一致。面向对象是利用 “对象” 来
+  集合一组数据和方法, 而函数式是通过函数来集合一组数据, 并且他的方法是和数据分开的。所以
   在函数式里面不会存在 this 这种上下文概念。
 #### 3.8.1 箭头函数语法
 - 箭头函数的语法多变, 根据实际的使用场景有多种形式. 所有变种都由 函数参数, 箭头, 函数体

@@ -57,3 +57,13 @@
     console.log(person);
     console.log(notAPersion)
 })();
+
+
+(function() {
+    // 不定参数的使用示例
+    let func = function(a, b, ...args) {
+        console.log('argument.length:', arguments.length);  // argument.length: 6
+        console.log(args);  // [3, 4, 5, 6]
+    };
+    func(1, 2, 3, 4, 5, 6); 
+})();

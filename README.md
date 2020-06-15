@@ -1,8 +1,8 @@
 #  JS-book-learning
 
 
-**Tip:** 当前仓库内容为学习 JavasScript 相关书籍/文档的笔记, 更新比较频繁,
-所以请 watch 而不要 fork 当前仓库! 
+**Tip:** 当前为学习 JavasScript 相关书籍/文档的笔记, 更新比较频繁,
+请 Star 而不要 Fork! 
 
 
 ## Repository Directory(当前仓库目录)
