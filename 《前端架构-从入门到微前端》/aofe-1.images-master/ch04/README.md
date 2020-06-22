@@ -1,2 +1,0 @@
-
-![](css-in-js.png)
