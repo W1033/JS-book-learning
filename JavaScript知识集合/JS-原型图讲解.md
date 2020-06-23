@@ -12,6 +12,15 @@
 
 
 
+## Pre-Content
+- 我们使用 `new` 创建一个构造函数的实例(一个对象)经历了什么?
+  
+  答: 见
+  `../《Javascript设计模式与开发实践》/第1部分--基础知识/Chapter01-面向对象的javascript.md`
+  中的 `1.4.5` 
+
+
+
 ## Contents
 
 

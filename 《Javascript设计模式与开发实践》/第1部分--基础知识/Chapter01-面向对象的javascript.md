@@ -698,7 +698,7 @@
         return typeof ret === 'object' ? ret : obj;
     }
 
-    let a = ObjectFactory(Person, "seven");
+    let a = objectFactory(Person, "seven");
 
     console.log(a);     // Person { name: 'seven' }
     console.log(a.name);
@@ -762,10 +762,10 @@
   对象设置正确的 `__proto__` 指向. 
 ```js
     obj.__proto__ = Constructor.prototype;
-  ```
+```
   通过这句代码, 我们让 `obj.__proto__` 指向 `Person.prototype`, 
   而不是原来的 `Object.prototype`.
-  
+
 - (4) **如果对象无法响应某个请求, 它会把这个请求委托给它的构造器的原型**
   这条规则即是原型继承的精髓所在. 从对 Io 语言的学习中, 我们已经了解到, 
   当一个对象无法响应某个请求的时候, 它会顺着原型链把请求传递下去, 
@@ -868,7 +868,7 @@
 #### 1.4.6 原型继承的未来
 - 另外,  ECMAScript 6 带来了新的 Class 语法. 这让 JavaScript
   看起来像是一门基于类的语言, 但其背后仍是通过原型机制来创建对象. 
-   
+  
   更多关于 ES6 的 `Class` 创建类的语法, 见:
   `../../《深入理解ES6》/chapter09_JavaScript中的类`
 
