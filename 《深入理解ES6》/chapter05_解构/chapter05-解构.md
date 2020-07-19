@@ -148,6 +148,19 @@
   因为 `value` 使用了预设的默认值, 我们曾在第 3 章讨论过函数的默认参数值,
   这个过程与其很相似.
 
+- **Additional Info:** 这里添加一个示例, 这个示例在 Vuex 官网文档的 todos
+  示例中有相似的使用: 
+  ```js
+    let todo = {text: '吃饭', done: false}
+    // - 解构组件的默认值, 在函数的参数中使用解构.
+    function merge({todo, text = todo.text, done = todo.done}) {
+        console.log('todo:', todo);
+        console.log('text: ', text);
+        console.log('done: ', done);
+    }
+    merge({todo, done: true})
+  ```
+
 #### 5.2.3 为非同名局部变量赋值
 - 到目前为止的每一个示例中, 解构赋值使用的都是与对象属性同名的局部变量,
   例如: `node.type` 的值被存储在了变量 `type` 中. 
