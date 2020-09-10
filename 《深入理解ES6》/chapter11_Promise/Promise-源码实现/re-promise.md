@@ -72,7 +72,7 @@
                     onError(e);
                 }
             }
-    
+   
             // - 执行回调 execute callback:
             //     + status: fulfilled / rejected
             //     + value: value 参数是在 new Promise(function() {}) 时, 在函数参数
@@ -474,4 +474,4 @@
             console.log(value[2]);
         });
     })();
-  ```  
+  ```
