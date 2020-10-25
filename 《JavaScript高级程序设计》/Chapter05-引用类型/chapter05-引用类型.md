@@ -53,6 +53,18 @@
       Do we have to slice that into 10 different roles?
       Can I just be a product developer? (我们必须把它分成10个不同的角色吗? 
       我可以成为产品开发人员吗?)
+- **split `[splɪt]` --vt.分离; 使分离; 劈开; 离开. --vi.离开; 被劈开; 断绝关系. --n.裂口,裂缝; 分裂,分歧;**
+    + split(vt) logs. 劈开圆木.
+    + The gale split(vt) the sails. 强风把帆扯破.
+    + split(vt) a board in two. 把木板劈成两半.
+    + a debate that has split(vt) the country down the middle. 
+      使全国分成两大派的一场争论.
+    + Let's split(vt)! 咱们快走吧.
+    + This wood splits(vi) easily. 这种木材容易裂开.
+    + The ship suddenly split(vi) in two. 那艘船突然裂成两半.
+    + The party split(vi) on the issue. 该党因那个问题而分裂.
+    + There's a big split(n) in the tent. 帐篷上撕了一个大口子.
+    + He demanded a 50-50 split(n) in the profits. 他要求利润对半分成.
 - **splice [splaɪs] --vt.拼接; 接合. --n.拼接**
     + He spliced(vt) the two lengths of film together. 
       他把两段胶卷粘接起来.
@@ -84,52 +96,50 @@
   提供了很多原生引用类型（例如 Object）, 以便开发人员用以实现常见的计算任务.   
 
 ### 5.1 `Object` 类型
-- 一般来说, 访问对象属性时使用的都是点表示法, 这也是很多面向对象语言中通用的语法.
-  不过, 在 JavaScript 中也可以使用方括号表示法来访问对象的属性. 在使用方括号语法时,
-  应该将要访问的 **属性以字符串的形式放在方括号中**, 如下面的例子所示. 
-  ```javascript
-    let person = {
-        name : "Nicholas",
-        age : 29
-    };
-    console.log(person["name"]);    // "Nicholas"
-    console.log(person.name);   // "Nicholas"
-  ```
+一般来说, 访问对象属性时使用的都是点表示法, 这也是很多面向对象语言中通用的语法. 不过, 在 JavaScript 中也可以使用方括号表示法来访问对象的属性. 在使用方括号语法时, 应该将要访问的 **属性以字符串的形式放在方括号中**, 如下面的例子所示. 
+```javascript
+let person = {
+    name : "Nicholas",
+    age : 29
+};
+console.log(person["name"]);    // "Nicholas"
+console.log(person.name);   // "Nicholas"
+```
 ### 5.2 `Array` 类型
 #### 5.2.1 检测数组
-- 对一个网页, 或者一个全局作用域而言, 使用 `instanceof` 操作符即可:
-  ```js
-    let numbers = [1, 3, 5, 7, 9];
-    if (numbers instanceof Array) { 
-        // ...
-    }
-  ```
-  instanceof 操作符的问题在于, 它假定只有一个全局执行环境. 如果网页中包含多个框架,
-  那实际上就存在两个以上不同的全局执行环境, 从而存在两个以上不同版本的 Array
-  构造函数. 如果你从一个框架向另一个框架传入一个数组,
-  那么传入的数组与在第二个框架中原生创建的数组分别具有各自不同的构造函数.
-  
-  为了解决这个问题, ECMAScript 5 新增了 `Array.isArray()` 方法.
-  这个方法的目的是最终确定某个值到底是不是数组, 而不管它是在哪个全局执行环境中创建的.
-  这个方法的用法如下:
-  ```js
-    if (Array.isArray(numbers)) {
-        // ...
-    }
-  ```
-  支持 `Array.isArray()` 方法的浏览器有 IE9+、Firefox 4+、Safari 5+、
-  Opera 10.5+ 和 Chrome.
+对一个网页, 或者一个全局作用域而言, 使用 `instanceof` 操作符即可:
+```js
+let numbers = [1, 3, 5, 7, 9];
+if (numbers instanceof Array) { 
+    // ...
+}
+```
+instanceof 操作符的问题在于, 它假定只有一个全局执行环境. 如果网页中包含多个框架,
+那实际上就存在两个以上不同的全局执行环境, 从而存在两个以上不同版本的 Array
+构造函数. 如果你从一个框架向另一个框架传入一个数组,
+那么传入的数组与在第二个框架中原生创建的数组分别具有各自不同的构造函数.
 
-  由于上面的 `Array.isArray()` 只支持 IE9+, 那么在低版本的浏览器中, 用什么方法呢?
-  答案是: `Object.prototype.toString.call(value);`, 在任何值上调用 Object
-  原生的 `toString()` 方法, 都会返回一个 `[object NativeConstructorName]`
-  格式的字符串. 每个类在内部都有一个 `[[Class]]` 属性,
-  这个属性中就指定了上述字符串中的构造函数名. 举个例子:
-  ```js
-    // - 注意: 下面输出值中, object 是小写, Array 第一个字母是大写
-    // "[object Array]"
-    console.log(Object.prototype.toString.call(numbers));
-  ```
+为了解决这个问题, ECMAScript 5 新增了 `Array.isArray()` 方法.
+这个方法的目的是最终确定某个值到底是不是数组, 而不管它是在哪个全局执行环境中创建的.
+这个方法的用法如下:
+```js
+if (Array.isArray(numbers)) {
+    // ...
+}
+```
+支持 `Array.isArray()` 方法的浏览器有 IE9+、Firefox 4+、Safari 5+、
+Opera 10.5+ 和 Chrome.
+
+由于上面的 `Array.isArray()` 只支持 IE9+, 那么在低版本的浏览器中, 用什么方法呢?
+答案是: `Object.prototype.toString.call(value);`, 在任何值上调用 Object
+原生的 `toString()` 方法, 都会返回一个 `[object NativeConstructorName]`
+格式的字符串. 每个类在内部都有一个 `[[Class]]` 属性,
+这个属性中就指定了上述字符串中的构造函数名. 举个例子:
+```js
+// - 注意: 下面输出值中, object 是小写, Array 第一个字母是大写
+// "[object Array]"
+console.log(Object.prototype.toString.call(numbers));
+```
 
 #### 5.2.2 转换方法
 - 所有对象都具有 `toLocaleString()`、`toString()` 和 `valueOf()`方法.
@@ -561,129 +571,133 @@
 
 ### 5.6 基本包装类型
 #### 5.6.1 `Boolean` 类型
+
+
 #### 5.6.2 `Number` 类型
-- Number 是与数字值对应的引用类型. 要创建 Number 对象, 可以在调用 Number
-  构造函数时向其中传递相应的数值. 下面是一个例子. 
-  ```js
-    var numberObject = new Number(10);
-  ```
-  与 Boolean 类型一样,  Number 类型也重写了 `valueOf()`、 `toLocaleString()`
-  和 `toString()`方法. 重写后的 `valueOf()` 方法返回对象表示的基本类型的数值, 
-  **另外两个方法则返回字符串形式的数值**. 我们在第 3 章还介绍过, 可以为 `toString()`
-  方法传递一个表示基数的参数, 告诉它返回几进制数值的字符串形式, 如下面的例子所示:
-  ```js
-    var num = 10;
-    alert(num.toString()); //"10"
-    alert(num.toString(2)); //"1010"
-    alert(num.toString(8)); //"12"
-    alert(num.toString(10)); //"10"
-    alert(num.toString(16)); //"a"
-  ```
-  除了继承的方法之外,  Number 类型还提供了一些用于将数值格式化为字符串的方法. 其中, 
-  `toFixed()` 方法会按照指定的小数位**返回数值的字符串表示**, 例如:
-  ```js
-    var num = 10;
-    alert(num.toFixed(2)); //"10.00"
-  ```
+Number 是与数字值对应的引用类型. 要创建 Number 对象, 可以在调用 Number
+构造函数时向其中传递相应的数值. 下面是一个例子. 
+```js
+var numberObject = new Number(10);
+```
+与 Boolean 类型一样, Number 类型也重写了 `valueOf()`、 `toLocaleString()`
+和 `toString()`方法. 重写后的 `valueOf()` 方法返回对象表示的基本类型的数值, 
+**另外两个方法则返回字符串形式的数值**. 我们在第 3 章还介绍过, 可以为 `toString()`
+方法传递一个表示基数的参数, 告诉它返回几进制数值的字符串形式, 如下面的例子所示:
+```js
+var num = 10;
+alert(num.toString()); //"10"
+alert(num.toString(2)); //"1010"
+alert(num.toString(8)); //"12"
+alert(num.toString(10)); //"10"
+alert(num.toString(16)); //"a"
+```
+除了继承的方法之外, Number 类型还提供了一些用于将数值格式化为字符串的方法. 其中, 
+`toFixed()` 方法会按照指定的小数位**返回数值的字符串表示**, 例如:
+```js
+var num = 10;
+alert(num.toFixed(2)); //"10.00"
+```
 #### 5.6.3 `String` 类型
-- `String` 类型是字符串的对象包装类型, 可以像下面这样使用 `String` 构造函数来创建.
+`String` 类型是字符串的对象包装类型, 可以像下面这样使用 `String` 构造函数来创建.
+```js
+var stringObject = new String('Hello world');
+```
+`String` 对象的方法也可以在所有基本的字符串值中访问到. 其中, 继承的 `valueOf()`,
+`toLocaleString()` 和 `toString()` 方法, 都返回对象所表示的基本字符串值.
+
+`String` 类型的每个实例都有一个 `length` 属性, 表示字符串中包含多个字符.
+来看下面的例子.
+```js
+var stringValue = "hello world";
+console.log(stringValue.length);// "11"
+```
+这个例子输出了字符串 "hello world" 中的字符数量, 即 "11". 应该注意的是,
+即使字符串中包含双字节字符 (不是占一个字节的 `ASCII` 字符), 每个字符也仍然算一个字符.
+
+`String` 类型提供了很多方法, 用于辅助完成对 ECMAScript 中字符串的解析和操作. 
+##### (1). 字符方法
+2 个用于访问字符串中特定字符的方法: 这两个方法都接收一个参数, 即`基于 0 的字符位置`.
+
++ (1) `charAt(num)`: 以单字符字符串的形式返回给定位置的那个字符.
+  (ES 中没有字符类型) 例如: 
   ```js
-    var stringObject = new String('Hello world');
+    var stringValue = 'Hello world';
+    console.log(stringValue.charAt(1)); // "e"
   ```
-  `String` 对象的方法也可以在所有基本的字符串值中访问到. 其中, 继承的 `valueOf()`,
-  `toLocaleString()` 和 `toString()` 方法, 都返回对象所表示的基本字符串值.
 
-  `String` 类型的每个实例都有一个 `length` 属性, 表示字符串中包含多个字符.
-   来看下面的例子.
-   ```js
-    var stringValue = "hello world";
-    console.log(stringValue.length);    // "11"
-   ```
-  这个例子输出了字符串 "hello world" 中的字符数量, 即 "11". 应该注意的是,
-  即使字符串中包含双字节字符 (不是占一个字节的 `ASCII` 字符), 每个字符也仍然算一个字符.
++ (2) `charCodeAt(num)`: 返回给定位置的字符编码.
+  ```js
+    var stringValue = 'Hello world';
+    console.log(stringValue.charCodeAt(1)); // "101"
+  ```
+##### (2). 字符串操作方法
++ (a.) `concat()`: 用于拼接一或多个字符串, 返回拼接后的新字符串.
+  ```js
+    var stringValue = "hello ";
+    var result = stringValue.concat("world");
+    console.log(result);        // "hello world"
+    console.log(stringValue);   // "hello"
+  ```
++ (b.) ES 还提供了 3 个基于子字符串创建新字符串的方法: 这 3 个方法都会返回被操作字符串的一个子字符串, 而且都接受 1 或 2 个参数. 第 1 个参数 `指定子字符串的开始位置`, 第 2 个参数 `指定的是子字符串最后一个字符后面的位置.`
+    - `slice()`
+    - `substr()`
+    - `subString()`
+##### (3). 字符串位置方法
+有 2 个可以从字符串中查找子字符串的方法: 这 2 个方法都是从一个字符串中
+`搜索给定的子字符串`, 然后返回子字符串的位置(如果没有找到该子字符串, 则返回 `-1`).
+这 2 个方法也可以接受第二个参数, 表示`从字符串中的那个位置开始搜索`.
+- `indexOf()`
+- `lastIndexOf()`
 
-  `String` 类型提供了很多方法, 用于辅助完成对 ECMAScript 中字符串的解析和操作. 
-- (1). 字符方法
-    + 2 个用于访问字符串中特定字符的方法: 这两个方法都接收一个参数, 即`基于 0 的字符位置`.
-        + `charAt(num)`: 以单字符字符串的形式返回给定位置的那个字符.(ES 中没有字符类型.)
-          例如: 
-          ```js
-            var stringValue = 'Hello world';
-            console.log(stringValue.charAt(1));     // "e"
-          ```
-        + `charCodeAt(num)`: 返回给定位置的字符编码.
-           ```js
-            var stringValue = 'Hello world';
-            console.log(stringValue.charCodeAt(1));     // "101"
-          ```
-- (2). 字符串操作方法
-    + (a.) `concat()`: 用于拼接一或多个字符串, 返回拼接后的新字符串.
-      ```js
-        var stringValue = "hello ";
-        var result = stringValue.concat("world");
-        console.log(result);        // "hello world"
-        console.log(stringValue);   // "hello"
-      ```
-    + (b.) ES 还提供了 3 个基于子字符串创建新字符串的方法: 这 3
-      个方法都会返回被操作字符串的一个子字符串, 而且都接受 1 或 2 个参数.
-      第 1 个参数 `指定子字符串的开始位置`, 第 2 个参数
-      `指定的是子字符串最后一个字符后面的位置.`
-        - `slice()`
-        - `substr()`
-        - `subString()`
-- (3). 字符串位置方法
-    + 有 2 个可以从字符串中查找子字符串的方法: 这 2
-      个方法都是从一个字符串中 `搜索给定的子字符串`, 然后返回子字符串的位置
-      (如果没有找到该子字符串, 则返回 `-1`). 这 2 个方法也可以接受第二个参数,
-      表示`从字符串中的那个位置开始搜索`.
-        - `indexOf()`
-        - `lastIndexOf()`
-- (4). `trim()` 方法
-- (5). 字符串大小写转换方法
-    + `toLowerCase()`, toLocalLowerCase()
-    + `toUpperCase()`, toLocalUpperCase()
-- (6). 字符串的模式匹配方法
-    + (1) `match()`: 只接受一个参数(正则表达式 / RegExp对象)
-    + (2) `search()`: 参数与 match 方法相同.  search() 方法返回字符串中第一个匹配项
-      的索引; 如果没有返回 -1.
-    + (3) `replace()`: 接受2个参数: 第一个为 "正则表示 / RegExp对象", 第二个参数为
-      "一个字符串 / 一个函数". 
-      
-        - 更多 `replace()` 的使用示例见:
-          `DataStructure-Algorithm-Learning/正则表达式/replace方法和正则表达式.md`
-    + (4) `split()`: 基于指定的分隔符将一个字符串分割为多个子字符串, 并将结果放在一个
-      数组中. (Tip: 简短说法: `split()` 方法: 把字符串转换为数组.)
-      ```js
-        // (1.) match()
-        let word = "cot, bot, sot, fot";
-        let pattern = /.ot/;
-        let matches = word.match(pattern);
-        console.log(matches.index);   // 0
-        console.log(matches[0]);      // cot
-        console.log(pattern.lastIndex);   // 0
+##### (4). `trim()` 方法
 
-        // (2.) search()
-        let font = "cat, bat, dat, eat";
-        let pos = font.search(/at/);
-        console.log(pos);     // 1
-        
-        // (3.) replace()
-        let text = "cat, bat, sat, fat";
-        let result = text.replace(/at/g, "ond");
-        console.log(result);  // replace 返回的是字符串:  cond, bond, sond, fond
-        
-        // (4.) split()
-        const colorText = "red, blue, green, yellow";
-        let colorArr = colorText.split(",");
-        console.log(colorArr);  // [ 'red', ' blue', ' green', ' yellow' ]
-      ```
-- (7). `localCompare()` 方法
-- (8). `fromCharCode()` 方法
-    + `fromCharCode()`: 接收一或多个字符编码, 然后将它们转换成一个字符串. 
-      从本质上来看, 这个方法与实例方法 `charCodeAt()` 执行的是相反的操作. 
-      ```js
-        console.log(String.fromCharCode(104, 101, 108, 108, 111));  // "hello"
-      ```
+##### (5). 字符串大小写转换方法
++ `toLowerCase()`, `toLocalLowerCase()`
++ `toUpperCase()`, `toLocalUpperCase()`
+
+##### (6). 字符串的模式匹配方法
++ (1) `match()`: 只接受一个参数(正则表达式 / RegExp对象)
++ (2) `search()`: 参数与 match 方法相同.  search()
+  方法返回字符串中第一个匹配项的索引; 如果没有返回 -1.
++ (3) `replace()`: 接受2个参数:
+    - 第一个为 "正则表示 / RegExp对象", 
+    - 第二个参数为 "一个字符串 / 一个函数". 
+  
+  更多 `replace()` 的使用示例见:
+  `DataStructure-Algorithm-Learning/正则表达式/replace方法和正则表达式.md`
++ (4) `split()`: 基于指定的分隔符将一个字符串分割为多个子字符串,
+  并将结果放在一个数组中. (Tip: 简短说法: `split()` 方法: 把字符串转换为数组.)
+  ```js
+    // (1.) match()
+    let word = "cot, bot, sot, fot";
+    let pattern = /.ot/;
+    let matches = word.match(pattern);
+    console.log(matches.index);   // 0
+    console.log(matches[0]);      // cot
+    console.log(pattern.lastIndex);   // 0
+
+    // (2.) search()
+    let font = "cat, bat, dat, eat";
+    let pos = font.search(/at/);
+    console.log(pos);     // 1
+    
+    // (3.) replace()
+    let text = "cat, bat, sat, fat";
+    let result = text.replace(/at/g, "ond");
+    console.log(result);  // replace 返回的是字符串:  cond, bond, sond, fond
+    
+    // (4.) split()
+    const colorText = "red, blue, green, yellow";
+    let colorArr = colorText.split(",");
+    console.log(colorArr);  // [ 'red', ' blue', ' green', ' yellow' ]
+  ```
+##### (7). `localCompare()` 方法
+##### (8). `fromCharCode()` 方法
+`fromCharCode()`: 接收一或多个字符编码, 然后将它们转换成一个字符串. 
+从本质上来看, 这个方法与实例方法 `charCodeAt()` 执行的是相反的操作. 
+```js
+console.log(String.fromCharCode(104, 101, 108, 108, 111));  // "hello"
+```
 
 ### 5.7 单体内置对象
 #### 5.7.1 `Global` 对象
