@@ -81,25 +81,53 @@
         //     console.log(1);
         // })();
 
-        function add(x, y) {
-            var sum = x;
-            if (y) {
-                return sum + y;
-            }
-            else {
-                var temp = function(z) {
-                    sum = sum + z;
-                    return temp;
-                }
-                temp.toString = function() {
-                    return sum;
-                }
-                console.log(temp.toString)
-                return temp;
-            }
+        // function add(x, y) {
+        //     var sum = x;
+        //     if (y) {
+        //         return sum + y;
+        //     }
+        //     else {
+        //         var temp = function(z) {
+        //             sum = sum + z;
+        //             return temp;
+        //         }
+        //         temp.toString = function() {
+        //             return sum;
+        //         }
+        //         console.log(temp.toString)
+        //         return temp;
+        //     }
+        // }
+        // // console.log(add(2, 3));     // 5
+        // console.log(add(2)(3));     // f 5
+
+        // function Foo() {
+        //     var i = 0;
+        //     return function() {
+        //         console.log(i++);
+        //     }
+        // }
+        // var f1 = Foo();
+        // var f2 = Foo();
+        // f1();
+        // f1();
+        // f2();
+
+        var bb = 1;
+        function aa(bb) {
+            bb = 2;
+            console.log(bb);
         }
-        // console.log(add(2, 3));     // 5
-        console.log(add(2)(3));     // f 5
+        aa(bb);
+        console.log('out:', bb);
+
+        var a = "40";
+        var b = 7;
+        console.log( a % b);
+
+        console.log(isNaN(1/0));
+        console.log(1 in [1]);
+        console.log( 1 && 2);
     </script>
 </body>
 </html>
