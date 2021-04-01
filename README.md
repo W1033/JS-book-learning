@@ -1,8 +1,13 @@
 #  JS-book-learning
 
+**Hint:** 学习 JavaScript 书籍和文档的笔记；最近一年应该会暂停更新， 如果有需要请 fork.
 
-**Tip:** 当前为学习 JavasScript 相关书籍/文档的笔记, 更新比较频繁,
-请 Star 而不要 Fork! 
+**Tip:**  JS数据结构和算法的笔记在 `DataStructure-Algorithm-Learning` 仓库中，Vue 学习的笔记在 `Vue-learning` 内。
+
+> 学编程有没有必要做笔记?
+>
+>>  A : 十分肯定, 一定要做!
+      (tip: 编程书看第一遍时，可以拿笔在书上划重点， 但一定不要做笔记。)
 
 
 ## Repository Directory(当前仓库目录)
@@ -29,14 +34,7 @@
 ------
 
 
-> 学编程有没有必要做笔记?
-    + A: 十分肯定, 一定要做!
-      (tip: 编程书第一遍看时, 可以拿笔在书上划重点, 但一定不要做笔记.)
-
-------
-
-
-## Table Of Contents
+## 当前 ReadMe 文档的 TOC(目录)
 1. JavaScript 常见基础语法
     + 1.1 `childNodes` 和 `children` 的区别: 
     + 1.2 JS 中的根对象: `Object.prototype` 对象
