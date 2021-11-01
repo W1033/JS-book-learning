@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>拷贝继承</title>
+</head>
+<body>
+    <script type="text/javascript">
+        /**
+         * - (1) typeof Array|[]|Object|{} 都会返回 object 如果监测到 parent 的
+         *      子项是 object 走 if
+         * - (2)、如果当前 parent[item] 项利用 constructor 属性找到其构造函数为 Array
+         *      就把一个空数组赋值给当前child[item]，如果不是把一个空对象赋值给 child[item]
+         * - (3) 把 parent[2]项，再次传入到 deepCopy中，执行后 child[2] 得到 parent[2] 中的数组内容
+         * - (4)、如果 parent 的子项是基本类型(Undefined|Null|Number|Boolean|
+         *      String|Symbol)的值走 else
+         */
+        function deepCopy(parent, child = {}) {
+            for (let item in parent) {
+                // (1)、
+                if (typeof parent[item] === "object") {
+                    // (2)、
+                    child[item] = (parent[item].constructor === Array) ? [] : {};
+                    // (3)、
+                    deepCopy(parent[item], child[item]);
+                    console.log('child: ', child);
+                } else {
+                    // (4)、
+                    child[item] = parent[item];
+                }
+            }
+            return child;
+        }
+
+        //调用示例:
+        let Chinese = {
+            nation: "中国",
+            birthPlaces: ["北京", "上海", "深圳"]
+        };
+
+        let Doctor = deepCopy(Chinese);
+        Doctor.career = "医生";
+        Doctor.birthPlaces.push("厦门");
+
+        console.log('Doctor Object: ');
+        // { nation: '中国', birthPlaces: [ '北京', '上海', '深圳', '厦门' ], career: '医生' }
+        console.log(Doctor);
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        let o1 = {
+            arr: [1, 2, 3],
+            obj: {
+                key: 'value'
+            },
+            func: function(){
+                return 1;
+            }
+        };
+        let o3 = deepCopy(o1);
+        console.log(o3 === o1); // false
+        console.log(o3.obj === o1.obj); // false
+
+        /**
+         * - jQuery中的 extend 方法基本的就是按照这个思路实现的，但是没有办法处理源对象内部
+         *   循环引用的问题，同时对 Date，Function 等类型值也没有实现真正的深度复制，但是这些
+         *   类型的值在重新定义的时候一般都是直接覆盖，所以也不会对源对象产生影响，从一定程度上
+         *   来说也算是实现了一个深拷贝。
+         */
+        // 从这个输出结果可以看出，这个 deepCopy 并没有解决 Function 类型的深度复制，(深
+        // 度复制就是: copy 一份完整的数据，01 和 03 是两份不同的数据，所以 o3.obj !==
+        // 01.obj , 但是这里 o3.func === o1.func 的结果为 true, 所以应该是互相引用的)
+        console.log(o3.func === o1.func); // true
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深拷贝</title>
+</head>
+<body>
+    <script>
+        // - 此代码来自 Vuex 仓库: `Vuex/vuex-dev/src/util.js`
+        export function deepCopy (obj, cache = []) {
+            // - just return if obj is immutable value
+            // - 如果 obj 是常量直接返回
+            if (obj === null || typeof obj !== 'object') {
+                return obj
+            }
+
+            // if obj is hit, it is in circular structure
+            // - 如果 obj 被命中, 则它为循环结构
+            const hit = find(cache, c => c.original === obj)
+            if (hit) {
+                return hit.copy
+            }
+
+            const copy = Array.isArray(obj) ? [] : {}
+            // put the copy into cache at first
+            // because we want to refer it in recursive deepCopy
+            // - 首先将副本放入缓存, 因为我们要在递归 deepCopy 中引用它.
+            cache.push({
+                original: obj,
+                copy
+            })
+
+            Object.keys(obj).forEach(key => {
+                copy[key] = deepCopy(obj[key], cache)
+            })
+
+            return copy
+        }
+
+        /**
+         * Get the first item that pass the test
+         * by second argument function 
+         * (根据第二个函数参数获取通过测试的第一项)
+         *
+         * @param {Array} list
+         * @param {Function} f
+         * @return {*}
+         */
+        function find(list, f) {
+            // - `filter()`: 对数组中的每一项运行给定函数, 返回该函数会返回
+            //   true 的项组成的数组.
+            return list.filter(f)[0];
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+            maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3.2.3 高阶函数实现 AOP</title>
+</head>
+<body>
+<script>
+    Function.prototype.before = function(beforefn) { // {1}
+        // - 保存原函数的引用
+        let _self = this;                           // {2}
+        // - 返回包含了原函数和新函数的 "代理" 函数
+        return function() {
+            // - 执行新函数, 修正 this
+            beforefn.apply(this, arguments);        // {3}
+            // - 执行原函数
+            return _self.apply(this, arguments);    // {4}
+        }
+    };
+    Function.prototype.after = function(afterfn) {  // {5}
+        let _self = this;   // {6}
+        // console.log(_self);
+        return function() {
+            let ret = _self.apply(this, arguments); // {7}
+            afterfn.apply(this, arguments);         // {8}
+            return ret;                             // {9}
+        }
+    };
+
+    let func = function() {         // {10}
+        console.log(2);             // {11}
+    };
+    func = func.before(             // {12}
+        function() {console.log(1)} // {13}
+    );
+    func = func.after(              // {14}
+        function() {console.log(3)} // {15}
+    );
+    func();                         // {16}
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>第8章-草稿纸</title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    /** 可迭代对象与 for-of 循环 --> 访问默认迭代器 **/
+    let nums = [1, 2, 3];
+    // 可以使用 symbol.iterator 来访问对象上的默认迭代器，就像这样
+    let thirdIterator = nums[Symbol.iterator]();
+    console.log(thirdIterator.next());  // { value: 1, done: false }
+    console.log(thirdIterator.next());  // { value: 2, done: false }
+
+
+    /** 可迭代对象与 for-of 循环 --> 创建可迭代对象 **/
+        // 开发者自定义对象默认情况下不是可迭代对象，但你可以创建一个包含生成器的 Symbol.iterator 属性,
+        // 让他成为可迭代对象:
+    let collection = {
+            items: [],
+            * [Symbol.iterator]() {
+                for (let item of this.items) {
+                    yield item;
+                }
+            }
+        };
+    collection.items.push(1);
+    collection.items.push(2);
+    collection.items.push(3);
+    for (let x of collection) {
+        console.log(x);
+    }
+
+
+    // + entries() 迭代器: 返回一个包含键值对的迭代器
+    let colors = ["red", "green", "blue"];
+    let tracking = new Set([1234, 5678, 9012]);
+    let data = new Map();
+
+    data.set("title", "Understanding ES6");
+    data.set("format", "ebook");
+
+    for (let entry of colors.entries()) {
+        console.log(entry);
+    }
+
+    for (let entry of tracking.entries()) {
+        console.log(entry);
+    }
+    for (let entry of data.entries()) {
+        console.log(entry);
+    }
+
+
+    let message = "A    B";
+    for (let i = 0; i < message.length; i++) {
+        console.log(message[i]);
+    }
+
+    let text = '𠮷𠮷𠮷';
+    // 6: ES6 之前，js字符串基于16位编码单元(UTF-16)进行构建, 一个中文大概等于2个字符
+    console.log(text.length);
+    for (let i = 0; i < text.length; i++) {
+        console.log(text[i]);
+    }
+
+    // 使用 for-of 方法输出正确的字符串
+    for (let c of text) {
+        console.log(c);
+    }
+
+
+    /** ## 扩展运算符与非数组的可迭代对象 **/
+    let smallNumbers = [1, 2, 3],
+        bigNumbers = [100, 101, 102],
+        allNumbers = [0, ...smallNumbers, ...bigNumbers];
+    console.log(allNumbers);    // [0, 1, 2, 3, 100, 101, 102]
+
+
+    /** 迭代器高级功能 --> 传递参数给迭代器 **/
+    function* createIte() {
+        let first = yield 1;
+        let second = yield first + 2; // 4 + 2
+        yield second + 3;   // 5 + 3
+    }
+
+    let ite = createIte();
+
+    // 第一次调用时即使传入参数也不是写入到 *createIte 生成器函数中，
+    console.log(ite.next(2));    // { value: 1, done: false }
+    console.log(ite.next(4));   // { value: 6, done: false }
+    console.log(ite.next(5));   // { value: 8, done: false }
+    console.log(ite.next(8));   // { value: undefined, done: true }
+    console.log(ite.next());    // { value: undefined, done: true }
+
+
+    /** 迭代器高级功能 --> 生成器委托 **/
+    function* createNumberIterator() {
+        yield 1;
+        yield 2;
+        return 3;
+    }
+
+    function* createRepeatingIterator(count) {
+        for (let i = 0; i < count; i++) {
+            yield "repeat";
+        }
+    }
+
+    function* createCombinedIterator() {
+        let result = yield* createNumberIterator();
+
+        // 由于 createNumberIterator() 包含 return 3 语句，该返回值就是3. result 变量接下来会作为
+        // 参数传递给 createRepeatIterator() 生成器，指示同一个字符串需要被重复几次(本例中是3次)
+        yield* createRepeatingIterator(result);
+    }
+
+    let combinedIte = createCombinedIterator();
+    console.log(combinedIte.next());
+    console.log(combinedIte.next());
+    console.log(combinedIte.next());
+    console.log(combinedIte.next());
+    console.log(combinedIte.next());
+    console.log(combinedIte.next());
+
+
+</script>
+</body>
+</html>

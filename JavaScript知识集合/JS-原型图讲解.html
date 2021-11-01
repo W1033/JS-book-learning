@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="box"></div>
+
+    <script>
+        // console.log(Object.prototype.__proto__);    // null
+
+        // if (Object.__proto__ === Function.prototype) {
+        //     // Object.__proto__  = Function.prototype: true
+        //     console.log('Object.__proto__  = Function.prototype:', true);
+        // }
+
+        // // - Note: Function.prototype.__proto__ 指向 Object.prototype.
+        // if (Function.prototype.__proto__ === Object.prototype) {
+        //     console.log(true);  // true
+        // }
+
+
+
+        // console.log('sync1');
+
+        // setTimeout(function() {
+        //     console.log('setTimeout1')
+        // }, 0);
+
+        // var promise = new Promise(function(resolve, reject) {
+        //     setTimeout(function() {
+        //         console.log('setTimeoutPromise')
+        //     }, 0);
+        //     console.log('promise');
+        //     resolve();
+        // });
+
+        // promise.then(() => {
+        //     console.log('pro_then');
+        //     setTimeout(() => {
+        //         console.log('pro_timeout');
+        //     }, 0)
+        // } );
+
+        // setTimeout(function() {
+        //     console.log('lat_setTimeout');
+        // }, 0);
+
+        // console.log('sync2');
+
+        var fullName = "圆圆鼠";
+        var obj = {
+            fullName: '方块候',
+            prop: {
+                fullName: '三角兔',
+                getFullName: function(){
+                    setTimeout(function showName() {
+                        console.log(this.fullName); 
+                    }, 1000)
+                    return this.fullName;
+                }
+            }
+        }
+        // console.log(obj.prop.getFullName());    // 三角兔
+
+        var getFullName = obj.prop.getFullName;
+        // console.log(getFullName())  // 圆圆鼠
+
+        // 1, 4, 1000, 0
+        // let aa = (function() {
+        //     console.log(1);
+        //     setTimeout(function() {console.log(2)}, 1000);
+        //     setTimeout(function() {console.log(3)}, 0);
+        //     console.log(4);
+        // })();
+        // aa;
+
+        // (function() {
+        //     console.log(1);
+        // })();
+
+        // function add(x, y) {
+        //     var sum = x;
+        //     if (y) {
+        //         return sum + y;
+        //     }
+        //     else {
+        //         var temp = function(z) {
+        //             sum = sum + z;
+        //             return temp;
+        //         }
+        //         temp.toString = function() {
+        //             return sum;
+        //         }
+        //         console.log(temp.toString)
+        //         return temp;
+        //     }
+        // }
+        // // console.log(add(2, 3));     // 5
+        // console.log(add(2)(3));     // f 5
+
+        // function Foo() {
+        //     var i = 0;
+        //     return function() {
+        //         console.log(i++);
+        //     }
+        // }
+        // var f1 = Foo();
+        // var f2 = Foo();
+        // f1();
+        // f1();
+        // f2();
+
+        var bb = 1;
+        function aa(bb) {
+            bb = 2;
+            console.log(bb);
+        }
+        aa(bb);
+        console.log('out:', bb);
+
+        var a = "40";
+        var b = 7;
+        console.log( a % b);
+
+        console.log(isNaN(1/0));
+        console.log(1 in [1]);
+        console.log( 1 && 2);
+    </script>
+</body>
+</html>

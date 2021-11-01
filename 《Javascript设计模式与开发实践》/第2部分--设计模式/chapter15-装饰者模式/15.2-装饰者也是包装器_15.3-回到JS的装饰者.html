@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>15.2-装饰者也是包装器_15.3-回到JS的装饰者</title>
+</head>
+<body>
+    <script type="text/javascript">
+        /**
+         * > 15.2 装饰者也是包装器
+         * - 在《设计模式》成书之前，GoF 原想把装饰者（decorator）模式成为包装器
+         *  （wrapper）模式。
+         * - 从功能上而言，decorator 能很好地描述这个模式，但从结构来看，wrapper 的说法
+         *   更加贴切。装饰者模式将一个对象嵌入另一个对象之中，实际上相当于这个对象被另一个
+         *   对象包装起来，形成一条包装链。请求随着这条链依次传递到所有的对象，每个对象都有
+         *   处理这条请求的机会。如图 15-2 所以。（P211）
+         */
+
+        /**
+         * > 15.3-回到JS的装饰者 
+         * - JavaScript 语言动态改变对象相当容易，我们可以直接改改写对象或者对象的某个方
+         *   法，并不需要使用"类"来实现装饰者模式。代码如下：
+         */  
+        let plane = {
+            fire: function() {
+                console.log("发射普通子弹");
+            }
+        };
+
+        let missileDecorator = function() {
+            console.log("发射导弹");
+        };
+
+        let atomDecorator = function() {
+            console.log("发射原子弹");
+        };
+
+        let fire1 = plane.fire;
+        plane.fire = function() {
+            fire1();
+            missileDecorator();
+        };
+
+        let fire2 = plane.fire;
+        plane.fire = function() {
+            fire2();
+            atomDecorator();
+        };
+
+        plane.fire();
+    </script>
+</body>
+</html>
+
+
+
+

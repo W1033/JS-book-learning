@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>错误捕获</title>
+</head>
+
+<body>
+  <script src="../../promise.js"></script>
+
+  <!-- <script src="../../test.js"></script> -->
+  <script>
+    // 错误捕获
+    // var promise = new Promise((resolve, reject) => {
+    //   throw new Error('I am an error')
+    // }).catch((err) => {
+    //   console.log(err)
+    // })
+
+    // promise 在 resolve 后面再抛错不会被捕获
+    // var promise = new Promise((resolve, reject) => {
+    //   resolve('success')
+    //   throw new Error('I am an error')
+    // })
+    //   .then((fullfilled) => {
+    //     console.log(fullfilled) // success
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+
+    // we hope the result is
+    // 2
+    // 错误捕获.html:38 Uncaught Error: I am an Error
+    // 解决这个问题的方法是将项目中的 setTimeout() 换成 https://github.com/YuzuJS/setImmediate/blob/master/test/browserOnly/tests.js
+    // var promise = new Promise((resolve, reject) => {
+    //   resolve(2)
+    //   setTimeout(() => {throw new Error('I am an Error')}, 0)
+    // })
+    //   .then((fullfilled) => {console.log(fullfilled)})
+
+    // 连续捕获异常
+    var promise = new Promise((resolve, reject) => {
+      throw new Error('I am an error')
+    })
+    .catch((err) => {
+      console.log(err)
+      y + 2
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  </script>
+</body>
+
+</html>

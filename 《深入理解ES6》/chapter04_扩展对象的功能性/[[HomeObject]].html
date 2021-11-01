@@ -1,0 +1,35 @@
+<script type="text/javascript">
+    /**
+     * > 单词:
+     *  - variety [və'raɪətɪ] ~~~n.品种，种类，变种
+     *  - roar [rɔː] ~~~n.吼，咆哮，轰鸣。 ~~~vi.吼叫，咆哮。 ~~~vt.咆哮，呼喊
+     *
+     * > 注释:
+     *
+     *
+     * */
+
+
+    class Animal {
+        constructor(variety) {
+            this.variety = variety;
+        }
+        variety() {
+            return this.variety;
+        }
+    }
+
+    class Dog extends Animal {
+        constructor(variety) {
+            super(variety);
+        }
+        roar() {
+            console.log(super.variety() + ": " + "wow, wow...")
+        }
+    }
+    let dog = new Dog("Bailey");
+    dog.roar();
+
+    console.log();
+
+</script>

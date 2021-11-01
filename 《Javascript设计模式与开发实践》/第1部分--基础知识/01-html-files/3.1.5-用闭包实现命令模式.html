@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+            maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3.1.5 用闭包实现命令模式</title>
+</head>
+<body>
+    <div class="container">
+        <button id="execute">点击我执行命令</button>
+        <button id="undo">点击我撤销命令</button>
+        <br>
+        <br>
+        <button id="execute02">执行命令</button>
+        <button id="undo02">撤销命令</button>
+    </div>
+
+    <script type="text/javascript">
+
+        let getId = function(id) {
+            return typeof id === 'string' ? document.getElementById(id) : id;
+        };
+
+        // - 我们先用面向对象的方式来编写一段命令式的代码。
+        (function() {
+            let Tv = {
+                open: function() {
+                    console.log("打开电视机");
+                },
+                close() {
+                    console.log("关闭电视机");
+                }
+            };
+
+            let OpenTvCommand = function(receiver) {
+                this.receiver = receiver;
+            };
+            OpenTvCommand.prototype.execute = function() {
+                // - 执行命令，打开电视机
+                this.receiver.open();
+            };
+            OpenTvCommand.prototype.undo = function() {
+                // - 撤销命令，关闭电视机
+                this.receiver.close();
+            };
+
+            let setCommand = function(command) {
+                getId('execute').onclick = function() {
+                    command.execute();
+                };
+                getId('undo').onclick = function() {
+                    command.undo();
+                }
+            };
+            setCommand(new OpenTvCommand(Tv));
+        })();
+
+        // - 命令模式的意图是把请求封装为对象，从而分离请求的发起者和请求的接收者（执行者）
+        //   之间的耦合关系。在命令被执行之前，可以预先往命令对象中植入命令的接收者。
+
+        // - 但在 JS 中，函数作为一等对象，本身就可以四处传递，用函数对象而不是普通对象来
+        //   封装请求显得更加简单和自然。如果需要往函数对象中预先植入命令的接收者，那么闭包
+        //   就可以完成这个工作。在面向对象版本的命令模式中，预先植入的命令接收者被当成对象
+        //   的属性保存起来；而在闭包版本的命令模式中，命令接收者会被封装在闭包形成的环境中
+        //   。代码如下：
+        (function() {
+            let Tv = {
+                open: function() {
+                    console.log("打开电视机");
+                },
+                close() {
+                    console.log("关闭电视机");
+                }
+            };
+
+            let createCommand = function(receiver) {
+                let execute = function() {
+                    // 执行命令，打开电视机
+                    return receiver.open();
+                };
+                let undo = function() {
+                    return receiver.close();
+                };
+
+                return {
+                    execute: execute,
+                    undo: undo
+                }
+            };
+
+            let setCommand = function(command) {
+                getId('execute02').onclick = function() {
+                    command.execute();
+                };
+                getId('undo02').onclick = function() {
+                    command.undo();
+                }
+            };
+
+            setCommand(createCommand(Tv));
+        })();
+    </script>
+</body>
+</html>

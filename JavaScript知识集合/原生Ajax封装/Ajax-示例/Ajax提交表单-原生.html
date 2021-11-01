@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>原生ajax方法提交表单数据</title>
+    <link rel="stylesheet" href="../publicScript%20&&%20publicCss/css/reset.css">
+    <link rel="stylesheet" href="../publicScript%20&&%20publicCss/css/publicStyle.css">
+    <script type="text/javascript" src="../publicScript%20&&%20publicCss/js/jquery-v3.1.0.js"></script>
+    <script type="text/javascript" src="../publicScript%20&&%20publicCss/js/publicScript.js"></script>
+</head>
+<body>
+<div class="whiteBg">
+    <!--主体 main-->
+    <div class="wall100Per">
+        <div class="width1198 whiteBg marTop30 marginAuto marBot30 lightGreyBor">
+            <form method="post" class="myForm"> <!--用表单序列化，必须给input框添加name属性，radio的name值一样-->
+                <div class="width580 marginAuto overflowHid">
+                    <div class=" borBot wid100Per height60  font18 marTop25 marBot30 coralBg lineHei60 textCenter">
+                        手机验证
+                    </div>
+
+                    <!--手机号码-->
+                    <div class="height75  wid90Per marLeft27 overflowHid">
+                        <div class="wid100Per">
+                            <div class="fl wid25Per lineHei42 textRight marRight10Per font14 marBot15">手机号码</div>
+                            <div class="fl overflowHid ">
+                                <p class="fl">
+                                    <input type="text"
+                                           class="width248 textInd10 height38 borRadius4 lightGreyBor theInput phoNumInput"
+                                           name="phoneNum">
+                                </p>
+                                <p class="clear"></p>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="overflowHid">
+                            <p class="fl wid25Per textRight font14 height20 marRight60"></p>
+                            <p class="fl">
+                                <span class="redFont font12 wid100Per errorSpan phoNumErrorSpan"></span>
+                            </p>
+                            <p class="clear"></p>
+                        </div>
+                    </div>
+                    <!--手机号码-->
+
+                    <!--短信验证码-->
+                    <div class="height75 lineHei40 wid90Per marLeft27 marBot23 overflowHid">
+                        <p class="fl wid25Per lineHei42 textRight marRight10Per font14">短信验证码</p>
+                        <p class="fl">
+                            <input type="text"
+                                   class="width142 textInd10 lineHei38 height38 borRadius4 lightGreyBor marRight8 theInput verInput"
+                                   name="verificationCode">
+                        </p>
+                        <p class="fl">
+                            <input type="button"
+                                   class="fl lineHei38 orangeBorder borRadius4 orangeFont width100 textCenter cursorPoint whiteBg"
+                                   id="sendVerCodeButton" value="获取验证码">
+                        </p>
+                        <p class="clear"></p>
+                    </div>
+                    <!--短信验证码-->
+
+                    <div class="height75  wid90Per marLeft27 overflowHid">
+                        <p class="fl wid25Per marRight10Per height42 marRight10Per"></p>
+                        <a class="fl borRadius4 lineHei38 width178 textCenter cursorPoint font16 nextStepBut defaultNextStep">提交</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--主体 main-->
+</div>
+
+<script type="text/javascript">
+    /**Ajax 技术的核心是 XMLHttpRequest 对象（简称 XHR），这是由微软首先引入的一个特性，其他
+     浏览器提供商后来都提供了相同的实现。**/
+
+    //现在利用js原生的方法和表单序列化方法，从服务器获取数据，并把表单里需要提交的数据传回给后台
+    function serialize(form) {
+        var parts = [];
+        var field = null;
+        var i, len, j, optLen, option, optValue;
+        for (i = 0, len = form.elements.length; i < len; i++) {
+            field = form.elements[i];
+            switch (field.type) {
+                case "select-one":
+                case "select-multiple":
+                    if (field.name.length) {
+                        for (j = 0, optLen = field.options.length; j < optLen; j++) {
+                            option = field.options[j];
+                            if (option.selected) {
+                                optValue = "";
+                                if (option.hasAttribute) {
+                                    optValue = (option.hasAttribute("value") ? option.value : option.text);
+                                } else {
+                                    optValue = (option.attributes["value"].specified ? option.value : option.text);
+                                }
+                                parts.push(encodeURIComponent(field.name) + "=" + encodeURIComponent(optValue));
+                            }
+                        }
+                    }
+                    break;
+
+                case undefined : //字段集
+                case "file" :    //文本输入
+                case "submit" :  //提交按钮
+                case "reset" :   //重置按钮
+                case "button" :  //自定义按钮
+                    break;
+
+                case "radio" :     //单选按钮
+                case "checkbox" :  //复选框
+                    if (!field.checked) {
+                        break;
+                    }
+                /*执行默认操作*/
+
+                default:
+                    //不包含没有名字的表单字段
+                    if (field.name.length) {
+                        parts.push(encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value));
+                    }
+            }
+        }
+        return parts.join("&");
+    }
+
+
+    function createXHR() {
+        if (typeof XMLHttpRequest !== "undefined") {
+            return new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+            return new ActiveXObject("Microsoft XMLHTTP");
+        }
+    }
+
+
+    var xhr = createXHR();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            /**一般来说，可以将 HTTP状态代码为 200 作为成功的标志。此时，responseText 属性的内容已经就绪，而且在内容类型正确的
+             情况下，responseXML 也应该能够访问了。此外，状态代码为 304 表示请求的资源并没有被修改，可以直接使用浏览器中缓存的
+             版本；当然，也意味着响应是有效的。 [300——请求的资源可在多处得到] **/
+            if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                console.log(xhr.responseText); //这里只有当xhr.send()执行之后，才会触发
+            } else {
+                console.log("Request was unsuccessful:" + xhr.status);
+            }
+        }
+    };
+
+    xhr.open("post", "url", true);  //true 代表异步传输
+    xhr.setRequestHeader("Content-type", "application/x-www.form-urlencoded");
+    var btn = getClassName("defaultNextStep")[0];
+    var myForm = getClassName("myForm")[0];
+    EventUtil.addHandler(btn, "click", function () {
+        xhr.send(serialize(myForm));
+    });
+
+</script>
+
+
+<div class="zhuangTaiMa" style="margin-top:50px; margin-left:50px;">
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+</div>
+</body>
+</html>

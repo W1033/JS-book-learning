@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>H5 audio 标签 播放时间流程</title>
+    <style type="text/css">
+        * {margin: 0; padding: 0; list-style: none;}
+        .wrapper {
+            width: 80%;
+            height: 760px;
+            margin: 20px auto;
+            padding-top: 20px;
+            border-radius: 10px;
+            background: lightblue;
+            text-align: center;
+        }
+        #media {
+            width: 400px;
+            height: 70px;
+            margin: 20px auto;
+            background: lightgrey;
+            border-radius: 10px;
+        }
+        #show-time {
+            width: 200px;
+            height: 45px;
+            background: lightcoral;
+            margin: 0 auto;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div id="media"></div>
+        <div id="show-time"></div>
+    </div>
+
+    <script type="text/javascript">
+        // [参考文章](https://blog.csdn.net/liubangbo/article/details/86536422)
+        let audio = new Audio();
+        document.getElementById("media").appendChild(audio);
+
+
+        console.log(new Date());
+
+        let getTime = function() {
+            let data, year, month, day, hour, minute, second;
+            data = new Date();
+            year = data.getFullYear();
+            month = data.getMonth() + 1;
+            month = month < 10 ? "0" + month : month;
+            day = data.getDate();
+            hour = data.getHours();
+            minute = data.getMinutes();
+            minute = minute < 10 ? "0" + minute : minute;
+            second = data.getSeconds();
+            return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        };
+
+
+        if (!!audio) {
+            audio.src= "xusong.mp3";
+            // audio.autoplay = true;
+            audio.controls = true;
+            setTimeout(() => {
+                console.log("音频时长 media duration: ",  audio.duration);
+                console.log("音频当前时间 media currentTime: ", audio.currentTime);
+                console.log("音频播放率 media playbackRate: ", audio.playbackRate);
+                console.log("音频自动播放 media autoplay: ", audio.autoplay);
+                console.log("音频声音 media volume: ", audio.volume);
+                console.log("音频静音 media muted: ", audio.muted);
+
+                // 0 = HAVE_NOTHING  没有关于音频是否就绪的信息
+                // 1 = HAVE_METADATA  关于音频就绪的元数据
+                // 2 = HAVE_CURRENT_DATA  关于当前播放位置的数据是可用的，但没有足够的数据来播放下一帧/毫秒
+                // 3 = HAVE_FUTURE_DATA  当前及至少下一帧的数据是可用的
+                // 4 = HAVE_ENOUGH_DATA  可用数据足以开始播放
+                console.log("音频状态 media readyState: ", audio.readyState);
+            }, 5000)
+        }
+
+        let currentTime = (new Date()).getTime();
+
+        audio.addEventListener("loadstart", () => {
+            // 当浏览器开始寻找指定的 音频/视频时，会发生 loadstart 事件。即当加载过程开始时
+            console.log("音视频加载 event loadstart: ", getTime());
+        });
+        audio.addEventListener("durationchange", () => {
+            // 当指定的 音频/视频 的时长数据发生变化时，触发 durationchange 事件
+            console.log("音视频时长数据发生变化 event durationchange: ", getTime());
+        });
+        audio.addEventListener("loadedmetadata", () => {
+            // 当指定的 音频/视频 的元数据已加载时，会发生 loadedmetadata 事件
+            console.log("音视频元数据已加载 event loadedmetadata: ", getTime());
+        });
+
+        let j = 0;
+        audio.addEventListener("progress", () => {
+            // 当浏览器正在下载指定的 音频/视频 时， 会触发 progress 事件
+            console.log(" ");
+            console.log("---progress start---");
+            console.log("j: ", j++);
+            console.log("音视频正在下载 event progress:", getTime());
+            console.log("---progress over---");
+            console.log(" ");
+        });
+        let i = 0;
+        audio.addEventListener("suspend", () => {
+            // 该事件在媒体数据被阻止加载时触发。可以时完成加载后触发，或者因为被暂停的原因。
+            console.log("---suspend start---");
+            console.log("i: ", i++);
+            console.log("音视频数据被阻止加载 event suspend: ", getTime());
+            console.log("---suspend end---");
+        });
+        audio.addEventListener("loadedata", () => {
+            // 当当前帧的数据已加载，但没有足够的数据来播放指定 音频/视频 的下一帧时，会触发 loadeddata 事件
+            console.log("音视频元数据已加载但没有足够的数据来播放 event loadeddata :", getTime());
+        });
+        audio.addEventListener("canplay", () => {
+            // 当浏览器能够开始播放指定的 音频/视频 时，触发 canplay 事件
+            console.log("音视频元数据开始播放 event canplay: ", getTime());
+        });
+        audio.addEventListener("canplaythrough", () => {
+            // 当浏览器预计能够在不停下来进行缓冲的情况下持续播放指定的 音频/视频 时，触发 canplaythrough 事件
+            console.log("音视频能够在不停下来进行缓冲的情况下持续播放 event canplaythrough: ", getTime());
+        });
+        audio.addEventListener("play", () => {
+            // 开始播放时触发
+            console.log("音视频开始播放 event play: ", getTime());
+        });
+        audio.addEventListener("playing", () => {
+            // 开始回放
+            console.log("音视频开始回放 event playing: ", getTime());
+        });
+        audio.addEventListener("timeupdate", (event) => {
+            // 播放时间改变 这个会一直打印
+            // console.log("event.target.currentTime: ", event.target.currentTime);
+            const minute = event.target.currentTime / 60 | 0;
+            const second = parseInt(event.target.currentTime % 60);
+            console.log(" ");
+            console.log("当前已经播放时长: ", `${minute}: ${second}`);
+            document.getElementById("show-time").innerHTML = `${minute}:${second}`;
+            console.log(" ");
+
+            // return `${minute}: ${second}`;
+            // console.log("音视频播放时间改变 event timeupdate: ", getTime());
+        });
+        audio.addEventListener("pause", () => {
+            // 暂停时触发，当播放完一首歌曲时液会触发
+            console.log("音视频暂停 event pause: ", getTime());
+        });
+        audio.addEventListener("ended", () => {
+            // 当播放完一首歌曲时也会触发
+            console.log("音视频播放完毕 event ended: ", getTime());
+        });
+
+
+
+        audio.addEventListener("abort", () => {
+            // 客户端主动中止下载 (不是因为错误引起)
+            console.log("event abort", getTime());
+        });
+        audio.addEventListener("error", () => {
+            // 请求时遇到错误
+            console.log("event error: ", getTime());
+        });
+        audio.addEventListener("stalled", () => {
+            // 网络失速
+            console.log("event stalled: ", getTime());
+        });
+        audio.addEventListener("seeking", () => {
+            // 寻找中
+            console.log("event seeking: ", getTime());
+        });
+        audio.addEventListener("seeked", () => {
+            // 寻找完毕
+            console.log("event seeked: ", getTime());
+        });
+        audio.addEventListener("ratechange", () => {
+            // 播放速度改变
+            console.log("event ratechange: ", getTime());
+        });
+        audio.addEventListener("volumechange", () => {
+            // 音量改变
+            console.log("event volumechange: ", getTime());
+        });
+    </script>
+</body>
+</html>

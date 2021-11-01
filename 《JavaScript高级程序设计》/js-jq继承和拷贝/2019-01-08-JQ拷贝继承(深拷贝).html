@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>拷贝继承</title>
+</head>
+<body>
+    <script type="text/javascript">
+
+        /** 2019-01-08 添加注解 */
+        function deepCopy(parent, child) {
+            child = child || {};
+            for (let i in parent) {
+                // typeof Array|[]|Object|{} 都会返回 object
+                // 如果监测到 parent 的子项是 object 走 if
+                if (typeof parent[i] === "object") {
+                    // 如果当前 parent 子项利用 constructor 属性，找到其构造函数为 Array 就把一个空数组赋值给当前
+                    // child[i] (注: 此时 child[i] 的 key 为 birthPlaces , value = [] )
+                    child[i] = (parent[i].constructor === Array) ? [] : {};
+                    // 把 parent[2]项，和 child[i] = (birthPlaces=[]) 再次传入到 deepCopy中，执行后
+                    // child[2] 得到 parent[2] 中的数组内容
+                    deepCopy(parent[i], child[i]);
+                    console.log(child);
+                } else { // 如果 parent 的子项是基本类型(Undefined|Null|Number|Boolean|String|Symbol)的值走 else
+                    child[i] = parent[i];
+                }
+            }
+            return child;
+        }
+
+        //调用示例:
+        var Chinese = {
+            nation: "中国",
+            birthPlaces: ["北京", "上海", "深圳"]
+        };
+
+        var Doctor = deepCopy(Chinese);
+        Doctor.career = "医生";
+        Doctor.birthPlaces.push("厦门");
+
+        console.log(Doctor);        // { nation: '中国', birthPlaces: [ '北京', '上海', '深圳', '厦门' ], career: '医生' }
+
+
+        var o1 = {
+            arr: [1, 2, 3],
+            obj: {
+                key: 'value'
+            },
+            func: function(){
+                return 1;
+            }
+        };
+        var o3 = deepCopy(o1);
+        console.log(o3 === o1); // false
+        console.log(o3.obj === o1.obj); // false
+
+        /**
+         * 🔺 jQuery中的extend方法基本的就是按照这个思路实现的，但是没有办法处理源对象内部循环引用的问题，
+         * 同时对Date，Funcion等类型值也没有实现真正的深度复制，但是这些类型的值在重新定义的时候一般都
+         * 是直接覆盖，所以也不会对源对象产生影响，从一定程度上来说也算是实现了一个深拷贝。
+         * */
+
+        // 从这个输出结果可以看出，这个 deepCopy 并没有解决 Function 类型的深度复制，(深度复制就是: copy
+        // 一份完整的数据，01 和 03 是两份不同的数据，所以 o3.obj ！== 01.obj , 但是这里
+        // o3.func === o1.func 的结果为 true, 所以就应该是互相引用的。)
+        console.log(o3.func === o1.func); // true
+
+
+
+    </script>
+</body>
+</html>

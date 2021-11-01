@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>第九章草稿紙</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    /** 作為一等公民的類 */
+    /*function createObject(classDef) {
+        console.log(classDef);  // class { sayHi() {console.log("Hi!"); } }
+        return new classDef();
+    }
+
+    let obj = createObject(class {
+        sayHi() {
+            console.log("Hi!");
+        }
+    })
+    obj.sayHi();*/
+
+
+
+   /* function testThis() {
+        console.log(this);  // window
+    }
+    testThis();
+
+    function MyArray(col) {
+        this.color = col;
+        console.log(this);  // MyArray {color: "red"}
+    }
+    MyArray.prototype.getColor = function() {
+      console.log(this.color);
+    };
+
+    let colors = new MyArray("red");
+    colors.getColor();*/
+
+
+    class Observer {
+        constructor (value) {
+            this.value = value;
+            this.dep = new Dep();
+            this.vmCount = 0;
+            def(value, '__ob__', this);
+            if (Array.isArray(value)) {
+                const augment = hasProto ? protoAugment : copyAugment;
+                augment(value, arrayMethods, arrayKeys)
+                this.observeArray(value)
+            } else {
+                this.walk(value)
+            }
+        }
+
+        /**
+         * Walk through each property and convert them into
+         * getter/setters. This method should only be called when
+         * value type is Object.
+         */
+        walk (obj) {
+            const keys = Object.keys(obj)
+            for (let i = 0; i < keys.length; i++) {
+                defineReactive(obj, keys[i])
+            }
+        }
+
+        /**
+         * Observe a list of Array items.
+         */
+        observeArray (items: Array<any>) {
+            for (let i = 0, l = items.length; i < l; i++) {
+                observe(items[i])
+            }
+        }
+    }
+
+
+
+
+</script>
+</body>
+</html>

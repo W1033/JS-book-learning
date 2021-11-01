@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>面向对象编程-云库网</title>
+    <meta name="description" content="面向对象编程详解"/>
+    <meta name="keywords" content="面向对象编程"/>
+    <style>
+        #circle {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #ccc;
+            border-radius: 50%;
+            line-height: 100px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="circle">拽我</div>
+<script>
+    /* ----- 普通写法 ----- */
+    window.onload = function () {
+        var disX = 0;
+        var disY = 0;
+        var iCircle = document.getElementById("circle");
+        iCircle.onmousedown = function (ev) {
+            var ev = ev || window.event;
+            disX = ev.clientX - iCircle.offsetLeft;
+            disY = ev.clientY - iCircle.offsetTop;
+            document.onmousemove = function (ev) {
+                var ev = ev || window.ev;
+                iCircle.style.left = ev.clientX - disX + "px";
+                iCircle.style.top = ev.clientY - disY + "px";
+            }
+            document.onmouseup = function (ev) {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+            return false;
+        }
+    }
+    /* ----- 普通写法 END ----- */
+    /* ----- 普通方法变形 ----- */
+    var disX = 0;
+    var disY = 0;
+    var iCircle = null;
+    window.onload = function () {
+        iCircle = document.getElementById("circle");
+        init();
+
+        function init() {
+            iCircle.onmousedown = iDown;
+        }
+
+        function iDown(ev) {
+            var ev = ev || window.event;
+            disX = ev.clientX - iCircle.offsetLeft;
+            disY = ev.clientY - iCircle.offsetTop;
+            document.onmousemove = iMove;
+            document.onmouseup = iUp;
+            return false;
+        };
+
+        function iMove(ev) {
+            var ev = ev || window.ev;
+            iCircle.style.left = ev.clientX - disX + "px";
+            iCircle.style.top = ev.clientY - disY + "px";
+        }
+
+        function iUp(ev) {
+            document.onmousemove = null;
+            document.onmouseup = null;
+        }
+    }
+    /* ----- 普通方法变形 END  ----- */
+    /* ----- 改成面向对象  ----- */
+    window.onload = function () {
+        var drag = new Drag("circle");
+        drag.init();
+    }
+
+    function Drag(id) {
+        this.disX = 0;
+        this.disY = 0;
+        this.iCircle = document.getElementById(id);
+    }
+
+    Drag.prototype.init = function () {
+        var _this = this;
+        this.iCircle.onmousedown = function (ev) {
+            var ev = ev || window.event;
+            _this.iDown(ev);
+            return false;
+        }
+    }
+
+    Drag.prototype.iDown = function (ev) {
+        var _this = this;
+        this.disX = ev.clientX - this.iCircle.offsetLeft;
+        this.disY = ev.clientY - this.iCircle.offsetTop;
+        document.onmousemove = function (ev) {
+            var ev = ev || window.event;
+            _this.iMove(ev);
+        }
+        document.onmouseup = function (ev) {
+            _this.iUp(ev);
+        }
+    }
+    Drag.prototype.iMove = function (ev) {
+        this.iCircle.style.left = ev.clientX - this.disX + "px";
+        this.iCircle.style.top = ev.clientY - this.disY + "px";
+    }
+    Drag.prototype.iUp = function (ev) {
+        document.onmousemove = null;
+        document.onmouseup = null;
+    }
+    /* ----- 改成面向对象 END ----- */
+</script>
+</body>
+</html>

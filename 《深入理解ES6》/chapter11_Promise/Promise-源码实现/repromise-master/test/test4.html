@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="../promise.js"></script>
+  <script>
+    // resolve(Promise.resolve(1)) + 连续 then 调用
+    function pms1() {
+      return new Promise(function (resolve, reject) {
+        console.log('执行任务1')
+        resolve('执行任务1成功')
+
+      })
+    }
+
+    function pms2() {
+      return new Promise(function (resolve, reject) {
+        console.log('执行任务2')
+        resolve(Promise.resolve('执行任务2成功'))
+      })
+    }
+
+    pms1()
+      .then(function (data) {
+        console.log(`第一个回调：${data}`)
+        return pms2()
+      })
+      .then(function (data) {
+        console.log(`第二个回调：${data}`)
+      })
+  </script>
+</body>
+
+</html>

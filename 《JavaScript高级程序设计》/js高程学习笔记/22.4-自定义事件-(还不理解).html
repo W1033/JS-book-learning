@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>22.4-自定义事件</title>
+    <script type="text/javascript">
+        /*观察者模式由两类对象组成：主体和观察者。主体负责发布事件，同时观察者通过订阅这些事件来
+        观察该主体。该模式的一个关键概念是主体并不知道观察者的任何事情，也就是说它可以独自存在并正
+        常运作即使观察者不存在。从另一方面来说，观察者知道主体并能注册事件的回调函数（事件处理程序）。
+        涉及 DOM 上时，DOM 元素便是主体，你的事件处理代码便是观察者。*/
+        //EventTarget: 自定义事件背后的概念是创建一个管理事件的对象，让其他对象监听那些事件。实现此功能的基本模式可以如下定义：
+        function EventTarget() {
+            this.handlers = {}; //EventTarget类型有一个单独的属性handlers,用于存储事件处理程序。
+        }
+
+        EventTarget.prototype = {
+            constructor: EventTarget,
+            //EventTarget类型的构造函数的原型上有三个方法:
+            /*addHandler()方法用于注册给定类型事件的事件处理程序。addHandler()方法接受两个参数:
+             (1)事件类型(2)用于处理该事件的函数。当调用该方法时，会进行一次检查，看看handlers属性中
+             是否已经存在一个针对该事件类型的数组；如果没有，则创建一个新的。然后使用push()将该处理
+             程序添加到数组的末尾。*/
+            addHandler: function (type, handler) {
+                if (typeof this.handlers[type] == "undefined") { //判断this.handlers对象有没有type属性
+                    this.handlers[type] = [];
+                }
+
+                this.handlers[type].push(handler); //现在的情况是数组中的第一项是一个待执行的函数
+            },
+            /*fire()方法用于触发一个事件:该方法接受一个单独的参数，是一个至少包含type属性的对象。fire()
+              方法先给event对象设置一个target属性，如果它尚未被指定的话。然后它就查找对应事件类型的一组
+              处理程序，调用各个函数，并给出event对象。因为这些都是自定义事件，所以event对象上还需要的额外
+              信息由你自己决定。*/
+            fire: function (event) {
+                if (!event.target) {
+                    event.target = this;
+                }
+                if (this.handlers[event.type] instanceof Array) {
+                    //此时this.handlers数组只包含传进来的要执行的事件这一项
+                    var handlers = this.handlers[event.type];
+                    for (var i = 0, len = handlers.length; i < len; i++) {
+                        handlers[i](event); //遍历this.handlers数组然后找到每一项然后执行
+                    }
+                }
+            },
+            /*removeHandler()方法用于注销某个事件类型的处理程序。他接受的参数和addHandler()一样：
+             事件类型和事件处理程序。这个方法搜索事件处理程序的数组找到要删除的处理程序的位置。如果找到
+             了，则使用break操作符退出for循环。然后使用splice()方法将该项目从数组中删除。*/
+            removeHandler: function (type, handler) {
+                if (this.handlers[type] instanceof Array) {
+                    var handlers = this.handlers[type];
+                    for (var i = 0, len = handlers.length; i < len; i++) {
+                        if (handlers[i] === handler) {
+                            break;
+                        }
+                    }
+                    handlers.splice(i, 1);
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+<div id="myDiv" style="background:#ccc;"></div>
+
+<script type="text/javascript">
+    function object(o) {
+        function F() {
+        }
+
+        F.prototype = o;
+        return new F();
+    }
+
+    function inheritPrototype(subType, superType) {
+        var prototype = object(superType.prototype);   //create object
+        prototype.constructor = subType;               //augment object
+        subType.prototype = prototype;                 //assign object
+    }
+
+    function Person(name, age) {
+        EventTarget.call(this);
+        this.name = name;
+        this.age = age;
+    }
+
+    inheritPrototype(Person, EventTarget);
+
+    Person.prototype.say = function (message) {
+        this.fire({type: "message", message: message});
+    };
+
+    function handleMessage(event) {
+        alert(event.target.name + " says: " + event.message);
+    }
+
+    var person = new Person("Nicholas", 29);
+
+    person.addHandler("message", handleMessage);
+
+    person.say("Hi there.");
+
+</script>
+</body>
+</html>

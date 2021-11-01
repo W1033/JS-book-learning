@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+           maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>8.8 全局的发布订阅对象</title>
+</head>
+<body>
+    <script type="text/javascript">
+        let Event = (function() {
+            let subs = [];
+            const addSub = function(key, watcher) {
+                if (!subs[key]) {
+                    subs[key] = [];
+                }
+                subs[key].push(watcher);
+            };
+            const notify = function() {
+                let key = Array.prototype.shift.call(arguments);
+                let subWatcher = subs[key];
+                if (!subWatcher || subWatcher.length === 0) {
+                    return false;
+                }
+                for (let i = 0; i < subWatcher.length; i++) {
+                    subWatcher[i].apply(this, arguments);
+                }
+            };
+            const remove = function(key, watcher) {
+                let subWatcher = subs[key];
+                // - 如果 key 对应的消息没有被人订阅, 则直接返回
+                if (!subWatcher) {
+                    return false;
+                }
+                // - 如果没有传入具体的回调函数, 表示需要取消 key 对应消息的所有订阅
+                if (!watcher) {
+                    subWatcher && (subWatcher.length = 0);
+                }
+                else {
+                    // - 反向遍历订阅的回调函数列表
+                    for (let l = subWatcher.length - 1; l >= 0; l--) {
+                        let _fn = subWatcher[l];
+                        if (_fn === watcher) {
+                            // - 删除订阅的回到函数
+                            subWatcher.splice(l, 1);
+                        }
+                    }
+                }
+            };
+            return {
+                addSub: addSub,
+                notify: notify,
+                remove: remove,
+            }
+        })();
+
+        Event.addSub('squareMeter88', function(price) {
+            console.log('价格= ' + price);
+        });
+        Event.notify('squareMeter88', 2000000);
+    </script>
+</body>
+</html>

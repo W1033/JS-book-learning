@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[gist]为什么要柯里化（curry）</title>
+</head>
+<body>
+    <script>
+
+        // 1. 写一个函数，可以连接字符数组
+        const arr = ["1", "2", "4"];
+        let concatArray = function(chars) {
+            // String.concat(): 用于将一或多个字符串拼接起来，返回拼接得到的新字符串。
+            return chars.reduce((acc, cur) => acc.concat(cur));
+        };
+        console.log("concatArray: ", concatArray(arr));
+
+        // 2. 现在我要其中所有数字加1，然后再连接
+        // inc = increase 增加
+         let concatArray2 = function(chars, inc) {
+            // map() 方法执行完毕后接着执行链式调用
+            return chars.map(function(item) {
+                console.log("item: ", item);
+                return (+item) + inc + "";
+            }).reduce(function(acc, cur) {
+                return acc.concat(cur);
+            })
+        };
+        console.log("concatArray2: ", concatArray2(arr, 1));
+
+        // 3.所有数字乘以2，在重构试试看
+        let multiple = function(a, b) {
+            return + a*b + "";
+        };
+        let concatArray3 = function(chars, inc) {
+            return chars.map(function(item){
+                return multiple(item, inc)
+            }).reduce(function(acc, cur) {
+                return acc.concat(cur);
+            })
+        };
+        console.log("concatArray3: ", concatArray3(arr, 2));
+
+        /*
+         * 是不是已经看出问题了呢? 如果我在需要每个数字都减2,是不是很麻烦呢.需要将map
+         * 参数匿名函数中的 multiple 函数换掉. 这样一来concatArray就不能同时处理加,
+         * 乘和减? 那么怎么能把他提取出来呢? 来对比下柯里化的解法.
+         */
+
+        /** 柯里化函数接口 */
+        let multi = function(num) {
+            return function(item) {
+                // +item 把字符串转换为数字
+                return +item * num + "";
+            }
+        };
+        let plus = function(num) {
+            return function(item) {
+                return (+item) + num + "";
+            }
+        };
+
+        // concatArr 函数在下面被调用，但是 multi(2) 这样在当作参数传入到 concatArr 的同时就会执行，
+        // 所以传入到 concatArr 中的已经是执行完毕 return 的匿名函数(anonymousFun)
+        let concatArr = function(chars, anonymousFun) {
+            console.log("anonymousFun: ", anonymousFun);
+            return chars.map(anonymousFun).reduce(function(acc, cur) {
+                return acc.concat(cur)
+            })
+        };
+        console.log(concatArr(arr, multi(2)));
+        console.log(concatArr(arr, plus(2)));
+
+
+        // 再加上自动柯里化的库 ramda(http://ramda.cn/), 简直就完美了
+        /*var multiple = ramda.curry(function(a, b){
+            return +b*a + ''
+        })
+        var plus = ramda.curry(function(a, b){
+            return (+b)+a + ''
+        })*/
+
+    </script>
+</body>
+</html>

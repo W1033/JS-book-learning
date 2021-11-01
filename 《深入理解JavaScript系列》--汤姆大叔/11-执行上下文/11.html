@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        Function.prototype.before = function (beforefn) { // {1}
+            let _self = this;                            // {2}
+            return function () {                          // {3} - 标记为 r1
+                beforefn.apply(this, arguments);         // {4} - 标记为 r2
+                return _self.apply(this, arguments);     // {5}
+            }
+        };
+        Function.prototype.after = function (afterfn) {  // {6}
+            let _self = this;                           // {7}
+            return function () {                         // {8} - 标记为 r3
+                let ret = _self.apply(this, arguments); // {9}
+                afterfn.apply(this, arguments);         // {10}
+                console.log(ret);
+                return ret;                             // {11} - 标记为 r4
+            }
+        };
+        let func = function () { // {12} - 匿名函数标记为 f2
+            console.log(2);     // {13}
+        };
+        func = func.before(     // {14}
+            function () {        // {15} - 标记为 f1
+                console.log(1)  // {16}
+            }
+        );
+        func = func.after(      // {16}
+            function () {        // {17} - 标记为 f3
+                console.log(3)  // {18}
+            }
+        );
+        func();                 // {19}
+    </script>
+</body>
+</html>

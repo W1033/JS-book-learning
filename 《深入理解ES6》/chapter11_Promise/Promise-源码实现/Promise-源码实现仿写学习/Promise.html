@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+          maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script src="re-promise-pure.js"></script>
+<script type="text/javascript">
+
+    // - test1.html
+    // (function() {
+    //     function pms1() {
+    //         return new Promise(function (resolve, reject) {
+    //             console.log('执行任务1');
+    //             resolve('执行任务1成功')
+    //         })
+    //     }
+
+    //     pms1().then(function (data) {
+    //         console.log(`第一个回调：${data}`)
+    //         console.log("---------");
+    //     });
+    // })();
+
+    // - test2.html
+    // (function() {
+    //     function pms1() {
+    //         return new Promise((resolve, reject) => {
+    //             // console.log("executor function body");
+
+    //             resolve("执行任务 1 成功");
+                
+    //             // - 下面添加 setTimeout() 超时调用, 不管时间设置为多少, 都会等待时间
+    //             //   执行完后,按顺序输出结果, 因为 then() 也是添加到 
+    //             // setTimeout(() => {
+    //             //     resolve("执行任务 1 成功");
+    //             // }, 2000)
+    //         });
+    //     }
+
+    //     // 第 1 个回调: 执行任务 1 成功
+    //     // 第 2 个回调: 执行任务 2 成功
+    //     // 第 3 个回调: 执行任务 3 成功
+    //     pms1().then((data) => {
+    //         console.log(`第 1 个回调: ${data}`);
+    //         return '执行任务 2 成功';
+    //     }).then((data) => {
+    //         console.log(`第 2 个回调: ${data}`);
+    //         return '执行任务 3 成功';
+    //     }).then((data) => {
+    //         console.log(`第 3 个回调: ${data}`);
+    //         console.log("---------");
+    //     });
+    // })();
+
+    // - test3.html
+    // (function() {
+    //     function pms1() {
+    //         return new Promise((resolve, reject) => {
+    //             console.log("执行 test3.html 测试");
+    //             resolve(Promise.resolve('test3 回调'));
+    //         })
+    //     }
+    //     pms1().then((data) => {
+    //         console.log(`test3 的 then 回调数据: ${data}`);
+    //     })
+    // })();
+
+    // - test4.html
+    // (function() {
+    //     function pms1() {
+    //         return new Promise((resolve, reject) => {
+    //             console.log("执行任务 1");
+    //             resolve('执行任务 1 成功');
+    //         })
+    //     }
+    //     function pms2() {
+    //         return new Promise((resolve, reject) => {
+    //             console.log('执行任务2');
+    //             resolve(Promise.resolve('执行任务2成功'))
+    //         })
+    //     }
+
+    //     //  执行任务 1
+    //     //  第一个回调: 执行任务 1 成功
+    //     //  执行任务2
+    //     //  第二个回调: 执行任务2成功
+    //     pms1()
+    //         .then((data) => {
+    //             console.log(`第一个回调: ${data}`);
+    //             return pms2();
+    //         })
+    //         .then((data) => {
+    //             console.log(`第二个回调: ${data}`);
+    //         })
+    // })();
+
+    // - test5-测试-promise.all.html
+    // (function() {
+    //     let p1 = Promise.resolve(3);
+    //     let p2 = new Promise((resolve, reject) => {
+    //         // - `setTimeout(function, delay, parameter1, parameter2)` 
+    //         //   第 3 个参数及以后的参数都可以作为 function 函数的参数. 
+    //         setTimeout(resolve, 2000, 'foo');
+    //     });
+    //     let p3 = 1336;
+    //     Promise.all([p1, p2, p3]).then(values => {
+    //         // [3, "foo", 1336]
+    //         console.log(values);
+    //     });
+    // })();
+
+    // - test6-promise.race.html
+    // (function() {
+    //     let p1 = Promise.resolve(1);
+    //     let p2 = new Promise((resolve, reject) => {
+    //     setTimeout(resolve, 2000, 2)
+    //     });
+    //     let p3 = 3
+
+    //     Promise.race([p1, p2, p3]).then((data) => {
+    //         console.log(data); // 1
+    //     });
+    // })();
+
+    // - 对象含有 then 属性的测试
+    // (function() {
+    //     // let numberOfTimesThenWasRetrieved = 0;
+    //     // let obj = Object.create(null, {
+    //     //     then: {
+    //     //         get: function() {
+    //     //             ++numberOfTimesThenWasRetrieved;
+    //     //             return function(resolve) {
+    //     //                 resolve();
+    //     //             }
+    //     //         }
+    //     //     }
+    //     // });
+    //     // console.log('obj:', obj);
+    //     // Promise.resolve(obj).then(() => {
+    //     //     console.log(numberOfTimesThenWasRetrieved); // 1
+    //     // });
+    // })();
+
+    // - test07 -- Promise.all() 测试
+    (function() {
+        let p1 = new Promise(function(resolve, reject) {
+            resolve(62);
+        });
+        let p2 = new Promise(function(resolve, reject) {
+            resolve(63);
+        })
+        let p4 = Promise.all([p1]);
+        p4.then(function(value){
+            console.log(Array.isArray(value));  // true
+            console.log(value[0]);
+        });
+    })();
+
+
+    // ------
+
+    // - Promise.all() 示例
+    // let createPromise = function(url) {
+    //     return new Promise((resolve, reject) => {
+    //         // - ajax() 方法见封装的 ajax 文件
+    //         ajax({
+    //             url: url,
+    //             success(json) {
+    //                 resolve(json);
+    //             },
+    //             error(err) {
+    //                 reject(err);
+    //             }
+    //         })
+    //     })
+    // };
+    // Promise.all([
+    //     // p01, p02
+    //     createPromise('data/arr.txt'),
+    //     createPromise('data/data.json')
+    // ]).then(function(all) {
+    //     let [arr, data] = all;
+    //     console.log('arr: ' +arr);
+    //     console.log('data: ' + data);
+    // }, function(err) {
+    //     console.log(`失败： ${err}`);
+    // });
+
+
+
+
+    // - testing00.html  -- 深入理解ES6 上的示例
+    // (function() {
+    //     // let p1 = new Promise((resolve, reject) => {
+    //     //     resolve(42);
+    //     // })
+    //     // p1.then(function(value) {
+    //     //     console.log(value);
+    //     //     return value + 1;
+    //     // }).then(function(value) {
+    //     //     console.log(value);
+    //     // });
+    // })();
+
+</script>
+</body>
+</html>

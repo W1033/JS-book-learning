@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // - 6.3 虚拟代理实现图片预加载
+        let myImage = (function(){
+            const imgNode = document.createElement('img');  // {7}
+            document.body.appendChild(imgNode); // {8}
+            return {
+                setSrc: function(src) { // {9}
+                    imgNode.src = src;  // {10}
+                }
+            }
+        })();
+        let proxyImage = (function(){
+            const img = new Image;      // {1}
+            img.onload = function() {   // {2}
+                myImage.src(this.src);  // {3}
+            };
+            return {
+                setSrc: function(src) { // {4}
+                    myImage.setSrc('/C:/Users/svenzeng/Desktop/loading.gif'); // {5}
+                    img.src = src; // {6}
+                }
+            }
+        })();
+
+        // - 注释: 下面在调用 proxyImage.setSrc() 方法之前, 按照 js 代码从上到下的执行
+        //   顺序, 两个自执行函数 myImage 和 proxyImage 已经执行完毕, 相应的 imgNode
+        //   节点( 行{7},{8})和 img 节点(行{1}) 已经被创建, img 实例同时也绑定了
+        //   onload 方法--行{2},{3}.
+
+        // - proxyImage.setSrc() 方法传入要展示的图片路径, 在 setSrc() 内部, 首先
+        //   调用 myImage.setSrc() 方法把准备的默认 loading.gif 图片赋值给 imgNode
+        //   节点(行 {5}), 然后把参数 src 赋值给 img 实例的自定义 src 属性(行 {6}),
+        //   当浏览器准备好并开始执行 img.onload (行 {2}) 事件时, 其内部再次调用
+        //   myImage.setSrc() 方法把真正要展示的图片路径传入.
+        proxyImage.setSrc('http://imgcache.qq.com/music/photo/k/000GGDysoyAoNK.jpg');
+    </script>
+</body>
+</html>

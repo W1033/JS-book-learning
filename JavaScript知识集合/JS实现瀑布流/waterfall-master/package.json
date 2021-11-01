@@ -1,0 +1,16 @@
+{
+  "name": "jswaterfall",
+  "version": "0.1.1",
+  "description": "plugin waterfall",
+  "main": "waterfall.min.js",
+  "scripts": {
+    "build": "rollup -c && cp waterfall.min.js example/waterfall.js && cp index.html example/index.html",
+    "publish": "git subtree push --prefix=example origin gh-pages"
+  },
+  "author": "muyunyun (muyy95@gmail.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "^0.55.1",
+    "rollup-plugin-uglify": "^3.0.0"
+  }
+}

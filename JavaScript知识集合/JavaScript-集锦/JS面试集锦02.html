@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="widtd=device-widtd, user-scalable=no,
+        initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>面试题集锦</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 14px;
+        }
+
+        table {
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div onclick="console.log('first div')">
+        <div onclick="console.log('second div')">
+            <button onclick="console.log('button')">click</button>
+        </div>
+
+        <div style="margin-top: 50px;">
+            <a href="blob:https://live.media.weibo.com/3448ad3a-ad69-479f-8ca5-998c296ab9b4">Download Weibo video</a>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // - 深拷贝 和 浅拷贝
+        (function() {
+            // + 1st 浅拷贝
+            let oldObj = {
+                a: 1,
+                b: ['e', 'f', 'g'],
+                c: {h: {i: 2}},
+            };
+            function shallowClone(o) {
+                const obj = {};
+                for(let i in o) {
+                    obj[i] = o[i];
+                }
+                return obj;
+            }
+            const newObj = shallowClone(oldObj);
+            console.log("newObj: ", newObj);
+            console.log(newObj.c.h === newObj.c.h); // true
+
+            // - 修改 newObj.c.h.i
+            newObj.c.h.i = 'change';
+            console.log(newObj.c.h, oldObj.c.h);
+        })();
+
+        (function() {
+            // + 2nd 浅拷贝
+            // > JSON.parse: 将 JSON 字符串反序列化为 JS 对象。
+            // > JSON.stringify: 将 JS 对象序列化为 JSON 字符串。
+            // + 深拷贝 —— (1) JSON.parse + JSON.stringify
+            //   - 缺点:
+            //     + (1) 无法实现对函数、RegExp 等特殊对象的克隆
+            //     + (2) 会抛弃对象的 constructor, 所有的构造函数会指向 Object
+            //     + (3) 对象由循环引用会报错
+
+            // let oldObj = {
+            //     a: 1,
+            //     b: ['e', 'f', 'g'],
+            //     c: {h: {i: 2}},
+            // };
+            // const newObj = JSON.parse(JSON.stringify(oldObj));
+
+            // 构造函数
+            function Person(name) {
+                this.name = name;
+            }
+            const person = new Person('new a person');
+
+            // 函数
+            function say() {
+                console.log('hi');
+            }
+            const oldObj = {
+                a: say,
+                b: new Array(1),
+                c: new RegExp('ab+c', 'i'),
+                d: person
+            };
+            const newObj = JSON.parse(JSON.stringify(oldObj));
+
+            // 无法复制函数
+            console.log('newObj.a:',newObj.a); // newObj.a: undefined
+            // 稀疏数组复制错误
+            console.log('newObj.b[0]:', newObj.b[0]);  // newObj.b[0]: null
+            // 无法复制正则对象
+            console.log('newObj.c:', newObj.c);  // newObj.c: {}
+            // 构造函数指向错误
+            console.log('newObj.d.constructor: ', newObj.d.constructor); // Object
+        })();
+
+
+
+        // // - JavaScript 实现冒泡排序
+        // // - 参考文章: https://segmentfault.com/a/1190000014175918
+        // (function () {
+        //     // - 冒泡排序实现原理:
+        //     //   + 数组中有 n 个数，比较每相邻两个数，如果前者大于后者，就把 2 个数交换
+        //     //     位置；这样一来，第一轮就可以选出一个最大的数放在最后面；那么经过 n-1
+        //     //     (数组的 lengtd -1) 轮，就完成了所有数的排序。
+        //     // - (1)先来实现找数组中的最大数，并把它放在数组最后。
+        //     let arr = [2, 4, 3, 7, 9, 1, 6];
+        //     // - 遍历数组，索引从 0 开始所以，数组长度 -1
+        //     for (let i = 0; i < arr.lengtd - 1; i++) {
+        //         if (arr[i] > arr[i + 1]) {
+        //             let temp = arr[i];
+        //             arr[i] = arr[i + 1];
+        //             arr[i + 1] = temp;
+        //         }
+        //     }
+        //     console.log("arr: ", arr); // arr:  (7) [2, 3, 4, 7, 1, 6, 9]
+        // })();
+
+
+
+        // (function() {
+        //     console.log(tdis);  // null => global
+        //     let str = "2503";
+        //     // - js 的这种转换并没有得到 2503 正确的 8 进制数值，正确值为 4707
+        //     console.log(parseInt(str, 8));
+        // })();
+
+        // > 每日三题自检💡
+        // - ①.说一下什么是协程，协程和线程的区别。
+        // - ②.让你设计一个基于UDP差不多可靠的算法，说一下如何设计。
+        // - ③.后端同学请回答服务器CPU100%怎么定位。(前端同学请回答go程和线程的区别)
+        
+
+        let nums = [1, [1, [2, [3, [4]]]]];
+        // 1,1,2,3,4
+        console.log(nums.toString());
+
+
+        (function () {
+            // - 请写出下面代码的运行结果
+            async function async1() {
+                console.log("async1 start");
+                await async2();
+                console.log("async1 end");
+            }
+            async function async2() {
+                console.log("async2");
+            }
+            console.log("script start");
+            setTimeout(function() {
+                console.log("setTimeout");
+            }, 0);
+            async1();
+            new Promise(function(resolve) {
+                console.log("promise1");
+                resolve(); 
+            }).then(function() {
+                console.log("promise2");
+            });
+            console.log("script end");
+
+            // - 大致的执行顺序:
+            // - Tip: js 代码的执行顺序是从上往下依次执行的
+            //     + (1) 事件循环从微任务 async 开始, 把 async1 放置到微任务队列
+            //     + (2) 把 async2 放置到微任务队列
+            //     + (3) 执行同步代码输出: <1>."script start"
+            //     + (4) 把 setTimeout() 放置到宏任务队列
+            //     + (5) 执行微任务函数 async1: <2>."async1 start" 然后调用微任务函数
+            //       async2, 因为 await 会等待 async2 函数执行完毕才会继续执行 async1 
+            //       函数内接下来的代码, 所以此时执行 async2 函数后, 输出: <3>."async2"
+            //       
+            //     + (6) 
+            //     + (7) 
+        })();
+
+        // (function() {
+        //     var arr = [[1, 2, 3],[3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10];
+        //     var c = arr.concat().toString().split(",");
+        //     var removeRepeat = new Set(...arr.concat());
+            
+        // })();
+        
+        (function() {
+            let blobUrl = "";
+            let theSrc = URL.revokeObjectURL(blobUrl);
+            console.log("theSrc:", theSrc);
+        })();
+
+
+
+        var aa = [
+            cmd:MAIL,
+            Q:M001TEEAAIqQD2A/TCgA,tid:AQAAfwCHGCKKkA9gNzkoAA--.8092S2,ip:10.66.111.2,ClientIp:10.66.111.2,FreeIP:1,FreeIPFlag:2,ssl:0,CmProtocol:0,SysWhitelist:0,UserCreationDate:0,UserSendInterval:0,Helo:gw.maildata.cn,AuthUser:,Sender:aboobear@longger.com.cn,SenderEmail:,FromDN:,org_id:,org_unit_id:@,Local:0,MdRet:258,gwi:0,gwb:0,gwd:0,BlackUser:0,RuleID:9,RuleName:邮件网关白名单,PolicyID:3,SPF:5,ErrCnt:0,DeliveredCnt:0,UsrQuarterCnt:1(-1)\, 0(-1),UsrTodayCnt:1(-1)\, 0(-1),DomainQuarterCnt:1 0,DomainTodayCnt:1 0,Handle:1,Respond:250 Mail OK\r\n,Result:OK,DebugInfo:FreeIP,SendCtrlRuleID:0,optime:0,delaytime:0,errinfo:]
+11:46:18 [cmd:RCPT,Q:M001TEEAAIqQD2A/TCgA,tid:AQAAfwCHGCKKkA9gNzkoAA--.8092S2,ip:10.66.111.2,ClientIp:10.66.111.2,FreeIP:1,FreeIPFlag:2,ssl:0,CmProtocol:0,Sender:aboobear@longger.com.cn,SenderEmail:,Rcpt:lys@cctgroup.com.cn,Local:0,MdRet:257,RcptOu:,HoneypotRcpt:0,IsLmtpRcpt:0,RcptMailSize:0,RcptMailQuantity:0,RuleID:0,RuleName:,PolicyID:0,UsrQuarterCnt:1(-1)\, 0(-1),UsrTodayCnt:1(-1)\, 0(-1),Respond:550 User not found\: lys@cctgroup.com.cn\r\n,Result:Reject,DebugInfo:R_INVALID_USER,SendCtrlRuleID:0,optime:0,delaytime:0,errinfo:]
+11:46:18 [cmd:DISCONNECT,Q:M001TEEAAIqQD2A/TCgA,tid:AQAAfwCHGCKKkA9gNzkoAA--.8092S2,ip:10.66.111.2,ClientIp:10.66.111.2,FreeIP:1,FreeIPFlag:2,ssl:0,Sender:aboobear@longger.com.cn,FromDN:,org_id:,org_unit_id:@,Size:0,Rcpt:,lrcptcnt:0,rrcptcnt:0,MailCnt:0,SmtpState:9,Handle:0,Delivered:0,Respond:221 Bye\r\n,optime:0,delaytime:0,errinfo:]
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .delFile {
+            width: 100px;
+            height: 32px;
+            margin: 4px;
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<script>
+    // - 12.4.1 对象爆炸
+    let id = 0;
+    // - uploadType 区分是控件还是 flash
+    window.startUpload = function (uploadType, files) {
+        for (let i = 0, file; file = files[i++];) {
+            let uploadObj = new Upload(uploadType, file.fileName, file.fileSize);
+            // - 给 upload 对象设置一个唯一的 id
+            uploadObj.init(id++);
+        }
+    };
+    // - 当用户选择完文件之后, startUpload 函数会遍历 files 数组来创建对应的
+    //   upload 对象. 接下来定义 Upload 构造函数, 它接受 3 个参数, 分别是插件类型,
+    //   文件名 和 文件大小. 这些信息都已经被插件组装在 files 数组里返回, 代码如下:
+    const Upload = function (uploadType, fileName, fileSize) {
+        this.uploadType = uploadType;
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.dom = null;
+    };
+    Upload.prototype.init = function (id) {
+        let that = this;
+        this.id = id;
+        this.dom = document.createElement('div');
+        this.dom.innerHTML =
+            '<span> 文件名称:' + this.fileName + ', 文件大小: ' +
+            this.fileSize + '</span>' +
+            '<button class="delFile">删除</button>';
+        this.dom.querySelector('.delFile').onclick = function () {
+            that.delFile();
+        };
+        document.body.appendChild(this.dom);
+    };
+
+    // - 为了简化示例, 我们暂时去掉了 upload 对象的其他功能, 只保留删除文件的功能,
+    //   对应的方法是 Upload.prototype.delFile. 该方法只有一个逻辑: 当被删除的
+    //   文件小于 300KB 时, 该文件将被直接删除. 否则页面中会弹出一个提示框, 提示
+    //   用户是否确认要删除该文件, 代码如下:
+    Upload.prototype.delFile = function () {
+        if (this.fileSize < 3000) {
+            return this.dom.parentNode.removeChild(this.dom);
+        }
+        if (window.confirm('确定要删除该文件吗?' + this.fileName)) {
+            return this.dom.parentNode.removeChild(this.dom);
+        }
+    };
+    // - 接下来分别创建 3 个插件上传对象和 3 个 Flash 上传对象:
+    startUpload('plugin', [
+        {
+            fileName: '1.txt',
+            fileSize: 1000
+        },
+        {
+            fileName: '2.html',
+            fileSize: 3000
+        },
+        {
+            fileName: '3.txt',
+            fileSize: 5000
+        }
+    ]);
+
+    startUpload('flash', [
+        {
+            fileName: '4.txt',
+            fileSize: 1000
+        },
+        {
+            fileName: '5.html',
+            fileSize: 3000
+        },
+        {
+            fileName: '6.txt',
+            fileSize: 5000
+        }
+    ]);
+
+</script>
+</body>
+</html>

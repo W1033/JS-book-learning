@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tenth chapter scratch paper</title>
+</head>
+<body>
+<script type="text/javascript">
+
+    function sum() {
+        let args = Array.prototype.slice.call(arguments);
+        console.log(args);  // [1, 3, 6, 9]
+    }
+    // sum(1, 3, 6, 9);
+
+    // let nums = [1, [1, [2, [3, [4]]]]];
+    // // - split(): 基于指定的分隔符将一个字符串分割成多个子字符串,
+    // //   并将结果放在一个数组中. 
+    // // - concat(): 基于当前数组中的所有项创建一个新数组.
+    // console.log('nums.toString():', nums.toString());   // 1,1,2,3,4
+    // let result = nums.toString().split(',').concat();
+
+
+    function translate() {
+        return Array.from(arguments, (value) => value + 1);
+    }
+    let numbers = translate(1, 2, 3);
+    console.log(numbers); 
+
+    console.log('\n' + '*********');
+    console.log('\n' + '*********');
+    console.log('\n' + '*********');
+    console.log('\n' + '*********');
+    console.log('\n' + '*********');
+    console.log('\n' + '*********');
+    console.log('\n' + '*********');
+
+
+
+
+    let numbersArr = [25, 30, 35, 40, 45];
+    console.log(numbersArr.find(function (n) {
+        return n > 33;
+    }));
+    // 把上面的回调函数写成箭头函数更简洁，
+    // 注意: 参数 n 外面一般不写括号(虽然有括号也正常执行)，带括号的写法多为: (n) => { return n >33 };
+    console.log(numbersArr.find(n => n > 33));
+    console.log(numbersArr.findIndex(n => n > 33));  // 2
+
+
+    /** 2.为所有的数组添加的方法 --> fill() 方法: 用指定的值填充一至多个数组元素。当传入一个值时，fill()
+     * 方法会用这个值重写数组中的所有值。 */
+    let numbersAgain = [1, 2, 3, 4, 5];
+    numbersAgain.fill(6);
+    console.log(numbersAgain.toString());       // 6,6,6,6,6
+    console.log(numbersAgain.fill(2, 2));       // [6, 6, 2, 2, 2]
+    console.log(numbersAgain.fill(0, 1, 3));    // [6, 0, 0, 2, 2]
+
+
+    let anotherNums = [1, 3, 5, 6, 7, 9, 10];
+    // 从数组的索引 3 开始粘贴值
+    // 从数组的索引 0 开始复制值
+    /* 注: 2 个参数从后往前看: 从索引 0 开始复制值到索引 3 处停止 (不包含索引 3), 然后把复制的 1, 3, 5
+     * 插入到索引为 3 的元素的前面，数组总长度不改变，所以数组变更为 -> [1, 3, 5, 1, 3, 5, 6]  */
+    anotherNums.copyWithin(3, 0);
+    console.log(anotherNums);       // [1, 3, 5, 1, 3, 5, 6]
+
+    let otherNum = [1, 3, 5, 6, 7, 9, 10];
+    // 从索引 3 开始粘贴值
+    // 从索引 0 开始复制值
+    // 当位于索引 2 时停止复制值 ( 此时复制了前两项 1, 3 )
+    otherNum.copyWithin(3, 0, 2);
+    /* 注: 通过输出值可以看出: 当第 3 个参数存在时和上面 2 个参数的情形并不一样，第 3 个参数存在时复制的
+     * 1, 3 项直接覆盖了 6, 7 两项，并不是插入到这两项之前。  */
+    console.log(otherNum);  // [1, 3, 5, 1, 3, 9, 10]
+</script>
+</body>
+</html>

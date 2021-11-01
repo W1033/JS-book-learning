@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+            maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>5.6 表单校验</title>
+    <style type="text/css">
+        * {margin:0; padding:0; list-style:none; font-size: 14px;}
+        .container {
+            width: 80%; min-height: 660px; margin: 20px auto;
+            background: #eeeeee; border-radius: 4px;
+        }
+        p {
+            height: 40px;
+            margin: 10px auto;
+            padding: 10px;
+            /*background: #ffdeac;*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        label {
+            flex: 0 1 15%;
+            line-height: 36px;
+            margin-right: 20px;
+            text-align: right;
+            /*background: lightgreen;*/
+        }
+        input {
+            border:1px solid lightgreen;
+            border-radius: 4px;
+            flex: 0 1 20%;
+            line-height: 36px;
+            /*background: lightpink;*/
+            outline: none;
+            text-indent: 6px;
+        }
+        #submit {
+            flex: 0 0 120px;
+            line-height: 46px;
+            background: lightseagreen;
+            margin: 20px auto;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        #showErrors {
+            width: 40%;
+            min-height: 20px;
+            margin: 20px auto 0;
+            padding: 6px 0;
+            background: lightblue;
+            text-align: center;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="http://xxx.com/register" id="registerForm" method="post">
+            <p>
+                <label for="userName">请输入用户名:</label>
+                <input type="text" id="userName" name="userName"/>
+            </p>
+            <p>
+                <label for="password">请输入密码:</label>
+                <input type="password" id="password" name="password"/>
+            </p>
+            <p>
+                <label for="phoneNumber">请输入手机号码:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber"/>
+            </p>
+            <p>
+                <button id="submit">提交</button>
+            </p>
+        </form>
+        <div id="showErrors"></div>
+    </div>
+
+
+    <script type="text/javascript">
+        // - 策略对象
+        const strategies = {
+            // - 不为空
+            isNonEmpty(value, errorMsg) {
+                if (value === '') {
+                    return errorMsg;
+                }
+            },
+            // - 限制最小长度
+            minLength(value, length, errorMsg) {
+                if (value.length < length) {
+                    return errorMsg;
+                }
+            },
+            // - 手机号码格式
+            isMobile(value, errorMsg) {
+                if (!/(^1[3|5|8][0-9]{9}$)/.test(value)) {
+                    return errorMsg;
+                }
+            }
+        };
+
+        // - Validator 类
+        let Validator = function() {
+            // - 保存校验规则
+            this.cache = [];
+        };
+        Validator.prototype.add = function(dom, rules) {
+            let self = this;
+            for (let i = 0, length = rules.length; i < length; i++) {
+                (function(rule) {
+                    // - split(): 把字符串转换成数组. 把 strategy 和参数分开
+                    let strategyAry = rule.strategy.split(':');
+                    let errorMsg = rule.errorMsg;
+
+                    // - {1}: 把校验的步骤用空函数包装起来, 并且放入 cache
+                    // - {2}: 用户挑选的 strategy
+                    // - {3}: 把 input 的 value 添加近参数列表
+                    // - {4}: 把 errorMsg 添加进参数列表
+                    self.cache.push(function() {    // {1}
+                        let strategy = strategyAry.shift(); // {2}
+
+                        // - unshift() 在数组前端添加任意个项并返回新数组的长度。
+                        strategyAry.unshift(dom.value);     // {3}
+                        strategyAry.push(errorMsg);         // {4}
+                        return strategies[strategy].apply(dom, strategyAry);
+                    });
+                    console.log('this.cache:', self.cache);
+                })(rules[i]);
+            }
+        };
+
+        Validator.prototype.start = function() {
+            let errors = [];
+            for (let i = 0, validatorFunc; validatorFunc = this.cache[i++]; ) {
+                let errorMsg = validatorFunc();
+                if (errorMsg) {
+                    errors.push(errorMsg);
+                }
+            }
+            return errors;
+        };
+
+        // - 客户调用代码
+        let registerForm = document.getElementById('registerForm');
+        let validateFunc = function() {
+            let validator = new Validator();
+            validator.add(
+                registerForm.userName,
+                [
+                    {
+                        strategy: 'isNonEmpty',
+                        errorMsg: '用户名不能为空'
+                    },
+                    {
+                        strategy: 'minLength:6',
+                        errorMsg: '用户名长度不能小于 6 位'
+                    }
+                ]
+            );
+            validator.add(registerForm.password, [{
+                strategy: 'minLength:6',
+                errorMsg: '密码长度不能小于 6 位'
+            }]);
+            validator.add(registerForm.phoneNumber, [{
+                strategy: 'isMobile',
+                errorMsg: '手机号码格式不正确'
+            }]);
+            return validator.start();
+        };
+        registerForm.onsubmit = function() {
+            let errors = validateFunc();
+            if (errors.length > 0) {
+                let str = '';
+                errors.forEach((item) => {
+                    str += '<i style="display:block; text-align: center; margin: 2px auto">' + item +'</i>';
+                });
+                console.log(str);
+                document.getElementById('showErrors').innerHTML = str;
+                return false;
+            }
+        }
+
+    </script>
+</body>
+</html>

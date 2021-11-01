@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>async 学习</title>
+</head>
+<body>
+    <script>
+        (function() {
+            // - async 代码转换示例
+            function getConstant() {
+                return 1;
+            }
+            async function getAsyncConstant() {
+                return 1;
+            }
+            async function getPromise() {
+                return new Promise((resolved, rejected) => {
+                    resolved(1);
+                })
+            }
+            async function test() {
+                a = 2;
+                c = 1;
+                await getConstant();
+                d = 3;
+                await getPromise();
+                d = 4;
+                await getAsyncConstant();
+                return 2;
+            }
+        })();
+        // - 上面匿名函数中的代码就等于
+        (function() {
+            function getConstant() {
+                return 1;
+            }
+            function getAsyncConstant() {
+                return Promise.resolve().then(function() {
+                    return 1;
+                });
+            }
+            function Promise() {
+                return Promise.resolve().then(function(){
+                    return new Promise((resolved, rejected) => {
+                        resolved(1);
+                    });
+                });
+            }
+            function test() {
+                return Promise.resolve().then(function(){
+                    a = 2;
+                    c = 1;
+                    return getConstant();
+                }).then(function() {
+                    d = 3;
+                    return getPromise();
+                }).then(function() {
+                    d = 4;
+                    return getAsyncConstant();
+                }).then(function() {
+                    return 2;
+                });
+            }
+        })();
+
+
+        let smallNumbers = [1, 2, 3],
+        bigNumbers = [100, 101, 102],
+        allNumbers = [0, ...smallNumbers, ...bigNumbers];
+        console.log(allNumbers);
+
+    </script>
+</body>
+</html>

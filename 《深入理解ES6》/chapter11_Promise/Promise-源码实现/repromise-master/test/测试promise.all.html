@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="../promise.js"></script>
+  <!-- <script src="../test.js"></script> -->
+  <script>
+    // 测试 Promise.all([])
+    var p1 = Promise.resolve(3)
+    var p2 = new Promise((resolve, reject) => {
+      setTimeout(resolve, 2000, 'foo')
+    })
+    var p3 = 1337
+
+    Promise.all([p1, p2, p3]).then(values => {
+      console.log(values); // [3, "foo", 1337]
+    })
+
+    // 测试 Promise.all() 抛错
+    // var p1 = 1
+    // var p2 = Promise.reject(new Error('this is a error'))
+    // var p2 = Promise.reject(2)
+
+    // Promise.all([p1, p2]).then((values) => {
+    //   console.log(values)
+    // }, (err) => {
+    //   console.log(err)
+    // })
+
+    // 测试 catch() 捕获错误
+    // var p1 = 1
+    // var p2 = Promise.reject(new Error('this is a error'))
+
+    // Promise.all([p1, p2])
+    //   .then((values) => {
+    //     console.log(values)
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+  </script>
+</body>
+</html>

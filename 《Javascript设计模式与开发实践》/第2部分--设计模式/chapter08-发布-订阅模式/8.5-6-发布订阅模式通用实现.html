@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+           maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>8.5 -- 发布订阅模式通用实现</title>
+</head>
+<body>
+    <script type="text/javascript">
+        // - JS 是一门解释执行的语言, 给对象动态添加职责是理所当然的事情.
+        // - 8.5 例如我们把发布订阅的功能提取出来, 放在一个单独的对象内.
+        (function() {
+            let dependence = {
+                subs: [],
+                addSub: function(key, watcher) {
+                    if (!this.subs[key]) {
+                        this.subs[key] = [];
+                    }
+                    this.subs[key].push(watcher);
+                },
+                notify: function() {
+                    let key = Array.prototype.shift.call(arguments);
+                    let subWatcher = this.subs[key];
+                    if (!subWatcher || subWatcher.length === 0) {
+                        return false;
+                    }
+                    for (let i = 0; i < subWatcher.length; i++) {
+                        // - My God! 把 (this, argument) 写成了 (this. arguments)
+                        //   改了半天!!!
+                        subWatcher[i].apply(this, arguments);
+                    }
+                }
+            };
+
+            // function installDep(obj) {
+            //     for (let key in event) {
+            //         obj[key] = event[key];
+            //     }
+            // }
+            // let salesOffices = {};
+            // installDep(salesOffices);
+
+            // - 上面的 installDep 函数可以给所有的对象动态添加发布订阅功能.
+            // - (Tip: 即是很多库中实现的 Mixin(混合), ES6 实现是 Object.assign();
+            //   下面是`深入理解ES6--chapter04-扩展对象的功能性.md` 中的 Mixin() 写法)
+            function mixin(receiver, supplier) {
+                Object.keys(supplier).forEach(function(key) {
+                    receiver[key] = supplier[key];
+                });
+                return receiver;
+            }
+
+            let depInstance = {};
+            mixin(depInstance, dependence);
+
+
+            // - 小明订阅消息
+            depInstance.addSub('squareMeter88', function(price01) {
+                console.log('squareMeter88 价格=', price01);
+            });
+            // - 小红订阅消息
+            depInstance.addSub('squareMeter110', function(price02) {
+                console.log('squareMeter110 价格=', price02);
+            });
+
+            // - 发布 88 平方米房子的价格
+            // depInstance.notify('squareMeter88', 2000000);
+            // // - 发布 110 平方米房子的价格
+            // depInstance.notify('squareMeter110', 3000000);
+        })();
+
+        // - 8.6 取消订阅的事件
+        (function(){
+            let dependence = {
+                subs: [],
+                addSub: function(key, watcher) {
+                    if (!this.subs[key]) {
+                        // - Tip: 数组也是可以自建 `索引: 值` 结构形式的, 就和对象
+                        //   的 `键: 值` 对一样的原理, 数组在js中就归入 `特异对象`
+                        //   (Exotic Object: <深入理解ES6>--chapter04.md) 中;
+                        //   而且在 js 实现的 `计数排序(counting-sort)` 算法中也
+                        //   是使用数组自定义的 `索引: 值` 形式. 输出见下面的 {1}.
+                        this.subs[key] = [];
+                    }
+                    this.subs[key].push(watcher);
+
+                    // - 经过下面 2 次 addSub() 调用后输出:
+                    // this.subs: [squareMeter88: Array(2)]
+                    // console.log('this.subs: ', this.subs);  // {1}
+                },
+                notify: function() {
+                    let key = Array.prototype.shift.call(arguments);
+                    let subWatcher = this.subs[key];
+                    if (!subWatcher || subWatcher.length === 0) {
+                        return false;
+                    }
+                    for (let i = 0; i < subWatcher.length; i++) {
+                        subWatcher[i].apply(this, arguments);
+                    }
+                },
+                remove: function(key, watcher) {
+                    let subWatcher = this.subs[key];
+                    // - 如果 key 对应的消息没有被人订阅, 则直接返回
+                    if (!subWatcher) {
+                        return false;
+                    }
+                    // - 如果没有传入具体的回调函数, 表示需要取消 key 对应消息的所有订阅
+                    if (!watcher) {
+                        subWatcher && (subWatcher.length = 0);
+                    }
+                    else {
+                        // - 反向遍历订阅的回调函数列表
+                        for (let l = subWatcher.length - 1; l >= 0; l--) {
+                            // - Question: 移除订阅函数是怎么做的比较?
+                            //   A: 生生的函数硬比较
+                            let _fn = subWatcher[l];
+                            if (_fn === watcher) {
+                                console.log('_fn: ', _fn);
+                                console.log('watcher: ', watcher);
+                                // - 删除订阅的回调函数
+                                subWatcher.splice(l, 1);
+                            }
+                        }
+                    }
+
+                }
+            };
+
+            function mixin(receiver, supplier) {
+                Object.keys(supplier).forEach(function(key) {
+                    receiver[key] = supplier[key];
+                });
+                return receiver;
+            }
+            let depInstance = {};
+            mixin(depInstance, dependence);
+
+            // - 小明订阅消息
+            let fn1 = function(price01) {
+                console.log('squareMeter88 价格=', price01);
+            };
+            depInstance.addSub('squareMeter88', fn1) ;
+
+            // - 小红订阅消息
+            let fn2 = function(price02) {
+                console.log('squareMeter88 价格=', price02);
+            };
+            depInstance.addSub('squareMeter88', fn2);
+
+            // - 删除小明订阅的消息
+            depInstance.remove('squareMeter88', fn1);
+            // - 发布小红订阅的消息
+            depInstance.notify('squareMeter88', 2000000);
+        })();
+    </script>
+</body>
+</html>

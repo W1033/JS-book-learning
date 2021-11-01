@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+           maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>15.4 装饰函数</title>
+</head>
+<body>
+    <button id="btn">按钮btn</button>
+    <script>
+        /**
+         * > 15.4 装饰函数：
+         * - 在 JS 中几乎一切都是对象，其中函数又被称为一等对象。
+         */
+
+        // - 通过保存原引用的方式就可以改写某个函数：
+        let a = function() {
+            console.log(11);
+        };
+
+        let _a = a;
+
+        a = function() {
+            _a();
+            console.log(22);
+        };
+
+        // a();
+
+        // - 这是实际开发中很常见的一种做法，比我我们想给 window 绑定 onload 事件，但是
+        //   又不确定这个事件是不是已经被其他人绑定过，为了避免覆盖掉之前的 window.onload
+        //   函数里中的行为，我们一般都会先保存好原先的 window.onload, 把它放入新的
+        //   window.onload 里执行：
+        window.onload = function() {
+            console.log(33);
+        };
+        let _onload = window.onload || function() {};
+        window.onload = function() {
+            _onload();
+            console.log(44);
+        };
+
+        // - 上面的代码符合 '开放-封闭原则'，但是有 2 个问题：
+        //    + (1)、必须维护 _onload 这个中建亮，如果函数的装饰链较长，或者需要装饰的
+        //      函数变多，这些中间变量的数量也会越来越多。
+        //    + (2)、其实还遇到了 this 被劫持的问题。 具体见书本......
+
+        // 改进上面 (2) 的问题
+        let _getElementById = document.getElementById;
+        document.getElementById = function() {
+            console.log(1);
+            return _getElementById.apply(document, arguments);
+        };
+        let btn = document.getElementById('btn');
+
+        // - 这样改进后显然很不方便，下面我们引入本书 3.7 节介绍过得 AOP，来提供一种
+        //   完美的方法给函数动态增加功能。 -- 详见下一节 15.5
+
+    </script>
+</body>
+</html>

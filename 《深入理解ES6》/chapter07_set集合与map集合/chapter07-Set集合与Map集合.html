@@ -1,0 +1,91 @@
+<script type="text/javascript">
+
+    (function() {
+        let set = new Set();
+        let key1 = {};
+        let key2 = {};
+        set.add(key1);
+        set.add(key2);
+        console.log("set: ", set);
+    })();
+
+
+    let set5 = new Set([1, 2, 3, 3, 3, 4, 5]),
+        arr = [...set5];
+    console.log("arr:", arr);
+
+
+    // 创建一个无重复值的新数组
+    function eliminateDuplicates(items) {
+        return [...new Set(items)];
+    }
+
+    let numbers = [1, 2, 3, 4, 4, 4, 5],
+        noDuplicates = eliminateDuplicates(numbers);
+    console.log(noDuplicates);
+
+
+    // P136: Weak Set
+    let set6 = new Set(),
+        key = {};
+    set6.add(key);
+    console.log(set6.size); // 1
+    // 取消原始引用
+    key = null;
+    console.log(set6.size);  // 1
+    // 重新获得原始引用
+    key = [...set6][0];
+
+    let wSet = new WeakSet(),
+        wKey = {};
+    // 将对象加载 set
+    wSet.add(wKey);
+    console.log(wSet.has(wKey));    // true
+    wSet.delete(wKey);
+    console.log(wSet.has(wKey));    // false
+
+
+    /** ES5 中创建几乎真正私有的数据模式 **/
+    let Person = (function () {
+        // 此示例用 IIFE 包裹了 Person 的定义，其中包含2个私有属性: privateData 与 privateId
+        // privateData 对象存储了每个实例的私有信息，而 privateId 则被用于为每个实例产生一个唯一 ID。
+        // 当 Person 构造函数被调用时，一个不可枚举、不可配置、不可写入的 _id 属性就被添加了。
+        let privateData = {},
+            privateId = 0;
+
+        function Person(name) {
+            console.log(this);  // Person{}
+            // 在当前 Person 对象上定义一个访问器属性 _id
+            Object.defineProperty(this, "_id", {value: privateId++});
+            privateData[this._id] = {
+                name: name
+            }
+        }
+
+        Person.prototype.getName = function () {
+            return privateData[this._id].name;
+        };
+        return Person;
+    }());
+
+    let person = new Person("Nicholas");
+    console.log(person.getName());  // Nicholas
+
+
+    /** ES6 利用 Weak map 创建对象的私有数据  **/
+    let People = (function () {
+        let privateData = new WeakMap();
+
+        function People(name) {
+            privateData.set(this, {name: name});
+        }
+
+        People.prototype.getName = function () {
+            return privateData.get(this).name;
+        };
+        return People;
+    }());
+    let people = new People("Nicholas");
+    console.log(people.getName()); 
+
+</script>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no,
+            initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../typo.css">
+    <style type="text/css">
+        .box {
+            margin: 6px 0 6px 12px;
+            width: 360px;
+            height: 260px;
+            padding: 0 10px;
+            float: left;
+            background: lightsalmon;
+            overflow: hidden;
+        }
+        .square {
+            width: 50%;
+            height: 50%;
+            text-align: center;
+            line-height: 10;
+            border-radius:5%;
+            margin-top: 10%;
+            margin-left: 10%;
+            overflow: hidden;
+            float: left;
+            background-color: #33cc99;
+            /*border: 1px solid #cccc00;*/
+        }
+        
+        .wrapper {
+            font-size: 20px;
+            min-width: 320px;
+            min-height: 260px;
+            background: #d49499;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 20px;
+            float: left;
+            line-height: 100%;
+        }
+        .wrapper ul {
+            margin-left: 30px;
+            /* - 20 x 0.8 = 16px */
+            font-size: 0.8em;
+            list-style:disc;
+        }
+        .wrapper ul ul {
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <p class="square">方块</p>
+    </div>
+
+    <div class="wrapper">
+        <ul class="first-ul">
+            <li class="item1">li item:1
+                <ul>
+                    <li class="sub-item1">sub li num:1</li>
+                    <ul>
+                        <li class="sub-sub-item1">sub sub li num:1
+                            <ul>
+                                <li class="sub-sub-sub-item1">sub sub sub li num:1</li>
+                                <ul>
+                                    <li class="sub-sub-sub-sub-item1">sub sub sub sub li num:1</li>
+                                </ul>
+                            </ul>
+                        </li>
+                    </ul>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const square = document.querySelector('.square');
+        
+        function getBoundingClientRect(element) {
+            if (typeof arguments.callee.offset != "number"){
+                var scrollTop = document.documentElement.scrollTop;
+                var temp = document.createElement("div");
+                temp.style.cssText = "position:absolute;left:0;top:0;";
+                document.body.appendChild(temp);
+                arguments.callee.offset = -temp.getBoundingClientRect().top - scrollTop;
+                document.body.removeChild(temp);
+                temp = null;
+            }
+            var rect = element.getBoundingClientRect();
+            console.log('rect:', rect);
+            var offset = arguments.callee.offset;
+            console.log('offset: ', offset);
+            return {
+                left: rect.left + offset,
+                right: rect.right + offset,
+                top: rect.top + offset,
+                bottom: rect.bottom + offset
+            }
+        }
+        getBoundingClientRect(square);
+    </script>
+</body>
+</html>
+
+

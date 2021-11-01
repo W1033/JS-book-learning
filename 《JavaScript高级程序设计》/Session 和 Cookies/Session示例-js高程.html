@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Global and Local Storage 示例(js高程 23td chapter)</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font: inherit;
+            font-size: 100%;
+            vertical-align: baseline;
+        }
+
+        body, button, input, select, textarea {
+            font: 14px/1.5 "Microsoft YaHei", Tahoma, Helvetica, Arial, SimSun
+        }
+
+        ol, ul {
+            list-style: none;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        caption, th, td {
+            text-align: left;
+            font-weight: normal;
+            vertical-align: middle;
+        }
+
+        q, blockquote {
+            quotes: none;
+        }
+
+        a img {
+            border: none;
+        }
+
+        article, aside, details, figcaption, figure, footer, header, main, menu, nav, section, summary {
+            display: block;
+        }
+
+        input {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: none;
+        }
+
+        .lightBlueBg {
+            background: lightblue;
+        }
+
+        .lightGreenBy {
+            background: lightseagreen;
+        }
+
+        .width400 {
+            width: 400px;
+        }
+
+        .width800 {
+            width: 800px;
+        }
+
+        .height40 {
+            height: 40px;
+        }
+
+        .height600 {
+            height: 600px;
+        }
+
+        .disInlBlock {
+            display: inline-block;
+        }
+
+        .marLeft50 {
+            margin-left: 50px;
+        }
+
+        .marTop50 {
+            margin-top: 50px;
+        }
+
+        .marBot20 {
+            margin-bottom: 20px;
+        }
+
+        .bor1 {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="width800 height600 marLeft50 marTop50 lightGreenBy">
+        <p class="marBot20">
+            <span>姓名: </span>
+            <span id="name-value" class="disInlBlock width400 height40 lightBlueBg ">Nicholas C Zakas</span><br/>
+        </p>
+        <p class="marBot20">
+            <span>书名: </span>
+            <span id="book-value" class="disInlBlock width200 lightBlueBg">Professional JavaScript for Web Developers 3rd Edition </span>
+        </p>
+
+        <input type="button" class="bor1" value="删除数据" id="delete-btn"/>
+        <input type="button" class="bor1" value="查看所有" id="see-btn"/>
+        <input type="button" class="bor1" value="跳转百度" id="link-btn"/>
+        <p>Refresh the page to see the values. Click &quot;Delete Data&quot; to remove them. Close the browser and
+            re-open this page to see the data is still available.</p>
+        <p>This example requires Internet Explorer 8, Firefox 2, Safari 4, Chrome 4, or Opera 10.5 to work.<br/>
+            This example must be run from a server; it won't work when run locally.</p>
+    </div>
+
+</div>
+<script type="text/javascript" src="EventUtil.js"></script>
+<script type="text/javascript">
+    function getLocalStorage() {
+        if (typeof localStorage == "object") {
+            return localStorage;
+        } else if (typeof globalStorage == "object") {
+            return globalStorage[location.host];
+        } else {
+            throw new Error("Local storage not available.");
+        }
+    }
+
+    EventUtil.addHandler(window, "load", function () {
+
+        var dataStore = getLocalStorage();
+        ////set some data 设置localStorage
+        dataStore.setItem("name", document.getElementById("name-value").innerHTML);
+        dataStore.setItem("book", document.getElementById("book-value").innerHTML);
+
+        EventUtil.addHandler(document.getElementById("delete-btn"), "click", function () {
+            //these don't work in webkit
+            //delete dataStore.name;
+            //delete dataStore.book;
+            dataStore.removeItem("name");
+            dataStore.removeItem("book");
+        });
+
+        EventUtil.addHandler(document.getElementById("see-btn"), "click", function () {
+            var i, len, key, value;
+            for (i = 0, len = dataStore.length; i < len; i++) {
+                key = dataStore.key(i);
+                value = dataStore.getItem(key);
+                alert(key + "=" + value);
+            }
+        });
+        EventUtil.addHandler(document.getElementById("link-btn"), "click", function () {
+            window.location = "http://www.baidu.com";
+        });
+        dataStore.getItem("name");
+        dataStore.getItem("book");
+    });
+</script>
+</body>
+</html>

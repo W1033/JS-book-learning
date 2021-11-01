@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>同步/异步测试</title>
+</head>
+
+<body>
+  <script src="../../promise.js"></script>
+  <script>
+    let promise = new Promise((resolve, reject) => {
+      console.log('run at once')
+      resolve()
+    })
+
+    promise.then(() => {
+      console.log('this is asyncronous')
+    })
+
+    console.log('this is synchronous')
+
+    // run at once
+    // this is synchronous
+    // this is asyncronous
+  </script>
+</body>
+
+</html>

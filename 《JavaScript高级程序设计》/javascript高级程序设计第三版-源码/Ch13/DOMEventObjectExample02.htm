@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM Event Object Example</title>
+</head>
+<body>
+<input type="button" id="myBtn" value="Click Me"/>
+<script type="text/javascript">
+    //由于按钮上并没有注册事件处理程序，结果click事件就冒泡到document.body，在那里事件才得到了处理。
+    document.body.onclick = function (event) {
+        alert(event.currentTarget === document.body);   //true
+        alert(this === document.body);                  //true
+        alert(event.target === document.getElementById("myBtn")); //true
+    };
+</script>
+</body>
+</html>

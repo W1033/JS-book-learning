@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+            maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>5.4 使用策略模式实现缓动动画</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 90%;
+            height: 600px;
+            margin: 20px auto;
+            /*padding: 1%;*/
+            border-radius: 10px;
+            background: rgba(59, 214, 81, 0.09);
+            overflow: hidden;
+            position: relative;
+        }
+
+        #sphere {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #0ba495;
+            position: absolute;
+            left:0;top:0; cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p id="sphere">我是个小球</p>
+</div>
+<script type="text/javascript">
+    // #### 5.4.3 让小球运动起来
+    // - 在实现完整的功能之前，我们先了解一些常见的缓动算法，这些算法最初来自 Flash
+    //   , 但可以非常方便地移植到其他语言中。
+    // - 这些算法都接受 4个参数，这 4个参数的含义分别是
+    //     + (1) 动画已消耗的时间、
+    //     + (2) 小球原始位置、
+    //     + (3) 小球目标位置、
+    //     + (4) 动画持续的总时间，
+    //     返回的值则是动画元素当前应该在的位置.代码如下:
+    let tween = {
+        linear: function (t, b, c, d) {
+            return c * t / d + b;
+        },
+        easeIn: function (t, b, c, d) {
+            // - 除/赋值(/=) : 例如: x /= y === x = x / y
+            return c * (t /= d) * t + b;
+        },
+        strongEaseIn: function (t, b, c, d) {
+            // return c * (t /= d) * t * t * t * t + b;
+
+            // - ES6 为 JS 添加了 指数运算符(**)
+            return c * (t /= d) * (t ** 4) + b;
+        },
+        strongEaseOut: function (t, b, c, d) {
+            return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+        },
+        sinEaseIn: function (t, b, c, d) {
+            return c * (t /= d) * t * t + b;
+        },
+        sinEaseOut: function (t, b, c, d) {
+            return c * ((t = t / d - 1) * t * t + 1) + b;
+        },
+    };
+
+
+    const Animate = function(dom) {
+        this.dom = dom;         // - 进行运动的 dom 节点
+        this.startTime = 0;     // - 动画开始时间
+        this.startPos = 0;      // - 动画开始时, dom 节点的位置, 即 dom 的初始位置
+        this.endPos = 0;        // - 动画结束时, dom 节点的位置, 即 dom 的目标位置
+        this.propertyName = null;   // - dom 节点需要被改变的 css 属性名
+        this.easing = null;     // - 缓动算法
+        this.duration = null;   // - 动画持续时间
+    };
+    // - 接下来 Animate.prototype.start 方法负责启动这个动画，在动画被启动的瞬间，
+    //   要记录一些信息，供缓动算法在以后计算小球当前位置的时候使用。在记录完这些信息之后，
+    //   此方法还要负责启动定时器。代码如下：
+    Animate.prototype.start = function(propertyName, endPos, duration, easing) {
+        this.startTime = +new Date;         // - 动画启动时间
+        // - dom 节点初始位置
+        this.startPos = this.dom.getBoundingClientRect()[propertyName];
+        console.log('propertyName:', propertyName);
+        console.log('this.startPos:', this.startPos);
+        this.propertyName = propertyName;   // - dom 节点需要被改变的 CSS 属性名
+        this.endPos = endPos;               // - dom 节点目标位置
+        this.duration = duration;           // - 动画持续时间
+        this.easing = tween[easing];        // - 缓动算法
+
+        // - 启动定时器, 开始执行动画
+        // - Q: 这里应该可以改为 requestAnimationFrame() 方法, 但是改了一下没改对,
+        //   有时间回来改.
+        let self = this;
+        let timeId = setInterval(function() {
+            // + 如果动画已结束, 则清楚定时器
+            if (self.step() === false) {
+                clearInterval(timeId);
+            }
+        }, 19)
+    };
+    // - 再接下来是 Animate.prototype.step 方法，该方法代表小球运动的每一帧要做的事情。
+    //   在此处，这个方法负责计算小球的当前位置和调用更新 CSS 属性值的方法
+    //   Animate.prototype.update。代码如下:
+    // - 行 {1} 的意思是: 如果当前时间大于动画开始时间加上动画持续时间之和，说明动画
+    //   已经结束，此时要修正小球的位置。因为在这一帧开始之后，小球的位置已经接近了目标位置,
+    //   但很可能不完全等于目标位置。此时我们要主动修正小球的当前位置为最终的目标位置。
+    //   此外让 Animate.prototype.step 方法返回 false，可以通知
+    //   Animate.prototype.start 方法清除定时器。
+    Animate.prototype.step = function() {
+        let t = +new Date;      // - 取得当前时间
+        if (t >= this.startTime + this.duration) { // {1}
+            this.update(this.endPos);   // - 更新小球的 CSS 属性值
+            return false;
+        }
+        let pos = this.easing(
+                    t - this.startTime,
+                    this.startPos,
+                    this.endPos - this.startPos,
+                    this.duration
+                );
+        // - pos 为小球当前位置
+        this.update(pos);   // - 更新小球的 CSS 属性值
+    };
+
+    // - 最后是负责更新小球 CSS 属性值的 Animate.prototype.update 方法
+    Animate.prototype.update = function(pos) {
+        this.dom.style[this.propertyName] = pos + 'px';
+    };
+
+    const sphere = document.getElementById('sphere');
+    let animate = new Animate(sphere);
+    sphere.addEventListener('click', function() {
+        animate.start('left', 1000, 2000, 'linear');
+    }, false)
+</script>
+</body>
+</html>
