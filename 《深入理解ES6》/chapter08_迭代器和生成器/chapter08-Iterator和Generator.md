@@ -69,7 +69,7 @@
                 next: function () {
                     let done = (i >= items.length);
                     let value = !done ? items[i++] : undefined;
-
+  
                     return {
                         done: done,
                         value: value
@@ -78,7 +78,7 @@
             }
         }
         let es5Iterator = es5CreateIterator([1, 2, 3]);
-
+  
         console.log(es5Iterator.next());   // {done: false, value: 1}
         console.log(es5Iterator.next());   // {done: false, value: 2}
         console.log(es5Iterator.next());   // {done: false, value: 3}
@@ -109,7 +109,7 @@
     console.log(ite.next().value);  // 1
     console.log(ite.next().value);  // 2
     console.log(ite.next().value);  // 3
-
+  
     // - 在这个示例中，createIte（）前的星号表明它是一个生成器；yield 关键字也是 
     //   ES6 的新特性，可以通过它来指定调用迭代器的 next（）方法时的返回值及返回顺序。
     //   生成迭代器后，连续 3 次调用它的 next（）方法返回 3 个不同的值，分别是 1、2 
@@ -121,13 +121,13 @@
     //   讲解它的应用.
     // - 使用 yield 关键字可以返回任何值或表达式，所以可以通过生成器函数批量地给迭代器
     //   添加元素。例如，可以在循环中使用 yield 关键字：
-
+  
     // - 示例 2 -- 生成器
     function * createIterator (items) {
         for (let i = 0; i < items.length; i++) {
             yield items[i]
         }
-
+  
         // yield 关键字只能用在生成器内部，用于其他任意位置都是语法错误，即使在生成器内部的
         // 函数中也不行，如下例:
         // function *createIterator (items) {
@@ -139,12 +139,12 @@
     }
     // 生成器的调用和普通函数一样，只不过返回的是一个迭代器。
     let iterator = createIterator([1, 2, 3]);
-
+  
     console.log(iterator.next());   // {done: false, value: 1}
     console.log(iterator.next());   // {done: false, value: 2}
     console.log(iterator.next());   // {done: false, value: 3}
     console.log(iterator.next());   // {done: true, value: undefined}
-
+  
     // - 之后所有的调用都会返回相内容
     console.log(iterator.next());   // '{done: true, value: undefined}'
     // - 此示例中, 给生成器函数 createIterator() 传入一个 items 数组, 而在函数内部,
@@ -161,12 +161,12 @@
         }
     };
     let iterator = createIterator([1, 2, 3]);
-
+  
     console.log(iterator.next());   // {done: false, value: 1}
     console.log(iterator.next());   // {done: false, value: 2}
     console.log(iterator.next());   // {done: false, value: 3}
     console.log(iterator.next());   // {done: true, value: undefined}
-
+  
     // - 之后所有的调用都会返回相内容
     console.log(iterator.next());   // '{done: true, value: undefined}'
   ```
@@ -233,7 +233,7 @@
     let thirdIte = nums[Symbol.iterator]();
     console.log(thirdIte.next());  // { value: 1, done: false }
     console.log(thirdIte.next());  // { value: 2, done: false }
-
+  
     // - 由于具有 Symbol.iterator 属性的对象都有默认的迭代器，因此可以用它来检测
     //   对象是否为可迭代对象. 代码如下:
     function isIterable(object) {
@@ -264,7 +264,7 @@
     for (let x of collection) {
         console.log(x);
     }
-
+  
     console.log('*'.repeat(66));
   ```
 
@@ -399,7 +399,7 @@
     }
 
     // - 由于双字节字符被当做2个分离的码元来对待，此处的输出在 A 与 B 之间就有 4 个空行。
-    //   ES6 旨在为 Unicode 提供完全支持(相见第二章markdown)，字符串的默认迭代器就是解决
+    //   ES6 旨在为 Unicode 提供完全支持(详见第二章markdown)，字符串的默认迭代器就是解决
     //   字符串迭代问题的一种尝试。这样一来，借助字符串默认迭代器就能处理字符而不是码元。
     //   把上面的循环改为 for-of 得到合理的输出
     for (let c of text) {
