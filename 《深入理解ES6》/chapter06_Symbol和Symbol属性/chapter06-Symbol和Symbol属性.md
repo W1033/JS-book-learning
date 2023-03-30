@@ -13,41 +13,41 @@
     + The species is[are] valuable. 这一物种很珍贵.
     + He felt a species of uneasiness. 他有一种不安的感觉.
 
-- **unscopables --不适用
+- **unscopables --不适用**
 
 
 
 ## ▲ Added Info
 
 > 笔记来源：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Grammar_and_types
-
-最新的 ECMAScript 标准定义了 8 种数据类型:  **7 种原始类型** 以及 **对象 (Object)**。
-
-原始值 (primitive values): 除 Object 以外的所有类型都是不可变的 (值本身无法被改变). 我们称这些类型的值为 "原始值"。例如：与 C 语言不同，JavaScript 中字符串是不可变的. (译注: JS 中对字符串的操作一定返回一个新字符串，原始字符串并没有被改变).
-
-### 7 种原始类型
-+ `Undefined` (未定义): Undefined 类型，一个没有被赋值的变量会有一个默认值 undefined.
-+ `Null` (空值): Null 类型只有一个值: null。js 是大小写敏感的，因此 null 与 Null、NULL或变体完全不同。
-+ `Boolean` (布尔值): 布尔类型表示一个逻辑实体，有两个值: true 和 false
-+ `Number` (数字): 整数或浮点数。例如：`42` 或者 `3.14159`。
-+ `String` (字符串)：字符串是一串表示文本值的字符序列。例如：`Howdy`。
-+ `Symbol` (符号/代表， ES6 中新增的类型)：一种实例是唯一且不可改变的数据类型。
-+ `BigInt` (任意精度的整数)：可以安全地存储和操作大整数，甚至可以超过数字的安全整数限制。
-
-### 对象 (Object)
-复杂数据类型.
-
-
-
-------
-
-
+>
+> 
+>
+> 最新的 ECMAScript 标准定义了 8 种数据类型:  **7 种原始类型** 以及 **对象 (Object)**。
+>
+> 原始值 (primitive values): 除 Object 以外的所有类型都是不可变的 (值本身无法被改变). 我们称这些类型的值为 "原始值"。例如：与 C 语言不同，JavaScript 中字符串是不可变的. (译注: JS 中对字符串的操作一定返回一个新字符串，原始字符串并没有被改变).
+>
+> ### 7 种原始类型
+>
+> + `Undefined` (未定义): Undefined 类型，一个没有被赋值的变量会有一个默认值 undefined.
+> + `Null` (空值): Null 类型只有一个值: null。js 是大小写敏感的，因此 null 与 Null、NULL或变体完全不同。
+> + `Boolean` (布尔值): 布尔类型表示一个逻辑实体，有两个值: true 和 false
+> + `Number` (数字): 整数或浮点数。例如：`42` 或者 `3.14159`。
+> + `String` (字符串)：字符串是一串表示文本值的字符序列。例如：`Howdy`。
+> + `Symbol` (符号/代表， ES6 中新增的类型)：一种实例是唯一且不可改变的数据类型。
+> + `BigInt` (任意精度的整数)：可以安全地存储和操作大整数，甚至可以超过数字的安全整数限制。
+>
+> ### 对象 (Object)
+>
+> 复杂数据类型.
+>
 
 
 
 在 ECMAScipt5 及早期版本中，语言包含 5 种原始类型 ： 字符 串型、数字型、布尔型、 null 和 undefined 。 ECMAScript 6 引入了第 6 种原始类型： Symbol 。 起初，人们用它来创建对象的私有成员， JavaScript 开发者们对这个新特性期待己久 。 在 Symbol 出现以前 ，人们一直通过属性名来访问所有属性，无论属性名由什么元素构成，全部通过一个字符串类型的名称来访问；私有名称原本是为了让开发者们创建非字符串属性名称而设计的，但是一般的技术无法检测这些属性的私有名称 。
 
 私有名称最终演变成了 ECMAScript 6 中的 Symbol，本章将讲解如何有效地使用它 。 虽然通过 Symbol 可以为属性添加非字符串名称，但是其隐私性就被打破了 。 最终，新标准中将 Symbol 属性与对象中的其他属性分别分类。
+
 
 ## ▲ 6.1 创建 Symbol
 
