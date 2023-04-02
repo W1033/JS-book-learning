@@ -1,0 +1,72 @@
+.timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 40px;
+}
+
+.timer-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    width: 200px;
+    border-radius: 10px;
+    background-color: #f3f3f3;
+}
+
+.timer-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    margin-top: 20px;
+}
+
+.timer-buttons button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.start-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.pause-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.reset-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.timer-input {
+    display: flex;
+    margin-top: 20px;
+}
+
+.timer-input label {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.timer-input input {
+    width: 50px;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.timer-input input::-webkit-inner-spin-button,
+.timer-input input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
