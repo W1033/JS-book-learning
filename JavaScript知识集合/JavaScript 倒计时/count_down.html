@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>倒计时程序</title>
+    <style>
+        #display{
+            font-size: 14px;
+            margin: 20px;
+            width: 12em;
+            height: 2em;
+            line-height: 2em;
+            background:lightblue;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <label for="countdown">设置倒计时时间（分）：</label>
+    <input type="text" id="countdown" value="0">
+    <br><br>
+
+    <button id="start-btn">开始</button>
+    <button id="pause-btn">暂停</button>
+    <button id="reset-btn">重置</button>
+
+    <div id="display">00:00</div>
+
+    <script>
+        function getId(ele_id){
+            return document.getElementById(ele_id);
+        }
+        let countdownInput = getId('countdown');
+        let startBtn = getId('start-btn');
+        let pauseBtn = getId('pause-btn');
+        let resetBtn = getId('reset-btn');
+        let display = getId('display');
+        let countdown, timeLeft, timerId;
+        let isCountingDown = false;
+
+        countdownInput.addEventListener("mouseout", ()=>{
+            // 获取 input 的 value 值，使用 parseInt() 函数把 value 值转换为整数，
+            // 再乘以 60 转换成秒数
+            countdown = parseInt(countdownInput.value) * 60;
+
+            console.log('countdown: ', countdown);
+
+            // 把获取的倒计时秒数赋值给 timeLeft 变量
+            timeLeft = countdown;
+
+            updateDisplay();
+        }, false);
+
+        // 更新显示时间
+        function updateDisplay() {
+            console.log('timeLeft: ', timeLeft);
+
+            // 分钟数: 
+            // Math.floor(x): 返回小于等于 x 的最大整数。
+            let minutes = Math.floor(timeLeft / 60);
+            console.log('minutes: ', minutes);
+
+            // - 秒数: 
+            // - chatGPT 回答：这行代码是用来计算倒计时剩余秒数的，% 是取余运算符，用来求一个整数除以另一个整数的余数。
+            //   例如，假设 timeLeft 是 110 秒，那么 timeLeft % 60 的结果就是 50，这表示剩余的时间是 1 分钟 50 秒。
+            //   因为 timeLeft % 60 的计算结果就是 timeLeft 除以 60 所得到的余数，所以这行代码可以得到剩余秒数。
+            //   在这个倒计时程序中，倒计时剩余时间是以秒为单位存储的，因此需要使用 % 运算符来计算剩余秒数。
+            let seconds = timeLeft % 60;
+            console.log('seconds: ', seconds);
+
+            // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+            display.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+
+        // 开始倒计时
+        function startCountdown() {
+            isCountingDown = true;
+            timerId = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                }
+                if (timeLeft === 0) {
+                    clearInterval(timerId);
+                    display.innerHTML = "倒计时结束！";
+                    isCountingDown = false;
+                }
+            }, 1000);
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (!isCountingDown) {
+                startCountdown();
+            }
+        });
+
+
+        // 暂停倒计时
+        function pauseCountdown() {
+            clearInterval(timerId);
+            isCountingDown = false;
+        }
+
+        pauseBtn.addEventListener('click', () => {
+            if (isCountingDown) {
+                pauseCountdown();
+            }
+        });
+
+        // 重置倒计时
+        function resetCountdown() {
+            clearInterval(timerId);
+            isCountingDown = false;
+            countdown = parseInt(countdownInput.value) * 60;
+            timeLeft = countdown;
+            updateDisplay();
+        }
+
+        resetBtn.addEventListener('click', () => {
+            resetCountdown();
+        });
+
+    </script>
+
+</body>
+</html>
