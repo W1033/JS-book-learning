@@ -1,7 +1,10 @@
 #  JS-book-learning
 
 
+
 **NOTE:** 学习 JavaScript 书籍和文档的笔记；最近一年应该会很少更新，如果有需要请 fork.
+
+
 
 
 ## Repository Directory(当前仓库目录)
