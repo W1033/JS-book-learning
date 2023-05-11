@@ -1,15 +1,7 @@
 #  JS-book-learning
 
-**Hint:** 学习 JavaScript 书籍和文档的笔记；最近一年应该会很少更新，如果有需要请 fork.
 
-JS数据结构和算法的笔记在 `DataStructure-Algorithm-Learning` 仓库。
-
-Vue 学习笔记在 `Vue-learning` 仓库。
-
-
-> 学编程有没有必要做笔记?
-> 
-> A : 十分肯定, 一定要做! (tip: 编程书看第一遍时可以拿笔在书上划重点，但尽量不要边看边做笔记。)
+**NOTE:** 学习 JavaScript 书籍和文档的笔记；最近一年应该会很少更新，如果有需要请 fork.
 
 
 ## Repository Directory(当前仓库目录)
