@@ -1,18 +1,9 @@
-# JavaScript 知识集合 -- ReadMe
+# JavaScript 知识集合
 
 
-## 目录(Catalog)
-1. `setTimeout()` 第三个参数:
-2. `svg-autocrop`
-3. "引用类型" 和 "类" 的区别?
-4. 字符串(String) 和 数组(Array) 的 `indexOf()` 和 `includes()` 方法
-5. `requestAnimationFrame` 介绍
-6. 不用原生的 `Number()` 和 `parseInt()`，用 JS 实现 String 到 Number
-7. `MutationObserver` 是什么?
-8. `Array.prototype.find()` 方法
 
 
-## 生词(New Words)
+
 
 
 

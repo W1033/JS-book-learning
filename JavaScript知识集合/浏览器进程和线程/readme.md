@@ -1,11 +1,10 @@
 # 从浏览器多进程到  JS  单线程,  JS  运行机制最全面的一次梳理
 
 
-- 原文章
-  [从浏览器多进程到 JS 单线程,  JS 运行机制最全面的一次梳理](https://segmentfault.com/a/1190000012925872)
+> 原文章 [从浏览器多进程到 JS 单线程,  JS 运行机制最全面的一次梳理](https://segmentfault.com/a/1190000012925872)
 
-> Tip: 文章前半部分还是可以的, 后半部分(`5`, `6`, `7`.) 内容杂乱,
-  请自行判断内容的正确度.
+*Reminder: 文章前半部分还是可以的, 后半部分(`5`, `6`, `7`.) 内容杂乱, 请自行判断内容的正确度.*
+
 
 ## Catalog
 1. 区分进程和线程
@@ -34,102 +33,82 @@
 
 
 ## New Words
-- **crash [kræʃ] --n.崩溃; 死机; 坠毁; 相撞. --vi.撞击声; 哗啦, 撞到.**
-    + The plane crash was branded on his mind.
-      飞机坠毁的情景铭刻在他的心中.
-- **composite ['kɒmpəzɪt] --adj.混合的; 复合的. --n.复合材料, 合成物**
-    + composite function. 复合函数
-    + a composite photograph. 合成照片
-    + English is a composite of many languages. 英语是多种语言混合而成的.
+- crash `/kræʃ/` --n.崩溃，瓦解；撞击声，爆裂声；失事。 --v.碰撞；坠毁，崩溃。
+- composite `/'kɒmpəzɪt/` --adj.合成的，混合的。 --n.合成物，复合材料。
 
 
 
 
-## Content
+## 1. 区分进程和线程
 
-### 1. 区分进程和线程
-- **Additional Info:** `进程(process)` 和 `线程(thread)` 的概念见仓库:
-  `../../Node.js/进程和线程.md`
+**Additional Info:** `进程(process)` 和 `线程(thread)` 的概念见仓库: `../../Node.js/进程和线程.md`
 
-- 如果是windows电脑中, 可以打开任务管理器, 可以看到有一个后台进程列表. 对,
-  那里就是查看进程的地方, 而且可以看到每个进程的内存资源信息以及cpu占有率. 
+如果是windows电脑中, 可以打开任务管理器, 可以看到有一个后台进程列表. 对, 那里就是查看进程的地方, 而且可以看到每个进程的内存资源信息以及cpu占有率. 
 
-  <img src="./images-js-knowledge-set/computer-process.jpeg"
-    style="margin-left: 0; border-radius: 4px; width: 76%;
-            box-shadow: 1px 1px 3px 2px #e5e5e5">
+<img src="readme.assets/computer-process.jpeg" style="border-radius: 4px; box-shadow: rgb(229, 229, 229) 1px 1px 3px 2px; zoom: 67%;">
 
-### 2. 浏览器是多进程的
-- 理解了 `进程` 与 `线程` 了区别后, 接下来对浏览器进行一定程度上的认识:
-    + (1) 浏览器是多进程的
-    + (2) 浏览器之所以能够运行, 是因为系统给它的进程分配了资源(cpu、内存)
-    + (3) 简单点理解, 每打开一个Tab页, 就相当于创建了一个独立的浏览器进程. 
 
-  关于以上几点的验证, **再上一张图验证**;
 
-  <img src="./images-js-knowledge-set/computer-process-02.jpeg"
-    style="margin-left: 0; border-radius: 4px; width: 76%;
-            box-shadow: 1px 1px 3px 2px #e5e5e5">
 
-  图中打开了 Chrome 浏览器的多个标签页, 然后可以在 `Chrome 的任务管理器`
-  中看到有多个进程(分别是每一个 Tab 页面有一个独立的进程, 以及一个主进程). 
-  感兴趣的可以自行尝试下, 如果再多打开一个Tab页, 进程正常会+1以上
+## 2. 浏览器是多进程的
+理解了 `进程` 与 `线程` 了区别后, 接下来对浏览器进行一定程度上的认识:
++ (1) 浏览器是多进程的
++ (2) 浏览器之所以能够运行, 是因为系统给它的进程分配了资源(cpu、内存)
++ (3) 简单点理解, 每打开一个Tab页, 就相当于创建了一个独立的浏览器进程. 
 
-- **注意:** 在这里浏览器应该也有自己的优化机制, 有时候打开多个 Tab页后, 
-  可以在 Chrome 任务管理器中看到, 有些进程被合并了
-  (所以每一个Tab标签对应一个进程并不一定是绝对的)
+关于以上几点的验证, **再上一张图验证**;
 
-#### 2.1 浏览器都包含哪些进程？
-- 目前 Chrome 浏览器的架构进程有下面几个:
-    + (1) `Browser 进程(浏览器主进程))`: 浏览器的主进程(负责协调、主控),
+<img src="readme.assets/computer-process-02.jpeg" style="border-radius: 4px; box-shadow: 1px 1px 3px 2px #e5e5e5">
+
+图中打开了 Chrome 浏览器的多个标签页, 然后可以在 `Chrome 的任务管理器` 中看到有多个进程(分别是每一个 Tab 页面有一个独立的进程, 以及一个主进程). 感兴趣的可以自行尝试下, 如果再多打开一个Tab页, 进程正常会+1以上
+
+**注意:** 在这里浏览器应该也有自己的优化机制, 有时候打开多个 Tab页后, 可以在 Chrome 任务管理器中看到, 有些进程被合并了 (所以每一个Tab标签对应一个进程并不一定是绝对的)
+
+### 2.1 浏览器都包含哪些进程？
+目前 Chrome 浏览器的架构进程有下面几个:
++ (1) `Browser 进程(浏览器主进程))`: 浏览器的主进程(负责协调、主控),
       只有一个. 作用有:
         - 负责浏览器界面显示, 与用户交互. 如前进, 后退等
         - 负责各个页面的管理, 创建和销毁其他进程
         - 将 Renderer 进程得到的内存中的 Bitmap, 绘制到用户界面上
         - 网络资源的管理, 下载等
         - 也提供存储等等功能.
-    + (2) `Render Process(渲染进程)`: 核心任务是将 HTML, CSS 和 JavaScript
++ (2) `Render Process(渲染进程)`: 核心任务是将 HTML, CSS 和 JavaScript
       转换为用户可以与之交互的网页, 排版引擎 Blink 和 JavaScript 引擎 V8
       都是运行在该进程中, 默认情况下, Chrome 会为每个 Tab 标签创建一个渲染进程.
       处于安全考虑, 渲染进程都是运行在沙箱模式下.
-    + (3) `GPU 进程 (GPU Process)`: 其实, Chrome
++ (3) `GPU 进程 (GPU Process)`: 其实, Chrome
       刚开始发布的时候是没有 GPU 进程的. 而 GPU 的使用初衷是为了实现 3D CSS 的效果,
       只是随后网页、Chrome 的 UI 界面都选择采用 GPU 来绘制, 这使得 GPU
       成为浏览器普遍的需求. 最后, Chrome 在其多进程架构上也引入了 GPU 进程. 
-    + (4) `插件进程(Plugin Process)`: 主要负责插件的运行, 因插件易崩溃,
++ (4) `插件进程(Plugin Process)`: 主要负责插件的运行, 因插件易崩溃,
       所以需要插件进程来隔离, 以保证插件进程崩溃不会对浏览器和页面造成影响.
       每种类型的插件对应一个进程, 仅当使用该插件时才创建.
-    + (5) `网络进程(Network Process)`: 主要负责页面的网络资源加载,
++ (5) `网络进程(Network Process)`: 主要负责页面的网络资源加载,
       之前是作为一个模块运行在浏览器进程里的, 直到最近才独立出来, 成为一个单独的进程.
-- 浏览器未来面向服务的架构(Services Oriented Architecture, 简称 SOA)
-    + 更多内容见此
-      [文章](https://blog.poetries.top/browser-working-principle/guide/part1/lesson01.html#%E7%9B%AE%E5%89%8D%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%9E%B6%E6%9E%84)
+
+浏览器未来面向服务的架构(Services Oriented Architecture, 简称 SOA)
+
+更多内容见此 [文章](https://blog.poetries.top/browser-working-principle/guide/part1/lesson01.html#%E7%9B%AE%E5%89%8D%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%9E%B6%E6%9E%84)
       
-      例如下图:
+例如下图:
 
-      <img src="./images-js-knowledge-set/Chrome-Renderer-process.png"
-        style="margin-left: 0; border-radius: 4px; width: 66%;
-            box-shadow: 1px 1px 3px 2px #e5e5e5">
+<img src="readme.assets/Chrome-Renderer-process.png" style="margin-left: 0; border-radius: 4px; width: 66%; box-shadow: 1px 1px 3px 2px #e5e5e5">
       
-      **Added:** 图中的信息提示
-        + (1) `PID (Process Identifier 进程控制符)`: 又略称为 `进程 ID`
-          是大多数操作系统的内核用于唯一标识进程的一个数值,
-          这一数值可以作为许多函数调用的参数,
-          以使调整进程优先级、杀死进程之类的进程控制行为成为可能. 
-        + (2) `线程` 一列, 每行中的 `线程` 数, 显示的是当前进程使用的线程数,
-          即当前进程有几个线程.
-- 强化记忆: **在浏览器中打开一个网页相当于新起了一个进程(进程内有自己的多线程)**
+**Added:** 图中的信息提示
++ (1) `PID (Process Identifier 进程控制符)`: 又略称为 `进程 ID` 是大多数操作系统的内核用于唯一标识进程的一个数值, 这一数值可以作为许多函数调用的参数, 以使调整进程优先级、杀死进程之类的进程控制行为成为可能. 
++ (2) `线程` 一列, 每行中的 `线程` 数, 显示的是当前进程使用的线程数, 即当前进程有几个线程.
 
-  当然, 浏览器有时会将多个进程合并(譬如打开多个空白标签页后,
-  会发现多个空白标签页被合并成了一个进程), 如图
+强化记忆: **在浏览器中打开一个网页相当于新起了一个进程(进程内有自己的多线程)**
 
-  <img src="./images-js-knowledge-set/merge-process.jpeg"
-    style="margin-left: 0; border-radius: 4px; width: 76%;
-            box-shadow: 1px 1px 3px 2px #e5e5e5">
+当然, 浏览器有时会将多个进程合并(譬如打开多个空白标签页后, 会发现多个空白标签页被合并成了一个进程), 如图
 
-  另外, 可以通过 Chrome 的 `更多工具 -> 任务管理器` 自行验证
+<img src="readme.assets/merge-process.jpeg" style="margin-left: 0; border-radius: 4px; width: 76%; box-shadow: 1px 1px 3px 2px #e5e5e5">
+
+另外, 可以通过 Chrome 的 `更多工具 -> 任务管理器` 自行验证
 
 
-#### 2.2 浏览器多进程的优势
+### 2.2 浏览器多进程的优势
 - 相比于单进程浏览器, 多进程有如下优点: 
     + (1) 避免单个 page crash 影响整个浏览器
     + (2) 避免第三方插件 crash 影响整个浏览器
@@ -138,7 +117,7 @@
 - 当然, 内存等资源消耗也会更大, 有点空间换时间的意思. 
 
 
-#### 2.3 对前端比较重要的 `Renderer 进程(渲染进程)` (浏览器内核)
+### 2.3 对前端比较重要的 `Renderer 进程(渲染进程)` (浏览器内核)
 - 可以这样理解, 页面的渲染, JS 的执行, 事件的循环, 都在这个进程内进行.
   接下来重点分析这个进程
 - **请牢记, 浏览器的渲染进程是多线程的**
@@ -186,7 +165,7 @@
       都包含在 `WebAPI` 之内. (**Warning:** 由于没有找到资料,
       所以不知道这个理解到底对不对!)
 
-#### 2.4 `Browser 进程` 和 `Renderer 进程` 的通信过程
+### 2.4 `Browser 进程` 和 `Renderer 进程` 的通信过程
 - 如果自己打开任务管理器, 然后打开一个浏览器, 就可以看到:
   任务管理器中出现了两个进程(一个是`主控进程`, 一个则是打开 Tab 页的 `渲染进程`), 
   然后在这前提下, 看下整个的过程: (简化了很多很多!!!)
@@ -203,12 +182,12 @@
 
   这里绘一张简单的图: (很简化)
 
-  <img src="./images-js-knowledge-set/browser-render-process.png"
+  <img src="readme.assets/browser-render-process.png"
     style="margin-left: 0; border-radius: 4px; width: 66%;
             box-shadow: 1px 1px 3px 2px #e5e5e5">
   
-### 3. 梳理浏览器内核中线程之间的关系
-#### 3.1 GUI渲染线程与 JS 引擎线程互斥
+## 3. 梳理浏览器内核中线程之间的关系
+### 3.1 GUI渲染线程与 JS 引擎线程互斥
 - 由于 JavaScript 是可操纵 DOM 的, 如果在修改这些元素属性同时渲染界面
   (即 `JS 线程` 和 `GUI 线程` 同时运行),
   那么渲染线程前后获得的元素数据就可能不一致了. 
@@ -217,7 +196,7 @@
   为互斥的关系, 当 `JS 引擎` 执行时 `GUI 线程` 会被挂起,
   GUI 更新则会被保存在一个队列中等到 `JS 引擎线程` 空闲时立即被执行.
 
-#### 3.2 JS 阻塞页面加载
+### 3.2 JS 阻塞页面加载
 - 从上述的互斥关系, 可以推导出, JS 如果执行时间过长就会阻塞页面. 
   
   譬如, 假设 JS 引擎正在进行巨量的计算, 此时就算 GUI 有更新, 也会被保存到队列中,
@@ -230,7 +209,7 @@
   **TIP:** 不止浏览器中需要避免 JS 计算时间过长的问题, 在 Node.js
   中也要非常注意这个问题.
 
-#### 3.3 WebWorker, JS 的多线程？
+### 3.3 WebWorker, JS 的多线程？
 - 前文中有提到 JS 引擎是单线程的, 而且 JS 执行时间过长会阻塞页面, 
   那么 JS 就真的对 CPU 密集型计算无能为力么?
 
@@ -250,7 +229,7 @@
   可以理解是浏览器给 JS 引擎开的外挂, 专门用来解决那些大量计算问题. 
 
   其它, 关于Worker的详解就不是本文的范畴了, 因此不再赘述. 
-#### 3.4 WebWorker 与 SharedWorker
+### 3.4 WebWorker 与 SharedWorker
 - 既然都到了这里, 就再提一下 `SharedWorker` (避免后续将这两个概念搞混)
 
   `Web Worker` 只属于某个页面, 不会和其他页面的 `Render 进程`(浏览器内核进程)
@@ -267,7 +246,7 @@
   看到这里, 应该就很容易明白了, 本质上就是 `进程` 和 `线程` 的区别. 
   **SharedWorker 由独立的进程管理, WebWorker 只是属于 Render 进程下的一个线程**.
 
-### 4. 简单梳理下浏览器渲染流程
+## 4. 简单梳理下浏览器渲染流程
 - 此章节讲解过于简单, 请参考别的文章: 应该主要有两部分
     + (1) 浏览器中输入网址:
         - (1) DNS 解析, 将域名解析成 IP 地址 
@@ -286,10 +265,10 @@
           会将各层合成(composite), 显示在屏幕上.
         - (6) 渲染完毕后是 `load` 事件, 之后就是 JS 逻辑处理了.
 
-  <img src="./images-js-knowledge-set/html-render.png"
+  <img src="readme.assets/html-render.png"
     style="margin-left: 0; border-radius: 4px; width: 76%;
             box-shadow: 1px 1px 3px 2px #e5e5e5">
-#### 4.1 load事件与DOMContentLoaded事件的先后
+### 4.1 load事件与DOMContentLoaded事件的先后
 - 上面提到, 渲染完毕后会触发 `load` 事件, 那么 `load` 事件与
   `DOMContentLoaded` 事件谁的触发事件更早?
 
@@ -301,18 +280,18 @@
   当 `onload` 事件触发时, 页面上所有的 DOM, 样式表, 脚本, 图片都已经加载完成了
   (渲染完毕了).
 
-#### 4.2 css加载是否会阻塞dom树渲染？
-#### 4.3 普通图层和复合图层
+### 4.2 css加载是否会阻塞dom树渲染？
+### 4.3 普通图层和复合图层
 
 
-### 5. 从Event Loop谈 JS 的运行机制
-#### 5.1 事件循环机制进一步补充
-#### 5.1 单独说说定时器
-#### 5.1 setTimeout而不是setInterval
+## 5. 从Event Loop谈 JS 的运行机制
+### 5.1 事件循环机制进一步补充
+### 5.1 单独说说定时器
+### 5.1 setTimeout而不是setInterval
 
 
-### 6. 事件循环进阶: macrotask与microtask
+## 6. 事件循环进阶: macrotask与microtask
 
 
-### 7. 写在最后的话
+## 7. 写在最后的话
 
